@@ -10,10 +10,6 @@ abstract class AppStyles {
     fontSize: 36,
     fontWeight: FontWeight.bold,
   );
-  static final secondary = GoogleFonts.poppins(
-    fontSize: 28,
-    fontWeight: FontWeight.bold,
-  );
   static final sectionTitle = GoogleFonts.poppins(
     fontSize: 24,
     fontWeight: FontWeight.w600,

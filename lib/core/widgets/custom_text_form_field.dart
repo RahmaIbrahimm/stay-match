@@ -4,11 +4,16 @@ import 'package:stay_match/core/utils/app_styles.dart';
 
 import '../utils/app_icons.dart';
 
-class CustomTextFormField extends StatelessWidget {
-  CustomTextFormField({super.key, required this.hintText});
 
-  late String hintText;
-  late Widget suffixIcon;
+class CustomTextFormField extends StatelessWidget {
+  const CustomTextFormField({
+    super.key,
+    required this.hintText,
+    required this.suffixIcon,
+  });
+
+  final String hintText;
+  final Widget suffixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +29,7 @@ class CustomTextFormField extends StatelessWidget {
         errorBorder: buildOutlineInputBorder(),
         enabledBorder: buildOutlineInputBorder(),
         focusColor: AppColors.primary,
-        suffixIcon: Image.asset(AppIcons.emailIcon, width: 20, height: 20),
+        suffixIcon: suffixIcon,
         suffixIconColor: AppColors.primary,
       ),
     );
