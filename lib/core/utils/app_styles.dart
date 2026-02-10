@@ -12,6 +12,7 @@ abstract class AppStyles {
   );
   static final sectionTitle = GoogleFonts.poppins(
     fontSize: 24,
+
     fontWeight: FontWeight.w600,
   );
   static final cardTitle = GoogleFonts.poppins(
