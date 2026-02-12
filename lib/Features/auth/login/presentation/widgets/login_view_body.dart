@@ -11,6 +11,7 @@ class LoginViewBody extends StatelessWidget {
     return Column(
       children: [
         Container(
+          padding: EdgeInsets.symmetric(horizontal: 16),
           height: MediaQuery.of(context).size.height * 0.75,
           decoration: BoxDecoration(
             color: AppColors.containerColor,
