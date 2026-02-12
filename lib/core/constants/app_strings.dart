@@ -9,7 +9,8 @@ abstract class AppStrings {
   static const or = 'OR';
   static const login = 'Login';
   static const loginWithGoogle = 'Login with Google';
-  static const signUp = 'Sign Up !';
+  static const dontHaveAnAccount = 'Don\'t have an Account?';
+  static const signUp = 'Sign Up!';
 
   // Signup screen
 }
