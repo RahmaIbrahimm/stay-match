@@ -8,13 +8,14 @@ class CustomElevatedButton extends StatelessWidget {
     this.backgroundColor,
     required this.text,
     this.textColor,
-    this.icon,
+    this.icon, required this.onPressed,
   });
 
   final Color? backgroundColor;
   final Color? textColor;
   final String text;
   final Widget? icon;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class CustomElevatedButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 10),
       ),
 
-      onPressed: () {},
+      onPressed: onPressed,
       child: Row(
         spacing: 8,
         mainAxisAlignment: MainAxisAlignment.center,
