@@ -1,33 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:stay_match/core/utils/app_colors.dart';
-import 'package:stay_match/core/utils/app_styles.dart';
+import 'package:stay_match/core/constants/app_colors.dart';
+import 'package:stay_match/core/constants/app_styles.dart';
 
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
     super.key,
     required this.hintText,
-    required this.suffixIcon,
+    this.suffixIcon,
+    required this.validator,
   });
 
+  final String? Function(String?) validator;
   final String hintText;
-  final Widget suffixIcon;
+  final Widget? suffixIcon;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        hint: Text(
-          hintText,
-          style: AppStyles.caption.copyWith(
+    var boxShadow = [
+          BoxShadow(
+            color: AppColors.shadowColor,
+            offset: Offset(5, 5),
+            blurRadius: 5,
+            spreadRadius: 2,
+          ),
+        ];
+
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: boxShadow,
+      ),
+      child: TextFormField(
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: AppStyles.caption.copyWith(
             color: AppColors.textColorSecondary,
           ),
+          border: buildOutlineInputBorder(),
+          // TODO: add borders for each case
+          // errorBorder: buildOutlineInputBorder(),
+          enabledBorder: buildOutlineInputBorder(),
+          focusColor: AppColors.primary,
+          suffixIcon: suffixIcon,
+          suffixIconColor: AppColors.primary,
+          fillColor: AppColors.containerColor,
+          filled: true
         ),
-        border: buildOutlineInputBorder(),
-        errorBorder: buildOutlineInputBorder(),
-        enabledBorder: buildOutlineInputBorder(),
-        focusColor: AppColors.primary,
-        suffixIcon: suffixIcon,
-        suffixIconColor: AppColors.primary,
+        validator: validator,
+
       ),
     );
   }
