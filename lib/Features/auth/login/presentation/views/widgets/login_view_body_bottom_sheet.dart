@@ -6,7 +6,7 @@ import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/widgets/custom_elevated_button.dart';
 import 'package:stay_match/core/widgets/custom_text_button.dart';
 
-import '../../../widgets/form_section.dart';
+import '../../../../widgets/form_section.dart';
 import 'divider_between_login_buttons.dart';
 
 class LoginViewBodyBottomSheet extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/constants/app_colors.dart';
+import '../../../../../../core/constants/app_colors.dart';
 import 'login_view_body_bottom_sheet.dart';
 import 'login_view_header.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/constants/app_strings.dart';
-import '../../../../../core/constants/app_styles.dart';
+import '../../../../../../core/constants/app_strings.dart';
+import '../../../../../../core/constants/app_styles.dart';
 
 class DividerBetweenLoginButtons extends StatelessWidget {
   const DividerBetweenLoginButtons({super.key, required this.size});
