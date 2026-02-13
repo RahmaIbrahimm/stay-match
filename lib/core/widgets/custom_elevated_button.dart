@@ -36,7 +36,7 @@ class CustomElevatedButton extends StatelessWidget {
               color: textColor ?? AppColors.containerColor,
             ),
           ),
-          ?icon,
+          if(icon != null) icon!,
         ],
       ),
     );
