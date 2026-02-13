@@ -6,5 +6,5 @@ abstract class AppImages {
   static const loginDecorLeft = '$path/login_decor_left.png';
 
   // forget password
-  static const forgetPasswordBg = '$path/Forget password_bg.png';
+  static const gradientBg = '$path/Forget password_bg.png';
 }
