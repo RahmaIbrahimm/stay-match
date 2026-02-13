@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
+import 'package:stay_match/core/constants/app_icons.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/widgets/custom_elevated_button.dart';
 import 'package:stay_match/core/widgets/custom_text_button.dart';
@@ -14,26 +15,36 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
       children: [
         const SizedBox(height: 33),
-        // todo: implement validator
+        // todo: implement validator email
         FormSection(
           validator: (value) {},
           hintText: AppStrings.enterYourEmail,
           fieldTitle: AppStrings.email,
+          suffixIcon: ImageIcon(AssetImage(AppIcons.emailIcon)),
         ),
         const SizedBox(height: 37),
-        // todo: implement validator
+        // todo: implement validator password
         FormSection(
           validator: (value) {},
           hintText: AppStrings.enterYourPassword,
           fieldTitle: AppStrings.password,
+          suffixIcon: Icon(
+            Icons.remove_red_eye_outlined,
+            color: AppColors.primary,
+          ),
         ),
         //TODO: on pressed implementation
-        CustomTextButton(onPressed: () {}, text: AppStrings.forgetPassword),
-        const SizedBox(height: 70),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: CustomTextButton(
+            onPressed: () {},
+            text: AppStrings.forgetPassword,
+          ),
+        ),
+        const SizedBox(height: 50),
         SizedBox(
           width: double.infinity,
           child: CustomElevatedButton(text: AppStrings.login, onPressed: () {}),
@@ -56,9 +67,14 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
           children: [
             Text(AppStrings.dontHaveAnAccount),
             // TODO: implement on pressed
-            CustomTextButton(onPressed: () {}, text: AppStrings.signUp),
+            CustomTextButton(
+              onPressed: () {},
+              text: AppStrings.signUp,
+              textColor: AppColors.secondary,
+            ),
           ],
         ),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.05,)
       ],
     );
   }
