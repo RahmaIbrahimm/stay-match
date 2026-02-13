@@ -3,16 +3,15 @@ import 'package:google_fonts/google_fonts.dart';
 
 abstract class AppStyles {
   static final headLine = GoogleFonts.poppins(
-    fontSize: 48,
+    fontSize: 28,
     fontWeight: FontWeight.bold,
   );
-  static final primary = GoogleFonts.poppins(
-    fontSize: 36,
-    fontWeight: FontWeight.bold,
-  );
+  // static final primary = GoogleFonts.poppins(
+  //   fontSize: 36,
+  //   fontWeight: FontWeight.bold,
+  // );
   static final sectionTitle = GoogleFonts.poppins(
     fontSize: 24,
-
     fontWeight: FontWeight.w600,
   );
   static final cardTitle = GoogleFonts.poppins(
