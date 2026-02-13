@@ -12,4 +12,5 @@ abstract class AppColors {
   static const textColorError= Color(0xffBF3636);
   static const textColorSuccess= Color(0xff0D9467);
   static const shadowColor = Color(0x33000000);
+  static const grey = Color(0xffD9D9D9);
 }
