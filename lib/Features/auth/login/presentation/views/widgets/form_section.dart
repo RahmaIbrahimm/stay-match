@@ -10,23 +10,28 @@ class FormSection extends StatelessWidget {
     required this.hintText,
     required this.fieldTitle,
     this.suffixIcon,
+    this.stroke = true
   });
 
   final String? Function(String?) validator;
   final String hintText;
   final String fieldTitle;
   final Widget? suffixIcon;
+  final bool stroke;
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         //Todo: add validator
         Text(fieldTitle, style: AppStyles.sectionTitle),
+        const SizedBox(height: 16,),
         CustomTextFormField(
           hintText: hintText,
           validator: validator,
           suffixIcon: suffixIcon,
+          stroke: stroke,
         ),
       ],
     );
