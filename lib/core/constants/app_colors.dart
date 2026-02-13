@@ -6,6 +6,7 @@ abstract class AppColors {
   static const accentColor = Color(0xff4D84C8);
   static const backgroundColor = Colors.black;
   static const containerColor = Colors.white;
+  static const  textColorWhite= Color(0xffffffff);
   static const  textColorPrimary= Color(0xff19212C);
   static const textColorSecondary= Color(0xff565B66);
   static const textColorError= Color(0xffBF3636);
