@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stay_match/features/auth/widgets/custom_bottom_sheet.dart';
 
 import '../../../../../../core/constants/app_colors.dart';
 import 'login_view_body_bottom_sheet.dart';
@@ -14,19 +15,7 @@ class LoginViewBody extends StatelessWidget {
         LoginViewHeader(),
         const SizedBox(height: 20),
         Expanded(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            height: MediaQuery.of(context).size.height * 0.75,
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              color: AppColors.containerColor,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(50),
-                topRight: Radius.circular(50),
-              ),
-            ),
-            child: LoginViewBodyBottomSheet(),
-          ),
+          child: CustomBottomSheet(sheetBody: LoginViewBodyBottomSheet())
         ),
       ],
     );

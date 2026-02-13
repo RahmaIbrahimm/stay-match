@@ -41,7 +41,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: CustomTextButton(
             onPressed: () {},
-            text: AppStrings.forgetPassword,
+            text: AppStrings.forgetPasswordQuestion,
           ),
         ),
         const SizedBox(height: 50),
