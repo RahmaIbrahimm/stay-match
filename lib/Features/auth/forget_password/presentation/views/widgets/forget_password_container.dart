@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../../../../../../core/constants/app_colors.dart';
+import '../../../../widgets/custom_container.dart';
 import 'forget_password_container_body.dart';
 
 class ForgetPasswordContainer extends StatelessWidget {
@@ -10,16 +10,6 @@ class ForgetPasswordContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 16),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: AppColors.containerColor,
-        borderRadius: BorderRadius.circular(50),
-        border: Border.all(color: CupertinoColors.black)
-      ),
-      child: const ForgetPasswordContainerBody(),
-    );
+    return CustomContainer(containerBody: ForgetPasswordContainerBody(),);
   }
 }
