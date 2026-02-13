@@ -35,7 +35,7 @@ class LoginViewHeader extends StatelessWidget {
                 ),
               ),
               Text(
-                AppStrings.welcomeBack,
+                AppStrings.loginGreeting,
                 style: AppStyles.sectionTitle.copyWith(
                   color: AppColors.textColorWhite,
                 ),
