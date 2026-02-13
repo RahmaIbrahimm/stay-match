@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../../core/constants/app_images.dart';
+import '../../../../widgets/gradient_background.dart';
 import 'forget_password_container.dart';
 
 class ForgetPasswordViewBody extends StatelessWidget {
@@ -12,14 +11,7 @@ class ForgetPasswordViewBody extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(AppImages.forgetPasswordBg),
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
+        GradientBackground(),
         ForgetPasswordContainer(size: size),
       ],
     );
