@@ -1,6 +1,7 @@
 abstract class AppStrings {
   // Login screen
   static const email = 'Email';
+  static const welcomeBack = 'Welcome Back To StayMatch';
   static const enterYourEmail = 'Enter your Email';
   static const password = 'Password';
   static const enterYourPassword = 'Enter your password';
