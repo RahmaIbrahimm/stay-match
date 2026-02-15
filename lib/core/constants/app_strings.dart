@@ -33,7 +33,7 @@ abstract class AppStrings {
   // forget password screen
   static const emailAddress = 'Email Address';
   static const confirmEmail = 'Confirm Email';
-  static const newPassword = 'New Password ?'; // todo: wth is that??
+  static const newPassword = 'New Password'; // todo: wth is that??
   static const forgetPassword = 'Forget Password';
   static const forgetPasswordInstructions = 'Please Write your Email to receive a\nconfirmation code to sent a new password ';
 
@@ -42,4 +42,9 @@ abstract class AppStrings {
   static const verificationCodeSentTo = 'Verification code sent to :';
   static const resendConfirmation = 'Resend Confirmation code';
   static const confirmCode = 'Confirm code';
+
+  // New password page
+  static const pleaseWriteNewPass = 'Please write your new password';
+  static const enterYourNewPass = 'Enter your new password';
+
 }
