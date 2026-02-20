@@ -4,6 +4,7 @@ import '../../../../../../core/constants/app_colors.dart';
 import '../../../../../../core/constants/app_images.dart';
 import '../../../../../../core/constants/app_strings.dart';
 import '../../../../../../core/constants/app_styles.dart';
+import '../../../../widgets/auth_header.dart';
 
 class LoginViewHeader extends StatelessWidget {
   const LoginViewHeader({super.key});
@@ -23,26 +24,7 @@ class LoginViewHeader extends StatelessWidget {
         Positioned(
           bottom: 1,
           left: 16,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  AppStrings.login,
-                  style: AppStyles.headLine.copyWith(
-                    color: AppColors.textColorWhite,
-                  ),
-                ),
-              ),
-              Text(
-                AppStrings.loginGreeting,
-                style: AppStyles.sectionTitle.copyWith(
-                  color: AppColors.textColorWhite,
-                ),
-              ),
-            ],
-          ),
+          child: AuthHeaderText(greeting: AppStrings.loginGreeting, title: AppStrings.login,),
         ),
       ],
     );
