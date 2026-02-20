@@ -10,7 +10,8 @@ class FormSection extends StatelessWidget {
     required this.hintText,
     required this.fieldTitle,
     this.suffixIcon,
-    this.stroke = true
+    this.stroke = true,
+    required this.controller
   });
 
   final String? Function(String?) validator;
@@ -18,7 +19,7 @@ class FormSection extends StatelessWidget {
   final String fieldTitle;
   final Widget? suffixIcon;
   final bool stroke;
-
+  final TextEditingController controller;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -32,6 +33,7 @@ class FormSection extends StatelessWidget {
           validator: validator,
           suffixIcon: suffixIcon,
           stroke: stroke,
+          controller: controller
         ),
       ],
     );
