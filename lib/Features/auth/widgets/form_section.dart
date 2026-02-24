@@ -25,7 +25,7 @@ class FormSection extends StatelessWidget {
       children: [
         //Todo: add validator
         Text(fieldTitle, style: AppStyles.sectionTitle),
-        const SizedBox(height: 7),
+        const SizedBox(height: 8),
         CustomTextFormField(
           hintText: hintText,
           validator: validator,
