@@ -6,7 +6,6 @@ abstract class AppStrings {
   static const password = 'Password';
   static const enterYourPassword = 'Enter your password';
   static const gender = 'Gender';
-  static const enterYourGender = 'Enter your gender';
   static const name = 'Name';
   static const enterYourName = 'Enter your name';
   static const location = 'Location';
@@ -26,9 +25,10 @@ abstract class AppStrings {
 
   // Sign up screen
   static const signUpTitle = 'Sign Up';
+  static const selectYourGender = 'Select your gender';
   static const submit = 'Submit';
   static const loginGreeting = 'Welcome Back To StayMatch';
-  static const alreadyHaveAnAccount = 'Already Have an Accound?';
+  static const alreadyHaveAnAccount = 'Already Have an Account?';
 
   // forget password screen
   static const emailAddress = 'Email Address';
@@ -47,4 +47,5 @@ abstract class AppStrings {
   static const pleaseWriteNewPass = 'Please write your new password';
   static const enterYourNewPass = 'Enter your new password';
 
+  static const List<String> genderMenuItems = ['Female','Male'];
 }
