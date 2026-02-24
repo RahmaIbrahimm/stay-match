@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stay_match/features/auth/widgets/custom_drop_down_menu.dart';
 
 import '../../../../../../core/constants/app_colors.dart';
 import '../../../../../../core/constants/app_icons.dart';
@@ -28,7 +29,7 @@ class ButtomSheetBody extends StatelessWidget {
           // todo: implement validators
           // info: name
           FormSection(
-            validator: (val) {},
+            validator: validator,
             hintText: AppStrings.enterYourName,
             fieldTitle: AppStrings.name,
             controller: _nameController,
@@ -36,7 +37,7 @@ class ButtomSheetBody extends StatelessWidget {
           const SizedBox(height: 22),
           // info: email
           FormSection(
-            validator: (value) {},
+            validator: validator,
             hintText: AppStrings.enterYourEmail,
             fieldTitle: AppStrings.email,
             suffixIcon: ImageIcon(AssetImage(AppIcons.emailIcon)),
@@ -45,7 +46,7 @@ class ButtomSheetBody extends StatelessWidget {
           const SizedBox(height: 22),
           // info: password
           FormSection(
-            validator: (value) {},
+            validator: validator,
             hintText: AppStrings.enterYourPassword,
             fieldTitle: AppStrings.password,
             suffixIcon: Icon(
@@ -57,7 +58,7 @@ class ButtomSheetBody extends StatelessWidget {
           const SizedBox(height: 22),
           // info: confirm password
           FormSection(
-            validator: (value) {},
+            validator: validator,
             hintText: AppStrings.enterYourPassword,
             fieldTitle: AppStrings.confirmPassword,
             suffixIcon: Icon(
@@ -69,7 +70,7 @@ class ButtomSheetBody extends StatelessWidget {
           const SizedBox(height: 22),
           // info: age
           FormSection(
-            validator: (val) {},
+            validator: validator,
             hintText: AppStrings.enterYourAge,
             fieldTitle: AppStrings.age,
           controller: _ageController,
@@ -77,21 +78,24 @@ class ButtomSheetBody extends StatelessWidget {
           const SizedBox(height: 22),
           // info: location
           FormSection(
-            validator: (value) {},
+            validator: validator,
             hintText: AppStrings.enterYourLocation,
             fieldTitle: AppStrings.location,
             controller: _locationController,
           ),
           const SizedBox(height: 22),
           // info: gender
-          FormSection(
-            validator: (value) {},
-            hintText: AppStrings.enterYourGender,
-            fieldTitle: AppStrings.gender,
-            controller: _genderController,
-          ),
+          Text(AppStrings.gender,style: AppStyles.sectionTitle),
+          const SizedBox(height: 8),
+          CustomDropDownMenu(menuItems: AppStrings.genderMenuItems, hintText: AppStrings.selectYourGender,),
+          // FormSection(
+          //   validator: validator,
+          //   hintText: AppStrings.enterYourGender,
+          //   fieldTitle: AppStrings.gender,
+          //   controller: _genderController,
+          // ),
           const SizedBox(height: 45),
-          CustomElevatedButton(text: AppStrings.submit, onPressed: () {}),
+          CustomElevatedButton(text: AppStrings.submit, onPressed: signupOnPressed),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -102,7 +106,7 @@ class ButtomSheetBody extends StatelessWidget {
                 ),
               ),
               CustomTextButton(
-                onPressed: () {},
+                onPressed: loginOnPressed,
                 text: AppStrings.login,
                 textColor: AppColors.secondary,
               ),
@@ -113,4 +117,9 @@ class ButtomSheetBody extends StatelessWidget {
       ),
     );
   }
+
+  void signupOnPressed() {}
+  void loginOnPressed() {}
+
+  String? validator(value) {}
 }
