@@ -9,13 +9,14 @@ class FormSection extends StatelessWidget {
     required this.validator,
     required this.hintText,
     required this.fieldTitle,
-     this.suffixIcon,
+    this.suffixIcon, required this.controller,
   });
 
   final String? Function(String?) validator;
   final String hintText;
   final String fieldTitle;
   final Widget? suffixIcon;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +25,13 @@ class FormSection extends StatelessWidget {
       children: [
         //Todo: add validator
         Text(fieldTitle, style: AppStyles.sectionTitle),
-        const SizedBox(height: 7),
-        CustomTextFormField(hintText: hintText, validator: validator,suffixIcon: suffixIcon,),
+        const SizedBox(height: 8),
+        CustomTextFormField(
+          hintText: hintText,
+          validator: validator,
+          suffixIcon: suffixIcon,
+          controller: controller,
+        ),
       ],
     );
   }
