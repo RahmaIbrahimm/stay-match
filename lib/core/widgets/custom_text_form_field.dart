@@ -21,17 +21,9 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var boxShadow = [
-      BoxShadow(
-        color: AppColors.shadowColor,
-        offset: Offset(5, 5),
-        blurRadius: 5,
-        spreadRadius: 2,
-      ),
-    ];
 
     return Container(
-      decoration: BoxDecoration(boxShadow: boxShadow),
+      decoration: BoxDecoration(boxShadow: AppColors.boxShadow),
       child: TextFormField(
         decoration: InputDecoration(
           hintText: hintText,
