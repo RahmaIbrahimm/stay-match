@@ -5,7 +5,7 @@ import 'package:stay_match/core/networking/endpoints.dart';
 
 import '../errors/exceptions.dart';
 
-class DioConsumer implements ApiService {
+class DioConsumer extends ApiService {
   final Dio dio;
 
   DioConsumer(this.dio) {
@@ -17,10 +17,11 @@ class DioConsumer implements ApiService {
         requestBody: true,
         requestHeader: true,
         error: true,
+
         requestUrl: true,
         responseUrl: true,
         responseBody: true,
-        responseHeader: true
+        responseHeader: true,
       ),
     );
   }
@@ -39,11 +40,10 @@ class DioConsumer implements ApiService {
         queryParameters: queryParameters,
       );
       return response.data;
+    } on DioException catch (e) {
+      throw ServerFailure.fromDioError(e);
     } catch (e) {
-      if (e is DioException) {
-        ServerFailure.fromDioError(e);
-      }
-      return e.toString();
+      throw ServerFailure(e.toString());
     }
   }
 
@@ -60,11 +60,10 @@ class DioConsumer implements ApiService {
         queryParameters: queryParameters,
       );
       return response.data;
+    } on DioException catch (e) {
+      throw ServerFailure.fromDioError(e);
     } catch (e) {
-      if (e is DioException) {
-        ServerFailure.fromDioError(e);
-      }
-      return e.toString();
+      throw ServerFailure(e.toString());
     }
   }
 
@@ -81,11 +80,11 @@ class DioConsumer implements ApiService {
         data: isFormData ? FormData.fromMap(data) : data,
         queryParameters: queryParameters,
       );
+      return response.data;
+    } on DioException catch (e) {
+      throw ServerFailure.fromDioError(e);
     } catch (e) {
-      if (e is DioException) {
-        ServerFailure.fromDioError(e);
-      }
-      return e.toString();
+      throw ServerFailure(e.toString());
     }
   }
 
@@ -97,17 +96,14 @@ class DioConsumer implements ApiService {
     bool isFormData = false,
   }) async {
     try {
-      final response = await dio.get(
+      final response = await dio.post(
         path,
         data: isFormData ? FormData.fromMap(data) : data,
         queryParameters: queryParameters,
       );
       return response.data;
     } catch (e) {
-      if (e is DioException) {
-        ServerFailure.fromDioError(e);
-      }
-      return e.toString();
+      rethrow;
     }
   }
 }
