@@ -30,14 +30,14 @@ class ServerFailure extends Exceptions {
         if (dioError.error?.toString().contains('SocketException') ?? false) {
           return ServerFailure('No Internet Connection');
         }
-        return ServerFailure('Unexpected Error, Please try again!');
+        return ServerFailure('Unexpected Error, Please try again.');
       default:
-        return ServerFailure('Opps There was an Error, Please try again');
+        return ServerFailure('Opps There was an Error, Please try again.');
     }
   }
   factory ServerFailure.fromResponse(int? statusCode, dynamic response) {
     if (statusCode == 400 || statusCode == 401 || statusCode == 403) {
-      return ServerFailure(response['error']['message']);
+      return ServerFailure(response['message']);
     } else if (statusCode == 404) {
       return ServerFailure('Your request not found, Please try again later!');
     } else if (statusCode == 500) {
