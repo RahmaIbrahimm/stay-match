@@ -1,17 +1,19 @@
 import 'package:dartz/dartz.dart';
-import 'package:stay_match/core/errors/exceptions.dart';
+import 'package:stay_match/core/errors/failures.dart';
+import 'package:stay_match/features/auth/data/models/forget_password_response.dart';
 
 import '../models/login_response.dart';
 
 abstract class AuthRepo {
-  Future<Either<Exceptions, LoginResponse>> login({
+  Future<Either<Failure, LoginResponse>> login({
     required String email,
     required String password,
   });
 
-  String? loginEmailValidator({String? email});
+  // ========== login  =========
+  String? emailValidator({String? email});
 
-  String? loginPasswordValidator({String? password});
-
-  void loginAccountValidation();
+  String? passwordValidator({String? password});
+  // ========= forget password =========
+  Future<Either<Failure,ForgetPasswordResponse>> sendVerificationCode({String? email});
 }
