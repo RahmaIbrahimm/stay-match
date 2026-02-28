@@ -11,45 +11,60 @@ import 'package:stay_match/features/auth/login/presentation/views/widgets/form_s
 class ForgetPasswordContainerBody extends StatelessWidget {
   ForgetPasswordContainerBody({super.key});
 
-
-
   @override
   Widget build(BuildContext context) {
     var authCubit = BlocProvider.of<AuthCubit>(context);
-    return Form(
-      key: authCubit.forgetFormKey,
-      child: ListView(
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
-        children: [
-          Text(
-            AppStrings.forgetPassword,
-            style: AppStyles.headLine,
-            textAlign: TextAlign.center,
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is SendCodeStateFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.red[800],
+              content: Text(state.errMessage),
+            ),
+          );
+        }
+        if (state is SendCodeStateSuccess) {
+          context.go(AppRouting.verifyEmailView);
+        }
+      },
+      builder: (context, state) {
+        return Form(
+          key: authCubit.forgetFormKey,
+          child: ListView(
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(),
+            children: [
+              Text(
+                AppStrings.forgetPassword,
+                style: AppStyles.headLine,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                AppStrings.forgetPasswordInstructions,
+                style: AppStyles.bodyText,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              FormSection(
+                validator: authCubit.emailValidator(),
+                hintText: AppStrings.enterYourEmail,
+                fieldTitle: AppStrings.emailAddress,
+                stroke: false,
+                controller: authCubit.forgetEmailController,
+              ),
+              const SizedBox(height: 36),
+              CustomElevatedButton(
+                text: AppStrings.confirmEmail,
+                onPressed: () {
+                  authCubit.emailForForgetPassValidation();
+                },
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
-          Text(
-            AppStrings.forgetPasswordInstructions,
-            style: AppStyles.bodyText,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 24),
-          // todo implement validation
-          FormSection(
-            validator: (val) {},
-            hintText: AppStrings.enterYourEmail,
-            fieldTitle: AppStrings.emailAddress,
-            stroke: false,
-            controller: authCubit.forgetEmailController ,
-          ),
-          const SizedBox(height: 36),
-          // todo implement on pressed logic
-          CustomElevatedButton(text: AppStrings.confirmEmail, onPressed: () {
-            authCubit.emailForForgetPassValidation();
-            context.push(AppRouting.verifyEmailView);
-          }),
-        ],
-      ),
+        );
+      },
     );
   }
 }
