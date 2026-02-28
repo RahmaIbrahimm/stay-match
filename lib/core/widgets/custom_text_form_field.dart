@@ -11,6 +11,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.validator,
     this.stroke = true,
     required this.controller,
+    this.isObscure = false
   });
 
   final String? Function(String?) validator;
@@ -18,6 +19,7 @@ class CustomTextFormField extends StatelessWidget {
   final Widget? suffixIcon;
   final bool stroke;
   final TextEditingController controller;
+  final bool isObscure;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,9 @@ class CustomTextFormField extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(boxShadow: AppColors.boxShadow),
       child: TextFormField(
+        obscureText: isObscure,
         decoration: InputDecoration(
+
           hintText: hintText,
           hintStyle: AppStyles.caption.copyWith(
             color: AppColors.textColorSecondary,
