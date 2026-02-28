@@ -23,7 +23,6 @@ class FormSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        //Todo: add validator
         Text(fieldTitle, style: AppStyles.sectionTitle),
         const SizedBox(height: 8),
         CustomTextFormField(
