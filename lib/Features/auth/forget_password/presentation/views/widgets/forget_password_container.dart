@@ -10,6 +10,6 @@ class ForgetPasswordContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomContainer(containerBody: ForgetPasswordContainerBody(),);
+    return CustomContainer(containerBody: ForgetPasswordContainerBody());
   }
 }
