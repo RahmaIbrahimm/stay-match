@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stay_match/features/auth/widgets/custom_drop_down_menu.dart';
 
 import '../../../../../../core/constants/app_colors.dart';
 import '../../../../../../core/constants/app_icons.dart';
 import '../../../../../../core/constants/app_strings.dart';
 import '../../../../../../core/constants/app_styles.dart';
+import '../../../../../../core/routing/app_routing.dart';
 import '../../../../../../core/widgets/custom_elevated_button.dart';
 import '../../../../../../core/widgets/custom_text_button.dart';
 import '../../../../login/presentation/views/widgets/form_section.dart';
 
 class ButtomSheetBody extends StatelessWidget {
   ButtomSheetBody({super.key});
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -73,7 +78,7 @@ class ButtomSheetBody extends StatelessWidget {
             validator: validator,
             hintText: AppStrings.enterYourAge,
             fieldTitle: AppStrings.age,
-          controller: _ageController,
+            controller: _ageController,
           ),
           const SizedBox(height: 22),
           // info: location
@@ -85,17 +90,17 @@ class ButtomSheetBody extends StatelessWidget {
           ),
           const SizedBox(height: 22),
           // info: gender
-          Text(AppStrings.gender,style: AppStyles.sectionTitle),
+          Text(AppStrings.gender, style: AppStyles.sectionTitle),
           const SizedBox(height: 8),
-          CustomDropDownMenu(menuItems: AppStrings.genderMenuItems, hintText: AppStrings.selectYourGender,),
-          // FormSection(
-          //   validator: validator,
-          //   hintText: AppStrings.enterYourGender,
-          //   fieldTitle: AppStrings.gender,
-          //   controller: _genderController,
-          // ),
+          CustomDropDownMenu(
+            menuItems: AppStrings.genderMenuItems,
+            hintText: AppStrings.selectYourGender,
+          ),
           const SizedBox(height: 45),
-          CustomElevatedButton(text: AppStrings.submit, onPressed: signupOnPressed),
+          CustomElevatedButton(
+            text: AppStrings.submit,
+            onPressed: signupOnPressed,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -106,7 +111,9 @@ class ButtomSheetBody extends StatelessWidget {
                 ),
               ),
               CustomTextButton(
-                onPressed: loginOnPressed,
+                onPressed: () {
+                  context.pushReplacement(AppRouting.loginView);
+                },
                 text: AppStrings.login,
                 textColor: AppColors.secondary,
               ),
@@ -119,7 +126,5 @@ class ButtomSheetBody extends StatelessWidget {
   }
 
   void signupOnPressed() {}
-  void loginOnPressed() {}
-
   String? validator(value) {}
 }
