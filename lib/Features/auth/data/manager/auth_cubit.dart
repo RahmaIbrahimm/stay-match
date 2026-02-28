@@ -79,7 +79,7 @@ class AuthCubit extends Cubit<AuthState> {
       emit(SendCodeStateFailure(errMessage: fail.errMessage));
     }, (resp){
       if(resp.isSuccess == true){
-        SendCodeStateSuccess(resp);
+        SendCodeStateSuccess(response: resp,email: forgetEmailController.text);
       }
       else{
         SendCodeStateFailure( errMessage: resp.message ?? 'Failed sending code');
