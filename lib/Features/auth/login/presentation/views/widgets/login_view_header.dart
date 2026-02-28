@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../../core/constants/app_colors.dart';
 import '../../../../../../core/constants/app_images.dart';
 import '../../../../../../core/constants/app_strings.dart';
-import '../../../../../../core/constants/app_styles.dart';
 import '../../../../widgets/auth_header.dart';
 
 class LoginViewHeader extends StatelessWidget {
