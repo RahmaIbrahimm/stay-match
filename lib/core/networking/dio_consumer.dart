@@ -3,7 +3,7 @@ import 'package:stay_match/core/networking/api_interceptors.dart';
 import 'package:stay_match/core/networking/api_service.dart';
 import 'package:stay_match/core/networking/endpoints.dart';
 
-import '../errors/exceptions.dart';
+import '../errors/failures.dart';
 
 class DioConsumer extends ApiService {
   final Dio dio;
