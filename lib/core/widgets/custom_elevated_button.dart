@@ -6,6 +6,7 @@ class CustomElevatedButton extends StatelessWidget {
   const CustomElevatedButton({
     super.key,
     this.backgroundColor,
+    this.isLoading = false,
     required this.text,
     this.textColor,
     this.icon, required this.onPressed,
@@ -14,8 +15,9 @@ class CustomElevatedButton extends StatelessWidget {
   final Color? backgroundColor;
   final Color? textColor;
   final String text;
+  final bool isLoading;
   final Widget? icon;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class CustomElevatedButton extends StatelessWidget {
       ),
 
       onPressed: onPressed,
-      child: Row(
+      child: isLoading? CircularProgressIndicator(color:  AppColors.textColorWhite,):Row(
         spacing: 8,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
