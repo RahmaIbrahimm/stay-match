@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_icons.dart';
@@ -8,6 +9,7 @@ import 'package:stay_match/core/widgets/custom_elevated_button.dart';
 import 'package:stay_match/core/widgets/custom_text_button.dart';
 import 'package:stay_match/features/auth/data/manager/auth_cubit.dart';
 
+import '../../../../../../core/routing/app_routing.dart';
 import '../../../../widgets/form_section.dart';
 import 'divider_between_login_buttons.dart';
 
@@ -27,7 +29,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 backgroundColor: Colors.red[800],
-                content: Text(state.errMessage ),
+                content: Text(state.errMessage),
               ),
             );
           }
@@ -43,81 +45,84 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
         builder: (context, state) {
           bool isLoading = state is LoginStateLoading;
           return ListView(
-          children: [
-            const SizedBox(height: 33),
-            // todo: implement validator email
-            FormSection(
-              validator: authCubit.loginEmailValidator(),
-              hintText: AppStrings.enterYourEmail,
-              fieldTitle: AppStrings.email,
-              suffixIcon: ImageIcon(AssetImage(AppIcons.emailIcon)),
-              controller: authCubit.emailController,
-            ),
-            const SizedBox(height: 37),
-            // todo: implement validator password
-            FormSection(
-              validator: authCubit.loginPasswordValidator(),
-              hintText: AppStrings.enterYourPassword,
-              fieldTitle: AppStrings.password,
-              suffixIcon: Icon(
-                Icons.remove_red_eye_outlined,
-                color: AppColors.primary,
+            children: [
+              const SizedBox(height: 33),
+              // todo: implement validator email
+              FormSection(
+                validator: authCubit.emailValidator(),
+                hintText: AppStrings.enterYourEmail,
+                fieldTitle: AppStrings.email,
+                suffixIcon: ImageIcon(AssetImage(AppIcons.emailIcon)),
+                controller: authCubit.loginEmailController,
               ),
-              controller: authCubit.passwordController,
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: CustomTextButton(
-                onPressed: () {},
-                text: AppStrings.forgetPasswordQuestion,
-              ),
-            ),
-            const SizedBox(height: 50),
-            SizedBox(
-              width: double.infinity,
-              child: CustomElevatedButton(
-                text: AppStrings.login,
-                onPressed: isLoading
-                    ? null
-                    : () {
-                  final formState = authCubit.loginKey.currentState;
-                  if (formState is FormState && formState.validate() == true) {
-                    authCubit.login();
-                  }
-                },
-                isLoading: isLoading,
-              ),
-            ),
-            const SizedBox(height: 15),
-            DividerBetweenLoginButtons(size: size),
-            const SizedBox(height: 15),
-            SizedBox(
-              width: double.infinity,
-              child: CustomElevatedButton(
-                text: AppStrings.loginWithGoogle,
-                backgroundColor: AppColors.secondary,
-                textColor: AppColors.backgroundColor,
-                icon: Brand(Brands.google, size: 20),
-                onPressed: () {},
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(AppStrings.dontHaveAnAccount),
-                // TODO: implement on pressed
-                CustomTextButton(
-                  onPressed: () {},
-                  text: AppStrings.signUp,
-                  textColor: AppColors.secondary,
+              const SizedBox(height: 37),
+              // todo: implement validator password
+              FormSection(
+                validator: authCubit.passwordValidator(),
+                hintText: AppStrings.enterYourPassword,
+                fieldTitle: AppStrings.password,
+                suffixIcon: Icon(
+                  Icons.remove_red_eye_outlined,
+                  color: AppColors.primary,
                 ),
-              ],
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-          ],
-        );
+                controller: authCubit.loginPasswordController,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: CustomTextButton(
+                  onPressed: () {
+                    context.go(AppRouting.forgetPasswordView);
+                  },
+                  text: AppStrings.forgetPasswordQuestion,
+                ),
+              ),
+              const SizedBox(height: 50),
+              SizedBox(
+                width: double.infinity,
+                child: CustomElevatedButton(
+                  text: AppStrings.login,
+                  onPressed: isLoading
+                      ? null
+                      : () {
+                          authCubit.loginAccountValidation();
+                        },
+                  isLoading: isLoading,
+                ),
+              ),
+              const SizedBox(height: 15),
+              DividerBetweenLoginButtons(size: size),
+              const SizedBox(height: 15),
+              SizedBox(
+                width: double.infinity,
+                child: CustomElevatedButton(
+                  text: AppStrings.loginWithGoogle,
+                  backgroundColor: AppColors.secondary,
+                  textColor: AppColors.backgroundColor,
+                  icon: Brand(Brands.google, size: 20),
+                  onPressed: loginWithGoogle,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(AppStrings.dontHaveAnAccount),
+                  // TODO: implement on pressed
+                  CustomTextButton(
+                    onPressed: () {
+                      context.go(AppRouting.signupView);
+                    },
+                    text: AppStrings.signUp,
+                    textColor: AppColors.secondary,
+                  ),
+                ],
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            ],
+          );
         },
       ),
     );
   }
+
+  void loginWithGoogle() {}
 }
