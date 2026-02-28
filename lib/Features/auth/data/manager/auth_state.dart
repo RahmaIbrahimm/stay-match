@@ -32,3 +32,20 @@ class RegisterStateFailure extends AuthState {
   const RegisterStateFailure({required this.errMessage});
   List<Object> get props => [errMessage];
 }
+
+class SendCodeStateLoading extends AuthState {}
+class SendCodeStateSuccess extends AuthState {
+  final ForgetPasswordResponse response;
+  final String email;
+  const SendCodeStateSuccess({required this.response,required this.email});
+
+  @override
+  List<Object> get props => [response];
+}
+class SendCodeStateFailure extends AuthState {
+  final String errMessage;
+
+  const SendCodeStateFailure({required this.errMessage});
+  @override
+  List<Object> get props => [errMessage];
+}
