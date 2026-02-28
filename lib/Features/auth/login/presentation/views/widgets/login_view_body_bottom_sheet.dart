@@ -15,17 +15,18 @@ import 'divider_between_login_buttons.dart';
 
 class LoginViewBodyBottomSheet extends StatelessWidget {
   LoginViewBodyBottomSheet({super.key});
+  final ValueNotifier<bool> _isObscureNotifier = ValueNotifier<bool>(true);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final authCubit = BlocProvider.of<AuthCubit>(context);
-
     return Form(
       key: authCubit.loginKey,
       child: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is LoginStateFailure) {
+            ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 backgroundColor: Colors.red[800],
@@ -57,15 +58,29 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
               ),
               const SizedBox(height: 37),
               // todo: implement validator password
-              FormSection(
-                validator: authCubit.passwordValidator(),
-                hintText: AppStrings.enterYourPassword,
-                fieldTitle: AppStrings.password,
-                suffixIcon: Icon(
-                  Icons.remove_red_eye_outlined,
-                  color: AppColors.primary,
-                ),
-                controller: authCubit.loginPasswordController,
+              ValueListenableBuilder<bool>(
+                valueListenable: _isObscureNotifier,
+                builder: (context, isObscure, child) {
+                  return FormSection(
+                    validator: authCubit.passwordValidator(),
+                    hintText: AppStrings.enterYourPassword,
+                    fieldTitle: AppStrings.password,
+                    suffixIcon: IconButton(
+                      color: AppColors.primary,
+                      onPressed: () {
+                        // Toggle the value
+                        _isObscureNotifier.value = !_isObscureNotifier.value;
+                      },
+                      icon: Icon(
+                        isObscure
+                            ? Icons.visibility_off_outlined
+                            : Icons.remove_red_eye_outlined,
+                      ),
+                    ),
+                    isObscure: isObscure, // Use the same value
+                    controller: authCubit.loginPasswordController,
+                  );
+                },
               ),
               Align(
                 alignment: Alignment.centerLeft,

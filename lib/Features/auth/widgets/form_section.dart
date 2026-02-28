@@ -9,7 +9,9 @@ class FormSection extends StatelessWidget {
     required this.validator,
     required this.hintText,
     required this.fieldTitle,
-    this.suffixIcon, required this.controller,
+    this.suffixIcon,
+    required this.controller,
+    this.isObscure = false,
   });
 
   final String? Function(String?) validator;
@@ -17,6 +19,7 @@ class FormSection extends StatelessWidget {
   final String fieldTitle;
   final Widget? suffixIcon;
   final TextEditingController controller;
+  final bool isObscure;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +34,7 @@ class FormSection extends StatelessWidget {
           validator: validator,
           suffixIcon: suffixIcon,
           controller: controller,
+          isObscure: isObscure,
         ),
       ],
     );

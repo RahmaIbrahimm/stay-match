@@ -9,7 +9,12 @@ class DioConsumer extends ApiService {
   final Dio dio;
 
   DioConsumer(this.dio) {
-    dio.options.baseUrl = Endpoints.baseUrl;
+    dio.options = BaseOptions(
+      baseUrl: Endpoints.baseUrl,
+      validateStatus: (status) {
+        return status! < 500;
+      },
+    );
     dio.interceptors.add(ApiInterceptors());
     dio.interceptors.add(
       LogInterceptor(

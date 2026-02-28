@@ -4,6 +4,8 @@ import 'package:stay_match/core/errors/failures.dart';
 import 'package:stay_match/core/networking/api_service.dart';
 import 'package:stay_match/features/auth/data/models/forget_password_response.dart';
 import 'package:stay_match/features/auth/data/models/login_response.dart';
+import 'package:stay_match/features/auth/data/models/reset_password_response.dart';
+import 'package:stay_match/features/auth/data/models/verify_code_response.dart';
 
 import '../../../../core/networking/endpoints.dart';
 import 'auth_repo.dart';
@@ -47,15 +49,48 @@ class AuthRepoImpl implements AuthRepo {
 
   @override
   Future<Either<Failure, ForgetPasswordResponse>> sendVerificationCode({
-    String? email,
+    required String email,
   }) async {
     try {
       var response = await apiService.post(
         Endpoints.forgetPassword,
         data: {'email': email},
       );
-    ForgetPasswordResponse forgetPasswordResponse = ForgetPasswordResponse.fromJson(response);
-    return right(forgetPasswordResponse);
+      return right(ForgetPasswordResponse.fromJson(response));
+    } on DioException catch (e) {
+      return left(ServerFailure.fromDioError(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, VerifyCodeResponse>> verifyOTP({
+    required String code,
+    required String email,
+  }) async {
+    try {
+      var response = await apiService.post(
+        Endpoints.verifyCode,
+        data: {"email": email, "code": code},
+      );
+      return right(VerifyCodeResponse.fromJson(response));
+    } on DioException catch (e) {
+      return left(ServerFailure.fromDioError(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ResetPasswordResponse>> resetPassword({
+    required String password,
+    required String confirmPassword,
+    required String userId,
+  }) async {
+    try {
+      var response = await apiService.post(Endpoints.resetPassword, data: {
+        "userId": userId,
+        "newPassword": password,
+        "confirmPassword": confirmPassword
+      });
+      return right(ResetPasswordResponse.fromJson(response));
     } on DioException catch (e) {
       return left(ServerFailure.fromDioError(e));
     }
