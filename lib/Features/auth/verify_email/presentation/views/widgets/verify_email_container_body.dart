@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pinput/pinput.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
@@ -27,16 +28,7 @@ class VerifyEmailContainerBody extends StatelessWidget {
           );
         }
         if (state is VerifyCodeStateSuccess) {
-          final userId = state.response.data?.userId;
           authCubit.otpController.clear();
-          if (userId != null) {
-            context.push(
-              AppRouting.newPasswordView,
-              extra: userId,
-            );}
-          else{
-            print('problem arised $userId userid');
-          }
           ScaffoldMessenger.of(context).clearSnackBars();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -44,7 +36,7 @@ class VerifyEmailContainerBody extends StatelessWidget {
               content: Text(state.response.message ?? 'SUCCESS'),
             ),
           );
-          context.go(AppRouting.newPasswordView);
+          context.go(AppRouting.resetPasswordView);
         }
       },
       builder: (context, state) {
