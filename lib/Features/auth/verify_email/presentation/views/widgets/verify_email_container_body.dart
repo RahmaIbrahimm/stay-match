@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pinput/pinput.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
 import 'package:stay_match/core/routing/app_routing.dart';
 import 'package:stay_match/core/widgets/custom_elevated_button.dart';
+import 'package:stay_match/core/widgets/custom_text_button.dart';
 import 'package:stay_match/features/auth/data/manager/auth_cubit.dart';
 import 'package:stay_match/features/auth/verify_email/presentation/views/widgets/verify_email_otp.dart';
+import 'package:timer_count_down/timer_count_down.dart';
 
 class VerifyEmailContainerBody extends StatelessWidget {
   const VerifyEmailContainerBody({super.key});
@@ -93,17 +94,27 @@ class VerifyEmailContainerBody extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: 5,
                 children: [
-                  Text(
-                    '0:29',
-                    style: AppStyles.bodyText.copyWith(
-                      color: AppColors.textColorPrimary,
-                    ),
+                  Countdown(
+                    seconds: 120,
+                    build: (context, time) {
+                      return Text(
+                        _formatTime(time),
+                        style: AppStyles.bodyText.copyWith(
+                          color: AppColors.textColorPrimary,
+                        ),
+                      );
+                    },
+                    interval: const Duration(seconds: 1),
                   ),
-                  Text(
-                    AppStrings.resendConfirmation,
-                    style: AppStyles.bodyText.copyWith(
-                      color: AppColors.textColorSecondary,
-                    ),
+                  CustomTextButton(
+                    onPressed: () {
+                      if (state is SendCodeStateSuccess ) {
+                        authCubit.sendCode();
+                      }
+                    },
+                    text: AppStrings.resendConfirmation,
+                    textColor: AppColors.textColorSecondary,
+                    textStyle: AppStyles.bodyText,
                   ),
                 ],
               ),
@@ -112,5 +123,12 @@ class VerifyEmailContainerBody extends StatelessWidget {
         );
       },
     );
+  }
+
+  String _formatTime(double time) {
+    int totalSeconds = time.toInt();
+    int minutes = totalSeconds ~/ 60;
+    int seconds = totalSeconds % 60;
+    return '$minutes:${seconds.toString().padLeft(2, '0')}';
   }
 }
