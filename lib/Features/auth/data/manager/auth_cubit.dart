@@ -141,8 +141,6 @@ class AuthCubit extends Cubit<AuthState> {
         if (resp.isSuccess == true) {
           emit(VerifyCodeStateSuccess(response: resp));
           _resetUserId = resp.data?.userId;
-          print('✅ Stored _resetUserId: $_resetUserId');
-
         } else {
           emit(VerifyCodeStateFailure(errMessage: "Incorrect Code"));
         }
@@ -152,10 +150,10 @@ class AuthCubit extends Cubit<AuthState> {
 
   // ---------- reset password ---------
   void resetPassValidation() async {
-    if (_resetUserId == null) {
-      emit(ResetPassStateFailure(errMessage: "Session expired. Please verify again."));
-      return;
-    }
+    // if (_resetUserId == null) {
+    //   emit(ResetPassStateFailure(errMessage: "Session expired. Please verify again."));
+    //   return;
+    // }
 
     final formState = resetPasswordFormKey.currentState;
     if (formState is FormState && formState.validate() == true) {
