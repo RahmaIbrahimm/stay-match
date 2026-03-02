@@ -7,4 +7,8 @@ abstract class AppImages {
 
   // forget password
   static const gradientBg = '$path/Forget password_bg.png';
+
+  // home
+  static const homeHeader = '$path/home_header_pic.png';
+
 }
