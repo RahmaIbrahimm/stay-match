@@ -24,6 +24,21 @@ class LoginStateFailure extends AuthState {
   const LoginStateFailure({required this.errMessage});
 }
 
+class GoogleLoginStateLoading extends AuthState {}
+class GoogleLoginStateSuccess extends AuthState {
+  final LoginWithGoogleResponse? resp;
+
+  const GoogleLoginStateSuccess({required this.resp});
+
+  @override
+  List<Object> get props => [?resp];
+}
+class GoogleLoginStateFailure extends AuthState {
+  final String errMessage;
+
+  const GoogleLoginStateFailure({required this.errMessage});
+}
+
 class RegisterStateLoading extends AuthState {}
 class RegisterStateSuccess extends AuthState {}
 class RegisterStateFailure extends AuthState {
