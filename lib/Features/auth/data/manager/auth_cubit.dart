@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stay_match/features/auth/data/models/forget_password_response.dart';
 import 'package:stay_match/features/auth/data/models/login_response.dart';
+import 'package:stay_match/features/auth/data/models/login_with_google_response.dart';
 import 'package:stay_match/features/auth/data/models/verify_code_response.dart';
 
 import '../models/reset_password_response.dart';
@@ -13,8 +15,12 @@ part 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   AuthRepo authRepo;
 
+  AuthCubit(this.authRepo) : super(AuthStateInitial());
+
   // ---- other ----
   String? _resetUserId;
+
+  // String? idToken;
   //=========== login page ===========
 
   GlobalKey<FormState> loginKey = GlobalKey<FormState>(
@@ -54,10 +60,10 @@ class AuthCubit extends Cubit<AuthState> {
   final TextEditingController resetPasswordController = TextEditingController();
 
   // confirm password
-  final TextEditingController resetConfirmPasswordController = TextEditingController();
+  final TextEditingController resetConfirmPasswordController =
+      TextEditingController();
 
   //--------methods---------
-  AuthCubit(this.authRepo) : super(AuthStateInitial());
 
   // -------- login ----------
   Future<void> login() async {
@@ -94,6 +100,9 @@ class AuthCubit extends Cubit<AuthState> {
       await login();
     }
   }
+
+  // ----- google login ------
+
   // -------- forget password ----------
   Future<void> sendCode() async {
     emit(SendCodeStateLoading());
@@ -162,7 +171,6 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> resetPassword() async {
-
     var response = await authRepo.resetPassword(
       password: resetPasswordController.text,
       confirmPassword: resetConfirmPasswordController.text,
@@ -191,5 +199,59 @@ class AuthCubit extends Cubit<AuthState> {
     otpController.dispose();
     forgetEmailController.dispose();
     return super.close();
+  }
+
+  // google sign in
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+
+  Future<void> googleLogin() async {
+    emit(GoogleLoginStateLoading());
+
+    try {
+      await _googleSignIn.initialize(
+        serverClientId:
+            '936135595361-h2fip19l9a53t41gc1htmanh3qmv5pjm.apps.googleusercontent.com',
+      );
+
+      final GoogleSignInAccount? googleUser = await _googleSignIn
+          .authenticate();
+
+      if (googleUser == null) {
+        emit(GoogleLoginStateFailure(errMessage: "Google sign-in cancelled"));
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final String? idToken = googleAuth.idToken;
+
+      if (idToken == null) {
+        emit(GoogleLoginStateFailure(errMessage: "Failed to get ID token"));
+        return;
+      }
+
+      var response = await authRepo.loginWithGoogle(idToken: idToken);
+
+      response.fold(
+        (failure) {
+          emit(GoogleLoginStateFailure(errMessage: failure.errMessage));
+        },
+        (resp) {
+          if (resp.isSuccess == true) {
+            print('Token:$idToken');
+            emit(GoogleLoginStateSuccess(resp: resp));
+          } else {
+            emit(
+              GoogleLoginStateFailure(
+                errMessage: resp.message ?? "Login failed",
+              ),
+            );
+          }
+        },
+      );
+    } catch (e) {
+      emit(GoogleLoginStateFailure(errMessage: "Google Sign-In failed: $e"));
+    }
   }
 }

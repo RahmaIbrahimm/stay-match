@@ -12,7 +12,7 @@ class ForgetPasswordView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(body: const ForgetPasswordViewBody()),
+      child: Scaffold(backgroundColor: AppColors.primary,body: const ForgetPasswordViewBody()),
     );
   }
 }

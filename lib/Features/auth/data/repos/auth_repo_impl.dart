@@ -4,6 +4,7 @@ import 'package:stay_match/core/errors/failures.dart';
 import 'package:stay_match/core/networking/api_service.dart';
 import 'package:stay_match/features/auth/data/models/forget_password_response.dart';
 import 'package:stay_match/features/auth/data/models/login_response.dart';
+import 'package:stay_match/features/auth/data/models/login_with_google_response.dart';
 import 'package:stay_match/features/auth/data/models/reset_password_response.dart';
 import 'package:stay_match/features/auth/data/models/verify_code_response.dart';
 
@@ -85,14 +86,33 @@ class AuthRepoImpl implements AuthRepo {
     required String userId,
   }) async {
     try {
-      var response = await apiService.post(Endpoints.resetPassword, data: {
-        "userId": userId,
-        "newPassword": password,
-        "confirmPassword": confirmPassword
-      });
+      var response = await apiService.post(
+        Endpoints.resetPassword,
+        data: {
+          "userId": userId,
+          "newPassword": password,
+          "confirmPassword": confirmPassword,
+        },
+      );
       return right(ResetPasswordResponse.fromJson(response));
     } on DioException catch (e) {
       return left(ServerFailure.fromDioError(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, LoginWithGoogleResponse>> loginWithGoogle({
+    required String idToken,
+  }) async {
+    try {
+      var response = await apiService.post(
+        Endpoints.googleLogin,
+        data: {"idToken": idToken},
+      );
+      print('id token : $idToken');
+      return right(LoginWithGoogleResponse.fromJson(response));
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDioError(e));
     }
   }
 }
