@@ -51,6 +51,7 @@ dependencies:
   get_it: ^9.2.1
   timer_count_down: ^2.2.2
   google_sign_in: ^7.2.0
+  google_sign_in_android: ^7.2.9
 
 dev_dependencies:
   flutter_test:
