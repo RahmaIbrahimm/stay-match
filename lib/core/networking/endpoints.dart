@@ -5,5 +5,6 @@ abstract class Endpoints {
   static const String verifyCode = 'api/Account/verify-code';
   static const String resetPassword = 'api/Account/reset-password';
   static const String googleLogin = 'api/Account/google-login';
-  static const String clientId= '753330589269-8ikuvjtbbvhranh8rg52rkodge5mg33h.apps.googleusercontent.com';
+  static const String webClientId= '993310853138-lmutd7a9nogenvkl5apieffu5qotdqdf.apps.googleusercontent.com';
+  static const String androidClientId= '936135595361-h3462ve7821dq8hcqamq5f3i632qruf9.apps.googleusercontent.com';
 }
