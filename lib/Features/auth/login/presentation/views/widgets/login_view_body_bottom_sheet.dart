@@ -15,6 +15,7 @@ import 'divider_between_login_buttons.dart';
 
 class LoginViewBodyBottomSheet extends StatelessWidget {
   LoginViewBodyBottomSheet({super.key});
+
   final ValueNotifier<bool> _isObscureNotifier = ValueNotifier<bool>(true);
 
   @override
@@ -29,7 +30,6 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
             ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                backgroundColor: Colors.red[800],
                 content: Text(state.errMessage),
               ),
             );
@@ -41,6 +41,20 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                 content: Text(state.user.message ?? 'Login Successful'),
               ),
             );
+            context.go(AppRouting.homeView);
+          }
+          // GOOGLE LOGIN :
+          if (state is GoogleLoginStateSuccess) {
+            // Handle successful Google login
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Google Sign-In Successful!')),
+            );
+            context.go(AppRouting.homeView);
+          }
+          if (state is GoogleLoginStateFailure) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.errMessage)));
           }
         },
         builder: (context, state) {
@@ -68,7 +82,6 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                     suffixIcon: IconButton(
                       color: AppColors.primary,
                       onPressed: () {
-                        // Toggle the value
                         _isObscureNotifier.value = !_isObscureNotifier.value;
                       },
                       icon: Icon(
@@ -77,7 +90,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                             : Icons.remove_red_eye_outlined,
                       ),
                     ),
-                    isObscure: isObscure, // Use the same value
+                    isObscure: isObscure,
                     controller: authCubit.loginPasswordController,
                   );
                 },
@@ -114,7 +127,9 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                   backgroundColor: AppColors.secondary,
                   textColor: AppColors.backgroundColor,
                   icon: Brand(Brands.google, size: 20),
-                  onPressed: loginWithGoogle,
+                  onPressed: () async{
+                    await authCubit.googleLogin();
+                  } ,
                 ),
               ),
               Row(
@@ -139,5 +154,4 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
     );
   }
 
-  void loginWithGoogle() {}
 }
