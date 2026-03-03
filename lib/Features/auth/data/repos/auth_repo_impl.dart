@@ -109,7 +109,7 @@ class AuthRepoImpl implements AuthRepo {
         Endpoints.googleLogin,
         data: {"idToken": idToken},
       );
-      print('id token : $idToken');
+      print('id token impl print: $idToken');
       return right(LoginWithGoogleResponse.fromJson(response));
     } on DioException catch (e) {
       return Left(ServerFailure.fromDioError(e));
