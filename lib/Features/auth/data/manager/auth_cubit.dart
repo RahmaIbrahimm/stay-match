@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:stay_match/core/networking/endpoints.dart';
 import 'package:stay_match/features/auth/data/models/forget_password_response.dart';
 import 'package:stay_match/features/auth/data/models/login_response.dart';
 import 'package:stay_match/features/auth/data/models/login_with_google_response.dart';
@@ -159,11 +160,6 @@ class AuthCubit extends Cubit<AuthState> {
 
   // ---------- reset password ---------
   void resetPassValidation() async {
-    // if (_resetUserId == null) {
-    //   emit(ResetPassStateFailure(errMessage: "Session expired. Please verify again."));
-    //   return;
-    // }
-
     final formState = resetPasswordFormKey.currentState;
     if (formState is FormState && formState.validate() == true) {
       await resetPassword();
@@ -203,6 +199,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   // google sign in
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  final scopes = <String>["https://www.googleapis.com/auth/userinfo.email"];
 
   Future<void> googleLogin() async {
     emit(GoogleLoginStateLoading());
@@ -210,8 +207,9 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       await _googleSignIn.initialize(
         serverClientId:
-            '936135595361-h2fip19l9a53t41gc1htmanh3qmv5pjm.apps.googleusercontent.com',
+            '936135595361-tkjd357n4h18pd6pc4pfoch6rto0vlh5.apps.googleusercontent.com',
       );
+      print('success web 2');
 
       final GoogleSignInAccount? googleUser = await _googleSignIn
           .authenticate();
@@ -220,9 +218,12 @@ class AuthCubit extends Cubit<AuthState> {
         emit(GoogleLoginStateFailure(errMessage: "Google sign-in cancelled"));
         return;
       }
-
+// ======= ======= =======
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
+      // final gAuth = await googleUser.authorizationClient.authorizationForScopes(
+      //   scopes,
+      // );
 
       final String? idToken = googleAuth.idToken;
 
@@ -230,11 +231,12 @@ class AuthCubit extends Cubit<AuthState> {
         emit(GoogleLoginStateFailure(errMessage: "Failed to get ID token"));
         return;
       }
-
+      print('id token : $idToken');
       var response = await authRepo.loginWithGoogle(idToken: idToken);
 
       response.fold(
         (failure) {
+          print(failure.errMessage);
           emit(GoogleLoginStateFailure(errMessage: failure.errMessage));
         },
         (resp) {
