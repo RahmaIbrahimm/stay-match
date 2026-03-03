@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract class AppStyles {
+  static final logo = GoogleFonts.protestRiot(
+    fontSize: 15,
+    fontWeight: FontWeight.normal,
+  );
   static final headLine = GoogleFonts.poppins(
     fontSize: 28,
     fontWeight: FontWeight.bold,
   );
-  // static final primary = GoogleFonts.poppins(
-  //   fontSize: 36,
-  //   fontWeight: FontWeight.bold,
-  // );
   static final sectionTitle = GoogleFonts.poppins(
     fontSize: 24,
     fontWeight: FontWeight.w600,
