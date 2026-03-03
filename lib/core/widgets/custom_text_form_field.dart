@@ -11,7 +11,8 @@ class CustomTextFormField extends StatelessWidget {
     required this.validator,
     this.stroke = true,
     required this.controller,
-    this.isObscure = false
+    this.isObscure = false,
+    this.strokeWidth,
   });
 
   final String? Function(String?) validator;
@@ -20,16 +21,15 @@ class CustomTextFormField extends StatelessWidget {
   final bool stroke;
   final TextEditingController controller;
   final bool isObscure;
+  final double? strokeWidth;
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       decoration: BoxDecoration(boxShadow: AppColors.boxShadow),
       child: TextFormField(
         obscureText: isObscure,
         decoration: InputDecoration(
-
           hintText: hintText,
           hintStyle: AppStyles.caption.copyWith(
             color: AppColors.textColorSecondary,
@@ -55,7 +55,7 @@ class CustomTextFormField extends StatelessWidget {
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(
         color: stroke ? AppColors.primary : Colors.transparent,
-        width: 2,
+        width: strokeWidth ?? 2,
       ),
     );
   }

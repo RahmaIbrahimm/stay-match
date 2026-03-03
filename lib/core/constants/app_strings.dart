@@ -1,5 +1,4 @@
 abstract class AppStrings {
-
   // auth form
   static const email = 'Email';
   static const enterYourEmail = 'Enter your Email';
@@ -35,7 +34,8 @@ abstract class AppStrings {
   static const confirmEmail = 'Confirm Email';
   static const newPassword = 'New Password'; // todo: wth is that??
   static const forgetPassword = 'Forget Password';
-  static const forgetPasswordInstructions = 'Please Write your Email to receive a\nconfirmation code to sent a new password ';
+  static const forgetPasswordInstructions =
+      'Please Write your Email to receive a\nconfirmation code. ';
 
   // verify email page
   static const verifyEmailAddress = 'Verify Email Address';
@@ -47,5 +47,64 @@ abstract class AppStrings {
   static const pleaseWriteNewPass = 'Please write your new password';
   static const enterYourNewPass = 'Enter your new password';
 
-  static const List<String> genderMenuItems = ['Female','Male'];
+  static const List<String> genderMenuItems = ['Female', 'Male'];
+  static const egyptCities = <String>[
+    "Alexandria",
+    "Aswan",
+    "Asyut",
+    "Beheira",
+    "Beni Suef",
+    "Cairo",
+    "Dakahlia",
+    "Damietta",
+    "Faiyum",
+    "Gharbia",
+    "Giza",
+    "Ismailia",
+    "Kafr El Sheikh",
+    "Luxor",
+    "Matrouh",
+    "Minya",
+    "Monufia",
+    "New Valley",
+    "North Sinai",
+    "Port Said",
+    "Qalyubia",
+    "Qena",
+    "Red Sea",
+    "Sharqia",
+    "Sohag",
+    "South Sinai",
+    "Suez",
+  ];
+
+  // home page
+  static const stayMatch = 'StayMatch';
+  static const homeHeader =
+      'helps you find the perfect home and the most compatible roommate.';
+  static const searchHome = 'Search by Area / Person';
+  static const viewAllApartments = 'View All Apartments';
+  static const discoverApartments = 'Discover Apartments';
+  static const discoverRooms = 'Discover Rooms';
+  static const viewAllRooms = 'View All Rooms';
+  static const myProperties = 'My Properties';
+  static const viewAllProperties = 'View All Properties';
+  static const needHelp = 'Need Help ?';
+  static const technicalSupport = 'Technical Support';
+  static const sendInquiries = 'Send us your inquiries!';
+  static const contactUs = 'Contact Us';
+  static const about = 'About';
+  static const aboutDesc =
+      'Find your ideal home and the perfect roommate with StayMatch';
+  static const links = 'Links';
+  static const home = 'Home';
+  static const apartments = 'Apartments';
+  static const matches = 'Matches';
+  static const chats = 'Chats';
+  static const profile = 'Profile';
+  static const helpCenter = 'Help Center';
+  static const faqs = 'FAQs';
+  static const safetyTips = 'Safety Tips';
+  static const support = 'Support';
+  static const month = 'month';
 }
