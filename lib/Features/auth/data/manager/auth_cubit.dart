@@ -2,12 +2,13 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:stay_match/core/networking/endpoints.dart';
 import 'package:stay_match/features/auth/data/models/forget_password_response.dart';
 import 'package:stay_match/features/auth/data/models/login_response.dart';
 import 'package:stay_match/features/auth/data/models/login_with_google_response.dart';
+import 'package:stay_match/features/auth/data/models/register_response.dart';
 import 'package:stay_match/features/auth/data/models/verify_code_response.dart';
 
+import '../../../../core/networking/endpoints.dart';
 import '../models/reset_password_response.dart';
 import '../repos/auth_repo.dart';
 
@@ -21,7 +22,6 @@ class AuthCubit extends Cubit<AuthState> {
   // ---- other ----
   String? _resetUserId;
 
-  // String? idToken;
   //=========== login page ===========
 
   GlobalKey<FormState> loginKey = GlobalKey<FormState>(
@@ -38,6 +38,30 @@ class AuthCubit extends Cubit<AuthState> {
     text: 'Kitty@123',
   );
 
+  // ============ signup page ===============
+  GlobalKey<FormState> signupKey = GlobalKey<FormState>();
+
+  // email
+  final TextEditingController signEmailController = TextEditingController();
+
+  // password
+  final TextEditingController signFirstNameController = TextEditingController();
+  final TextEditingController signLastNameController = TextEditingController();
+  final TextEditingController signPasswordController = TextEditingController();
+
+  // confirm password
+  final TextEditingController signConfirmPasswordController =
+      TextEditingController();
+
+  // city
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController signSearchCityController =
+      TextEditingController();
+
+  // gender
+  final TextEditingController genderController = TextEditingController();
+
+  // birth date ==========================
   //=========== forget password page ===========
   final GlobalKey<FormState> forgetFormKey = GlobalKey<FormState>(
     debugLabel: 'forget form key',
@@ -52,7 +76,7 @@ class AuthCubit extends Cubit<AuthState> {
   );
   final TextEditingController otpController = TextEditingController();
 
-  //=========== verify email code ===========
+  //=========== reset password ===========
   GlobalKey<FormState> resetPasswordFormKey = GlobalKey<FormState>(
     debugLabel: 'login form key',
   );
@@ -103,6 +127,80 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   // ----- google login ------
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  final scopes = <String>["https://www.googleapis.com/auth/userinfo.email"];
+
+  Future<void> googleLogin() async {
+    emit(GoogleLoginStateLoading());
+
+    try {
+      await _googleSignIn.initialize(serverClientId: Endpoints.webClientId);
+      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+
+      final String? idToken = googleAuth.idToken;
+
+      if (idToken == null) {
+        emit(GoogleLoginStateFailure(errMessage: "Failed to get ID token"));
+        return;
+      }
+      print('id token : $idToken');
+      var response = await authRepo.loginWithGoogle(idToken: idToken);
+
+      response.fold(
+        (failure) {
+          print(failure.errMessage);
+          emit(GoogleLoginStateFailure(errMessage: failure.errMessage));
+        },
+        (resp) {
+          if (resp.isSuccess == true) {
+            print('Token:$idToken');
+            emit(GoogleLoginStateSuccess(resp: resp));
+          } else {
+            emit(
+              GoogleLoginStateFailure(
+                errMessage: resp.message ?? "Login failed",
+              ),
+            );
+          }
+        },
+      );
+    } catch (e) {
+      emit(GoogleLoginStateFailure(errMessage: "Google Sign-In failed: $e"));
+    }
+  }
+
+  // -------- signup ----------
+  //todo: add birth dateeeeeeeeeee
+  Future<void> signup() async {
+    var response = await authRepo.signup(
+      firstName: signFirstNameController.text,
+      lastName: signLastNameController.text,
+      email: signEmailController.text,
+      password: signPasswordController.text,
+      confirmPassword: signConfirmPasswordController.text,
+      genderType: genderController.text,
+      birthDate: '',
+      city: cityController.text,
+    );
+    response.fold(
+      (failure) {
+        emit(RegisterStateFailure(errMessage: failure.errMessage));
+      },
+      (response) {
+        if (response.isSuccess == true) {
+          emit(RegisterStateSuccess(response: response));
+        } else {
+          emit(
+            RegisterStateFailure(
+              errMessage: response.message ?? "Registration failed",
+            ),
+          );
+        }
+      },
+    );
+  }
 
   // -------- forget password ----------
   Future<void> sendCode() async {
@@ -165,7 +263,6 @@ class AuthCubit extends Cubit<AuthState> {
       await resetPassword();
     }
   }
-
   Future<void> resetPassword() async {
     var response = await authRepo.resetPassword(
       password: resetPasswordController.text,
@@ -195,65 +292,5 @@ class AuthCubit extends Cubit<AuthState> {
     otpController.dispose();
     forgetEmailController.dispose();
     return super.close();
-  }
-
-  // google sign in
-  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
-  final scopes = <String>["https://www.googleapis.com/auth/userinfo.email"];
-
-  Future<void> googleLogin() async {
-    emit(GoogleLoginStateLoading());
-
-    try {
-      await _googleSignIn.initialize(
-        serverClientId:
-            '936135595361-tkjd357n4h18pd6pc4pfoch6rto0vlh5.apps.googleusercontent.com',
-      );
-      print('success web 2');
-
-      final GoogleSignInAccount? googleUser = await _googleSignIn
-          .authenticate();
-
-      if (googleUser == null) {
-        emit(GoogleLoginStateFailure(errMessage: "Google sign-in cancelled"));
-        return;
-      }
-// ======= ======= =======
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-      // final gAuth = await googleUser.authorizationClient.authorizationForScopes(
-      //   scopes,
-      // );
-
-      final String? idToken = googleAuth.idToken;
-
-      if (idToken == null) {
-        emit(GoogleLoginStateFailure(errMessage: "Failed to get ID token"));
-        return;
-      }
-      print('id token : $idToken');
-      var response = await authRepo.loginWithGoogle(idToken: idToken);
-
-      response.fold(
-        (failure) {
-          print(failure.errMessage);
-          emit(GoogleLoginStateFailure(errMessage: failure.errMessage));
-        },
-        (resp) {
-          if (resp.isSuccess == true) {
-            print('Token:$idToken');
-            emit(GoogleLoginStateSuccess(resp: resp));
-          } else {
-            emit(
-              GoogleLoginStateFailure(
-                errMessage: resp.message ?? "Login failed",
-              ),
-            );
-          }
-        },
-      );
-    } catch (e) {
-      emit(GoogleLoginStateFailure(errMessage: "Google Sign-In failed: $e"));
-    }
   }
 }
