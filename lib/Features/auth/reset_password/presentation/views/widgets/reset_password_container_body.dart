@@ -5,29 +5,19 @@ import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/routing/app_routing.dart';
 import 'package:stay_match/core/widgets/custom_elevated_button.dart';
-import 'package:stay_match/features/auth/widgets/form_section.dart';
+import 'package:stay_match/core/widgets/form_section.dart';
 
 import '../../../../../../core/constants/app_styles.dart';
 import '../../../../data/manager/auth_cubit.dart';
 
 class ResetPasswordContainerBody extends StatelessWidget {
-  ResetPasswordContainerBody({super.key});
+  const ResetPasswordContainerBody({super.key});
 
   @override
   Widget build(BuildContext context) {
     var authCubit = BlocProvider.of<AuthCubit>(context);
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
-        if (state is ResetPassStateFailure) {
-          print(state.errMessage);
-          ScaffoldMessenger.of(context).clearSnackBars();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.red[800],
-              content: Text(state.errMessage),
-            ),
-          );
-        }
         if (state is ResetPassStateSuccess) {
           print(state.response.message);
           ScaffoldMessenger.of(context).showSnackBar(
@@ -42,7 +32,8 @@ class ResetPasswordContainerBody extends StatelessWidget {
             if (context.mounted) {
               context.go(AppRouting.loginView);
             }
-          });        }
+          });
+        }
       },
       builder: (context, state) {
         return Form(
@@ -67,7 +58,7 @@ class ResetPasswordContainerBody extends StatelessWidget {
               ),
               const SizedBox(height: 25),
               FormSection(
-                validator: authCubit.passwordValidator(),
+                validator:(val)=>  authCubit.passwordValidator(password: val),
                 hintText: AppStrings.enterYourNewPass,
                 fieldTitle: AppStrings.newPassword,
                 suffixIcon: Icon(
@@ -78,7 +69,7 @@ class ResetPasswordContainerBody extends StatelessWidget {
               ),
               const SizedBox(height: 28),
               FormSection(
-                validator: authCubit.passwordValidator(),
+                validator: (val)=>  authCubit.passwordMatchValidator(password: authCubit.resetPasswordController.text, confirmPassword: authCubit.resetConfirmPasswordController.text),
                 hintText: AppStrings.enterYourNewPass,
                 fieldTitle: AppStrings.confirmPassword,
                 suffixIcon: Icon(
@@ -90,8 +81,18 @@ class ResetPasswordContainerBody extends StatelessWidget {
               const SizedBox(height: 40),
               CustomElevatedButton(
                 text: AppStrings.confirmCode,
-                onPressed: () {
-                  authCubit.resetPassValidation();
+                onPressed: () async {
+                  await authCubit.formValidationAndInvokeMethod(
+                    key: authCubit.resetPasswordFormKey,
+                    authMethod: authCubit.formValidationAndInvokeMethod(
+                      key: authCubit.resetPasswordFormKey,
+                      authMethod: authCubit.resetPassword(),
+                      hasConfirmPassword: true,
+                      pass: authCubit.resetPasswordController.text,
+                      confirmPass:
+                          authCubit.resetConfirmPasswordController.text,
+                    ),
+                  );
                 },
               ),
             ],
