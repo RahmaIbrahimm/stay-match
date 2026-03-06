@@ -66,6 +66,7 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
+      padding: EdgeInsets.zero,
       duration: const Duration(milliseconds: 150),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
@@ -85,7 +86,7 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
           contentPadding: const EdgeInsets.only(
             top: 16,
             bottom: 16,
-            left: 16,
+            left: 12,
 
           ),
           //==================borders===========================
@@ -123,7 +124,6 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
                   color: AppColors.textColorSecondary,
                 ),
                 contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 12,
                   vertical: 10,
                 ),
                 border: OutlineInputBorder(
@@ -132,7 +132,7 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: AppColors.primary.withOpacity(0.5)),
+                  borderSide: BorderSide(color: AppColors.primary.withAlpha(50)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -186,14 +186,14 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
             interactive: true,
           ),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: AppColors.containerColor,
-            boxShadow: AppColors.boxShadow
+              borderRadius: BorderRadius.circular(15),
+              color: AppColors.containerColor,
+              boxShadow: AppColors.boxShadow
           ),
           maxHeight: 210,
         ),
         menuItemStyleData: const MenuItemStyleData(
-          padding: EdgeInsets.symmetric(vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 16),
         ),
       ),
     );
@@ -201,12 +201,12 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
 
   OutlineInputBorder buildOutlineInputBorder({bool isError = false}) {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(15),
-      borderSide: BorderSide(
-        width: 2,
-        color: isError ? Colors.red : AppColors.primary,
-      ),
-      gapPadding: 0
+        borderRadius: BorderRadius.circular(15),
+        borderSide: BorderSide(
+          width: 2,
+          color: isError ? Colors.red : AppColors.primary,
+        ),
+        gapPadding: 0
     );
   }
 }
