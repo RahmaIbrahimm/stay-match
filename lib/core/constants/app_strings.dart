@@ -12,8 +12,9 @@ abstract class AppStrings {
   static const enterYourFirstName = 'Enter your first name';
   static const enterYourLastName = 'Enter your last name';
   static const city = 'City';
-  static const enterYourCity = 'Enter your city';
+  static const chooseYourCity = 'Choose your city';
   static const birthDate = 'Birth Date';
+  static const dateFormat = 'YYYY-MM-DD';
   static const enterYourBirthDate = 'Enter your birth date';
   static const confirmPassword = 'Confirm Password';
   static const login = 'Login';
@@ -53,35 +54,34 @@ abstract class AppStrings {
 
   static const List<String> genderMenuItems = ['Female', 'Male'];
   static const egyptCities = <String>[
-    "Alexandria",
-    "Aswan",
-    "Asyut",
-    "Beheira",
-    "Beni Suef",
-    "Cairo",
-    "Dakahlia",
-    "Damietta",
-    "Faiyum",
-    "Gharbia",
-    "Giza",
-    "Ismailia",
-    "Kafr El Sheikh",
-    "Luxor",
-    "Matrouh",
-    "Minya",
-    "Monufia",
-    "New Valley",
-    "North Sinai",
-    "Port Said",
-    "Qalyubia",
-    "Qena",
-    "Red Sea",
-    "Sharqia",
-    "Sohag",
-    "South Sinai",
-    "Suez",
+    'Alexandria',
+    'Aswan',
+    'Asyut',
+    'Beheira',
+    'Beni Suef',
+    'Cairo',
+    'Dakahlia',
+    'Damietta',
+    'Faiyum',
+    'Gharbia',
+    'Giza',
+    'Ismailia',
+    'Kafr El Sheikh',
+    'Luxor',
+    'Matrouh',
+    'Minya',
+    'Monufia',
+    'New Valley',
+    'North Sinai',
+    'Port Said',
+    'Qalyubia',
+    'Qena',
+    'Red Sea',
+    'Sharqia',
+    'Sohag',
+    'South Sinai',
+    'Suez',
   ];
-
   // home page
   static const stayMatch = 'StayMatch';
   static const rentWholeApartment = 'Rent A Whole Apartment';
