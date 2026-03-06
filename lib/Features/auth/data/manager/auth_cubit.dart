@@ -58,6 +58,8 @@ class AuthCubit extends Cubit<AuthState> {
   final TextEditingController signSearchCityController =
       TextEditingController();
 
+  final TextEditingController birthDateController = TextEditingController();
+
   // gender
   final TextEditingController genderController = TextEditingController();
 
@@ -88,8 +90,16 @@ class AuthCubit extends Cubit<AuthState> {
   final TextEditingController resetConfirmPasswordController =
       TextEditingController();
 
-  //--------methods---------
-
+  //-------- METHODS ---------
+  void formValidationAndInvokeMethod({
+    required GlobalKey<FormState> key,
+    required Future<void> authMethod,
+  }) async {
+    final formState = key.currentState;
+    if (formState is FormState && formState.validate() == true) {
+      await authMethod;
+    }
+  }
   // -------- login ----------
   Future<void> login() async {
     emit(LoginStateLoading());
@@ -119,12 +129,7 @@ class AuthCubit extends Cubit<AuthState> {
     return (password) => authRepo.passwordValidator(password: password);
   }
 
-  void loginAccountValidation() async {
-    final formState = loginKey.currentState;
-    if (formState is FormState && formState.validate() == true) {
-      await login();
-    }
-  }
+
 
   // ----- google login ------
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
@@ -170,9 +175,7 @@ class AuthCubit extends Cubit<AuthState> {
       emit(GoogleLoginStateFailure(errMessage: "Google Sign-In failed: $e"));
     }
   }
-
   // -------- signup ----------
-  //todo: add birth dateeeeeeeeeee
   Future<void> signup() async {
     var response = await authRepo.signup(
       firstName: signFirstNameController.text,
@@ -181,7 +184,7 @@ class AuthCubit extends Cubit<AuthState> {
       password: signPasswordController.text,
       confirmPassword: signConfirmPasswordController.text,
       genderType: genderController.text,
-      birthDate: '',
+      birthDate: birthDateController.text,
       city: cityController.text,
     );
     response.fold(
@@ -227,13 +230,6 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  void emailForForgetPassValidation() async {
-    final formState = forgetFormKey.currentState;
-    if (formState is FormState && formState.validate() == true) {
-      await sendCode();
-    }
-  }
-
   // -------- confirm password ----------
   Future<void> verifyOTP() async {
     emit(VerifyCodeStateLoading());
@@ -257,12 +253,6 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   // ---------- reset password ---------
-  void resetPassValidation() async {
-    final formState = resetPasswordFormKey.currentState;
-    if (formState is FormState && formState.validate() == true) {
-      await resetPassword();
-    }
-  }
   Future<void> resetPassword() async {
     var response = await authRepo.resetPassword(
       password: resetPasswordController.text,
