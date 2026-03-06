@@ -6,11 +6,16 @@ abstract class AppStrings {
   static const enterYourPassword = 'Enter your password';
   static const gender = 'Gender';
   static const name = 'Name';
+  static const firstName = 'First Name';
+  static const lastName = 'Last Name';
   static const enterYourName = 'Enter your name';
-  static const location = 'Location';
-  static const enterYourLocation = 'Enter your location';
-  static const age = 'Age';
-  static const enterYourAge = 'Enter your age';
+  static const enterYourFirstName = 'Enter your first name';
+  static const enterYourLastName = 'Enter your last name';
+  static const city = 'City';
+  static const chooseYourCity = 'Choose your city';
+  static const birthDate = 'Birth Date';
+  static const dateFormat = 'YYYY-MM-DD';
+  static const enterYourBirthDate = 'Enter your birth date';
   static const confirmPassword = 'Confirm Password';
   static const login = 'Login';
 
@@ -24,7 +29,7 @@ abstract class AppStrings {
 
   // Sign up screen
   static const signUpTitle = 'Sign Up';
-  static const selectYourGender = 'Select your gender';
+  static const enterYourGender = 'Enter your gender';
   static const submit = 'Submit';
   static const loginGreeting = 'Welcome Back To StayMatch';
   static const alreadyHaveAnAccount = 'Already Have an Account?';
@@ -49,37 +54,38 @@ abstract class AppStrings {
 
   static const List<String> genderMenuItems = ['Female', 'Male'];
   static const egyptCities = <String>[
-    "Alexandria",
-    "Aswan",
-    "Asyut",
-    "Beheira",
-    "Beni Suef",
-    "Cairo",
-    "Dakahlia",
-    "Damietta",
-    "Faiyum",
-    "Gharbia",
-    "Giza",
-    "Ismailia",
-    "Kafr El Sheikh",
-    "Luxor",
-    "Matrouh",
-    "Minya",
-    "Monufia",
-    "New Valley",
-    "North Sinai",
-    "Port Said",
-    "Qalyubia",
-    "Qena",
-    "Red Sea",
-    "Sharqia",
-    "Sohag",
-    "South Sinai",
-    "Suez",
+    'Alexandria',
+    'Aswan',
+    'Asyut',
+    'Beheira',
+    'Beni Suef',
+    'Cairo',
+    'Dakahlia',
+    'Damietta',
+    'Faiyum',
+    'Gharbia',
+    'Giza',
+    'Ismailia',
+    'Kafr El Sheikh',
+    'Luxor',
+    'Matrouh',
+    'Minya',
+    'Monufia',
+    'New Valley',
+    'North Sinai',
+    'Port Said',
+    'Qalyubia',
+    'Qena',
+    'Red Sea',
+    'Sharqia',
+    'Sohag',
+    'South Sinai',
+    'Suez',
   ];
-
   // home page
   static const stayMatch = 'StayMatch';
+  static const rentWholeApartment = 'Rent A Whole Apartment';
+  static const rentRoom = 'Rent A Room';
   static const homeHeader =
       'helps you find the perfect home and the most compatible roommate.';
   static const searchHome = 'Search by Area / Person';
@@ -107,4 +113,5 @@ abstract class AppStrings {
   static const safetyTips = 'Safety Tips';
   static const support = 'Support';
   static const month = 'month';
+  static const search = 'Search';
 }

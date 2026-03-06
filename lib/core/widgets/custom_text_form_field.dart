@@ -13,30 +13,48 @@ class CustomTextFormField extends StatelessWidget {
     required this.controller,
     this.isObscure = false,
     this.strokeWidth,
+    this.horizontalPadding,
+    this.verticalPadding,
+    this.hintStyle,
+    this.enabled = true
+
   });
 
   final String? Function(String?) validator;
   final String hintText;
+  final TextStyle? hintStyle;
   final Widget? suffixIcon;
   final bool stroke;
   final TextEditingController controller;
   final bool isObscure;
   final double? strokeWidth;
-
+  final double? horizontalPadding;
+  final double? verticalPadding;
+  final bool enabled;
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(boxShadow: AppColors.boxShadow),
+      decoration: BoxDecoration(
+        boxShadow: AppColors.boxShadow,
+        borderRadius: BorderRadius.circular(15)
+      ),
       child: TextFormField(
         obscureText: isObscure,
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: AppStyles.caption.copyWith(
-            color: AppColors.textColorSecondary,
-          ),
+          enabled: enabled,
+          hintStyle:
+              hintStyle ??
+              AppStyles.caption.copyWith(color: AppColors.textColorSecondary),
           border: buildOutlineInputBorder(),
           // TODO: add borders for each case
-          // errorBorder: buildOutlineInputBorder(),
+          errorBorder:  OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide(
+              color: stroke ? Colors.red : Colors.transparent,
+              width: strokeWidth ?? 2,
+            ),
+          ),
           enabledBorder: buildOutlineInputBorder(),
           focusColor: AppColors.primary,
           suffixIcon: suffixIcon,
@@ -46,6 +64,7 @@ class CustomTextFormField extends StatelessWidget {
         ),
         validator: validator,
         controller: controller,
+
       ),
     );
   }

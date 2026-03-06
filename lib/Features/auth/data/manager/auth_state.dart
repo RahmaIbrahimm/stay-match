@@ -40,7 +40,12 @@ class GoogleLoginStateFailure extends AuthState {
 }
 
 class RegisterStateLoading extends AuthState {}
-class RegisterStateSuccess extends AuthState {}
+class RegisterStateSuccess extends AuthState {
+  final RegisterResponse response;
+  RegisterStateSuccess({required this.response});
+  @override
+  List<Object> get props => [response];
+}
 class RegisterStateFailure extends AuthState {
   final String errMessage;
 

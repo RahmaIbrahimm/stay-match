@@ -7,7 +7,6 @@ import 'package:stay_match/features/auth/data/manager/auth_cubit.dart';
 import 'package:stay_match/features/auth/data/repos/auth_repo_impl.dart';
 
 import 'core/routing/app_routing.dart';
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setupServiceLocator();
@@ -20,10 +19,7 @@ void main() {
 }
 
 class StayMatch extends StatelessWidget {
-  StayMatch({super.key});
-
-  final Dio dio = Dio();
-
+  const StayMatch({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(

@@ -30,4 +30,12 @@ abstract class AppStyles {
     fontSize: 12,
     fontWeight: FontWeight.normal,
   );
+  static final smallButton = GoogleFonts.poppins(
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+  );
+  static final extraSmallText = GoogleFonts.poppins(
+    fontSize: 8,
+    fontWeight: FontWeight.w500,
+  );
 }

@@ -6,10 +6,11 @@ import 'package:stay_match/core/constants/app_styles.dart';
 import 'package:stay_match/core/routing/app_routing.dart';
 import 'package:stay_match/core/widgets/custom_elevated_button.dart';
 import 'package:stay_match/features/auth/data/manager/auth_cubit.dart';
-import 'package:stay_match/features/auth/login/presentation/views/widgets/form_section.dart';
+
+import '../../../../../../core/widgets/form_section.dart';
 
 class ForgetPasswordContainerBody extends StatelessWidget {
-  ForgetPasswordContainerBody({super.key});
+  const ForgetPasswordContainerBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,7 @@ class ForgetPasswordContainerBody extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               FormSection(
-                validator: authCubit.emailValidator(),
+                validator: (val)=> authCubit.emailValidator(email: val),
                 hintText: AppStrings.enterYourEmail,
                 fieldTitle: AppStrings.emailAddress,
                 stroke: false,
@@ -58,7 +59,10 @@ class ForgetPasswordContainerBody extends StatelessWidget {
               CustomElevatedButton(
                 text: AppStrings.confirmEmail,
                 onPressed: () {
-                  authCubit.emailForForgetPassValidation();
+                  authCubit.formValidationAndInvokeMethod(
+                    key: authCubit.forgetFormKey,
+                    authMethod: authCubit.sendCode(),
+                  );
                 },
               ),
             ],

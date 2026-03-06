@@ -11,7 +11,7 @@ class HomeView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         extendBody: true,
-        body: const HomeViewBody(),
+        body:  HomeViewBody(),
         bottomNavigationBar: HomeNavBar(),
       ),
     );

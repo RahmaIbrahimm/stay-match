@@ -1,130 +1,232 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stay_match/features/auth/widgets/custom_drop_down_menu.dart';
+import 'package:stay_match/core/widgets/custom_drop_down_menu.dart';
+import 'package:stay_match/features/auth/data/manager/auth_cubit.dart';
 
 import '../../../../../../core/constants/app_colors.dart';
 import '../../../../../../core/constants/app_icons.dart';
 import '../../../../../../core/constants/app_strings.dart';
 import '../../../../../../core/constants/app_styles.dart';
 import '../../../../../../core/routing/app_routing.dart';
+import '../../../../../../core/widgets/custom_date_selector.dart';
 import '../../../../../../core/widgets/custom_elevated_button.dart';
 import '../../../../../../core/widgets/custom_text_button.dart';
-import '../../../../login/presentation/views/widgets/form_section.dart';
+import '../../../../../../core/widgets/form_section.dart';
 
-class ButtomSheetBody extends StatelessWidget {
-  ButtomSheetBody({super.key});
+class BottomSheetBody extends StatelessWidget {
+  BottomSheetBody({super.key});
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
+  final TextEditingController dropDownMenuSearchController =
       TextEditingController();
-  final TextEditingController _ageController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
-  final TextEditingController _genderController = TextEditingController();
+  final ValueNotifier<bool> _isObscureNotifierPass = ValueNotifier<bool>(true);
+  final ValueNotifier<bool> _isObscureNotifierConfirmPass = ValueNotifier<bool>(
+    true,
+  );
 
   @override
   Widget build(BuildContext context) {
+    var authCubit = BlocProvider.of<AuthCubit>(context);
+    var size = MediaQuery.of(context).size;
     return Form(
-      key: formKey,
-      child: ListView(
-        padding: EdgeInsets.only(top: 30),
-        children: [
-          // todo: implement validators
-          // info: name
-          FormSection(
-            validator: validator,
-            hintText: AppStrings.enterYourName,
-            fieldTitle: AppStrings.name,
-            controller: _nameController,
-          ),
-          const SizedBox(height: 22),
-          // info: email
-          FormSection(
-            validator: validator,
-            hintText: AppStrings.enterYourEmail,
-            fieldTitle: AppStrings.email,
-            suffixIcon: ImageIcon(AssetImage(AppIcons.emailIcon)),
-            controller: _emailController,
-          ),
-          const SizedBox(height: 22),
-          // info: password
-          FormSection(
-            validator: validator,
-            hintText: AppStrings.enterYourPassword,
-            fieldTitle: AppStrings.password,
-            suffixIcon: Icon(
-              Icons.remove_red_eye_outlined,
-              color: AppColors.primary,
-            ),
-            controller: _passwordController,
-          ),
-          const SizedBox(height: 22),
-          // info: confirm password
-          FormSection(
-            validator: validator,
-            hintText: AppStrings.enterYourPassword,
-            fieldTitle: AppStrings.confirmPassword,
-            suffixIcon: Icon(
-              Icons.remove_red_eye_outlined,
-              color: AppColors.primary,
-            ),
-            controller: _confirmPasswordController,
-          ),
-          const SizedBox(height: 22),
-          // info: age
-          FormSection(
-            validator: validator,
-            hintText: AppStrings.enterYourAge,
-            fieldTitle: AppStrings.age,
-            controller: _ageController,
-          ),
-          const SizedBox(height: 22),
-          // info: location
-          FormSection(
-            validator: validator,
-            hintText: AppStrings.enterYourLocation,
-            fieldTitle: AppStrings.location,
-            controller: _locationController,
-          ),
-          const SizedBox(height: 22),
-          // info: gender
-          Text(AppStrings.gender, style: AppStyles.sectionTitle),
-          const SizedBox(height: 8),
-          CustomDropDownMenu(
-            menuItems: AppStrings.genderMenuItems,
-            hintText: AppStrings.selectYourGender,
-          ),
-          const SizedBox(height: 45),
-          CustomElevatedButton(
-            text: AppStrings.submit,
-            onPressed: signupOnPressed,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                AppStrings.alreadyHaveAnAccount,
-                style: AppStyles.secondary.copyWith(
-                  color: AppColors.textColorSecondary,
+      key: authCubit.signupKey,
+      child: BlocListener<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is RegisterStateFailure) {
+            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  authCubit.signPasswordController !=
+                          authCubit.signConfirmPasswordController
+                      ? 'Passwords do not match'
+                      : state.errMessage,
                 ),
               ),
-              CustomTextButton(
-                onPressed: () {
-                  context.pushReplacement(AppRouting.loginView);
-                },
-                text: AppStrings.login,
-                textColor: AppColors.secondary,
+            );
+          }
+          if (state is RegisterStateSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: AppColors.secondary,
+                content: Text('Sign Up Successful ✔️'),
               ),
-            ],
-          ),
-          const SizedBox(height: 45),
-        ],
+            );
+            context.go(AppRouting.homeView);
+          }
+        },
+        child: ListView(
+          padding: EdgeInsets.only(top: 30),
+          children: [
+            // todo: implement validators
+            // info: name
+            Row(
+              children: [
+                Expanded(
+                  child: FormSection(
+                    // todo: add correct validation
+                    validator:(val)=>authCubit.nullFieldValidator(text: val),
+                    hintText: AppStrings.enterYourFirstName,
+                    fieldTitle: AppStrings.firstName,
+                    controller: authCubit.signFirstNameController,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: FormSection(
+                    // todo: add correct validation
+                    validator: (val)=>authCubit.nullFieldValidator(text: val),
+                    hintText: AppStrings.enterYourLastName,
+                    fieldTitle: AppStrings.lastName,
+                    controller: authCubit.signLastNameController,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 22),
+            // info: email
+            FormSection(
+              // todo: add correct validation
+              validator: (val)=>authCubit.emailValidator(email: val),
+              hintText: AppStrings.enterYourEmail,
+              fieldTitle: AppStrings.email,
+              suffixIcon: ImageIcon(AssetImage(AppIcons.emailIcon)),
+              controller: authCubit.signEmailController,
+            ),
+            const SizedBox(height: 22),
+            // info: password
+            ValueListenableBuilder<bool>(
+              valueListenable: _isObscureNotifierPass,
+              builder: (context, isObscure, child) {
+                return FormSection(
+                  validator:(val)=> authCubit.passwordValidator(password: val),
+                  hintText: AppStrings.enterYourPassword,
+                  fieldTitle: AppStrings.password,
+                  suffixIcon: IconButton(
+                    color: AppColors.primary,
+                    onPressed: () {
+                      _isObscureNotifierPass.value =
+                          !_isObscureNotifierPass.value;
+                    },
+                    icon: Icon(
+                      isObscure
+                          ? Icons.visibility_off_outlined
+                          : Icons.remove_red_eye_outlined,
+                    ),
+                  ),
+                  isObscure: isObscure,
+                  controller: authCubit.signPasswordController,
+                );
+              },
+            ),
+            const SizedBox(height: 22),
+            // info: confirm password
+            ValueListenableBuilder<bool>(
+              valueListenable: _isObscureNotifierConfirmPass,
+              builder: (context, isObscure, child) {
+                return FormSection(
+                  validator: (val)=> authCubit.passwordMatchValidator(password: authCubit.signPasswordController.text, confirmPassword: authCubit.signConfirmPasswordController.text),
+                  hintText: AppStrings.enterYourPassword,
+                  fieldTitle: AppStrings.confirmPassword,
+                  suffixIcon: IconButton(
+                    color: AppColors.primary,
+                    onPressed: () {
+                      _isObscureNotifierConfirmPass.value =
+                          !_isObscureNotifierConfirmPass.value;
+                    },
+                    icon: Icon(
+                      isObscure
+                          ? Icons.visibility_off_outlined
+                          : Icons.remove_red_eye_outlined,
+                    ),
+                  ),
+                  isObscure: isObscure,
+                  controller: authCubit.signConfirmPasswordController,
+                );
+              },
+            ),
+            const SizedBox(height: 22),
+            // info: city and birth date
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(AppStrings.city, style: AppStyles.sectionTitle),
+                      const SizedBox(height: 8),
+                      CustomDropDownMenu(
+                        hasSearch: false,
+                        menuItems: AppStrings.egyptCities,
+                        hintText: AppStrings.chooseYourCity,
+                        selectedValue: authCubit.cityController,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(AppStrings.birthDate, style: AppStyles.sectionTitle),
+                      const SizedBox(height: 8),
+                      CustomDateSelector(
+                        size: size,
+                        dateController: authCubit.birthDateController,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 22),
+            // info: gender
+            Text(AppStrings.gender, style: AppStyles.sectionTitle),
+            const SizedBox(height: 8),
+            CustomDropDownMenu(
+              hasSearch: false,
+              menuItems: AppStrings.genderMenuItems,
+              hintText: AppStrings.enterYourGender,
+              selectedValue: authCubit.genderController,
+            ),
+            const SizedBox(height: 45),
+            CustomElevatedButton(
+              text: AppStrings.submit,
+              onPressed: () {
+                authCubit.formValidationAndInvokeMethod(
+                  key: authCubit.signupKey,
+                  authMethod: authCubit.signup(),
+                  hasConfirmPassword: true,
+                  pass: authCubit.signPasswordController.text,
+                  confirmPass: authCubit.signConfirmPasswordController.text,
+                );
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  AppStrings.alreadyHaveAnAccount,
+                  style: AppStyles.secondary.copyWith(
+                    color: AppColors.textColorSecondary,
+                  ),
+                ),
+                CustomTextButton(
+                  onPressed: () {
+                    context.pushReplacement(AppRouting.loginView);
+                  },
+                  text: AppStrings.login,
+                  textColor: AppColors.secondary,
+                ),
+              ],
+            ),
+            const SizedBox(height: 45),
+          ],
+        ),
       ),
     );
   }
-
-  void signupOnPressed() {}
-  String? validator(value) {}
 }

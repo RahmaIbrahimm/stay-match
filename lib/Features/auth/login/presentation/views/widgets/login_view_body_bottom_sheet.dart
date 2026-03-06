@@ -10,7 +10,7 @@ import 'package:stay_match/core/widgets/custom_text_button.dart';
 import 'package:stay_match/features/auth/data/manager/auth_cubit.dart';
 
 import '../../../../../../core/routing/app_routing.dart';
-import '../../../../widgets/form_section.dart';
+import '../../../../../../core/widgets/form_section.dart';
 import 'divider_between_login_buttons.dart';
 
 class LoginViewBodyBottomSheet extends StatelessWidget {
@@ -64,7 +64,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
               const SizedBox(height: 33),
               // todo: implement validator email
               FormSection(
-                validator: authCubit.emailValidator(),
+                validator:(val)=>  authCubit.emailValidator(email: val),
                 hintText: AppStrings.enterYourEmail,
                 fieldTitle: AppStrings.email,
                 suffixIcon: ImageIcon(AssetImage(AppIcons.emailIcon)),
@@ -76,7 +76,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                 valueListenable: _isObscureNotifier,
                 builder: (context, isObscure, child) {
                   return FormSection(
-                    validator: authCubit.passwordValidator(),
+                    validator: (val)=> authCubit.passwordValidator(password: val),
                     hintText: AppStrings.enterYourPassword,
                     fieldTitle: AppStrings.password,
                     suffixIcon: IconButton(
@@ -112,7 +112,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                   onPressed: isLoading
                       ? null
                       : () {
-                          authCubit.loginAccountValidation();
+                          authCubit.formValidationAndInvokeMethod(key: authCubit.loginKey, authMethod: authCubit.login());
                         },
                   isLoading: isLoading,
                 ),
