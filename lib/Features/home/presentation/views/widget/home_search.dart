@@ -1,34 +1,54 @@
-import 'package:flutter/material.dart';
-import 'package:stay_match/core/constants/app_colors.dart';
-import 'package:stay_match/core/widgets/custom_text_form_field.dart';
-
-class HomeSearch extends StatelessWidget {
-  HomeSearch({super.key, required this.validator, required this.hintText});
-
-  final TextEditingController controller = TextEditingController();
-  final String? Function(String?) validator;
-  final String hintText;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(color: AppColors.containerColor),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Flexible(
-              child: CustomTextFormField(
-                hintText: hintText,
-                validator: validator,
-                controller: controller,
-                stroke: false,
-                suffixIcon: Icon(Icons.search),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// import 'package:flutter/material.dart';
+//
+// class HomeSearch extends StatefulWidget {
+//   HomeSearch({super.key, required this.validator, required this.hintText});
+//
+//   final String? Function(String?) validator;
+//   final String hintText;
+//
+//   @override
+//   State<HomeSearch> createState() => _HomeSearchState();
+// }
+//
+// class _HomeSearchState extends State<HomeSearch> {
+//   final TextEditingController controller = TextEditingController();
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     // return Container(
+//     //   decoration: BoxDecoration(color: AppColors.containerColor),
+//     //   child: Padding(
+//     //     padding: const EdgeInsets.all(6),
+//     //     child: Column(
+//     //       children: [
+//     //         Divider(thickness: 0.5, color: Colors.black),
+//     //         SizedBox(height: 6),
+//     //         CustomTextFormField(
+//     //           hintText: hintText,
+//     //           validator: validator,
+//     //           controller: controller,
+//     //           hintStyle: AppStyles.caption.copyWith(
+//     //             color: AppColors.textColorSecondary,
+//     //           ),
+//     //           suffixIcon: IconButton(
+//     //             color: AppColors.textColorSecondary,
+//     //             onPressed: () {},
+//     //             icon: Icon(Icons.search, size: 16),
+//     //           ),
+//     //           strokeWidth: 0.5,
+//     //         ),
+//     //         // Expanded(
+//     //         //   flex: 2,
+//     //         //   child: CustomElevatedButton(
+//     //         //     text: AppStrings.search,
+//     //         //     onPressed: () {},
+//     //         //     textStyle: AppStyles.smallButton,
+//     //         //   ),
+//     //         // ),
+//     //       ],
+//     //     ),
+//     //   ),
+//     // );
+//     return DefaultTabController(child: TabBar(tabs:[Text('data'),Text('data')]));
+//   }
+// }
