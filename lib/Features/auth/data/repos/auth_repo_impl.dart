@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/errors/failures.dart';
 import 'package:stay_match/core/networking/api_service.dart';
 import 'package:stay_match/features/auth/data/models/forget_password_response.dart';
@@ -33,11 +32,50 @@ class AuthRepoImpl implements AuthRepo {
       return left(ServerFailure.fromDioError(e));
     }
   }
+  @override
+  String? passwordMatchValidator({
+    required String? password,
+    required String? confirmPassword,
+  }) {
+    if (confirmPassword == null || confirmPassword.isEmpty) {
+      return 'Please confirm your password';
+    }
+
+    if (password != confirmPassword) {
+      return 'Passwords do not match';
+    }
+
+    return null;
+  }
+  @override
+  String? nullFieldValidator({String? text}) {
+    if (text?.trim() == null || text!.trim().isEmpty) {
+      return 'Required';
+    }
+    return null;
+  }
 
   @override
   String? emailValidator({String? email}) {
+    email = email?.trim();
     if (email == null || email.isEmpty) {
       return 'Email is required';
+    }
+
+    final emailRegex = RegExp(
+      r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
+    );
+
+    if (!emailRegex.hasMatch(email)) {
+      return 'Please enter a valid email address';
+    }
+
+    if (!email.contains('.') || email.startsWith('.') || email.endsWith('.')) {
+      return 'Please enter a valid email address';
+    }
+
+    if (email.split('@').length != 2) {
+      return 'Please enter a valid email address';
     }
     return null;
   }
@@ -47,6 +85,27 @@ class AuthRepoImpl implements AuthRepo {
     if (password == null || password.isEmpty) {
       return 'Password is required';
     }
+
+    if (password.length < 6) {
+      return 'Password must be at least 6 characters long';
+    }
+
+    if (!password.contains(RegExp(r'[A-Z]'))) {
+      return 'Password must contain at least one uppercase letter';
+    }
+
+    if (!password.contains(RegExp(r'[a-z]'))) {
+      return 'Password must contain at least one lowercase letter';
+    }
+
+    if (!password.contains(RegExp(r'[0-9]'))) {
+      return 'Password must contain at least one number';
+    }
+
+    if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      return 'Password must contain at least one special character';
+    }
+
     return null;
   }
 
@@ -60,7 +119,7 @@ class AuthRepoImpl implements AuthRepo {
     required String genderType,
     required String birthDate,
     required String city,
-  }) async{
+  }) async {
     try {
       var response = await apiService.post(
         Endpoints.register,
