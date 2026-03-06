@@ -1,10 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/errors/failures.dart';
 import 'package:stay_match/core/networking/api_service.dart';
 import 'package:stay_match/features/auth/data/models/forget_password_response.dart';
 import 'package:stay_match/features/auth/data/models/login_response.dart';
 import 'package:stay_match/features/auth/data/models/login_with_google_response.dart';
+import 'package:stay_match/features/auth/data/models/register_response.dart';
 import 'package:stay_match/features/auth/data/models/reset_password_response.dart';
 import 'package:stay_match/features/auth/data/models/verify_code_response.dart';
 
@@ -46,6 +48,37 @@ class AuthRepoImpl implements AuthRepo {
       return 'Password is required';
     }
     return null;
+  }
+
+  @override
+  Future<Either<Failure, RegisterResponse>> signup({
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String password,
+    required String confirmPassword,
+    required String genderType,
+    required String birthDate,
+    required String city,
+  }) async{
+    try {
+      var response = await apiService.post(
+        Endpoints.register,
+        data: {
+          "firstName": firstName,
+          "lastName": lastName,
+          "email": email,
+          "password": password,
+          "confirmPassword": confirmPassword,
+          "genderType": genderType,
+          "birthDate": birthDate,
+          "city": city,
+        },
+      );
+      return right(RegisterResponse.fromJson(response));
+    } on DioException catch (e) {
+      return left(ServerFailure.fromDioError(e));
+    }
   }
 
   @override
