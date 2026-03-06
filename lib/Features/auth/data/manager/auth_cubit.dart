@@ -8,6 +8,7 @@ import 'package:stay_match/features/auth/data/models/login_with_google_response.
 import 'package:stay_match/features/auth/data/models/register_response.dart';
 import 'package:stay_match/features/auth/data/models/verify_code_response.dart';
 
+import '../../../../core/constants/app_strings.dart';
 import '../../../../core/networking/endpoints.dart';
 import '../models/reset_password_response.dart';
 import '../repos/auth_repo.dart';
@@ -58,7 +59,9 @@ class AuthCubit extends Cubit<AuthState> {
   final TextEditingController signSearchCityController =
       TextEditingController();
 
-  final TextEditingController birthDateController = TextEditingController();
+  final TextEditingController birthDateController = TextEditingController(
+    text: AppStrings.dateFormat
+  );
 
   // gender
   final TextEditingController genderController = TextEditingController();
@@ -91,15 +94,90 @@ class AuthCubit extends Cubit<AuthState> {
       TextEditingController();
 
   //-------- METHODS ---------
-  void formValidationAndInvokeMethod({
+  Future<void> formValidationAndInvokeMethod({
     required GlobalKey<FormState> key,
     required Future<void> authMethod,
+    bool hasConfirmPassword = false,
+    String? pass ,
+    String? confirmPass
   }) async {
     final formState = key.currentState;
-    if (formState is FormState && formState.validate() == true) {
+    if (formState is FormState && formState.validate() == true && hasConfirmPassword? pass == confirmPass : true ) {
       await authMethod;
     }
   }
+
+  String? passwordMatchValidator({
+    required String? password,
+    required String? confirmPassword,
+  }) {
+    if (confirmPassword == null || confirmPassword.isEmpty) {
+      return 'Please confirm your password';
+    }
+
+    if (password != confirmPassword) {
+      return 'Passwords do not match';
+    }
+
+    return null;
+  }
+  String? nullFieldValidator({String? text}) {
+    if (text?.trim() == null || text!.trim().isEmpty) {
+      return 'Required';
+    }
+    return null;
+  }
+  String? emailValidator({String? email}) {
+    email = email?.trim();
+    if (email == null || email.isEmpty) {
+      return 'Email is required';
+    }
+
+    final emailRegex = RegExp(
+      r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
+    );
+
+    if (!emailRegex.hasMatch(email)) {
+      return 'Please enter a valid email address';
+    }
+
+    if (!email.contains('.') || email.startsWith('.') || email.endsWith('.')) {
+      return 'Please enter a valid email address';
+    }
+
+    if (email.split('@').length != 2) {
+      return 'Please enter a valid email address';
+    }
+    return null;
+  }
+  String? passwordValidator({String? password}) {
+    if (password == null || password.isEmpty) {
+      return 'Password is required';
+    }
+
+    if (password.length < 6) {
+      return 'Password must be at least 6 characters long';
+    }
+
+    if (!password.contains(RegExp(r'[A-Z]'))) {
+      return 'Password must contain at least one uppercase letter';
+    }
+
+    if (!password.contains(RegExp(r'[a-z]'))) {
+      return 'Password must contain at least one lowercase letter';
+    }
+
+    if (!password.contains(RegExp(r'[0-9]'))) {
+      return 'Password must contain at least one number';
+    }
+
+    if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      return 'Password must contain at least one special character';
+    }
+
+    return null;
+  }
+
   // -------- login ----------
   Future<void> login() async {
     emit(LoginStateLoading());
@@ -121,13 +199,6 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  String? Function(String?) emailValidator() {
-    return (email) => authRepo.emailValidator(email: email);
-  }
-
-  String? Function(String?) passwordValidator() {
-    return (password) => authRepo.passwordValidator(password: password);
-  }
 
 
 
