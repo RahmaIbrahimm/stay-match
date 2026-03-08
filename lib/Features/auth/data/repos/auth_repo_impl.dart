@@ -33,83 +33,6 @@ class AuthRepoImpl implements AuthRepo {
     }
   }
   @override
-  String? passwordMatchValidator({
-    required String? password,
-    required String? confirmPassword,
-  }) {
-    if (confirmPassword == null || confirmPassword.isEmpty) {
-      return 'Please confirm your password';
-    }
-
-    if (password != confirmPassword) {
-      return 'Passwords do not match';
-    }
-
-    return null;
-  }
-  @override
-  String? nullFieldValidator({String? text}) {
-    if (text?.trim() == null || text!.trim().isEmpty) {
-      return 'Required';
-    }
-    return null;
-  }
-
-  @override
-  String? emailValidator({String? email}) {
-    email = email?.trim();
-    if (email == null || email.isEmpty) {
-      return 'Email is required';
-    }
-
-    final emailRegex = RegExp(
-      r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
-    );
-
-    if (!emailRegex.hasMatch(email)) {
-      return 'Please enter a valid email address';
-    }
-
-    if (!email.contains('.') || email.startsWith('.') || email.endsWith('.')) {
-      return 'Please enter a valid email address';
-    }
-
-    if (email.split('@').length != 2) {
-      return 'Please enter a valid email address';
-    }
-    return null;
-  }
-
-  @override
-  String? passwordValidator({String? password}) {
-    if (password == null || password.isEmpty) {
-      return 'Password is required';
-    }
-
-    if (password.length < 6) {
-      return 'Password must be at least 6 characters long';
-    }
-
-    if (!password.contains(RegExp(r'[A-Z]'))) {
-      return 'Password must contain at least one uppercase letter';
-    }
-
-    if (!password.contains(RegExp(r'[a-z]'))) {
-      return 'Password must contain at least one lowercase letter';
-    }
-
-    if (!password.contains(RegExp(r'[0-9]'))) {
-      return 'Password must contain at least one number';
-    }
-
-    if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-      return 'Password must contain at least one special character';
-    }
-
-    return null;
-  }
-
-  @override
   Future<Either<Failure, RegisterResponse>> signup({
     required String firstName,
     required String lastName,
@@ -201,7 +124,6 @@ class AuthRepoImpl implements AuthRepo {
         Endpoints.googleLogin,
         data: {"idToken": idToken},
       );
-      print('id token impl print: $idToken');
       return right(LoginWithGoogleResponse.fromJson(response));
     } on DioException catch (e) {
       return Left(ServerFailure.fromDioError(e));
