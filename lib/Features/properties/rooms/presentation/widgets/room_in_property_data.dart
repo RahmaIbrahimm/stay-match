@@ -15,45 +15,48 @@ class RoomInPropertyData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-      margin: EdgeInsets.symmetric(horizontal: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 6),
       decoration: BoxDecoration(
         color: AppColors.bgGrey,
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(numOfRooms ?? 0, (roomIdx) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    backgroundColor: AppColors.secondaryLight,
-                    radius: 3,
-                  ),
-                  SizedBox(width: 6),
-                  Text(
-                    'Room ${roomIdx + 1}',
-                    style: AppStyles.semiBold8poppins.copyWith(
-                      color: AppColors.textColorPrimary,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: 55),
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemCount: numOfRooms ?? 0,
+          itemBuilder: (context, roomIdx) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: AppColors.secondaryLight,
+                      radius: 3,
                     ),
-                  ),
-                  Spacer(),
-                  Text(
-                    '${monthRent ?? 0} EGP',
-                    style: AppStyles.semiBold8poppins.copyWith(
-                      color: AppColors.secondaryLight,
+                    const SizedBox(width: 6),
+                    Text(
+                      'Room ${roomIdx + 1}',
+                      style: AppStyles.semiBold8poppins,
                     ),
-                  ),
-                ],
-              ),
-              if (roomIdx < (numOfRooms ?? 0) - 1) Divider(thickness: 0.5),
-            ],
-          );
-        }),
+                    const Spacer(),
+                    Text(
+                      '$monthRent EGP',
+                      style: AppStyles.semiBold8poppins.copyWith(
+                        color: AppColors.secondaryLight,
+                      ),
+                    ),
+                  ],
+                ),
+                if (roomIdx < (numOfRooms ?? 0) - 1)
+                  const Divider(thickness: 0.5),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
