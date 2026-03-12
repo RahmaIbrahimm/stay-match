@@ -16,5 +16,7 @@ abstract class ApartmentRepo {
     double? userLng,
     bool orderByOldest = false,
     bool onlyAvailable = false,
+    num? page,
+    num? pageSize
   });
 }

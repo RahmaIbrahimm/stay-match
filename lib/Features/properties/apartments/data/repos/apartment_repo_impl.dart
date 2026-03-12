@@ -25,6 +25,8 @@ class ApartmentRepoImpl extends ApartmentRepo {
     double? userLng,
     bool orderByOldest = false,
     bool onlyAvailable = false,
+    num? page = 1,
+    num? pageSize = 5
   }) async {
     try {
       var response = await apiService.get(
@@ -41,6 +43,8 @@ class ApartmentRepoImpl extends ApartmentRepo {
           'userLng': userLng,
           'orderByOldest': orderByOldest,
           'onlyAvailable': onlyAvailable,
+          'page': page,
+          'pageSize':pageSize
         },
       );
       return right(GetAllApartments.fromJson(response));
