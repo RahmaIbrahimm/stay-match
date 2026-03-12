@@ -13,7 +13,7 @@ class ApartmentsSection extends StatelessWidget {
   });
 
   final Size size;
-  final List<ApartmentData>? properties;
+  final List<Items>? properties;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +43,7 @@ class ApartmentsSection extends StatelessWidget {
                 isUnderlined: false,
                 textColor: AppColors.primary,
                 textStyle: AppStyles.semiBold10poppins,
+                isPadded: false,
               ),
             ],
           ),
