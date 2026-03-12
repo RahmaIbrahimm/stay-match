@@ -193,9 +193,9 @@ class AuthCubit extends Cubit<AuthState> {
       },
       (response) async {
         if (response.isSuccess == true) {
-          emit(LoginStateSuccess(response));
           await SecureStorageHelper.storage.write(key: SecureStorageHelper.tokenKey, value: response.data?.token);
           await SecureStorageHelper.loadToken();
+          emit(LoginStateSuccess(response));
         } else {
           emit(LoginStateFailure(errMessage: "Invalid Email or Password"));
         }
