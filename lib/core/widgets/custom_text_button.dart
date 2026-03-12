@@ -3,13 +3,14 @@ import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
 
 class CustomTextButton extends StatelessWidget {
-  CustomTextButton({
+  const CustomTextButton({
     super.key,
     required this.onPressed,
     required this.text,
     this.textColor,
     this.isUnderlined = true,
     this.textStyle,
+    this.isPadded = true,
   });
 
   final VoidCallback onPressed;
@@ -17,6 +18,7 @@ class CustomTextButton extends StatelessWidget {
   final Color? textColor;
   final bool isUnderlined;
   final TextStyle? textStyle;
+  final bool isPadded;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,8 @@ class CustomTextButton extends StatelessWidget {
         overlayColor: Colors.transparent,
         textStyle: AppStyles.secondary,
         padding: EdgeInsets.zero,
+        minimumSize: Size.zero,
+        tapTargetSize: isPadded ? null : MaterialTapTargetSize.shrinkWrap,
       ),
       onPressed: onPressed,
       child: Text(
