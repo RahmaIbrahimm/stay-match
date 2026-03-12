@@ -1,5 +1,7 @@
 abstract class AppImages {
   static const path = 'assets/images';
+  // logo path
+  static const logo = '$path/logo.png';
   // login page
   static const loginDecor = '$path/login_decor.png';
   static const loginDecorRight = '$path/login_decor_right.png';

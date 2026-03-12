@@ -18,6 +18,13 @@ abstract class AppStyles {
     fontSize: 20,
     fontWeight: FontWeight.w500,
   );
+  static final semiBold15poppins = GoogleFonts.poppins(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+  );  static final medium15poppins = GoogleFonts.poppins(
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
+  );
   static final bodyText = GoogleFonts.poppins(
     fontSize: 16,
     fontWeight: FontWeight.normal,
@@ -30,12 +37,31 @@ abstract class AppStyles {
     fontSize: 12,
     fontWeight: FontWeight.normal,
   );
-  static final smallButton = GoogleFonts.poppins(
+  static final semiBold12Poppins = GoogleFonts.poppins(
     fontSize: 12,
     fontWeight: FontWeight.w600,
   );
-  static final extraSmallText = GoogleFonts.poppins(
+  static final medium12poppins = GoogleFonts.poppins(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+  );
+  static final medium10poppins = GoogleFonts.poppins(
+    fontSize: 10,
+    fontWeight: FontWeight.w500,
+  );
+  static final semiBold10poppins = GoogleFonts.poppins(
+    fontSize: 10,
+    fontWeight: FontWeight.w600,
+  );
+  static final semiBold8poppins = GoogleFonts.poppins(
+    fontSize: 8,
+    fontWeight: FontWeight.w600,
+  );
+  static final medium8poppins = GoogleFonts.poppins(
     fontSize: 8,
     fontWeight: FontWeight.w500,
+  );static final regular8poppins = GoogleFonts.poppins(
+    fontSize: 8,
+    fontWeight: FontWeight.normal,
   );
 }

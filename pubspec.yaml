@@ -53,6 +53,9 @@ dependencies:
   google_sign_in: ^7.2.0
   google_sign_in_android: ^7.2.9
   flutter_native_splash: ^2.4.7
+  calendar_date_picker2: ^2.0.1
+  shared_preferences: ^2.5.4
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:

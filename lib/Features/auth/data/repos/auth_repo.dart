@@ -10,13 +10,8 @@ import '../models/login_response.dart';
 import '../models/verify_code_response.dart';
 
 abstract class AuthRepo {
-  String? emailValidator({String? email});
-
-  String? passwordValidator({String? password});
-
   // ========== login  =========
   // regular login
-
   Future<Either<Failure, LoginResponse>> login({
     required String email,
     required String password,
