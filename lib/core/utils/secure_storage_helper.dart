@@ -1,11 +1,16 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 class SecureStorageHelper {
-  static FlutterSecureStorage storage = FlutterSecureStorage();
+  static const FlutterSecureStorage storage = FlutterSecureStorage();
 
   static const String tokenKey = 'token';
   static String? token;
-  static Future<void> addToSecureStorage({required String key,required String? value})async {
-   await storage.write(key: key, value: value);
+
+  static Future<void> addToSecureStorage({
+    required String key,
+    required String? value,
+  }) async {
+    await storage.write(key: key, value: value);
   }
 
   static Future<void> loadToken() async {
