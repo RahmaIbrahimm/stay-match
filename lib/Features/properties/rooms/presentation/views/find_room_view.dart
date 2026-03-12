@@ -3,6 +3,7 @@ import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
 
 import '../../../../../core/constants/app_colors.dart';
+import '../widgets/find_room_body.dart';
 
 class FindRoomView extends StatelessWidget {
   const FindRoomView({super.key});
@@ -25,6 +26,7 @@ class FindRoomView extends StatelessWidget {
             child: Divider(color: AppColors.grey,)
           ),
         ),
+        body: FindRoomBody(),
         ),
     );
   }
