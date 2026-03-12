@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:stay_match/core/widgets/amenities.dart';
 
 import '../../../../../core/constants/app_colors.dart';
@@ -11,7 +12,7 @@ class PropertyBriefInfoContainer extends StatelessWidget {
     required this.name,
     required this.city,
     required this.streetName,
-    required this.monthlyRent,
+    required this.monthlyRent, required this.isFurnished,
   });
 
   final Size size;
@@ -19,6 +20,7 @@ class PropertyBriefInfoContainer extends StatelessWidget {
   final String? city;
   final String? streetName;
   final num? monthlyRent;
+  final bool isFurnished;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +102,7 @@ class PropertyBriefInfoContainer extends StatelessWidget {
               ),
             ),
             // todo: make it reusable for match also maybe?
-           Amenities(),
+           Amenities(isFurnished:isFurnished),
             Flexible(
               child: Divider(
                 thickness: 0.5,
@@ -135,26 +137,24 @@ class MonthlyRent extends StatelessWidget {
       // todo: widget inside class of this
       child: Row(
         children: [
-          Flexible(
-            child: Text(
-              'EGP ${monthlyRent ?? 0}',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppStyles.medium12poppins.copyWith(
-                color: AppColors.textColorPrimary,
-              ),
+          Text(
+            'EGP ${monthlyRent ?? 0}',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppStyles.medium12poppins.copyWith(
+              color: AppColors.textColorPrimary,
             ),
           ),
-          Flexible(
-            child: Text(
-              ' / month',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppStyles.medium10poppins.copyWith(
-                color: AppColors.secondary,
-              ),
+          Text(
+            ' / month',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppStyles.medium10poppins.copyWith(
+              color: AppColors.secondary,
             ),
           ),
+          Spacer(),
+          IconButton(  onPressed: () {  }, icon: Icon(FontAwesome.heart,size:10),)
         ],
       ),
     );
