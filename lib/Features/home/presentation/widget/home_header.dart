@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stay_match/features/home/presentation/widget/small_custom_button.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_images.dart';
@@ -70,9 +71,9 @@ class HomeHeader extends StatelessWidget {
               indicatorColor: AppColors.primary,
               dividerColor: AppColors.textColorSecondary,
               unselectedLabelColor: AppColors.textColorSecondary,
-              unselectedLabelStyle: AppStyles.textStyleTab,
+              unselectedLabelStyle: AppStyles.medium10poppins,
               labelColor: AppColors.primary,
-              labelStyle: AppStyles.textStyleTab,
+              labelStyle: AppStyles.medium10poppins,
               labelPadding: EdgeInsetsGeometry.all(6),
               padding: EdgeInsets.zero,
               tabAlignment: TabAlignment.fill,
@@ -109,24 +110,7 @@ class HomeHeader extends StatelessWidget {
                 SizedBox(width: 8),
                 Expanded(
                   flex: 2,
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      padding: EdgeInsets.symmetric(vertical: 7),
-                      elevation: 0,
-                      minimumSize: Size(0, 0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                    ),
-                    child: Text(
-                      AppStrings.search,
-                      style: AppStyles.smallButton.copyWith(
-                        color: AppColors.textColorWhite,
-                      ),
-                    ),
-                  ),
+                  child: SmallCustomButton(text: AppStrings.search, onPressed: () {  },),
                 ),
               ],
             ),
