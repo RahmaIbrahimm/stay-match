@@ -82,6 +82,7 @@ abstract class AppStrings {
     'South Sinai',
     'Suez',
   ];
+
   // home page
   static const stayMatch = 'StayMatch';
   static const rentWholeApartment = 'Rent A Whole Apartment';
@@ -90,28 +91,40 @@ abstract class AppStrings {
       'helps you find the perfect home and the most compatible roommate.';
   static const searchHome = 'Search by Area / Person';
   static const viewAllApartments = 'View All Apartments';
+  static const handPickedApartments =
+      'Handpicked Apartments with high compatibility score';
   static const discoverApartments = 'Discover Apartments';
+  static const handPickedRooms =
+      'Handpicked Rooms with high compatibility score';
   static const discoverRooms = 'Discover Rooms';
   static const viewAllRooms = 'View All Rooms';
   static const myProperties = 'My Properties';
+  static const addYourProperty = '"Add your property with ease"';
+  static const addProperty = 'Add Property';
+  static const shareApartmentDetails = 'Share your property details and reach the right people instantly';
   static const viewAllProperties = 'View All Properties';
-  static const needHelp = 'Need Help ?';
-  static const technicalSupport = 'Technical Support';
-  static const sendInquiries = 'Send us your inquiries!';
-  static const contactUs = 'Contact Us';
-  static const about = 'About';
-  static const aboutDesc =
-      'Find your ideal home and the perfect roommate with StayMatch';
-  static const links = 'Links';
+
+  // static const needHelp = 'Need Help ?';
+  // static const technicalSupport = 'Technical Support';
+  // static const sendInquiries = 'Send us your inquiries!';
+  // static const contactUs = 'Contact Us';
+  // static const about = 'About';
+  // static const aboutDesc =
+  //     'Find your ideal home and the perfect roommate with StayMatch';
+  // static const links = 'Links';
   static const home = 'Home';
   static const apartments = 'Apartments';
   static const matches = 'Matches';
   static const chats = 'Chats';
   static const profile = 'Profile';
-  static const helpCenter = 'Help Center';
-  static const faqs = 'FAQs';
-  static const safetyTips = 'Safety Tips';
-  static const support = 'Support';
+
+  // static const helpCenter = 'Help Center';
+  // static const faqs = 'FAQs';
+  // static const safetyTips = 'Safety Tips';
+  // static const support = 'Support';
   static const month = 'month';
   static const search = 'Search';
+
+  // rooms
+  static const viewDetails = 'View Details';
 }

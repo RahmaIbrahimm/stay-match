@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 abstract class AppColors {
   static const primary = Color(0xff182E6E);
   static const secondary = Color(0xff86C9A9);
+  static const secondaryLight = Color(0xff2F68C5);
   static const accentColor = Color(0xff4D84C8);
   static const backgroundColor = Colors.black;
   static const containerColor = Colors.white;
@@ -13,6 +14,7 @@ abstract class AppColors {
   static const textColorSuccess = Color(0xff0D9467);
   static const shadowColor = Color(0x33000000);
   static const grey = Color(0xffD9D9D9);
+  static const bgGrey = Color(0xffEEEEEF);
   static const stroke = Color(0xffE5E7EB);
 
   static const boxShadow = [
@@ -21,6 +23,18 @@ abstract class AppColors {
       offset: Offset(5, 5),
       blurRadius: 5,
       spreadRadius: 2,
+    ),
+  ];
+  static const elevationShadow = [
+    BoxShadow(
+      color: Color.fromRGBO(0, 0, 0, 0.15),
+      blurRadius: 3,
+      offset: Offset(0, 1),
+    ),
+    BoxShadow(
+      color: Color.fromRGBO(0, 0, 0, 0.3),
+      blurRadius: 2,
+      offset: Offset(0, 1),
     ),
   ];
 }
