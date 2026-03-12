@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:stay_match/core/routing/app_routing.dart';
 import 'package:stay_match/features/home/presentation/widget/rooms_list.dart';
 
 import '../../../../core/constants/app_colors.dart';
@@ -41,11 +43,14 @@ class RoomsSection extends StatelessWidget {
               ),
               // todo: view all rooms text button implementation
               CustomTextButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.push(AppRouting.findRoomView);
+                },
                 text: AppStrings.viewAllRooms,
                 isUnderlined: false,
                 textColor: AppColors.primary,
                 textStyle: AppStyles.semiBold10poppins,
+                isPadded: false,
               ),
             ],
           ),
