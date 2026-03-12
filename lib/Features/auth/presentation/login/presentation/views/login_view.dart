@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:stay_match/features/auth/presentation/login/presentation/views/widgets/login_view_body.dart';
 
 import '../../../../../../core/constants/app_colors.dart';
+import '../widgets/login_view_body.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
