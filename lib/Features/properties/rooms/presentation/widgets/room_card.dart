@@ -6,7 +6,7 @@ import 'package:stay_match/features/home/presentation/widget/small_custom_button
 import 'package:stay_match/features/properties/rooms/presentation/widgets/room_in_property_data.dart';
 
 import '../../../../../core/widgets/amenities.dart';
-import '../../../../../core/widgets/card_cover_photo.dart';
+import '../../../presentation/widgets/card_cover_photo.dart';
 
 class RoomCard extends StatelessWidget {
   const RoomCard({
@@ -18,6 +18,7 @@ class RoomCard extends StatelessWidget {
     required this.city,
     required this.numOfRooms,
     required this.monthRent,
+    required this.isFurnished,
   });
 
   final Size size;
@@ -27,6 +28,7 @@ class RoomCard extends StatelessWidget {
   final String? city;
   final int? numOfRooms;
   final num? monthRent;
+  final bool isFurnished;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class RoomCard extends StatelessWidget {
         boxShadow: AppColors.elevationShadow,
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // todo: add rating and match percent
           CardCoverPhoto(size: size, imageUrl: coverImageUrl ?? ''),
@@ -69,20 +71,16 @@ class RoomCard extends StatelessWidget {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-
               children: [
                 SizedBox(height: 6),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Text(
-                      name ?? 'No name',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppStyles.semiBold10poppins.copyWith(
-                        color: AppColors.textColorPrimary,
-                      ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Text(
+                    name ?? 'No name',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppStyles.semiBold10poppins.copyWith(
+                      color: AppColors.textColorPrimary,
                     ),
                   ),
                 ),
@@ -97,42 +95,37 @@ class RoomCard extends StatelessWidget {
                         color: AppColors.textColorSecondary,
                         size: 10,
                       ),
-                      Flexible(
-                        child: Text(
-                          '${street ?? 'No street'}, ',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppStyles.medium8poppins.copyWith(
-                            color: AppColors.textColorSecondary,
-                          ),
+                      Text(
+                        '${street ?? 'No street'}, ',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppStyles.medium8poppins.copyWith(
+                          color: AppColors.textColorSecondary,
                         ),
                       ),
-                      Flexible(
-                        child: Text(
-                          city ?? 'No name',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppStyles.medium8poppins.copyWith(
-                            color: AppColors.textColorSecondary,
-                          ),
+                      Text(
+                        city ?? 'No name',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppStyles.medium8poppins.copyWith(
+                          color: AppColors.textColorSecondary,
                         ),
                       ),
                     ],
                   ),
                 ),
                 // todo: make it reusable for match also maybe?
-                Amenities(),
+                Amenities(isFurnished: isFurnished),
                 // divider
-                Flexible(
-                  child: Divider(
-                    color: AppColors.textColorSecondary,
-                    thickness: 0.5,
-                  ),
+                Divider(
+                  color: AppColors.textColorSecondary,
+                  thickness: 0.5,
                 ),
                 RoomInPropertyData(
                   numOfRooms: numOfRooms,
                   monthRent: monthRent,
                 ),
+                Spacer(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: SizedBox(
