@@ -14,7 +14,7 @@ class RoomsRepoImpl extends RoomsRepo {
   @override
   Future<Either<Failure, GetAllRooms>> getAllRooms({
     String? start,
-    int? monthsCount,
+    num? monthsCount,
     String? government,
     bool? allowsFamilies,
     bool? allowsChildren,
@@ -27,7 +27,7 @@ class RoomsRepoImpl extends RoomsRepo {
   }) async {
     try {
       var response = await apiService.get(
-        Endpoints.getAllApartments,
+        Endpoints.getAllRooms,
         queryParameters: {
           'start': start,
           'monthsCount': monthsCount,
