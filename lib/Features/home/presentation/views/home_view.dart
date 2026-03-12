@@ -5,7 +5,7 @@ import 'package:stay_match/core/utils/service_locator.dart';
 import 'package:stay_match/features/home/manager/home_cubit.dart';
 
 import '../../../properties/apartments/data/repos/apartment_repo_impl.dart';
-import '../../../properties/apartments/data/repos/rooms_repo_impl.dart';
+import '../../../properties/rooms/data/repos/rooms_repo_impl.dart';
 import '../../../properties/apartments/manager/apartment_cubit.dart';
 import '../../../properties/rooms/manager/rooms_cubit.dart';
 import '../../data/repos/home_repo_impl.dart';
