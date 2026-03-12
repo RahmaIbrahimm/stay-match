@@ -49,7 +49,7 @@ class _HomeViewBodyState extends State<HomeViewBody>
               BlocBuilder<PropertiesCubit, ApartmentsState>(
                 builder: (context, state) {
                   if (state is GetPropertiesSuccess) {
-                    var properties = state.response.data;
+                    var properties = state.response.data?.items;
                     if (properties != null && properties.isNotEmpty) {
                       return ApartmentsSection(
                         size: size,
@@ -77,7 +77,7 @@ class _HomeViewBodyState extends State<HomeViewBody>
                   }
                   // Initial state (before any loading)
                   else if (state is RoomsInitial) {
-                    return Container(); // or loading, or nothing
+                    return Container(); // todo: or loading, or nothing
                   } else {
                     return Center(
                       child: CircularProgressIndicator(

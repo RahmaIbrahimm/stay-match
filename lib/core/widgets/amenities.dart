@@ -3,7 +3,9 @@ import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
 
 class Amenities extends StatelessWidget {
-  const Amenities({super.key});
+  const Amenities({super.key, required this.isFurnished});
+
+  final bool isFurnished;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class Amenities extends StatelessWidget {
       ),
       //todo: add list/ whatever the hint for what's available for this property
       child: Text(
-        'Furnished',
+        isFurnished?'Furnished' : 'Unfurnished',
         style: AppStyles.regular8poppins.copyWith(
           color: AppColors.textColorSecondary,
         ),
