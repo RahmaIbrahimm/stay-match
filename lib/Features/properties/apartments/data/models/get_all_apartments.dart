@@ -1,6 +1,6 @@
 /// isSuccess : true
 /// message : "Request successful"
-/// data : [{"id":76,"name":"Beshoydfaaff","monthlyRent":2000,"availableFrom":"2026-03-08T16:20:57.778","numberOfBedrooms":1,"numberOfLivingRooms":1,"numberOfEnSuiteBathrooms":1,"numberOfGuestBathrooms":1,"street":"Street Name","city":"cairo","government":"cairo","latitude":0,"longitude":0,"size":120,"coverImageUrl":"https://graduationproject1.runasp.net/images/properties/28d48dd5-b759-4679-8c54-3cab1c3ef8f7_Screenshot 2026-03-01 200807.png","allowedTenants":{"allowsFamilies":true,"allowsChildren":true,"allowsStudents":true,"studentGender":"male","allowsWorkers":true,"workerGender":"male","petsAllowed":true},"status":"Available","bookingFrom":null,"bookingTo":null,"distanceInKm":0},{"id":77,"name":"Beshoyddddddddd","monthlyRent":12222,"availableFrom":"2026-03-08T16:22:45.364","numberOfBedrooms":1,"numberOfLivingRooms":1,"numberOfEnSuiteBathrooms":1,"numberOfGuestBathrooms":1,"street":"Street Name","city":"cairo","government":"cairo","latitude":0,"longitude":0,"size":123,"coverImageUrl":"https://graduationproject1.runasp.net/images/properties/6c448ecf-60b1-46e4-9f42-721ff9d39a75_Screenshot 2026-03-01 200807.png","allowedTenants":{"allowsFamilies":true,"allowsChildren":true,"allowsStudents":true,"studentGender":"male","allowsWorkers":true,"workerGender":"male","petsAllowed":true},"status":"Available","bookingFrom":null,"bookingTo":null,"distanceInKm":0},{"id":70,"name":"شقة فيلات الياسمين - إطلالة على حديقة","monthlyRent":3000,"availableFrom":"2026-03-07T16:10:27.067","numberOfBedrooms":3,"numberOfLivingRooms":2,"numberOfEnSuiteBathrooms":1,"numberOfGuestBathrooms":1,"street":"شارع الياسمين 7","city":"التجمع الأول\"","government":"القاهرة","latitude":30.0489,"longitude":31.4582,"size":150,"coverImageUrl":"/images/properties/bf1d73ec-5acd-4aff-ace7-6ad7fbde7a9a_3.jpg","allowedTenants":{"allowsFamilies":true,"allowsChildren":true,"allowsStudents":true,"studentGender":"any","allowsWorkers":true,"workerGender":"any","petsAllowed":true},"status":"Available","bookingFrom":null,"bookingTo":null,"distanceInKm":0},{"id":71,"name":"شقة فيلات الياسمين - إطلالة على حديقة","monthlyRent":3000,"availableFrom":"2026-03-07T16:10:27.067","numberOfBedrooms":3,"numberOfLivingRooms":2,"numberOfEnSuiteBathrooms":1,"numberOfGuestBathrooms":1,"street":"شارع الياسمين 7","city":"التجمع الأول\"","government":"القاهرة","latitude":30.0489,"longitude":31.4582,"size":150,"coverImageUrl":"/images/properties/534ed8e1-6e96-4863-af10-65f80396a7a6_3.jpg","allowedTenants":{"allowsFamilies":true,"allowsChildren":true,"allowsStudents":true,"studentGender":"any","allowsWorkers":true,"workerGender":"any","petsAllowed":true},"status":"Available","bookingFrom":null,"bookingTo":null,"distanceInKm":0},{"id":72,"name":"شقة فيلات الياسمين - إطلالة على حديقة","monthlyRent":3000,"availableFrom":"2026-03-07T16:10:27.067","numberOfBedrooms":3,"numberOfLivingRooms":2,"numberOfEnSuiteBathrooms":1,"numberOfGuestBathrooms":1,"street":"شارع الياسمين 7","city":"التجمع الأول\"","government":"القاهرة","latitude":30.0489,"longitude":31.4582,"size":150,"coverImageUrl":"/images/properties/2849cca7-d9b9-4d00-ace8-4e3b4f388fc9_3.jpg","allowedTenants":{"allowsFamilies":true,"allowsChildren":true,"allowsStudents":true,"studentGender":"any","allowsWorkers":true,"workerGender":"any","petsAllowed":true},"status":"Available","bookingFrom":null,"bookingTo":null,"distanceInKm":0}]
+/// data : {"totalCount":22,"page":1,"pageSize":2,"totalPages":11,"hasNext":true,"hasPrevious":false,"items":[{"id":92,"name":"Beshoysososooop","monthlyRent":1200,"furnished":false,"availableFrom":"2026-03-12T10:39:41.242","numberOfBedrooms":1,"numberOfLivingRooms":1,"numberOfEnSuiteBathrooms":0,"numberOfGuestBathrooms":0,"street":"xxxxxxxxxxxxxxxo","city":"cairo","government":"xxxxxxxvxxs","latitude":30.0444,"longitude":31.2357,"size":120,"coverImageUrl":"[object Object]","allowedTenants":{"allowsFamilies":true,"allowsChildren":false,"allowsStudents":true,"studentGender":"male","allowsWorkers":false,"workerGender":"male","petsAllowed":false},"status":"Available","bookingFrom":null,"bookingTo":null,"distanceInKm":0},{"id":93,"name":"Beshoysososoosa","monthlyRent":1200,"furnished":false,"availableFrom":"2026-03-12T10:58:24.256","numberOfBedrooms":1,"numberOfLivingRooms":1,"numberOfEnSuiteBathrooms":1,"numberOfGuestBathrooms":1,"street":"dddddddddddda","city":"cairo","government":"xxxxxxxvxxs","latitude":30.0444,"longitude":31.2357,"size":120,"coverImageUrl":"https://graduationproject1.runasp.net/images/properties/b99c7cf2-ee2f-4db2-b3f4-7da0bcbfb9a0_Screenshot 2026-02-10 143849.png","allowedTenants":{"allowsFamilies":true,"allowsChildren":false,"allowsStudents":false,"studentGender":"male","allowsWorkers":false,"workerGender":"male","petsAllowed":false},"status":"Available","bookingFrom":null,"bookingTo":null,"distanceInKm":0}]}
 
 class GetAllApartments {
   GetAllApartments({
@@ -11,56 +11,108 @@ class GetAllApartments {
   GetAllApartments.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    if (json['data'] != null) {
-      data = [];
-      json['data'].forEach((v) {
-        data?.add(ApartmentData.fromJson(v));
-      });
-    }
+    data = json['data'] != null ? ApartmentData.fromJson(json['data']) : null;
   }
-
   bool? isSuccess;
   String? message;
-  List<ApartmentData>? data;
+  ApartmentData? data;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['isSuccess'] = isSuccess;
     map['message'] = message;
     if (data != null) {
-      map['data'] = data?.map((v) => v.toJson()).toList();
+      map['data'] = data?.toJson();
     }
     return map;
   }
 
 }
 
-/// id : 76
-/// name : "Beshoydfaaff"
-/// monthlyRent : 2000
-/// availableFrom : "2026-03-08T16:20:57.778"
+/// totalCount : 22
+/// page : 1
+/// pageSize : 2
+/// totalPages : 11
+/// hasNext : true
+/// hasPrevious : false
+/// items : [{"id":92,"name":"Beshoysososooop","monthlyRent":1200,"furnished":false,"availableFrom":"2026-03-12T10:39:41.242","numberOfBedrooms":1,"numberOfLivingRooms":1,"numberOfEnSuiteBathrooms":0,"numberOfGuestBathrooms":0,"street":"xxxxxxxxxxxxxxxo","city":"cairo","government":"xxxxxxxvxxs","latitude":30.0444,"longitude":31.2357,"size":120,"coverImageUrl":"[object Object]","allowedTenants":{"allowsFamilies":true,"allowsChildren":false,"allowsStudents":true,"studentGender":"male","allowsWorkers":false,"workerGender":"male","petsAllowed":false},"status":"Available","bookingFrom":null,"bookingTo":null,"distanceInKm":0},{"id":93,"name":"Beshoysososoosa","monthlyRent":1200,"furnished":false,"availableFrom":"2026-03-12T10:58:24.256","numberOfBedrooms":1,"numberOfLivingRooms":1,"numberOfEnSuiteBathrooms":1,"numberOfGuestBathrooms":1,"street":"dddddddddddda","city":"cairo","government":"xxxxxxxvxxs","latitude":30.0444,"longitude":31.2357,"size":120,"coverImageUrl":"https://graduationproject1.runasp.net/images/properties/b99c7cf2-ee2f-4db2-b3f4-7da0bcbfb9a0_Screenshot 2026-02-10 143849.png","allowedTenants":{"allowsFamilies":true,"allowsChildren":false,"allowsStudents":false,"studentGender":"male","allowsWorkers":false,"workerGender":"male","petsAllowed":false},"status":"Available","bookingFrom":null,"bookingTo":null,"distanceInKm":0}]
+
+class ApartmentData {
+  ApartmentData({
+      this.totalCount, 
+      this.page, 
+      this.pageSize, 
+      this.totalPages, 
+      this.hasNext, 
+      this.hasPrevious, 
+      this.items,});
+
+  ApartmentData.fromJson(dynamic json) {
+    totalCount = json['totalCount'];
+    page = json['page'];
+    pageSize = json['pageSize'];
+    totalPages = json['totalPages'];
+    hasNext = json['hasNext'];
+    hasPrevious = json['hasPrevious'];
+    if (json['items'] != null) {
+      items = [];
+      json['items'].forEach((v) {
+        items?.add(Items.fromJson(v));
+      });
+    }
+  }
+  num? totalCount;
+  num? page;
+  num? pageSize;
+  num? totalPages;
+  bool? hasNext;
+  bool? hasPrevious;
+  List<Items>? items;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['totalCount'] = totalCount;
+    map['page'] = page;
+    map['pageSize'] = pageSize;
+    map['totalPages'] = totalPages;
+    map['hasNext'] = hasNext;
+    map['hasPrevious'] = hasPrevious;
+    if (items != null) {
+      map['items'] = items?.map((v) => v.toJson()).toList();
+    }
+    return map;
+  }
+
+}
+
+/// id : 92
+/// name : "Beshoysososooop"
+/// monthlyRent : 1200
+/// furnished : false
+/// availableFrom : "2026-03-12T10:39:41.242"
 /// numberOfBedrooms : 1
 /// numberOfLivingRooms : 1
-/// numberOfEnSuiteBathrooms : 1
-/// numberOfGuestBathrooms : 1
-/// street : "Street Name"
+/// numberOfEnSuiteBathrooms : 0
+/// numberOfGuestBathrooms : 0
+/// street : "xxxxxxxxxxxxxxxo"
 /// city : "cairo"
-/// government : "cairo"
-/// latitude : 0
-/// longitude : 0
+/// government : "xxxxxxxvxxs"
+/// latitude : 30.0444
+/// longitude : 31.2357
 /// size : 120
-/// coverImageUrl : "https://graduationproject1.runasp.net/images/properties/28d48dd5-b759-4679-8c54-3cab1c3ef8f7_Screenshot 2026-03-01 200807.png"
-/// allowedTenants : {"allowsFamilies":true,"allowsChildren":true,"allowsStudents":true,"studentGender":"male","allowsWorkers":true,"workerGender":"male","petsAllowed":true}
+/// coverImageUrl : "[object Object]"
+/// allowedTenants : {"allowsFamilies":true,"allowsChildren":false,"allowsStudents":true,"studentGender":"male","allowsWorkers":false,"workerGender":"male","petsAllowed":false}
 /// status : "Available"
 /// bookingFrom : null
 /// bookingTo : null
 /// distanceInKm : 0
 
-class ApartmentData {
-  ApartmentData({
+class Items {
+  Items({
       this.id, 
       this.name, 
       this.monthlyRent, 
+      this.furnished, 
       this.availableFrom, 
       this.numberOfBedrooms, 
       this.numberOfLivingRooms, 
@@ -79,10 +131,11 @@ class ApartmentData {
       this.bookingTo, 
       this.distanceInKm,});
 
-  ApartmentData.fromJson(dynamic json) {
+  Items.fromJson(dynamic json) {
     id = json['id'];
     name = json['name'];
     monthlyRent = json['monthlyRent'];
+    furnished = json['furnished'];
     availableFrom = json['availableFrom'];
     numberOfBedrooms = json['numberOfBedrooms'];
     numberOfLivingRooms = json['numberOfLivingRooms'];
@@ -104,6 +157,7 @@ class ApartmentData {
   num? id;
   String? name;
   num? monthlyRent;
+  bool? furnished;
   String? availableFrom;
   num? numberOfBedrooms;
   num? numberOfLivingRooms;
@@ -127,6 +181,7 @@ class ApartmentData {
     map['id'] = id;
     map['name'] = name;
     map['monthlyRent'] = monthlyRent;
+    map['furnished'] = furnished;
     map['availableFrom'] = availableFrom;
     map['numberOfBedrooms'] = numberOfBedrooms;
     map['numberOfLivingRooms'] = numberOfLivingRooms;
@@ -152,12 +207,12 @@ class ApartmentData {
 }
 
 /// allowsFamilies : true
-/// allowsChildren : true
+/// allowsChildren : false
 /// allowsStudents : true
 /// studentGender : "male"
-/// allowsWorkers : true
+/// allowsWorkers : false
 /// workerGender : "male"
-/// petsAllowed : true
+/// petsAllowed : false
 
 class AllowedTenants {
   AllowedTenants({
