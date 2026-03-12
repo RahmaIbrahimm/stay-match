@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stay_match/core/widgets/card_cover_photo.dart';
+import 'package:stay_match/features/properties/presentation/widgets/card_cover_photo.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../data/models/get_all_apartments.dart';
@@ -13,7 +13,7 @@ class PropertyCard extends StatelessWidget {
   });
 
   final Size size;
-  final ApartmentData? property;
+  final Items? property;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class PropertyCard extends StatelessWidget {
             name: property?.name,
             city:  property?.city,
             streetName:  property?.street,
-            monthlyRent:  property?.monthlyRent,
+            monthlyRent:  property?.monthlyRent, isFurnished: property!.furnished!,
           ),
         ],
       ),
