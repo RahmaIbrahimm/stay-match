@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import '../../../../core/utils/secure_storage_helper.dart';
-import '../../apartments/data/repos/rooms_repo.dart';
+import '../data/repos/rooms_repo.dart';
 import '../data/models/get_all_rooms.dart';
 part 'rooms_state.dart';
 
