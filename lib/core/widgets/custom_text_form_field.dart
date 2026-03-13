@@ -16,8 +16,10 @@ class CustomTextFormField extends StatelessWidget {
     this.horizontalPadding,
     this.verticalPadding,
     this.hintStyle,
-    this.enabled = true
-
+    this.enabled = true,
+    this.strokeColor,
+    this.borderRadius,
+    this.hasShadow = true,
   });
 
   final String? Function(String?) validator;
@@ -31,24 +33,32 @@ class CustomTextFormField extends StatelessWidget {
   final double? horizontalPadding;
   final double? verticalPadding;
   final bool enabled;
+  final Color? strokeColor;
+  final double? borderRadius;
+  final bool hasShadow;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        boxShadow: AppColors.boxShadow,
-        borderRadius: BorderRadius.circular(15)
+        boxShadow: hasShadow ? AppColors.boxShadow : null,
+        borderRadius: BorderRadius.circular(15),
       ),
       child: TextFormField(
         obscureText: isObscure,
         decoration: InputDecoration(
           hintText: hintText,
           enabled: enabled,
+          contentPadding: EdgeInsets.symmetric(
+            vertical: verticalPadding ?? 16,
+            horizontal: horizontalPadding ?? 12,
+          ),
           hintStyle:
               hintStyle ??
               AppStyles.caption.copyWith(color: AppColors.textColorSecondary),
           border: buildOutlineInputBorder(),
           // TODO: add borders for each case
-          errorBorder:  OutlineInputBorder(
+          errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide(
               color: stroke ? Colors.red : Colors.transparent,
@@ -64,16 +74,15 @@ class CustomTextFormField extends StatelessWidget {
         ),
         validator: validator,
         controller: controller,
-
       ),
     );
   }
 
   OutlineInputBorder buildOutlineInputBorder() {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.circular(borderRadius ?? 15),
       borderSide: BorderSide(
-        color: stroke ? AppColors.primary : Colors.transparent,
+        color: stroke ? strokeColor ?? AppColors.primary : Colors.transparent,
         width: strokeWidth ?? 2,
       ),
     );
