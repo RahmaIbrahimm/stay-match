@@ -101,7 +101,8 @@ abstract class AppStrings {
   static const myProperties = 'My Properties';
   static const addYourProperty = '"Add your property with ease"';
   static const addProperty = 'Add Property';
-  static const shareApartmentDetails = 'Share your property details and reach the right people instantly';
+  static const shareApartmentDetails =
+      'Share your property details and reach the right people instantly';
   static const viewAllProperties = 'View All Properties';
 
   // static const needHelp = 'Need Help ?';
@@ -127,4 +128,7 @@ abstract class AppStrings {
 
   // rooms
   static const viewDetails = 'View Details';
+  static const findYourRoom = 'Find Your Room';
+  static const browseRoom =
+      'Browse Apartments with available rooms in your preferred location';
 }
