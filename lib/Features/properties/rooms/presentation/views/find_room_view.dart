@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
+import 'package:stay_match/core/networking/dio_consumer.dart';
+import 'package:stay_match/features/properties/rooms/data/repos/rooms_repo_impl.dart';
+import 'package:stay_match/features/properties/rooms/manager/rooms_cubit.dart';
 
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/utils/service_locator.dart';
 import '../widgets/find_room_body.dart';
 
 class FindRoomView extends StatelessWidget {
@@ -11,23 +16,12 @@ class FindRoomView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          title: Text(
-            AppStrings.stayMatch,
-            style: AppStyles.logo.copyWith(
-              color: AppColors.primary,
-              fontSize: 20,
-            ),
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(10),
-            child: Divider(color: AppColors.grey,)
-          ),
+      child: BlocProvider(
+        create: (context) => RoomsCubit(RoomsRepoImpl( apiService: getIt.get<DioConsumer>()))..getAllRooms(),
+        child: Scaffold(
+          body: FindRoomBody(),
         ),
-        body: FindRoomBody(),
-        ),
+      ),
     );
   }
 }
