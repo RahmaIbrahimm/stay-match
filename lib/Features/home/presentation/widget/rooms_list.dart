@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../properties/rooms/data/models/get_all_rooms.dart';
-import '../../../properties/rooms/presentation/widgets/room_card.dart';
+import '../../../properties/presentation/views/rooms/data/models/get_all_rooms.dart';
+import '../../../properties/presentation/views/rooms/presentation/widgets/room_card.dart';
 
 class RoomsList extends StatelessWidget {
   const RoomsList({
@@ -29,10 +29,11 @@ class RoomsList extends StatelessWidget {
                 name: roomPropertiesData?[index].name,
                 street: roomPropertiesData?[index].street,
                 city: roomPropertiesData?[index].city,
-                numOfRooms: roomPropertiesData?[index].rooms?.length,
-                monthRent: roomPropertiesData?[index].rooms?[index].monthRent,
+
                 // todo: add furnished impl
                 isFurnished: true,
+                id: roomPropertiesData![index].id!,
+                rooms: roomPropertiesData?[index].rooms ?? [],
               );
             },
           );

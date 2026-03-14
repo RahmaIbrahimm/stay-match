@@ -65,7 +65,7 @@ class _CustomDateSelectorState extends State<CustomDateSelector> {
           children: [
             Text(
               widget.dateController.text ,
-              style: AppStyles.caption,
+              style: AppStyles.regular12poppins,
             ),
             Icon(
               Icons.calendar_month,
