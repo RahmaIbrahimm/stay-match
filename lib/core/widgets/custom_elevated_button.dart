@@ -13,7 +13,7 @@ class CustomElevatedButton extends StatelessWidget {
     required this.onPressed,
     this.textStyle,
     this.verticalPadding,
-    this.horizontalPadding,
+    this.horizontalPadding, this.borderRadius,
   });
 
   final Color? backgroundColor;
@@ -25,6 +25,7 @@ class CustomElevatedButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final double? verticalPadding;
   final double? horizontalPadding;
+  final double? borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +36,12 @@ class CustomElevatedButton extends StatelessWidget {
           vertical: verticalPadding ?? 10,
           horizontal: horizontalPadding ?? 0,
         ),
+        shape: borderRadius != null
+            ? RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(borderRadius!),
+              )
+            : null,
       ),
-
       onPressed: onPressed,
       child: isLoading
           ? CircularProgressIndicator(color: AppColors.textColorWhite)
@@ -46,7 +51,7 @@ class CustomElevatedButton extends StatelessWidget {
               children: [
                 Text(
                   text,
-                  style: (textStyle ?? AppStyles.cardTitle).copyWith(
+                  style: (textStyle ?? AppStyles.medium20poppins).copyWith(
                     color: textColor ?? AppColors.containerColor,
                   ),
                 ),
