@@ -55,7 +55,7 @@ class CustomTextFormField extends StatelessWidget {
           ),
           hintStyle:
               hintStyle ??
-              AppStyles.caption.copyWith(color: AppColors.textColorSecondary),
+              AppStyles.regular12poppins.copyWith(color: AppColors.textColorSecondary),
           border: buildOutlineInputBorder(),
           // TODO: add borders for each case
           errorBorder: OutlineInputBorder(
