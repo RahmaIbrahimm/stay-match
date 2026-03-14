@@ -2,40 +2,53 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract class AppStyles {
-  static final logo = GoogleFonts.protestRiot(
+  static final regular15protestRiot = GoogleFonts.protestRiot(
     fontSize: 15,
     fontWeight: FontWeight.normal,
   );
-  static final headLine = GoogleFonts.poppins(
+  static final bold28poppins = GoogleFonts.poppins(
     fontSize: 28,
     fontWeight: FontWeight.bold,
   );
-  static final sectionTitle = GoogleFonts.poppins(
+  static final semibold24poppins = GoogleFonts.poppins(
     fontSize: 24,
     fontWeight: FontWeight.w600,
   );
-  static final cardTitle = GoogleFonts.poppins(
+  static final medium20poppins = GoogleFonts.poppins(
     fontSize: 20,
     fontWeight: FontWeight.w500,
+  );
+  static final bold20poppins = GoogleFonts.poppins(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
   );
   static final semiBold15poppins = GoogleFonts.poppins(
     fontSize: 15,
     fontWeight: FontWeight.w600,
-  );  static final medium15poppins = GoogleFonts.poppins(
+  );
+  static final medium15poppins = GoogleFonts.poppins(
     fontSize: 15,
     fontWeight: FontWeight.w500,
   );
-  static final bodyText = GoogleFonts.poppins(
+  static final bold15poppins = GoogleFonts.poppins(
+    fontSize: 15,
+    fontWeight: FontWeight.bold,
+  );
+  static final regular16poppins = GoogleFonts.poppins(
     fontSize: 16,
     fontWeight: FontWeight.normal,
   );
-  static final secondary = GoogleFonts.poppins(
+  static final regular14poppins = GoogleFonts.poppins(
     fontSize: 14,
     fontWeight: FontWeight.normal,
   );
-  static final caption = GoogleFonts.poppins(
+  static final regular12poppins = GoogleFonts.poppins(
     fontSize: 12,
     fontWeight: FontWeight.normal,
+  );
+  static final bold18poppins = GoogleFonts.poppins(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
   );
   static final semiBold12Poppins = GoogleFonts.poppins(
     fontSize: 12,
@@ -44,6 +57,10 @@ abstract class AppStyles {
   static final medium12poppins = GoogleFonts.poppins(
     fontSize: 12,
     fontWeight: FontWeight.w500,
+  );
+  static final bold12poppins = GoogleFonts.poppins(
+    fontSize: 12,
+    fontWeight: FontWeight.bold,
   );
   static final medium10poppins = GoogleFonts.poppins(
     fontSize: 10,
@@ -60,7 +77,8 @@ abstract class AppStyles {
   static final medium8poppins = GoogleFonts.poppins(
     fontSize: 8,
     fontWeight: FontWeight.w500,
-  );static final regular8poppins = GoogleFonts.poppins(
+  );
+  static final regular8poppins = GoogleFonts.poppins(
     fontSize: 8,
     fontWeight: FontWeight.normal,
   );
