@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stay_match/core/routing/app_routing.dart';
-import 'package:stay_match/features/home/presentation/widget/rooms_list.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_styles.dart';
 import '../../../../core/widgets/custom_text_button.dart';
-import '../../../properties/rooms/data/models/get_all_rooms.dart';
 
 class RoomsSection extends StatelessWidget {
-  const RoomsSection({
-    super.key,
-    required this.size,
-    required this.roomPropertiesData,
-  });
+  const RoomsSection({super.key, required this.size, required this.widget});
 
   final Size size;
-  final List<RoomData>? roomPropertiesData;
+  final Widget widget;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +38,7 @@ class RoomsSection extends StatelessWidget {
               // todo: view all rooms text button implementation
               CustomTextButton(
                 onPressed: () {
-                  context.push(AppRouting.findRoomView);
+                  context.pushNamed(AppRouting.findRoomViewName);
                 },
                 text: AppStrings.viewAllRooms,
                 isUnderlined: false,
@@ -62,13 +56,7 @@ class RoomsSection extends StatelessWidget {
             ),
           ),
           SizedBox(height: 8),
-          SizedBox(
-            height: size.height * 0.3,
-            child: RoomsList(
-              roomPropertiesData: roomPropertiesData,
-              size: size,
-            ),
-          ),
+          SizedBox(height: size.height * 0.3, child: widget),
         ],
       ),
     );
