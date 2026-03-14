@@ -29,7 +29,7 @@ class FormSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(fieldTitle, style: AppStyles.sectionTitle),
+        Text(fieldTitle, style: AppStyles.semibold24poppins),
         const SizedBox(height: 8),
         CustomTextFormField(
           hintText: hintText,

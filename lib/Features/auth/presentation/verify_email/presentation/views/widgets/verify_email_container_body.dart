@@ -51,20 +51,20 @@ class VerifyEmailContainerBody extends StatelessWidget {
             children: [
               Text(
                 AppStrings.verifyEmailAddress,
-                style: AppStyles.headLine,
+                style: AppStyles.bold28poppins,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
               Text(
                 AppStrings.verificationCodeSentTo,
-                style: AppStyles.cardTitle.copyWith(
+                style: AppStyles.medium20poppins.copyWith(
                   color: AppColors.textColorSecondary,
                 ),
               ),
               // TODO: implement logic Email sent to
               Text(
                 authCubit.forgetEmailController.text,
-                style: AppStyles.cardTitle.copyWith(color: AppColors.secondary),
+                style: AppStyles.medium20poppins.copyWith(color: AppColors.secondary),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -100,7 +100,7 @@ class VerifyEmailContainerBody extends StatelessWidget {
                     build: (context, time) {
                       return Text(
                         _formatTime(time),
-                        style: AppStyles.bodyText.copyWith(
+                        style: AppStyles.regular16poppins.copyWith(
                           color: AppColors.textColorPrimary,
                         ),
                       );
@@ -115,7 +115,7 @@ class VerifyEmailContainerBody extends StatelessWidget {
                     },
                     text: AppStrings.resendConfirmation,
                     textColor: AppColors.textColorSecondary,
-                    textStyle: AppStyles.bodyText,
+                    textStyle: AppStyles.regular16poppins,
                   ),
                 ],
               ),

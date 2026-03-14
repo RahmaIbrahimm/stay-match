@@ -38,13 +38,13 @@ class ForgetPasswordContainerBody extends StatelessWidget {
             children: [
               Text(
                 AppStrings.forgetPassword,
-                style: AppStyles.headLine,
+                style: AppStyles.bold28poppins,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
               Text(
                 AppStrings.forgetPasswordInstructions,
-                style: AppStyles.bodyText,
+                style: AppStyles.regular16poppins,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),

@@ -43,12 +43,12 @@ class HomeHeader extends StatelessWidget {
             children: [
               Text(
                 '${AppStrings.stayMatch} ',
-                style: AppStyles.logo.copyWith(color: AppColors.textColorWhite),
+                style: AppStyles.regular15protestRiot.copyWith(color: AppColors.textColorWhite),
               ),
               Expanded(
                 child: Text(
                   AppStrings.homeHeader,
-                  style: AppStyles.secondary.copyWith(
+                  style: AppStyles.regular14poppins.copyWith(
                     color: AppColors.textColorWhite,
                     fontWeight: FontWeight.bold,
                   ),

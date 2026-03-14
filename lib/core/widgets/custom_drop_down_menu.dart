@@ -97,7 +97,7 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
           fillColor: AppColors.containerColor,
           filled: true,
         ),
-        hint: Text(widget.hintText, style:AppStyles.caption.copyWith(color: AppColors.textColorSecondary)),
+        hint: Text(widget.hintText, style:AppStyles.regular12poppins.copyWith(color: AppColors.textColorSecondary)),
         value: widget.selectedValue?.text.isNotEmpty == true
             ? widget.selectedValue?.text
             : null,
@@ -120,7 +120,7 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
               decoration: InputDecoration(
                 isDense: true,
                 hintText: AppStrings.search,
-                hintStyle: AppStyles.caption.copyWith(
+                hintStyle: AppStyles.regular12poppins.copyWith(
                   color: AppColors.textColorSecondary,
                 ),
                 contentPadding: const EdgeInsets.symmetric(

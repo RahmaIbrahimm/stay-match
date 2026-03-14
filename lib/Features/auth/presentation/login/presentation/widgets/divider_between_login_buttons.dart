@@ -22,7 +22,7 @@ class DividerBetweenLoginButtons extends StatelessWidget {
             endIndent: 10,
           ),
         ),
-        Text(AppStrings.or, style: AppStyles.cardTitle),
+        Text(AppStrings.or, style: AppStyles.medium20poppins),
         Expanded(
           child: Divider(
             color: Colors.black,
