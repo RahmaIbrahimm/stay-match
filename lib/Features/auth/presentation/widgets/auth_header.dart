@@ -19,14 +19,14 @@ class AuthHeaderText extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(
             title,
-            style: AppStyles.headLine.copyWith(
+            style: AppStyles.bold28poppins.copyWith(
               color: AppColors.textColorWhite,
             ),
           ),
         ),
         Text(
           greeting,
-          style: AppStyles.sectionTitle.copyWith(
+          style: AppStyles.semibold24poppins.copyWith(
             color: AppColors.textColorWhite,
           ),
         ),
