@@ -16,7 +16,6 @@ class CardCoverPhoto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-
       children: [
         ClipRRect(
           borderRadius: BorderRadius.only(
@@ -26,17 +25,28 @@ class CardCoverPhoto extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           child: CachedNetworkImage(
             imageUrl: imageUrl ?? '',
-            height: size.height * 0.1,
             width: double.infinity,
             fit: BoxFit.cover,
 
-            errorWidget: (context, url, error) {
-              return Icon(Icons.error_outline,color: AppColors.textColorError,);
+            placeholder: (context, url) => Container(
+              width: double.infinity,
+              color: Colors.grey[200],
+              child: Icon(
+                Icons.image_outlined,
+                color: Colors.grey[400],
+                size: 30,
+              ),
+            ),
 
-            },
-            placeholder: (context, url) {
-              return Icon(Icons.error_outline,color: AppColors.textColorError,);
-            },
+            errorWidget: (context, url, error) => Container(
+              width: double.infinity,
+              color: Colors.grey[200],
+              child: Icon(
+                Icons.broken_image_outlined,
+                color: Colors.grey[400],
+                size: 30,
+              ),
+            ),
           ),
         ),
         Container(
