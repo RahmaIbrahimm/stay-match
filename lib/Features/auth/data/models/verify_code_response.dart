@@ -9,13 +9,13 @@ class VerifyCodeResponse {
     isSuccess = json['isSuccess'];
     message = json['message'];
     errors = json['errors'] != null ? Errors.fromJson(json['errors']) : null;
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? VerifyData.fromJson(json['data']) : null;
   }
 
   bool? isSuccess;
   String? message;
   Errors? errors;
-  Data? data;
+  VerifyData? data;
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['isSuccess'] = isSuccess;
@@ -54,12 +54,12 @@ class Errors {
   }
 }
 
-class Data {
+class VerifyData {
   String? userId;
 
-  Data({required this.userId});
+  VerifyData({required this.userId});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  VerifyData.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
   }
   Map<String,dynamic> toJson() {
