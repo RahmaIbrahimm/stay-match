@@ -4,8 +4,8 @@
 // import 'package:stay_match/features/auth/presentation/reset_password/presentation/views/reset_password_view.dart';
 // import 'package:stay_match/features/home/presentation/views/home_view.dart';
 // import 'package:stay_match/features/profile/presentation/views/profile_view.dart';
-// import 'package:stay_match/features/properties/rooms/presentation/find_room/views/find_room_view.dart';
-// import 'package:stay_match/features/properties/rooms/presentation/room_details/views/room_details_view.dart';
+// import 'package:stay_match/features/shared/rooms/presentation/find_room/views/find_room_view.dart';
+// import 'package:stay_match/features/shared/rooms/presentation/room_details/views/room_details_view.dart';
 //
 // import '../../features/auth/presentation/forget_password/presentation/views/forget_password_view.dart';
 // import '../../features/auth/presentation/login/presentation/views/login_view.dart';
@@ -170,17 +170,18 @@ import 'package:stay_match/core/widgets/layout_scaffold.dart';
 import 'package:stay_match/features/auth/presentation/reset_password/presentation/views/reset_password_view.dart';
 import 'package:stay_match/features/home/presentation/views/home_view.dart';
 import 'package:stay_match/features/profile/presentation/views/profile_view.dart';
-import 'package:stay_match/features/properties/presentation/views/apartments/presentation/views/find_apartment/views/find_apartment_view.dart';
 
+import '../../features/apartments/presentation/views/apartment_details_view.dart';
+import '../../features/apartments/presentation/views/find_apartment_view.dart';
 import '../../features/auth/presentation/forget_password/presentation/views/forget_password_view.dart';
 import '../../features/auth/presentation/login/presentation/views/login_view.dart';
 import '../../features/auth/presentation/signup/presentation/views/signup_view.dart';
 import '../../features/auth/presentation/verify_email/presentation/views/verify_email_view.dart';
-import '../../features/properties/presentation/views/rooms/presentation/views/find_room/views/find_room_view.dart';
-import '../../features/properties/presentation/views/rooms/presentation/views/room_details/views/room_details_view.dart';
+import '../../features/rooms/presentation/views/find_room_view.dart';
+import '../../features/rooms/presentation/views/room_details_view.dart';
 
 class AppRouting {
-
+  static final GlobalKey<NavigatorState> rootNavKey = GlobalKey<NavigatorState>();
   // ===========auth routes============
   static const loginView = '/';
   static const signupView = '/signup';
@@ -203,6 +204,7 @@ class AppRouting {
   static const findRoomView = 'find-room';
   static const roomDetailsView = 'room-details/:id';
   static const findApartmentView = 'find-apartment';
+  static const apartmentDetailsView = 'apartment-details/:id';
 
   //main app names
   static const homeViewName = 'home';
@@ -210,8 +212,10 @@ class AppRouting {
   static const findRoomViewName = 'findRoom';
   static const roomDetailsViewName = 'roomDetails';
   static const findApartmentViewName = 'findApartment';
+  static const apartmentDetailsViewName = 'apartmentDetails';
 
   static final router = GoRouter(
+    navigatorKey: rootNavKey,
     initialLocation: loginView,
     routes: [
       // AUTH ROUTES
@@ -254,7 +258,23 @@ class AppRouting {
                 name: homeViewName,
                 builder: (context, _) => const HomeView(),
                 routes: [
-                  // Nested route: /home/find-room
+                  // Nested route: /home/find-apartment/apartment-details/123
+                  GoRoute(
+                    path: findApartmentView,
+                    name: findApartmentViewName,
+                    builder: (context, state) => const FindApartmentView(),
+                    routes: [
+                      GoRoute(
+                        path: apartmentDetailsView,
+                        name: apartmentDetailsViewName,
+                        builder: (context, state) {
+                          final id = int.tryParse(state.pathParameters['id'] ?? '-1') ?? -1;
+                          return ApartmentDetailsView(id: id);
+                        },
+                      ),
+                    ],
+                  ),
+                  // Nested route: /home/find-room/room-details/123
                   GoRoute(
                     path: findRoomView,
                     name: findRoomViewName,
@@ -265,26 +285,12 @@ class AppRouting {
                         path: roomDetailsView,
                         name: roomDetailsViewName,
                         builder: (context, state) {
-                          final id = int.tryParse(state.pathParameters['id'] ?? '-1') ?? -1;
-                          return RoomDetailsView(id: id);
+                          final roomId = int.tryParse(state.pathParameters['roomId'] ?? '-1') ?? -1;
+                          final propertyId = int.tryParse(state.pathParameters['propertyId'] ?? '-1') ?? -1;
+                          return RoomDetailsView(roomId: roomId,propertyId:propertyId);
                         },
                       ),
                     ],
-                  ),
-                  GoRoute(
-                    path: findApartmentView,
-                    name: findApartmentViewName,
-                    builder: (context, state) => const FindApartmentView(),
-                    // routes: [
-                    //   GoRoute(
-                    //     path: roomDetailsView,
-                    //     name: roomDetailsViewName,
-                    //     builder: (context, state) {
-                    //       final id = int.tryParse(state.pathParameters['id'] ?? '-1') ?? -1;
-                    //       return RoomDetailsView(id: id);
-                    //     },
-                    //   ),
-                    // ],
                   ),
                 ],
               ),

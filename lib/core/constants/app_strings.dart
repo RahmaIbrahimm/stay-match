@@ -121,4 +121,11 @@ abstract class AppStrings {
       'Browse Apartments with available rooms in your preferred location';
   // room details
 static const roomDetails = 'Room Details';
+
+// apartments
+
+// apartment details
+ static const apartmentDetails = 'Apartment Details';
+ static const viewReviews = 'View Reviews';
+
 }

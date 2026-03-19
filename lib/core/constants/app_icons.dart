@@ -7,7 +7,7 @@ abstract class AppIcons {
   static const homeIcon = '$assetsPath/home_icon.png';
   static const folderExchangeIcon = '$assetsPath/folder_exchange.png';
   static const addCircleIcon = '$assetsPath/add_circle.png';
-  static const bathroomIcon = '$assetsPath/bathroom_icon.png';
-  static const sizeIcon = '$assetsPath/size_icon.png';
+  static const bathroomIcon = '$assetsPath/bathroom_icon.svg';
+  static const sizeIcon = '$assetsPath/size_icon.svg';
 
 }
