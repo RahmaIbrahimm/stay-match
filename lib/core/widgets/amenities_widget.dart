@@ -17,7 +17,7 @@ class AmenitiesWidget extends StatelessWidget {
       child: RPadding(
         padding: const EdgeInsets.all(16),
         child: Wrap(
-          spacing: 16.w, // horizontal spacing
+          spacing: 20.w, // horizontal spacing
           runSpacing: 12.h, // vertical spacing
           alignment: WrapAlignment.start,
           children: amenities.map((item) {
