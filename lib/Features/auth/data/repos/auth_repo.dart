@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:stay_match/core/errors/failures.dart';
 import 'package:stay_match/features/auth/data/models/forget_password_response.dart';
 import 'package:stay_match/features/auth/data/models/login_with_google_response.dart';
+import 'package:stay_match/features/auth/data/models/refresh_token_response.dart';
 import 'package:stay_match/features/auth/data/models/register_response.dart';
 import 'package:stay_match/features/auth/data/models/reset_password_response.dart';
 
@@ -50,5 +51,9 @@ abstract class AuthRepo {
     required String password,
     required String confirmPassword,
     required String userId,
+  });
+  // reset token
+  Future<Either<Failure, RefreshTokenResponse>> refreshToken({
+    required String refreshToken
   });
 }
