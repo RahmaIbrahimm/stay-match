@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/features/home/presentation/widget/small_custom_button.dart';
 
 import '../../../../../core/constants/app_colors.dart';
@@ -21,7 +22,7 @@ class HomeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: size.height * 0.28,
+      height: 235.h,
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 18),
       alignment: Alignment.center,
@@ -31,39 +32,43 @@ class HomeHeader extends StatelessWidget {
           image: AssetImage(AppImages.homeHeader),
           fit: BoxFit.cover,
         ),
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(15.r),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '${AppStrings.stayMatch} ',
-                style: AppStyles.regular15protestRiot.copyWith(color: AppColors.textColorWhite),
-              ),
-              Expanded(
-                child: Text(
-                  AppStrings.homeHeader,
+          RichText(
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: '${AppStrings.stayMatch} ',
+                  style: AppStyles.regular15protestRiot.copyWith(
+                    color: AppColors.textColorWhite,
+                  ),
+                ),
+                TextSpan(
+                  text: AppStrings.homeHeader,
                   style: AppStyles.regular14poppins.copyWith(
                     color: AppColors.textColorWhite,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-            ],
+
+              ],
+            ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Container(
-            padding: EdgeInsets.only(top: 8),
+            padding: EdgeInsets.only(top: 8.r),
             decoration: BoxDecoration(
               color: AppColors.containerColor,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
+                topLeft: Radius.circular(10.r),
+                topRight: Radius.circular(10.r),
               ),
             ),
             child: TabBar(
@@ -74,43 +79,58 @@ class HomeHeader extends StatelessWidget {
               unselectedLabelStyle: AppStyles.medium10poppins,
               labelColor: AppColors.primary,
               labelStyle: AppStyles.medium10poppins,
-              labelPadding: EdgeInsetsGeometry.all(6),
+              labelPadding: EdgeInsets.all(6.r),
               padding: EdgeInsets.zero,
               tabAlignment: TabAlignment.fill,
               indicatorSize: TabBarIndicatorSize.label,
               tabs: [
                 Row(
                   children: [
-                    Icon(Icons.apartment, size: 12),
-                    Text(AppStrings.rentWholeApartment),
+                    Icon(Icons.apartment, size: 12.sp),
+                    Flexible(
+                      child: Text(
+                        AppStrings.rentWholeApartment,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ],
                 ),
                 Row(
                   children: [
-                    Icon(Icons.meeting_room_sharp, size: 12),
-                    Text(AppStrings.rentRoom),
+                    Icon(Icons.meeting_room_sharp, size: 12.sp),
+                    Flexible(
+                      child: Text(
+                        AppStrings.rentRoom,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ],
                 ),
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            padding: EdgeInsets.symmetric(horizontal: 8.r, vertical: 16.r),
             decoration: BoxDecoration(
               color: AppColors.containerColor,
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(10),
-                bottomRight: Radius.circular(10),
+                bottomLeft: Radius.circular(10.r),
+                bottomRight: Radius.circular(10.r),
               ),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Expanded(flex: 3, child: HomeSearchField()),
-                SizedBox(width: 8),
+                SizedBox(width: 8.w),
                 Expanded(
                   flex: 2,
-                  child: SmallCustomButton(text: AppStrings.search, onPressed: () {  },),
+                  child: SmallCustomButton(
+                    text: AppStrings.search,
+                    onPressed: () {},
+                  ),
                 ),
               ],
             ),
