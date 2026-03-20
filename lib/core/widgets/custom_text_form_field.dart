@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 
 import '../constants/app_styles.dart';
@@ -42,7 +43,7 @@ class CustomTextFormField extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         boxShadow: hasShadow ? AppColors.boxShadow : null,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(15.r),
       ),
       child: TextFormField(
         obscureText: isObscure,
@@ -50,8 +51,8 @@ class CustomTextFormField extends StatelessWidget {
           hintText: hintText,
           enabled: enabled,
           contentPadding: EdgeInsets.symmetric(
-            vertical: verticalPadding ?? 16,
-            horizontal: horizontalPadding ?? 12,
+            vertical: verticalPadding?.r ?? 16.r,
+            horizontal: horizontalPadding?.r ?? 12.r,
           ),
           hintStyle:
               hintStyle ??
@@ -62,7 +63,7 @@ class CustomTextFormField extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide(
               color: stroke ? Colors.red : Colors.transparent,
-              width: strokeWidth ?? 2,
+              width: strokeWidth?.r ?? 2.r,
             ),
           ),
           enabledBorder: buildOutlineInputBorder(),
@@ -80,10 +81,10 @@ class CustomTextFormField extends StatelessWidget {
 
   OutlineInputBorder buildOutlineInputBorder() {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(borderRadius ?? 15),
+      borderRadius: BorderRadius.circular(borderRadius?.r ?? 15.r),
       borderSide: BorderSide(
         color: stroke ? strokeColor ?? AppColors.primary : Colors.transparent,
-        width: strokeWidth ?? 2,
+        width: strokeWidth?.r ?? 2.r,
       ),
     );
   }
