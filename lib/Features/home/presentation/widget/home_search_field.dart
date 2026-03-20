@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_strings.dart';
@@ -15,9 +16,9 @@ class HomeSearchField extends StatelessWidget {
       style: AppStyles.medium10poppins,
 
       decoration: InputDecoration(
-        suffixIconConstraints: const BoxConstraints(
-          minHeight: 20,
-          minWidth: 20,
+        suffixIconConstraints:  BoxConstraints(
+          minHeight: 20.r,
+          minWidth: 20.r,
         ),
         isDense: true,
         border: OutlineInputBorder(
@@ -35,7 +36,7 @@ class HomeSearchField extends StatelessWidget {
         suffixIcon: Icon(
           Icons.search,
           color: AppColors.textColorSecondary,
-          size: 16,
+          size: 16.sp,
         ),
         hintText: AppStrings.searchHome,
         hintStyle: AppStyles.medium10poppins.copyWith(
