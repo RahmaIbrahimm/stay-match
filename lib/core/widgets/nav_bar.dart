@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 
@@ -26,14 +27,14 @@ class NavBar extends StatelessWidget {
     // file exchange
     NavigationDestination(
       icon: CustomBottomNavButton(
-        icon: ImageIcon(AssetImage(AppIcons.folderExchangeIcon), size: 24,color: AppColors.primary,),
+        icon: ImageIcon(AssetImage(AppIcons.folderExchangeIcon), size: 24.sp,color: AppColors.primary,),
       ),
       selectedIcon: CustomBottomNavButton(
         selected: true,
         icon: ImageIcon(
           AssetImage(AppIcons.folderExchangeIcon),
           color: AppColors.containerColor,
-          size: 24,
+          size: 24.sp,
         ),
       ),
       label: '',
@@ -41,14 +42,14 @@ class NavBar extends StatelessWidget {
     // grid
     NavigationDestination(
       icon: CustomBottomNavButton(
-        icon: ImageIcon(AssetImage(AppIcons.gridIcon), size: 24,color: AppColors.primary,),
+        icon: ImageIcon(AssetImage(AppIcons.gridIcon), size: 24.sp,color: AppColors.primary,),
       ),
       selectedIcon: CustomBottomNavButton(
         selected: true,
         icon: ImageIcon(
           AssetImage(AppIcons.gridIcon),
           color: AppColors.containerColor,
-          size: 24,
+          size: 24.sp,
         ),
       ),
       label: '',
@@ -56,14 +57,14 @@ class NavBar extends StatelessWidget {
     // add circle
     NavigationDestination(
       icon: CustomBottomNavButton(
-        icon: ImageIcon(AssetImage(AppIcons.addCircleIcon), size: 24,color: AppColors.primary,),
+        icon: ImageIcon(AssetImage(AppIcons.addCircleIcon), size: 24.sp,color: AppColors.primary,),
       ),
       selectedIcon: CustomBottomNavButton(
         selected: true,
         icon: ImageIcon(
           AssetImage(AppIcons.addCircleIcon),
           color: AppColors.containerColor,
-          size: 24,
+          size: 24.sp,
         ),
       ),
       label: '',
@@ -72,14 +73,14 @@ class NavBar extends StatelessWidget {
     // chat bubble
     NavigationDestination(
       icon: CustomBottomNavButton(
-        icon: ImageIcon(AssetImage(AppIcons.chatBubbleIcon), size: 24,color: AppColors.primary,),
+        icon: ImageIcon(AssetImage(AppIcons.chatBubbleIcon), size: 24.sp,color: AppColors.primary,),
       ),
       selectedIcon: CustomBottomNavButton(
         selected: true,
         icon: ImageIcon(
           AssetImage(AppIcons.chatBubbleIcon),
           color: AppColors.containerColor,
-          size: 24,
+          size: 24.sp,
         ),
       ),
       label: '',
@@ -87,14 +88,14 @@ class NavBar extends StatelessWidget {
     // profile
     NavigationDestination(
       icon: CustomBottomNavButton(
-        icon: ImageIcon(AssetImage(AppIcons.profileIcon), size: 24,color: AppColors.primary,),
+        icon: ImageIcon(AssetImage(AppIcons.profileIcon), size: 24.sp,color: AppColors.primary,),
       ),
       selectedIcon: CustomBottomNavButton(
         selected: true,
         icon: ImageIcon(
           AssetImage(AppIcons.profileIcon),
           color: AppColors.containerColor,
-          size: 24,
+          size: 24.sp,
         ),
       ),
       label: '',
