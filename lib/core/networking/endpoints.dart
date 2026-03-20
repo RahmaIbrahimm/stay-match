@@ -10,6 +10,8 @@ abstract class Endpoints {
   // home
   static const String getAllRooms = 'api/Property/GetAllWithRooms';
   static const String getAllApartments = 'api/Property';
+  static const String getApartmentDetails = 'api/Property/';
+  static const String refreshToken = 'api/Account/refresh-token';
 
   // client ids uses for google login
   static const String webClientId= '936135595361-tkjd357n4h18pd6pc4pfoch6rto0vlh5.apps.googleusercontent.com';
