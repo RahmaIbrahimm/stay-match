@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stay_match/core/networking/dio_consumer.dart';
 import 'package:stay_match/core/utils/service_locator.dart';
-import 'package:stay_match/features/home/manager/home_cubit.dart';
 
-import '../../../properties/apartments/data/repos/apartment_repo_impl.dart';
-import '../../../properties/rooms/data/repos/rooms_repo_impl.dart';
-import '../../../properties/apartments/manager/apartment_cubit.dart';
-import '../../../properties/rooms/manager/rooms_cubit.dart';
+import '../../../apartments/data/repos/apartment_repo_impl.dart';
+import '../../../apartments/presentation/manager/apartment_cubit.dart';
+import '../../../rooms/data/repos/rooms_repo_impl.dart';
+import '../../../rooms/presentation/manager/rooms_cubit.dart';
 import '../../data/repos/home_repo_impl.dart';
-import '../widget/home_nav_bar.dart';
+import '../manager/home_cubit.dart';
 import '../widget/home_view_body.dart';
 
 class HomeView extends StatelessWidget {
@@ -21,25 +20,24 @@ class HomeView extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => PropertiesCubit(
-              ApartmentRepoImpl(apiService: getIt.get<DioConsumer>()),
-            )..getAllApartments(),
+            create: (context) => ApartmentCubit(
+              getIt.get<ApartmentRepoImpl>(),
+            ),
           ),
           BlocProvider(
             create: (context) =>
-                RoomsCubit(RoomsRepoImpl(apiService: getIt.get<DioConsumer>()))
-                  ..getAllRooms(),
+                RoomsCubit(getIt.get<RoomsRepoImpl>()),
           ),
           BlocProvider(
             create: (context) =>
-                HomeCubit(HomeRepoImpl(apiService: getIt.get<DioConsumer>())),
+                HomeCubit(getIt.get<HomeRepoImpl>()),
           ),
         ],
         // add home cubit
         child: Scaffold(
           backgroundColor: Colors.white,
           body: HomeViewBody(),
-          bottomNavigationBar: HomeNavBar(),
+          // bottomNavigationBar: HomeNavBar(navigationShell: navigationShell),
         ),
       ),
     );
