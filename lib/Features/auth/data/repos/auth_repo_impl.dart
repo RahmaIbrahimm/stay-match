@@ -5,6 +5,7 @@ import 'package:stay_match/core/networking/api_service.dart';
 import 'package:stay_match/features/auth/data/models/forget_password_response.dart';
 import 'package:stay_match/features/auth/data/models/login_response.dart';
 import 'package:stay_match/features/auth/data/models/login_with_google_response.dart';
+import 'package:stay_match/features/auth/data/models/refresh_token_response.dart';
 import 'package:stay_match/features/auth/data/models/register_response.dart';
 import 'package:stay_match/features/auth/data/models/reset_password_response.dart';
 import 'package:stay_match/features/auth/data/models/verify_code_response.dart';
@@ -125,6 +126,19 @@ class AuthRepoImpl implements AuthRepo {
         data: {"idToken": idToken},
       );
       return right(LoginWithGoogleResponse.fromJson(response));
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDioError(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, RefreshTokenResponse>> refreshToken({required String refreshToken}) async {
+    try {
+      var response = await apiService.post(
+        Endpoints.refreshToken,
+        data: {"refreshToken": refreshToken},
+      );
+      return right(RefreshTokenResponse.fromJson(response));
     } on DioException catch (e) {
       return Left(ServerFailure.fromDioError(e));
     }
