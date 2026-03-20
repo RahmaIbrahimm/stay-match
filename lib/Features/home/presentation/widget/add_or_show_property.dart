@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
@@ -11,10 +12,9 @@ class AddOrShowMyProperties extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-      height: size.height * 0.22,
+      padding: EdgeInsets.symmetric(horizontal: 10.r, vertical: 8.r),
+      height: 190.h,
       decoration: BoxDecoration(
         color: AppColors.bgGrey,
         borderRadius: BorderRadius.circular(16),
@@ -22,14 +22,14 @@ class AddOrShowMyProperties extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(height: 4),
+           SizedBox(height: 4.h),
           Text(
             AppStrings.myProperties,
             style: AppStyles.semiBold18poppins.copyWith(
               color: AppColors.textColorPrimary,
             ),
           ),
-          const SizedBox(height: 12),
+           SizedBox(height: 12.h),
           Text(
             AppStrings.addYourProperty,
             style: AppStyles.medium18poppins.copyWith(
@@ -37,7 +37,7 @@ class AddOrShowMyProperties extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
           Text(
             AppStrings.shareApartmentDetails,
             style: AppStyles.medium12poppins.copyWith(
@@ -45,13 +45,13 @@ class AddOrShowMyProperties extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 16),
+           SizedBox(height: 16.h),
           // todo: implement add property
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 80.0),
+            padding:  EdgeInsets.symmetric(horizontal: 80.0.r),
             child: CustomElevatedButton(
-              verticalPadding: 6,
-              textStyle: AppStyles.semiBold15poppins,
+              verticalPadding: 6.r,
+              textStyle: AppStyles.semiBold14poppins,
               text: AppStrings.addProperty,
               onPressed: () {},
             ),
