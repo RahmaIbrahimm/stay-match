@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class SecureStorageHelper {
+class SecureStorageHelper extends ChangeNotifier {
   static const FlutterSecureStorage storage = FlutterSecureStorage();
 
   static const String tokenKey = 'token';
-  static String? token;
+  static const refreshTokenKey = 'refresh_token';
 
   static Future<void> addToSecureStorage({
     required String key,
@@ -13,8 +14,11 @@ class SecureStorageHelper {
     await storage.write(key: key, value: value);
   }
 
-  static Future<void> loadToken() async {
-    token = await storage.read(key: tokenKey);
+  static Future<String?> readFromSecureStorage({
+    required String key,
+  }) async {
+    var value = await storage.read(key: key);
+    return value;
   }
   // todo: reset / refresh token
 
