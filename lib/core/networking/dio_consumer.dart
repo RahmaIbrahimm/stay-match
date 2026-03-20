@@ -15,7 +15,7 @@ class DioConsumer extends ApiService {
         return status! < 500;
       },
     );
-    dio.interceptors.add(ApiInterceptors());
+    dio.interceptors.add(ApiInterceptors(dio: dio));
     dio.interceptors.add(
       LogInterceptor(
         request: true,
@@ -29,6 +29,7 @@ class DioConsumer extends ApiService {
         responseHeader: true,
       ),
     );
+    
   }
 
   @override
@@ -111,4 +112,7 @@ class DioConsumer extends ApiService {
       rethrow;
     }
   }
+  // Future<Response<dynamic>> fetch(RequestOptions options) async {
+  //   return dio.fetch(options);
+  // }
 }

@@ -42,7 +42,7 @@ class ResetPasswordContainerBody extends StatelessWidget {
             children: [
               Text(
                 AppStrings.newPassword,
-                style: AppStyles.headLine.copyWith(
+                style: AppStyles.bold28poppins.copyWith(
                   color: AppColors.textColorPrimary,
                 ),
                 textAlign: TextAlign.center,
@@ -50,7 +50,7 @@ class ResetPasswordContainerBody extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 AppStrings.pleaseWriteNewPass,
-                style: AppStyles.cardTitle.copyWith(
+                style: AppStyles.medium20poppins.copyWith(
                   color: AppColors.textColorSecondary,
                 ),
                 textAlign: TextAlign.center,

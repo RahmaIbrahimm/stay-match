@@ -14,11 +14,11 @@ class SignUpHeader extends StatelessWidget {
       children: [
         Text(
           AppStrings.login,
-          style: AppStyles.headLine.copyWith(color: AppColors.textColorWhite),
+          style: AppStyles.bold28poppins.copyWith(color: AppColors.textColorWhite),
         ),
         Text(
           AppStrings.loginGreeting,
-          style: AppStyles.sectionTitle.copyWith(
+          style: AppStyles.semibold24poppins.copyWith(
             color: AppColors.textColorWhite,
           ),
         ),

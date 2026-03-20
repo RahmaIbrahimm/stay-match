@@ -3,7 +3,7 @@ class LoginResponse {
   String? message;
   int? status;
   Errors? errors;
-  Data? data;
+  LoginData? data;
 
   LoginResponse({
     required this.isSuccess,
@@ -18,7 +18,7 @@ class LoginResponse {
     status = json['status'];
     errors = json['errors'] != null ? Errors.fromJson(json['errors']) : null;
     isSuccess = json['isSuccess'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? LoginData.fromJson(json['data']) : null;
   }
 }
 
@@ -34,27 +34,29 @@ class Errors {
   }
 }
 
-class Data {
+class LoginData {
   final String token;
+  final String refreshToken;
   final String? expiration;
   final String? email;
   final String? displayName;
   final String? userId;
 
-  Data(
-    this.token, {
+  LoginData(
+    this.token, this.refreshToken,{
     this.expiration,
     this.email,
     this.displayName,
     this.userId,
   });
 
-  Data.fromJson(Map<String, dynamic> json)
+  LoginData.fromJson(Map<String, dynamic> json)
     : token = json['token'] ?? '',
       expiration = json['expiration'] as String?,
       email = json['email'] as String?,
       displayName = json['displayName'] as String?,
-      userId = json['userId'] as String?;
+      userId = json['userId'] as String?,
+        refreshToken = json['refreshToken'] ?? '';
 
   Map<String, dynamic> toJson() {
     return {
@@ -63,6 +65,7 @@ class Data {
       'email': email,
       'displayName': displayName,
       'userId': userId,
+      'refreshToken': refreshToken,
     };
   }
 }

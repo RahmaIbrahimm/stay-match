@@ -1,46 +1,313 @@
+// import 'package:flutter/cupertino.dart';
+// import 'package:go_router/go_router.dart';
+// import 'package:stay_match/core/widgets/layout_scaffold.dart';
+// import 'package:stay_match/features/auth/presentation/reset_password/presentation/views/reset_password_view.dart';
+// import 'package:stay_match/features/home/presentation/views/home_view.dart';
+// import 'package:stay_match/features/profile/presentation/views/profile_view.dart';
+// import 'package:stay_match/features/shared/rooms/presentation/find_room/views/find_room_view.dart';
+// import 'package:stay_match/features/shared/rooms/presentation/room_details/views/room_details_view.dart';
+//
+// import '../../features/auth/presentation/forget_password/presentation/views/forget_password_view.dart';
+// import '../../features/auth/presentation/login/presentation/views/login_view.dart';
+// import '../../features/auth/presentation/signup/presentation/views/signup_view.dart';
+// import '../../features/auth/presentation/verify_email/presentation/views/verify_email_view.dart';
+//
+// class AppRouting {
+//   static final GlobalKey<NavigatorState> rootNavKey =
+//       GlobalKey<NavigatorState>();
+//
+//   // ===========auth routes============
+//   static const loginView = '/';
+//   static const signupView = '/signupView';
+//   static const forgetPasswordView = '/forgetPasswordView';
+//   static const verifyEmailView = '/verifyEmailView';
+//   static const resetPasswordView = '/resetPasswordView';
+//   static const findRoomView = 'findRoomView';
+//
+//   // auth names
+//   static const loginViewName = 'login';
+//   static const signupViewName = 'signup';
+//   static const forgetPasswordViewName = 'forgetPasswordViewName';
+//   static const verifyEmailViewName = 'verifyEmailViewName';
+//   static const resetPasswordViewName = 'resetPasswordViewName';
+//
+//   // =========== main app routes ==============
+//   static const homeView = '/homeView';
+//   static const findRoomViewName = 'findRoomViewName';
+//   static const roomDetailsView = 'roomDetailsView/:id';
+//   static const profileView = '/profileView';
+//
+//   //main app names
+//   static const roomDetailsViewName = 'roomDetailsView';
+//   static const homeViewName = 'homeView';
+//   static const profileViewName = 'profileViewName';
+//
+//   static final router = GoRouter(
+//     navigatorKey: rootNavKey,
+//     initialLocation: loginView,
+//     routes: [
+//       // auth routes
+//       GoRoute(
+//         path: loginView,
+//         name: loginViewName,
+//         builder: (context, state) => const LoginView(),
+//       ),
+//       GoRoute(
+//         path: signupView,
+//         name: signupViewName,
+//         builder: (context, state) => const SignUpView(),
+//       ),
+//       GoRoute(
+//         path: forgetPasswordView,
+//         name: forgetPasswordViewName,
+//
+//         builder: (context, state) => const ForgetPasswordView(),
+//       ),
+//       GoRoute(
+//         path: verifyEmailView,
+//         name: verifyEmailViewName,
+//         builder: (context, _) => const VerifyEmailView(),
+//       ),
+//       GoRoute(
+//         path: resetPasswordView,
+//         name: resetPasswordViewName,
+//         builder: (context, state) => const ResetPasswordView(),
+//       ),
+//       StatefulShellRoute.indexedStack(
+//         builder: (context, state, navigationShell) {
+//           return LayoutScaffold(navigationShell: navigationShell);
+//         },
+//         branches: [
+//           StatefulShellBranch(
+//             routes: [
+//               GoRoute(
+//                 path: homeView,
+//                 name: homeViewName,
+//                 builder: (context, _) => const HomeView(),
+//                 routes: [
+//                   GoRoute(
+//                     path: findRoomView,
+//                     name: findRoomViewName,
+//                     builder: (context, state) => const FindRoomView(),
+//                     routes: [
+//                       GoRoute(
+//                         path: roomDetailsView,
+//                         name: roomDetailsViewName,
+//                         builder: (context, state) {
+//                           String? stringId = state.pathParameters['id'];
+//                           int id = stringId != null
+//                               ? int.tryParse(stringId) ?? -1
+//                               : -1;
+//                           return RoomDetailsView(id: id);
+//                         },
+//                       ),
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//             ],
+//           ),
+//           StatefulShellBranch(
+//             routes: [
+//               GoRoute(
+//                 path: profileView,
+//                 name: profileViewName,
+//                 builder: (context, state) => ProfileView(),
+//               ),
+//             ],
+//           ),
+//         ],
+//       ),
+//
+//     ],
+//   );
+//   // static final router = GoRouter(
+//   //   initialLocation: loginView,
+//   //   routes: [
+//   //     StatefulShellRoute.indexedStack(builder: (context, state, navigationShell){}, branches: [],),
+//   //     GoRoute(
+//   //       path: loginView,
+//   //       name: loginViewName,
+//   //       builder: (context, state) => const LoginView(),
+//   //     ),
+//   //     GoRoute(
+//   //       path: signupView,
+//   //       name: signupViewName,
+//   //       builder: (context, state) => const SignUpView(),
+//   //     ),
+//   //     GoRoute(
+//   //       path: forgetPasswordView,
+//   //       name: forgetPasswordViewName,
+//   //
+//   //       builder: (context, state) => const ForgetPasswordView(),
+//   //     ),
+//   //     GoRoute(
+//   //       path: verifyEmailView,
+//   //       name: verifyEmailViewName,
+//   //       builder: (context, _) => const VerifyEmailView(),
+//   //     ),
+//   //     GoRoute(
+//   //       path: resetPasswordView,
+//   //       name: resetPasswordViewName,
+//   //       builder: (context, state) => const ResetPasswordView(),
+//   //     ),
+//   //     GoRoute(
+//   //       path: homeView,
+//   //       name: homeViewName,
+//   //       builder: (context, _) => const HomeView(),
+//   //     ),
+//   //     GoRoute(
+//   //       path: findRoomView,
+//   //       name: findRoomViewName,
+//   //       builder: (context, state) => const FindRoomView(),
+//   //     ),
+//   //   ],
+//   // );
+// }
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stay_match/core/widgets/layout_scaffold.dart';
+import 'package:stay_match/features/auth/presentation/reset_password/presentation/views/reset_password_view.dart';
 import 'package:stay_match/features/home/presentation/views/home_view.dart';
+import 'package:stay_match/features/profile/presentation/views/profile_view.dart';
+
+import '../../features/apartments/presentation/views/apartment_details_view.dart';
+import '../../features/apartments/presentation/views/find_apartment_view.dart';
 import '../../features/auth/presentation/forget_password/presentation/views/forget_password_view.dart';
 import '../../features/auth/presentation/login/presentation/views/login_view.dart';
-import '../../features/auth/presentation/reset_password/presentation/views/reset_password_view.dart';
 import '../../features/auth/presentation/signup/presentation/views/signup_view.dart';
 import '../../features/auth/presentation/verify_email/presentation/views/verify_email_view.dart';
-import '../../features/properties/rooms/presentation/views/find_room_view.dart';
+import '../../features/rooms/presentation/views/find_room_view.dart';
+import '../../features/rooms/presentation/views/room_details_view.dart';
 
 class AppRouting {
-  // auth
+  static final GlobalKey<NavigatorState> rootNavKey = GlobalKey<NavigatorState>();
+  // ===========auth routes============
   static const loginView = '/';
-  static const signupView = '/signupView';
-  static const forgetPasswordView = '/forgetPasswordView';
-  static const verifyEmailView = '/verifyEmailView';
-  static const resetPasswordView = '/resetPasswordView';
-  static const findRoomView = '/findRoomView';
+  static const signupView = '/signup';
+  static const forgetPasswordView = '/forget-password';
+  static const verifyEmailView = '/verify-email';
+  static const resetPasswordView = '/reset-password';
 
-  // home
-  static const homeView = '/homeView';
+  // auth names
+  static const loginViewName = 'login';
+  static const signupViewName = 'signup';
+  static const forgetPasswordViewName = 'forgetPassword';
+  static const verifyEmailViewName = 'verifyEmail';
+  static const resetPasswordViewName = 'resetPassword';
+
+  // =========== main app routes ==============
+  static const homeView = '/home';
+  static const profileView = '/profile';
+
+  // Nested routes (no leading slash)
+  static const findRoomView = 'find-room';
+  static const roomDetailsView = 'room-details/:id';
+  static const findApartmentView = 'find-apartment';
+  static const apartmentDetailsView = 'apartment-details/:id';
+
+  //main app names
+  static const homeViewName = 'home';
+  static const profileViewName = 'profile';
+  static const findRoomViewName = 'findRoom';
+  static const roomDetailsViewName = 'roomDetails';
+  static const findApartmentViewName = 'findApartment';
+  static const apartmentDetailsViewName = 'apartmentDetails';
 
   static final router = GoRouter(
-    initialLocation: findRoomView,
+    navigatorKey: rootNavKey,
+    initialLocation: loginView,
     routes: [
-      GoRoute(path: loginView, builder: (context, state) => const LoginView()),
+      // AUTH ROUTES
+      GoRoute(
+        path: loginView,
+        name: loginViewName,
+        builder: (context, state) => const LoginView(),
+      ),
       GoRoute(
         path: signupView,
+        name: signupViewName,
         builder: (context, state) => const SignUpView(),
       ),
       GoRoute(
         path: forgetPasswordView,
+        name: forgetPasswordViewName,
         builder: (context, state) => const ForgetPasswordView(),
       ),
       GoRoute(
         path: verifyEmailView,
-        builder: (context, state) => const VerifyEmailView(),
+        name: verifyEmailViewName,
+        builder: (context, _) => const VerifyEmailView(),
       ),
       GoRoute(
         path: resetPasswordView,
+        name: resetPasswordViewName,
         builder: (context, state) => const ResetPasswordView(),
       ),
-      GoRoute(path: homeView, builder: (context, state) => const HomeView()),
-      GoRoute(path: findRoomView, builder: (context, state) => const FindRoomView()),
+
+      // MAIN APP SHELL - protected routes
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return LayoutScaffold(navigationShell: navigationShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: homeView,
+                name: homeViewName,
+                builder: (context, _) => const HomeView(),
+                routes: [
+                  // Nested route: /home/find-apartment/apartment-details/123
+                  GoRoute(
+                    path: findApartmentView,
+                    name: findApartmentViewName,
+                    builder: (context, state) => const FindApartmentView(),
+                    routes: [
+                      GoRoute(
+                        path: apartmentDetailsView,
+                        name: apartmentDetailsViewName,
+                        builder: (context, state) {
+                          final id = int.tryParse(state.pathParameters['id'] ?? '-1') ?? -1;
+                          return ApartmentDetailsView(id: id);
+                        },
+                      ),
+                    ],
+                  ),
+                  // Nested route: /home/find-room/room-details/123
+                  GoRoute(
+                    path: findRoomView,
+                    name: findRoomViewName,
+                    builder: (context, state) => const FindRoomView(),
+                    routes: [
+                      // Nested route: /home/find-room/room-details/123
+                      GoRoute(
+                        path: roomDetailsView,
+                        name: roomDetailsViewName,
+                        builder: (context, state) {
+                          final roomId = int.tryParse(state.pathParameters['roomId'] ?? '-1') ?? -1;
+                          final propertyId = int.tryParse(state.pathParameters['propertyId'] ?? '-1') ?? -1;
+                          return RoomDetailsView(roomId: roomId,propertyId:propertyId);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: profileView,
+                name: profileViewName,
+                builder: (context, state) => const ProfileView(),
+              ),
+            ],
+          ),
+        ],
+      ),
     ],
   );
 }

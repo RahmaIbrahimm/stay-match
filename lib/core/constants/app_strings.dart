@@ -101,30 +101,31 @@ abstract class AppStrings {
   static const myProperties = 'My Properties';
   static const addYourProperty = '"Add your property with ease"';
   static const addProperty = 'Add Property';
-  static const shareApartmentDetails = 'Share your property details and reach the right people instantly';
+  static const shareApartmentDetails =
+      'Share your property details and reach the right people instantly';
   static const viewAllProperties = 'View All Properties';
 
-  // static const needHelp = 'Need Help ?';
-  // static const technicalSupport = 'Technical Support';
-  // static const sendInquiries = 'Send us your inquiries!';
-  // static const contactUs = 'Contact Us';
-  // static const about = 'About';
-  // static const aboutDesc =
-  //     'Find your ideal home and the perfect roommate with StayMatch';
-  // static const links = 'Links';
   static const home = 'Home';
   static const apartments = 'Apartments';
   static const matches = 'Matches';
   static const chats = 'Chats';
   static const profile = 'Profile';
 
-  // static const helpCenter = 'Help Center';
-  // static const faqs = 'FAQs';
-  // static const safetyTips = 'Safety Tips';
-  // static const support = 'Support';
   static const month = 'month';
   static const search = 'Search';
 
   // rooms
   static const viewDetails = 'View Details';
+  static const findYourRoom = 'Find Your Room';
+  static const browseRoom =
+      'Browse Apartments with available rooms in your preferred location';
+  // room details
+static const roomDetails = 'Room Details';
+
+// apartments
+
+// apartment details
+ static const apartmentDetails = 'Apartment Details';
+ static const viewReviews = 'View Reviews';
+
 }

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:stay_match/core/routing/app_routing.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_styles.dart';
 import '../../../../core/widgets/custom_text_button.dart';
-import '../../../properties/apartments/data/models/get_all_apartments.dart';
-import '../../../properties/apartments/presentation/widgets/apartment_list.dart';
 class ApartmentsSection extends StatelessWidget {
   const ApartmentsSection({
     super.key,
     required this.size,
-    required this.properties,
+    required this.widget
   });
 
   final Size size;
-  final List<Items>? properties;
+  final Widget widget;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,9 @@ class ApartmentsSection extends StatelessWidget {
               ),
               // todo: view all apartments text button implementation
               CustomTextButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.pushNamed(AppRouting.findApartmentViewName);
+                },
                 text: AppStrings.viewAllApartments,
                 isUnderlined: false,
                 textColor: AppColors.primary,
@@ -56,8 +58,8 @@ class ApartmentsSection extends StatelessWidget {
           ),
           SizedBox(height: 8),
           SizedBox(
-            height: size.height * 0.22,
-            child: PropertyList(properties: properties, size: size),
+            height: size.height * 0.24,
+            child: widget,
           ),
         ],
       ),

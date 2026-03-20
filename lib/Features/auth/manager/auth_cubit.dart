@@ -194,7 +194,7 @@ class AuthCubit extends Cubit<AuthState> {
       (response) async {
         if (response.isSuccess == true) {
           await SecureStorageHelper.storage.write(key: SecureStorageHelper.tokenKey, value: response.data?.token);
-          await SecureStorageHelper.loadToken();
+          await SecureStorageHelper.storage.write(key: SecureStorageHelper.refreshTokenKey, value: response.data?.refreshToken);
           emit(LoginStateSuccess(response));
         } else {
           emit(LoginStateFailure(errMessage: "Invalid Email or Password"));
@@ -209,44 +209,112 @@ class AuthCubit extends Cubit<AuthState> {
   // ----- google login ------
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
   final scopes = <String>["https://www.googleapis.com/auth/userinfo.email"];
-
   Future<void> googleLogin() async {
     emit(GoogleLoginStateLoading());
 
     try {
-      await _googleSignIn.initialize(serverClientId: Endpoints.webClientId);
-      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+      await _googleSignIn.initialize(
+        serverClientId: Endpoints.webClientId,
+      );
 
-      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+      final GoogleSignInAccount? googleUser =
+      await _googleSignIn.authenticate();
+
+      // ✅ Handle cancel
+      if (googleUser == null) {
+        emit(GoogleLoginStateFailure(errMessage: "Login cancelled"));
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          googleUser.authentication;
 
       final String? idToken = googleAuth.idToken;
 
       if (idToken == null) {
-        emit(GoogleLoginStateFailure(errMessage: "Failed to get ID token"));
+        emit(GoogleLoginStateFailure(
+          errMessage: "Failed to get ID token",
+        ));
         return;
       }
-      var response = await authRepo.loginWithGoogle(idToken: idToken);
+
+      final response = await authRepo.loginWithGoogle(idToken: idToken);
 
       response.fold(
-        (failure) {
-          emit(GoogleLoginStateFailure(errMessage: failure.errMessage));
+            (failure) {
+          emit(GoogleLoginStateFailure(
+            errMessage: failure.errMessage,
+          ));
         },
-        (resp) {
+            (resp) {
           if (resp.isSuccess == true) {
             emit(GoogleLoginStateSuccess(resp: resp));
           } else {
-            emit(
-              GoogleLoginStateFailure(
-                errMessage: resp.message ?? "Login failed",
-              ),
-            );
+            emit(GoogleLoginStateFailure(
+              errMessage: _extractErrorMessage(resp),
+            ));
           }
         },
       );
     } catch (e) {
-      emit(GoogleLoginStateFailure(errMessage: "Google Sign-In failed: $e"));
+      emit(GoogleLoginStateFailure(
+        errMessage: "Google Sign-In failed",
+      ));
     }
   }
+  String _extractErrorMessage(LoginWithGoogleResponse resp) {
+    if (resp.errors != null) {
+      if (resp.errors!.invalidGoogleToken?.isNotEmpty == true) {
+        return resp.errors!.invalidGoogleToken!.first;
+      }
+
+      if (resp.errors!.idTokenRequired?.isNotEmpty == true) {
+        return resp.errors!.idTokenRequired!.first;
+      }
+    }
+
+    return resp.message ?? "Login failed";
+  }
+  // Future<void> googleLogin() async {
+  //   emit(GoogleLoginStateLoading());
+  //
+  //   try {
+  //     await _googleSignIn.initialize(serverClientId: Endpoints.webClientId);
+  //     final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+  //
+  //     final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+  //
+  //     final String? idToken = googleAuth.idToken;
+  //
+  //     if (idToken == null) {
+  //       emit(GoogleLoginStateFailure(errMessage: "Failed to get ID token"));
+  //       return;
+  //     }
+  //     var response = await authRepo.loginWithGoogle(idToken: idToken);
+  //
+  //     response.fold(
+  //       (failure) {
+  //         emit(GoogleLoginStateFailure(errMessage: failure.errMessage));
+  //       },
+  //       (resp) {
+  //         if (resp.isSuccess == true) {
+  //           emit(GoogleLoginStateSuccess(resp: resp));
+  //           SecureStorageHelper.addToSecureStorage(key: SecureStorageHelper.tokenKey, value: idToken);
+  //         } else {
+  //           emit(
+  //             GoogleLoginStateFailure(
+  //               errMessage: resp.message ?? "Login failed",
+  //             ),
+  //           );
+  //         }
+  //       },
+  //     );
+  //   } catch (e) {
+  //     emit(GoogleLoginStateFailure(errMessage: "Google Sign-In failed: $e"));
+  //   }
+  // }
+
+
   // -------- signup ----------
   Future<void> signup() async {
     var response = await authRepo.signup(
@@ -276,7 +344,6 @@ class AuthCubit extends Cubit<AuthState> {
       },
     );
   }
-
   // -------- forget password ----------
   Future<void> sendCode() async {
     emit(SendCodeStateLoading());

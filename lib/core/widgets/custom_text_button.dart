@@ -25,7 +25,7 @@ class CustomTextButton extends StatelessWidget {
     return TextButton(
       style: TextButton.styleFrom(
         overlayColor: Colors.transparent,
-        textStyle: AppStyles.secondary,
+        textStyle: AppStyles.regular14poppins,
         padding: EdgeInsets.zero,
         minimumSize: Size.zero,
         tapTargetSize: isPadded ? null : MaterialTapTargetSize.shrinkWrap,
@@ -33,7 +33,7 @@ class CustomTextButton extends StatelessWidget {
       onPressed: onPressed,
       child: Text(
         text,
-        style: (textStyle ?? AppStyles.secondary).copyWith(
+        style: (textStyle ?? AppStyles.regular14poppins).copyWith(
           decoration: isUnderlined
               ? TextDecoration.underline
               : TextDecoration.none,

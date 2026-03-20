@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stay_match/core/widgets/custom_drop_down_menu.dart';
 
@@ -67,7 +68,7 @@ class BottomSheetBody extends StatelessWidget {
                     controller: authCubit.signFirstNameController,
                   ),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16.w),
                 Expanded(
                   child: FormSection(
                     validator: (val)=>authCubit.nullFieldValidator(text: val),
@@ -78,7 +79,7 @@ class BottomSheetBody extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 22),
+             SizedBox(height: 22.h),
             // info: email
             FormSection(
               validator: (val)=>authCubit.emailValidator(email: val),
@@ -87,7 +88,7 @@ class BottomSheetBody extends StatelessWidget {
               suffixIcon: ImageIcon(AssetImage(AppIcons.emailIcon)),
               controller: authCubit.signEmailController,
             ),
-            const SizedBox(height: 22),
+            SizedBox(height: 22.h),
             // info: password
             ValueListenableBuilder<bool>(
               valueListenable: _isObscureNotifierPass,
@@ -113,7 +114,7 @@ class BottomSheetBody extends StatelessWidget {
                 );
               },
             ),
-            const SizedBox(height: 22),
+            SizedBox(height: 22.h),
             // info: confirm password
             ValueListenableBuilder<bool>(
               valueListenable: _isObscureNotifierConfirmPass,
@@ -139,7 +140,7 @@ class BottomSheetBody extends StatelessWidget {
                 );
               },
             ),
-            const SizedBox(height: 22),
+            SizedBox(height: 22.h),
             // info: city and birth date
             Row(
               children: [
@@ -148,8 +149,8 @@ class BottomSheetBody extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(AppStrings.city, style: AppStyles.sectionTitle),
-                      const SizedBox(height: 8),
+                      Text(AppStrings.city, style: AppStyles.semibold24poppins),
+                      SizedBox(height: 8.h),
                       CustomDropDownMenu(
                         hasSearch: false,
                         menuItems: AppStrings.egyptCities,
@@ -159,14 +160,15 @@ class BottomSheetBody extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(width: 16),
+                SizedBox(width: 16.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(AppStrings.birthDate, style: AppStyles.sectionTitle),
-                      const SizedBox(height: 8),
+                      Text(AppStrings.birthDate,
+                          style: AppStyles.semibold24poppins),
+                      SizedBox(height: 8.h),
                       CustomDateSelector(
                         size: size,
                         dateController: authCubit.birthDateController,
@@ -176,17 +178,17 @@ class BottomSheetBody extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 22),
+            SizedBox(height: 22.h),
             // info: gender
-            Text(AppStrings.gender, style: AppStyles.sectionTitle),
-            const SizedBox(height: 8),
+            Text(AppStrings.gender, style: AppStyles.semibold24poppins),
+            SizedBox(height: 8.h),
             CustomDropDownMenu(
               hasSearch: false,
               menuItems: AppStrings.genderMenuItems,
               hintText: AppStrings.enterYourGender,
               selectedValue: authCubit.genderController,
             ),
-            const SizedBox(height: 45),
+            SizedBox(height: 45.h),
             CustomElevatedButton(
               text: AppStrings.submit,
               onPressed: () {
@@ -204,7 +206,7 @@ class BottomSheetBody extends StatelessWidget {
               children: [
                 Text(
                   AppStrings.alreadyHaveAnAccount,
-                  style: AppStyles.secondary.copyWith(
+                  style: AppStyles.regular14poppins.copyWith(
                     color: AppColors.textColorSecondary,
                   ),
                 ),
@@ -217,7 +219,7 @@ class BottomSheetBody extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 45),
+            SizedBox(height: 45.h),
           ],
         ),
       ),
