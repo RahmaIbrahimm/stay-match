@@ -8,7 +8,6 @@ import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/widgets/custom_elevated_button.dart';
 import 'package:stay_match/core/widgets/custom_text_button.dart';
 
-
 import '../../../../../../../core/routing/app_routing.dart';
 import '../../../../../../../core/widgets/form_section.dart';
 import '../../../../manager/auth_cubit.dart';
@@ -29,11 +28,9 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
         listener: (context, state) {
           if (state is LoginStateFailure) {
             ScaffoldMessenger.of(context).clearSnackBars();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errMessage),
-              ),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.errMessage)));
           }
           if (state is LoginStateSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -65,7 +62,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
               const SizedBox(height: 33),
               // todo: implement validator email
               FormSection(
-                validator:(val)=>  authCubit.emailValidator(email: val),
+                validator: (val) => authCubit.emailValidator(email: val),
                 hintText: AppStrings.enterYourEmail,
                 fieldTitle: AppStrings.email,
                 suffixIcon: ImageIcon(AssetImage(AppIcons.emailIcon)),
@@ -77,7 +74,8 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                 valueListenable: _isObscureNotifier,
                 builder: (context, isObscure, child) {
                   return FormSection(
-                    validator: (val)=> authCubit.passwordValidator(password: val),
+                    validator: (val) =>
+                        authCubit.passwordValidator(password: val),
                     hintText: AppStrings.enterYourPassword,
                     fieldTitle: AppStrings.password,
                     suffixIcon: IconButton(
@@ -113,7 +111,10 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                   onPressed: isLoading
                       ? null
                       : () {
-                          authCubit.formValidationAndInvokeMethod(key: authCubit.loginKey, authMethod: authCubit.login());
+                          authCubit.formValidationAndInvokeMethod(
+                            key: authCubit.loginKey,
+                            authMethod: authCubit.login(),
+                          );
                         },
                   isLoading: isLoading,
                 ),
@@ -121,6 +122,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
               const SizedBox(height: 15),
               DividerBetweenLoginButtons(size: size),
               const SizedBox(height: 15),
+              // google login button
               SizedBox(
                 width: double.infinity,
                 child: CustomElevatedButton(
@@ -128,16 +130,17 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                   backgroundColor: AppColors.secondary,
                   textColor: AppColors.backgroundColor,
                   icon: Brand(Brands.google, size: 20),
-                  onPressed: () async{
+                  onPressed: () async {
                     await authCubit.googleLogin();
-                  } ,
+                  },
                 ),
               ),
+              // don't have account + signup button
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(AppStrings.dontHaveAnAccount),
-                  // TODO: implement on pressed
+                  const SizedBox(height: 6),
                   CustomTextButton(
                     onPressed: () {
                       context.go(AppRouting.signupView);
@@ -154,5 +157,4 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
       ),
     );
   }
-
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../constants/app_styles.dart';
 import 'custom_text_form_field.dart';
 
@@ -30,7 +31,7 @@ class FormSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(fieldTitle, style: AppStyles.semibold24poppins),
-        const SizedBox(height: 8),
+         SizedBox(height: 8.h),
         CustomTextFormField(
           hintText: hintText,
           validator: validator,

@@ -1,30 +1,39 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart%20';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:stay_match/core/constants/app_icons.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
-import 'package:stay_match/main.dart';
-
-void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+// Add this temporary debug widget
+class DebugSvgWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: rootBundle.loadString(AppIcons.sizeIcon),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+          print('SVG content loaded, length: ${snapshot.data?.length}');
+          return Column(
+            children: [
+              Text('SVG loaded: ${snapshot.data?.length} chars'),
+              SvgPicture.string(
+                snapshot.data ?? '',
+                height: 20,
+                width: 20,
+                colorFilter: const ColorFilter.mode(Colors.red, BlendMode.srcIn),
+              ),
+            ],
+          );
+        }
+        return const CircularProgressIndicator();
+      },
+    );
+  }
 }
+void main(){
+  DebugSvgWidget();
+}
+// Use it in your widget temporarily
