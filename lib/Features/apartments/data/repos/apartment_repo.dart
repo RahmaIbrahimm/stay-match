@@ -17,8 +17,8 @@ abstract class ApartmentRepo {
     double? userLng,
     bool orderByOldest = false,
     bool onlyAvailable = false,
-    num? page,
-    num? pageSize
+    num? page = 1,
+    num? pageSize = 5,
   });
   Future<Either<Failure,ApartmentDetailsResponse>> getApartmentDetail({required int id});
 }
