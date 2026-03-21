@@ -249,6 +249,7 @@ class AuthCubit extends Cubit<AuthState> {
             (resp) {
           if (resp.isSuccess == true) {
             emit(GoogleLoginStateSuccess(resp: resp));
+            SecureStorageHelper.addToSecureStorage(key: SecureStorageHelper.tokenKey, value: idToken);
           } else {
             emit(GoogleLoginStateFailure(
               errMessage: _extractErrorMessage(resp),

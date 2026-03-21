@@ -6,8 +6,8 @@ abstract class AppIcons {
   static const chatBubbleIcon = '$assetsPath/chat_bubble_icon.png';
   static const homeIcon = '$assetsPath/home_icon.png';
   static const folderExchangeIcon = '$assetsPath/folder_exchange.png';
+  static const childIcon= '$assetsPath/child_icon.png';
   static const addCircleIcon = '$assetsPath/add_circle.png';
   static const bathroomIcon = '$assetsPath/bathroom_icon.svg';
   static const sizeIcon = '$assetsPath/size_icon.svg';
-
 }

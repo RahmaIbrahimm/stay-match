@@ -23,7 +23,7 @@ class ApartmentCard extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(
-            height: scaleUp?160.h: 135.h,
+            height: scaleUp?200.h: 135.h,
             child: CardCoverPhoto(imageUrl: property?.coverImageUrl),
           ),
           SizedBox(

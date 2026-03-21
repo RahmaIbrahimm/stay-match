@@ -14,7 +14,7 @@ final class RoomsInitial extends RoomsState {
 final class GetRoomsLoading extends RoomsState {
   @override
   // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 final class GetRoomsSuccess extends RoomsState {
   final GetAllRooms response;

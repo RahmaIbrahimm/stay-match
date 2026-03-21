@@ -21,7 +21,7 @@ class ApartmentDetailsView extends StatelessWidget {
           ApartmentDetailsCubit(getIt.get<ApartmentRepoImpl>(), id)
             ..getApartmentDetails(id: id),
       child: Scaffold(
-        backgroundColor: AppColors.blueGrey,
+        backgroundColor: AppColors.darkerGrey,
         extendBodyBehindAppBar: true,
         extendBody: true,
         appBar: DetailsViewAppBar(title: AppStrings.apartmentDetails, barHeight: kToolbarHeight,),

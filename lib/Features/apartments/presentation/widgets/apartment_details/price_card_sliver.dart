@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
 
-import 'ApartmentDetailsHelper.dart';
+import 'apartment_details_helper.dart';
 
 class PriceCardSliver extends SliverToBoxAdapter {
   PriceCardSliver({

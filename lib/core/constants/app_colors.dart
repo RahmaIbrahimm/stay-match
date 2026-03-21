@@ -17,7 +17,8 @@ abstract class AppColors {
   static const grey = Color.fromARGB(200,243, 244, 246);
   static const pink= Color.fromRGBO(255, 186, 225, 0.7);
   static const bgGrey = Color(0xffEEEEEF);
-  static const blueGrey = Color(0xffF6F7F8);
+  static const darkerGrey = Color(0xffF6F7F8);
+  static const blueGrey = Color.fromRGBO(30, 58, 138, 0.1);
   static const stroke = Color(0xffE5E7EB);
 
   static const boxShadow = [

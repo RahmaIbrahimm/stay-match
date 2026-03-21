@@ -62,35 +62,33 @@ class ApartmentSection extends StatelessWidget {
         if (state is GetApartmentsFailure) {
           return ApartmentsSectionContainer(
             widget: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.error_outline,
-                    color: AppColors.textColorError,
-                    size: 40.sp,
+              child: GestureDetector(
+                onTap: () {
+                  context.read<ApartmentCubit>().getAllApartments();
+                },
+                child: RPadding(
+                  padding: EdgeInsets.all(16),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.refresh,
+                        size: 18.sp,
+                        color: AppColors.textColorSecondary, // 👈 not red
+                      ),
+                      SizedBox(width: 6.w),
+                      Text(
+                        'Tap to retry',
+                        style: AppStyles.medium14poppins.copyWith(
+                          color: AppColors.textColorSecondary,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 8.h),
-                  Text(
-                    'Failed to load apartments',
-                    style: AppStyles.semibold24poppins.copyWith(
-                      color: AppColors.textColorError,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      context
-                          .read<ApartmentCubit>()
-                          .getAllApartments();
-                    },
-                    child: Text('Retry'),
-                  ),
-                ],
+                ),
               ),
             ),
-          );
-        }
-
+          );}
         // todo : Default loading state
         return ApartmentsSectionContainer(
           widget: Center(

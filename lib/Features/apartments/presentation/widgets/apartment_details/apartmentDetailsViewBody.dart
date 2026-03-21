@@ -7,7 +7,7 @@ import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
 import 'package:stay_match/core/widgets/custom_elevated_button.dart';
 import 'package:stay_match/core/widgets/location_row.dart';
-import 'package:stay_match/features/apartments/presentation/widgets/apartment_details/ApartmentDetailsHelper.dart';
+import 'package:stay_match/features/apartments/presentation/widgets/apartment_details/apartment_details_helper.dart';
 
 import '../../../../../core/widgets/amenities_widget.dart';
 import '../../../data/models/apartment_details_response.dart';
@@ -16,6 +16,7 @@ import 'apartment_about_sliver.dart';
 import 'basic_features_sliver.dart';
 import 'duration_selector.dart';
 import 'failure_state_widget.dart';
+import 'host_name_sliver.dart';
 import 'property_name_sliver.dart';
 
 class ApartmentDetailsViewBody extends StatefulWidget {
@@ -267,7 +268,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                   ),
                 ),
               ),
-              _buildHostName(details),
+              HostNameSliver(details: details),
               if (allowedStudentTenantGender != 'any')
                 SliverToBoxAdapter(
                   child: Padding(
@@ -343,36 +344,34 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                               ],
                             ),
                           ),
-                          Flexible(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 32.r,
-                                vertical: 4.r,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.primary.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(15.r),
-                              ),
-                              child: RichText(
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: 'Available',
-                                      style: AppStyles.bold14poppins.copyWith(
-                                        color: AppColors.primary,
-                                      ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 32.r,
+                              vertical: 4.r,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(15.r),
+                            ),
+                            child: RichText(
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Available',
+                                    style: AppStyles.bold14poppins.copyWith(
+                                      color: AppColors.primary,
                                     ),
-                                    TextSpan(
-                                      text:
-                                          '\n${Apartmentdetailshelper.getMonth(availableDate.month)} ${availableDate.day}',
-                                      style: AppStyles.bold14poppins.copyWith(
-                                        color: AppColors.primary,
-                                      ),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        '\n${Apartmentdetailshelper.getMonth(availableDate.month)} ${availableDate.day}',
+                                    style: AppStyles.bold14poppins.copyWith(
+                                      color: AppColors.primary,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -554,42 +553,6 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
       ),
     );
   }
-
-  SliverToBoxAdapter _buildHostName(ApartmentDetailsData? details) {
-    return SliverToBoxAdapter(
-      child: RPadding(
-        padding: const EdgeInsets.all(16),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Container(
-            alignment: Alignment.center,
-            width: 200.w,
-            height: 30.h,
-            decoration: BoxDecoration(
-              color: AppColors.primary,
-              borderRadius: BorderRadius.circular(15.r),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              spacing: 8.w,
-              children: [
-                Icon(Icons.person, size: 20.sp, color: Colors.white),
-                Text(
-                  details?.hostName ?? 'Host Name',
-                  style: AppStyles.semiBold16poppins.copyWith(
-                    color: Colors.white,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildLoadingDot(double delay) {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.5, end: 1.0),

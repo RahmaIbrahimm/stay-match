@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -35,6 +37,7 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log(property?.name ?? 'wth no name sent for some reason',name: 'apartment brief name');
     return Container(
       decoration: BoxDecoration(
         color: AppColors.containerColor,
@@ -56,7 +59,7 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
           children: [
             SizedBox(height: 4.h),
             Text(
-              name ?? 'No name',
+              name ?? 'No name' ,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style:
@@ -83,7 +86,7 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 12.0.r),
       child: SizedBox(
         width: double.infinity,
-        height: scaleUp ? 40.h : null, // todo: mememmememme
+        height: scaleUp ? 40.h : null,
         child: SmallCustomButton(
           text: AppStrings.viewDetails,
           textStyle: AppStyles.semiBold16poppins,
