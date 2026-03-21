@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
+import 'package:stay_match/features/filter/presentation/manager/filter_cubit.dart';
 
 import '../../../../../../../../core/constants/app_strings.dart';
 import '../../../../../../../../core/constants/app_styles.dart';
@@ -20,9 +21,9 @@ class FindRoomBody extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return BlocBuilder<RoomsCubit, RoomsState>(
+    return BlocBuilder<FilterCubit, FilterState>(
       builder: (context, state) {
-        if (state is GetRoomsSuccess) {
+        if (state is RoomsFilterSuccess) {
           var roomPropertiesData = state.response.data?.items ?? [];
           return Padding(
             padding: EdgeInsets.all(16.0.r),
@@ -56,10 +57,10 @@ class FindRoomBody extends StatelessWidget {
               ],
             ),
           );
-        } else if (state is GetRoomsFailure) {
+        } else if (state is RoomsFilterFailure) {
           log(state.errMessage);
           return Text(state.errMessage);
-        } else if (state is GetRoomsLoading) {
+        } else if (state is RoomsFilterLoading) {
           return Center(
             child: CircularProgressIndicator(color: AppColors.primary),
           );
