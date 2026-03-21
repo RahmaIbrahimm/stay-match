@@ -1,162 +1,117 @@
-import 'dart:developer';
-
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:stay_match/core/networking/dio_consumer.dart';
+import 'package:flutter/material.dart';
 import 'package:stay_match/core/utils/secure_storage_helper.dart';
-import 'package:stay_match/core/utils/service_locator.dart';
-import 'package:stay_match/features/auth/data/repos/auth_repo_impl.dart';
 
 class ApiInterceptors extends Interceptor {
-  Dio dio;
-  ApiInterceptors({required this.dio});
+  final Dio dio;
+  bool _isRefreshing = false;
+  final List<(_CompleteCallback, ErrorCallback)> _pendingRequests = [];
+
+  ApiInterceptors(this.dio);
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final token = await SecureStorageHelper.readFromSecureStorage(
-        key: SecureStorageHelper.tokenKey);
+    final token = await SecureStorageHelper.readFromSecureStorage(key: SecureStorageHelper.tokenKey);
+
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
-      log('Token added to request: $token');
     }
-    handler.next(options);
+
+    super.onRequest(options, handler);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
-      log('Access token expired, trying refresh...');
-
-      final refreshToken = await SecureStorageHelper.storage.read(
-          key: SecureStorageHelper.refreshTokenKey);
-
-      if (refreshToken == null) {
-        log('No refresh token → cannot refresh');
-        return handler.next(err);
-      }
-
-      try {
-        final response = await AuthRepoImpl(getIt.get<DioConsumer>())
-            .refreshToken(refreshToken: refreshToken);
-
-        String? newAccessToken;
-        String? newRefreshToken;
-
-        response.fold(
-              (failure) {
-            log('Refresh failed: ${failure.errMessage}');
-          },
-              (refreshResponse) {
-            newAccessToken = refreshResponse.token;
-            newRefreshToken = refreshResponse.refreshToken;
-            log('Token refreshed successfully: $newAccessToken');
-          },
-        );
-
-        if (newAccessToken == null) {
-          return handler.next(err);
-        }
-
-        // Save new tokens
-        await SecureStorageHelper.storage.write(
-            key: SecureStorageHelper.tokenKey, value: newAccessToken);
-        await SecureStorageHelper.storage.write(
-            key: SecureStorageHelper.refreshTokenKey, value: newRefreshToken);
-
-        // Retry original request
-        final requestOptions = err.requestOptions;
-        requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
-        final cloneResponse = await dio.fetch(requestOptions);
-
-        return handler.resolve(cloneResponse);
-      } catch (e) {
-        log('Refresh failed → logout user');
-        await SecureStorageHelper.storage.deleteAll();
-        return handler.next(err);
-      }
+      // Token expired, try to refresh
+      await _refreshToken(err, handler);
     } else {
-      handler.next(err); // pass non-401 errors
+      handler.next(err);
     }
   }
+// fixme : add force logout
+  Future<void> _refreshToken(DioException originalError, ErrorInterceptorHandler handler) async {
+    // If already refreshing, add to queue
+    if (_isRefreshing) {
+      _pendingRequests.add((handler, originalError));
+      return;
+    }
+
+    _isRefreshing = true;
+
+    try {
+      final refreshToken = await SecureStorageHelper.readFromSecureStorage(key: SecureStorageHelper.refreshTokenKey);
+
+      if (refreshToken == null) {
+        // No refresh token, force logout
+        // _forceLogout();
+        handler.reject(originalError);
+        return;
+      }
+
+      // Call refresh token API
+      final response = await dio.post(
+        '/api/auth/refresh-token',
+        data: {'refreshToken': refreshToken},
+      );
+
+      if (response.statusCode == 200) {
+        final newToken = response.data['token'];
+        final newRefreshToken = response.data['refreshToken'];
+
+        // Save new tokens
+        await SecureStorageHelper.addToSecureStorage(key: SecureStorageHelper.tokenKey,value: newToken);
+        await SecureStorageHelper.addToSecureStorage(key: SecureStorageHelper.tokenKey,value: newRefreshToken);
+
+        // Retry all pending requests with new token
+        for (final pending in _pendingRequests) {
+          final (callback, error) = pending;
+          _retryRequest(error.requestOptions, callback);
+        }
+        _pendingRequests.clear();
+
+        // Retry the original request
+        _retryRequest(originalError.requestOptions, handler);
+      } else {
+        // Refresh failed, force logout
+        // _forceLogout();
+        handler.reject(originalError);
+      }
+    } catch (e) {
+      // _forceLogout();
+      handler.reject(originalError);
+    } finally {
+      _isRefreshing = false;
+    }
+  }
+
+  Future<void> _retryRequest(RequestOptions requestOptions, ErrorInterceptorHandler handler) async {
+    final newToken = await SecureStorageHelper.readFromSecureStorage(key: SecureStorageHelper.tokenKey);
+
+    if (newToken != null) {
+      requestOptions.headers['Authorization'] = 'Bearer $newToken';
+    }
+
+    try {
+      final response = await dio.fetch(requestOptions);
+      handler.resolve(response);
+    } catch (e) {
+      handler.reject(e as DioException);
+    }
+  }
+
+  // void _forceLogout() {
+  //   // Clear tokens
+  //   SecureStorageHelper.clearAll();
+  //
+  //   // Navigate to login (using a global navigator key or callback)
+  //   // You can use a GlobalKey<NavigatorState> for this
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     // Navigate to login screen
+  //     // navigatorKey.currentState?.pushNamedAndRemoveUntil('/login', (route) => false);
+  //   });
+  // }
 }
-// class ApiInterceptors extends Interceptor {
-//   @override
-//   void onRequest(RequestOptions options,
-//       RequestInterceptorHandler handler) async {
-//     final token = await SecureStorageHelper.readFromSecureStorage(
-//         key: SecureStorageHelper.tokenKey);
-//
-//     if (token != null) {
-//       options.headers['Authorization'] = 'Bearer $token';
-//       // options.headers['Authorization'] = 'Bearer $token';
-//       log('token in request: $token');
-//     }
-//
-//     handler.next(options);
-//   }
-//
-//   @override
-//   void onError(DioException err, ErrorInterceptorHandler handler) async {
-//     if (err.response?.statusCode == 401) {
-//       log('Access token expired, trying refresh...');
-//
-//       final refreshToken = await SecureStorageHelper.storage.read(
-//         key: SecureStorageHelper.refreshTokenKey,
-//       );
-//
-//       if (refreshToken == null) {
-//         return handler.next(err); // logout case
-//       }
-//
-//       try {
-//         var  newAccessToken ;
-//         var  newRefreshToken ;
-//         var response = await AuthRepoImpl(getIt.get<DioConsumer>())
-//             .refreshToken(refreshToken: refreshToken);
-//         response.fold(
-//               (failure) {
-//             // handle failure
-//             print("Refresh failed: ${failure.errMessage}");
-//           },
-//               (refreshResponse) {
-//              newAccessToken = refreshResponse.token;
-//             newRefreshToken = refreshResponse.refreshToken;
-//             // handle success
-//             print("New token: ${refreshResponse.token}");
-//           },
-//         );
-//
-//
-//         // ✅ Save new tokens
-//         await SecureStorageHelper.storage.write(
-//           key: SecureStorageHelper.tokenKey,
-//           value: newAccessToken,
-//         );
-//
-//         await SecureStorageHelper.storage.write(
-//           key: SecureStorageHelper.refreshTokenKey,
-//           value: newRefreshToken,
-//         );
-//
-//         log('Token refreshed successfully');
-//
-//         // 🔥 Retry original request
-//         final requestOptions = err.requestOptions;
-//
-//         requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
-//
-//         final cloneResponse = await dio.fetch(requestOptions);
-//
-//         return handler.resolve(cloneResponse);
-//       } catch (e) {
-//         log('Refresh failed → logout user');
-//
-//         // Optional: clear storage
-//         await SecureStorageHelper.storage.deleteAll();
-//
-//         return handler.next(err);
-//       }
-//     }
-//
-//     return handler.next(err);
-//   }
-// }
+
+typedef _CompleteCallback = ErrorInterceptorHandler;
+typedef ErrorCallback = DioException;
