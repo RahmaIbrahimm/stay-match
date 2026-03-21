@@ -118,14 +118,25 @@ abstract class AppStrings {
   static const viewDetails = 'View Details';
   static const findYourRoom = 'Find Your Room';
   static const browseRoom =
-      'Browse Apartments with available rooms in your preferred location';
+      'Browse Apartments with available rooms in your preferred location, Filter by Location And date';
   // room details
 static const roomDetails = 'Room Details';
 
 // apartments
+  static const browseApartment =
+      'Browse Apartments in your preferred location, Filter by Location And date';
+  static const findYourApartment = 'Find Your Apartment';
 
-// apartment details
- static const apartmentDetails = 'Apartment Details';
+  // apartment details
+  static const apartmentDetails = 'Apartment Details';
  static const viewReviews = 'View Reviews';
 
+// search
+  static const where = 'Where';
+  static const when = 'When';
+  static const who = 'Who';
+  static const sortedBy = 'Sorted by:';
+  static const newest = 'Newest';
+  static const oldest = 'oldest';
+  static const apply = 'Apply';
 }
