@@ -12,7 +12,8 @@ class ApartmentRepoImpl extends ApartmentRepo {
   ApiService apiService;
 
   ApartmentRepoImpl({required this.apiService});
-
+  bool orderByOldest = false;
+  bool onlyAvailable = false;
   @override
   Future<Either<Failure, AllApartmentsResponse>> getAllApartments({
     String? start,
@@ -24,8 +25,8 @@ class ApartmentRepoImpl extends ApartmentRepo {
     String? workerGender,
     double? userLat,
     double? userLng,
-    bool orderByOldest = false,
-    bool onlyAvailable = false,
+    orderByOldest = false,
+    onlyAvailable = false,
     num? page = 1,
     num? pageSize = 5,
   }) async {
