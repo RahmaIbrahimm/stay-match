@@ -26,7 +26,21 @@ class ApartmentCubit extends Cubit<ApartmentsState> {
 
   // get all apartments
   // todo: add parameters for filter..
-  Future<void> getAllApartments({bool forceRefresh = false}) async {
+  Future<void> getAllApartments({bool forceRefresh = false,
+  String? start,
+  int? monthsCount,
+  String? government,
+  bool? allowsFamilies,
+  bool? allowsChildren,
+  bool? allowsStudents,
+  String? workerGender,
+  double? userLat,
+  double? userLng,
+  bool orderByOldest = false,
+  bool onlyAvailable = false,
+  num? page = 1,
+  num? pageSize = 3,
+  }) async {
     if (!forceRefresh && _cachedResponse != null) {
       emit(GetApartmentsSuccess(response: _cachedResponse!));
       return;
@@ -35,7 +49,23 @@ class ApartmentCubit extends Cubit<ApartmentsState> {
     emit(GetApartmentsLoading());
 
     try {
-      var response = await apartmentRepo.getAllApartments();
+      var response = await apartmentRepo.getAllApartments(
+
+          start: start,
+          monthsCount: monthsCount,
+          government: government,
+          allowsFamilies: allowsFamilies,
+          allowsChildren: allowsChildren,
+          allowsStudents: allowsStudents,
+          workerGender: workerGender,
+          userLat: userLat,
+          userLng: userLng,
+          orderByOldest: orderByOldest,
+          onlyAvailable: onlyAvailable,
+          page: page,
+          pageSize: pageSize,
+
+      );
 
       response.fold(
             (fail) {
