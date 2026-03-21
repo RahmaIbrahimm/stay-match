@@ -6,10 +6,10 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
 
 class CardCoverPhoto extends StatelessWidget {
-  const CardCoverPhoto({super.key, required this.imageUrl});
+  const CardCoverPhoto({super.key, required this.imageUrl,  this.ScaleUp = false});
 
   final String? imageUrl;
-
+  final bool ScaleUp;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -53,8 +53,8 @@ class CardCoverPhoto extends StatelessWidget {
                     left: BorderSide(color: AppColors.primary),
                   ), color: AppColors.bgGrey,
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
+                      topLeft: Radius.circular(10.r),
+                      topRight: Radius.circular(10.r),
                   )
                   ),
                   child: Center(
@@ -69,7 +69,7 @@ class CardCoverPhoto extends StatelessWidget {
         ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 6.r, vertical: 2.r),
-          margin: EdgeInsets.symmetric(horizontal: 3.r, vertical: 6.r),
+          margin: EdgeInsets.symmetric(horizontal: 6.r, vertical: 6.r),
           decoration: BoxDecoration(
             color: AppColors.primary,
             borderRadius: BorderRadius.circular(5.r),
@@ -77,7 +77,7 @@ class CardCoverPhoto extends StatelessWidget {
           //todo: add actual match logic when api given
           child: Text(
             '98 % Match',
-            style: AppStyles.medium8poppins.copyWith(
+            style: AppStyles.medium10poppins.copyWith(
               color: AppColors.textColorWhite,
             ),
           ),
@@ -87,10 +87,11 @@ class CardCoverPhoto extends StatelessWidget {
           right: 6.r,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 6.r, vertical: 2.r),
-            margin: EdgeInsets.symmetric(vertical: 3.r, horizontal: 6.r),
+            margin: EdgeInsets.symmetric(vertical: 2.r, horizontal: 6.r),
             decoration: BoxDecoration(
               color: AppColors.bgGrey,
               borderRadius: BorderRadius.circular(5.r),
+              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.2),blurRadius: 1)]
             ),
             //todo: add actual match logic when api given
             alignment: Alignment.topRight,
@@ -106,7 +107,7 @@ class CardCoverPhoto extends StatelessWidget {
                 ),
                 Text(
                   '4.5',
-                  style: AppStyles.medium8poppins.copyWith(
+                  style: AppStyles.medium10poppins.copyWith(
                     color: AppColors.textColorSecondary,
                   ),
                 ),
