@@ -1,40 +1,46 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:stay_match/core/constants/app_icons.dart';
+import 'package:stay_match/features/filter/presentation/manager/filter_cubit.dart';
 import 'package:stay_match/features/filter/presentation/widgets/apply_button_sliver.dart';
 import 'package:stay_match/features/filter/presentation/widgets/filter_bottom_sheet_app_bar.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import 'availability_sliver.dart';
-import 'custom_gender_toggle.dart';
+import 'filter_helper.dart';
 import 'filter_option_card.dart';
+import 'gender_switch.dart';
 
-typedef OnWhoFilterApply =
-    void Function({
-      bool? allowsFamilies,
-      bool? allowsChildren,
-      bool? allowsStudents,
-      String? workerGender,
-    });
+typedef OnWorkerGenderChanged = void Function(String? value);
 
 class FilterSheetWho extends StatefulWidget {
-  const FilterSheetWho({
+  FilterSheetWho({
     super.key,
-    required this.onApply,
+    // required this.onApply,
     required this.allowsFamilies,
     required this.allowsChildren,
     required this.allowsStudents,
     required this.workerGender,
+    required this.studentGender,
     this.onlyAvailable,
+    required this.filterType,
+    required this.allowsWorkers,
   });
 
-  final OnWhoFilterApply onApply;
-  final bool? allowsFamilies;
-  final bool? allowsChildren;
-  final bool? allowsStudents;
-  final String? workerGender;
-  final bool? onlyAvailable;
+  // final OnWhoFilterApply onApply;
+  bool? allowsFamilies;
+  bool? allowsChildren;
+  bool? allowsStudents;
+  String? workerGender;
+  String? studentGender;
+  bool? onlyAvailable;
+  final FilterTypeProperty filterType;
+  bool? allowsWorkers;
 
   @override
   State<FilterSheetWho> createState() => _FilterSheetWhoState();
@@ -43,6 +49,7 @@ class FilterSheetWho extends StatefulWidget {
 class _FilterSheetWhoState extends State<FilterSheetWho> {
   @override
   Widget build(BuildContext context) {
+    var cubit = BlocProvider.of<FilterCubit>(context);
     return CustomScrollView(
       slivers: [
         FilterBottomSheetAppBar(),
@@ -56,6 +63,16 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
             color: AppColors.textColorPrimary,
           ),
           desc: '\nStandard household groups',
+          onChangedBool: (bool? value) {
+            widget.allowsFamilies = value ?? false;
+          },
+          isSelected: widget.allowsFamilies ?? false,
+          onChangeVoid: () {
+            widget.allowsFamilies = !(widget.allowsFamilies ?? false);
+            setState(() {
+
+            });
+          },
         ),
         SliverToBoxAdapter(child: SizedBox(height: 6.h)),
         // children filter
@@ -67,6 +84,16 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
             color: AppColors.primary,
           ),
           desc: '\nAges 2-12',
+          onChangedBool: (bool? value) {
+            widget.allowsChildren = value ?? false;
+          },
+          isSelected: widget.allowsChildren ?? false,
+          onChangeVoid: () {
+            widget.allowsChildren = !(widget.allowsChildren ?? false);
+            setState(() {
+
+            });
+          },
         ),
         SliverToBoxAdapter(child: SizedBox(height: 6.h)),
         // students filter
@@ -77,21 +104,164 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
             size: 20.sp,
             color: AppColors.primary,
           ),
-          bottomWidget: GenderSwitch(current: 'Female'),
+          bottomWidget: GenderSwitch(
+            current: widget.studentGender ?? 'Male',
+            genderChanged: (String? value) {
+              widget.studentGender = value;
+              log('student gender is:${widget.studentGender}');
+            },
+          ),
+          onChangedBool: (bool? value) {
+            widget.allowsStudents = value ?? false;
+          },
+          isSelected: widget.allowsStudents ?? false,
+          onChangeVoid: () {
+            widget.allowsStudents = !(widget.allowsStudents ?? false);
+            setState(() {
+
+            });
+          },
         ),
         SliverToBoxAdapter(child: SizedBox(height: 6.h)),
         // workers filter
         FilterOptionCard(
           title: 'Workers',
           icon: Icon(Icons.work_rounded, size: 24.sp, color: AppColors.primary),
-          bottomWidget: GenderSwitch(current: 'Female'),
+          bottomWidget: GenderSwitch(
+            current: widget.workerGender ?? 'Male',
+            genderChanged: (String? value) {
+              widget.workerGender = value;
+              log('worker gender is:${widget.workerGender}');
+            },
+          ),
+          onChangedBool: (bool? value) {
+            widget.allowsWorkers = value ?? false;
+          },
+          isSelected: widget.allowsWorkers ?? false,
+          onChangeVoid: () {
+            widget.allowsWorkers = !(widget.allowsWorkers ?? false);
+            setState(() {
+
+            });
+          },
         ),
         SliverToBoxAdapter(child: SizedBox(height: 6.h)),
         // availability and switch
-        AvailabilitySliver(),
+        AvailabilitySliver(
+          current: widget.onlyAvailable ?? true,
+          filterType: widget.filterType,
+        ),
         // Apply button
         SliverToBoxAdapter(child: SizedBox(height: 24.h)),
-        ApplyButtonSliver(onPressed: () {}),
+        BlocConsumer<FilterCubit, FilterState>(
+          listener: (context, state) {
+            // TODO: implement listener
+            var cubit = BlocProvider.of<FilterCubit>(context);
+            if (state is ApartmentFilterFailure) {
+              ScaffoldMessenger.of(context).clearSnackBars();
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.errMessage)));
+            }
+            if (state is RoomsFilterFailure) {
+              ScaffoldMessenger.of(context).clearSnackBars();
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.errMessage)));
+            }
+          },
+          builder: (context, state) {
+            bool isLoading = state is ApartmentFilterLoading ||
+                state is RoomsFilterLoading;
+            return ApplyButtonSliver(
+              onPressed: () async {
+                // Start debug logs
+                log('========================================',
+                    name: 'APPLY_FILTER');
+                log('🔘 APPLY BUTTON PRESSED', name: 'APPLY_FILTER');
+                log('Filter Type: ${widget.filterType}', name: 'APPLY_FILTER');
+
+                // Log current filter values
+                log('📋 Current filter values:', name: 'APPLY_FILTER');
+                log('  - allowsFamilies: ${widget.allowsFamilies}',
+                    name: 'APPLY_FILTER');
+                log('  - allowsChildren: ${widget.allowsChildren}',
+                    name: 'APPLY_FILTER');
+                log('  - allowsStudents: ${widget.allowsStudents}',
+                    name: 'APPLY_FILTER');
+                log('  - allowsWorkers: ${widget.allowsWorkers}',
+                    name: 'APPLY_FILTER');
+                log('  - studentGender: ${widget.studentGender}',
+                    name: 'APPLY_FILTER');
+                log('  - workerGender: ${widget.workerGender}',
+                    name: 'APPLY_FILTER');
+
+                // Log what will be sent
+                log('📤 Sending to API:', name: 'APPLY_FILTER');
+                log('  - allowsFamilies: ${widget.allowsFamilies}',
+                    name: 'APPLY_FILTER');
+                log('  - allowsChildren: ${widget.allowsChildren}',
+                    name: 'APPLY_FILTER');
+                log('  - allowsStudents: ${widget.allowsStudents}',
+                    name: 'APPLY_FILTER');
+                log('  - allowsWorkers: ${widget.allowsWorkers}',
+                    name: 'APPLY_FILTER');
+                log('  - studentGender: ${(widget.allowsStudents ?? false)
+                    ? widget.studentGender
+                    : null}', name: 'APPLY_FILTER');
+                log('  - workerGender: ${(widget.allowsWorkers ?? false)
+                    ? widget.workerGender
+                    : null}', name: 'APPLY_FILTER');
+
+                log('⏳ Calling cubit.update...', name: 'APPLY_FILTER');
+                final stopwatch = Stopwatch()
+                  ..start();
+
+                try {
+                  if (widget.filterType == FilterTypeProperty.apartment) {
+                    log('🏢 Updating APARTMENT filters', name: 'APPLY_FILTER');
+                    await cubit.updateApartmentFilter(
+                      allowsFamilies: widget.allowsFamilies,
+                      allowsChildren: widget.allowsChildren,
+                      allowsStudents: widget.allowsStudents,
+                      allowsWorkers: widget.allowsWorkers,
+                      studentGender: (widget.allowsStudents ?? false) ? widget
+                          .studentGender : null,
+                      workerGender: (widget.allowsWorkers ?? false) ? widget
+                          .workerGender : null,
+                    );
+                  } else {
+                    log('🛏️ Updating ROOMS filters', name: 'APPLY_FILTER');
+                    await cubit.updateRoomsFilter(
+                      allowsFamilies: widget.allowsFamilies,
+                      allowsChildren: widget.allowsChildren,
+                      allowsStudents: widget.allowsStudents,
+                      allowsWorkers: widget.allowsWorkers,
+                      studentGender: (widget.allowsStudents ?? false) ? widget
+                          .studentGender : null,
+                      workerGender: (widget.allowsWorkers ?? false) ? widget
+                          .workerGender : null,
+                    );
+                  }
+
+                  stopwatch.stop();
+                  log('✅ Filter update COMPLETED in ${stopwatch
+                      .elapsedMilliseconds}ms', name: 'APPLY_FILTER');
+                  log('========================================',
+                      name: 'APPLY_FILTER');
+                  if (mounted) context.pop();
+                } catch (e, stackTrace) {
+                  log('❌ ERROR in filter update: $e', name: 'APPLY_FILTER',
+                      error: e,
+                      stackTrace: stackTrace);
+                  log('========================================',
+                      name: 'APPLY_FILTER');
+                  rethrow;
+                }
+              }, isLoading: isLoading,
+            );
+          },
+        ),
       ],
     );
   }
