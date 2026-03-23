@@ -20,24 +20,25 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
     required this.city,
     required this.streetName,
     required this.monthlyRent,
-    required this.isFurnished,
     this.property,
     required this.id,
-    this.scaleUp = false,
+    this.scaleUp = false, required this.size, required this.numBathrooms, required this.numBedrooms,
   });
 
   final String? name;
   final String? city;
   final String? streetName;
   final num? monthlyRent;
-  final bool isFurnished;
   final AllApartmentsItems? property;
   final int? id;
   final bool scaleUp;
-
+  final int? size;
+  final int? numBathrooms;
+  final int? numBedrooms;
   @override
   Widget build(BuildContext context) {
     log(property?.name ?? 'wth no name sent for some reason',name: 'apartment brief name');
+    log(name ?? 'wth no name sent for some reason',name: 'apartment brief name');
     return Container(
       decoration: BoxDecoration(
         color: AppColors.containerColor,
@@ -154,11 +155,6 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
   }
 
   Widget _buildFeatures() {
-    int numBeds = property?.numberOfBedrooms?.toInt() ?? 0;
-    double size = property?.size?.toDouble() ?? 0;
-    int numBathrooms =
-        (property?.numberOfGuestBathrooms?.toInt() ?? 0) +
-        (property?.numberOfEnSuiteBathrooms?.toInt() ?? 0);
     return Container(
       padding: EdgeInsets.all(6.r),
       margin: EdgeInsets.symmetric(horizontal: 2.r),
@@ -175,16 +171,16 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
               color: Colors.black,
               size: scaleUp ? 20.sp : 12.sp,
             ),
-            text: '$numBeds ${numBeds > 1 ? 'Beds' : 'Bed'}',
+            text: '${numBedrooms ?? 0} ${(numBedrooms ?? 0) > 1 ? 'Beds' : 'Bed'}',
           ),
           _buildFeature(
             icon: FaIcon(FontAwesomeIcons.bath, size: scaleUp ? 20.sp : 12.sp),
             text:
-                '$numBathrooms ${numBathrooms > 1 ? 'Bathrooms' : 'Bathroom'}',
+                '${numBathrooms ?? 0} ${(numBathrooms ?? 0) > 1 ? 'Bathrooms' : 'Bathroom'}',
           ),
           _buildFeature(
             icon: FaIcon(FontAwesomeIcons.expand, size: scaleUp ? 20.r : 12.r),
-            text: '$size m',
+            text: '${size ?? 0} m²',
           ),
         ],
       ),

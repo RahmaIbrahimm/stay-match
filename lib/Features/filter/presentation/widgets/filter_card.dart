@@ -5,16 +5,17 @@ import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
 import 'package:stay_match/features/filter/presentation/manager/filter_cubit.dart';
-import 'package:stay_match/features/filter/presentation/widgets/filter_container.dart';
-import 'package:stay_match/features/filter/presentation/widgets/filter_sheet_who.dart';
 import 'package:stay_match/features/filter/presentation/widgets/sort_by_oldest.dart';
-
-enum FilterType { apartment, room }
+import '../../data/models/rooms_filter_params.dart';
+import 'filter_helper.dart';
+import 'filter_sheet_who.dart';
 
 class FilterCard extends StatelessWidget {
-  final FilterType filterType;
+  final FilterTypeProperty filterType;
 
-  const FilterCard({super.key, required this.filterType});
+
+   FilterCard(
+      {super.key, required this.filterType,});
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,7 @@ class FilterCard extends StatelessWidget {
 
             // Sort by
             SortedByOldest(
-              isApartmentFilter: filterType == FilterType.apartment,
+              isApartmentFilter: filterType == FilterTypeProperty.apartment,
             ),
 
             // Reset filters button (only show if filters are active)
@@ -90,7 +91,7 @@ class FilterCard extends StatelessWidget {
   String _getWherePrompt(BuildContext context) {
     final cubit = context.read<FilterCubit>();
 
-    if (filterType == FilterType.apartment) {
+    if (filterType == FilterTypeProperty.apartment) {
       final filters = cubit.currentApartmentFilters;
       final government = filters.government;
       if (government != null && government.isNotEmpty) {
@@ -109,7 +110,7 @@ class FilterCard extends StatelessWidget {
   String _getWhenPrompt(BuildContext context) {
     final cubit = context.read<FilterCubit>();
 
-    if (filterType == FilterType.apartment) {
+    if (filterType == FilterTypeProperty.apartment) {
       final filters = cubit.currentApartmentFilters;
       final start = filters.start;
       final monthsCount = filters.monthsCount;
@@ -139,7 +140,7 @@ class FilterCard extends StatelessWidget {
     final cubit = context.read<FilterCubit>();
     final List<String> preferences = [];
 
-    if (filterType == FilterType.apartment) {
+    if (filterType == FilterTypeProperty.apartment) {
       final filters = cubit.currentApartmentFilters;
       if (filters.allowsFamilies == true) preferences.add('Families');
       if (filters.allowsChildren == true) preferences.add('Children');
@@ -166,7 +167,7 @@ class FilterCard extends StatelessWidget {
   bool _hasActiveFilters(BuildContext context) {
     final cubit = context.read<FilterCubit>();
 
-    if (filterType == FilterType.apartment) {
+    if (filterType == FilterTypeProperty.apartment) {
       final filters = cubit.currentApartmentFilters;
       return filters.government != null ||
           filters.start != null ||
@@ -194,7 +195,7 @@ class FilterCard extends StatelessWidget {
   void _resetFilters(BuildContext context) {
     final cubit = context.read<FilterCubit>();
 
-    if (filterType == FilterType.apartment) {
+    if (filterType == FilterTypeProperty.apartment) {
       cubit.resetApartmentFilters();
     } else {
       cubit.resetRoomsFilters();
@@ -204,7 +205,7 @@ class FilterCard extends StatelessWidget {
   void _showWhoFilterSheet(BuildContext context) {
     final cubit = context.read<FilterCubit>();
 
-    if (filterType == FilterType.apartment) {
+    if (filterType == FilterTypeProperty.apartment) {
       final currentFilters = cubit.currentApartmentFilters;
 
       Scaffold.of(context).showBottomSheet(
@@ -213,68 +214,81 @@ class FilterCard extends StatelessWidget {
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
         (context) {
-          return FilterContainer(
-            filterContainerBody: FilterSheetWho(
-              allowsFamilies: currentFilters.allowsFamilies,
-              allowsChildren: currentFilters.allowsChildren,
-              allowsStudents: currentFilters.allowsStudents,
-              workerGender: currentFilters.workerGender,
-              onlyAvailable: currentFilters.onlyAvailable,
-              onApply:
-                  ({
-                    bool? allowsFamilies,
-                    bool? allowsChildren,
-                    bool? allowsStudents,
-                    String? workerGender,
-                    bool? onlyAvailable,
-                  }) {
-                    cubit.updateApartmentFilter(
-                      allowsFamilies: allowsFamilies,
-                      allowsChildren: allowsChildren,
-                      allowsStudents: allowsStudents,
-                      workerGender: workerGender,
-                      onlyAvailable: onlyAvailable,
-                      forceRefresh: true,
-                    );
-                  },
-            ),
-          );
-        },
-      );
-    } else {
-      final currentFilters = cubit.currentRoomsFilters;
-
-      showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-        ),
-        builder: (context) {
           return FilterSheetWho(
             allowsFamilies: currentFilters.allowsFamilies,
             allowsChildren: currentFilters.allowsChildren,
             allowsStudents: currentFilters.allowsStudents,
             workerGender: currentFilters.workerGender,
             onlyAvailable: currentFilters.onlyAvailable,
-            onApply:
-                ({
-                  bool? allowsFamilies,
-                  bool? allowsChildren,
-                  bool? allowsStudents,
-                  String? workerGender,
-                  bool? onlyAvailable,
-                }) {
-                  cubit.updateRoomsFilter(
-                    allowsFamilies: allowsFamilies,
-                    allowsChildren: allowsChildren,
-                    allowsStudents: allowsStudents,
-                    workerGender: workerGender,
-                    onlyAvailable: onlyAvailable,
-                    forceRefresh: true,
-                  );
-                },
+            studentGender: currentFilters.studentGender,
+            filterType: FilterTypeProperty.apartment,
+            allowsWorkers: currentFilters.allowsWorkers,
+            // onApply: ({
+            //   bool? allowsFamilies,
+            //   bool? allowsChildren,
+            //   bool? allowsStudents,
+            //   String? studentGender,
+            //   bool? allowsWorkers,
+            //   String? workerGender,
+            //   bool? onlyAvailable,
+            //
+            // }) {
+            //   cubit.updateApartmentFilter(
+            //     allowsFamilies: allowsFamilies,
+            //     allowsChildren: allowsChildren,
+            //     allowsStudents: allowsStudents,
+            //     workerGender: allowsWorkers == true ? workerGender : null,
+            //     onlyAvailable: onlyAvailable,
+            //     forceRefresh: true,
+            //   );
+            // },
+          );
+        },
+      );
+    } else {
+      final currentFilters = cubit.currentRoomsFilters;
+      //  final tempFilters = RoomsFilterParams(
+      //   allowsFamilies: currentFilters.allowsFamilies,
+      //   allowsChildren: currentFilters.allowsChildren,
+      //   allowsStudents: currentFilters.allowsStudents,
+      //   studentGender: currentFilters.studentGender,
+      //   allowsWorkers: currentFilters.allowsWorkers,
+      //   workerGender: currentFilters.workerGender,
+      //   onlyAvailable: currentFilters.onlyAvailable,
+      // );
+      Scaffold.of(context).showBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+        ),
+            (context) {
+          return FilterSheetWho(
+            allowsFamilies: currentFilters.allowsFamilies,
+            allowsChildren: currentFilters.allowsChildren,
+            allowsStudents: currentFilters.allowsStudents,
+            workerGender: currentFilters.workerGender,
+            onlyAvailable: currentFilters.onlyAvailable,
+            studentGender: currentFilters.studentGender,
+            filterType: FilterTypeProperty.room,
+            allowsWorkers: currentFilters.allowsWorkers,
+            // onApply: ({
+            //   bool? allowsFamilies,
+            //   bool? allowsChildren,
+            //   bool? allowsStudents,
+            //   String? studentGender,
+            //   bool? allowsWorkers,
+            //   String? workerGender,
+            //   bool? onlyAvailable,
+            // }) {
+            //   cubit.updateRoomsFilter(
+            //     allowsFamilies: allowsFamilies,
+            //     allowsChildren: allowsChildren,
+            //     allowsStudents: allowsStudents,
+            //     workerGender: allowsWorkers == true ? workerGender : null,
+            //     onlyAvailable: onlyAvailable,
+            //     forceRefresh: true,
+            //   );
+            // },
           );
         },
       );

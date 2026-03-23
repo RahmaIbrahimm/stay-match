@@ -33,7 +33,10 @@ class ApartmentCard extends StatelessWidget {
               city: property?.city,
               streetName: property?.street,
               monthlyRent: property?.monthlyRent,
-              isFurnished: property?.furnished ?? false,
+              numBedrooms: property?.numberOfBedrooms?.toInt(),
+              numBathrooms: (property?.numberOfGuestBathrooms?.toInt() ?? 0) +
+                  (property?.numberOfEnSuiteBathrooms?.toInt() ?? 0),
+              size: property?.size?.toInt(),
               id: property?.id,
               scaleUp: scaleUp,
             ),

@@ -19,7 +19,7 @@ class NoPropertiesSliver extends StatelessWidget {
             children: [
               Icon(
                 Icons.house_outlined,
-                size: 100.sp,
+                size: 90.sp,
                 color: AppColors.primary.withValues(
                   alpha: 0.5,
                 ),
@@ -27,7 +27,7 @@ class NoPropertiesSliver extends StatelessWidget {
               SizedBox(height: 16.h),
               Text(
                 'No Apartments Available',
-                style: AppStyles.bold28poppins.copyWith(
+                style: AppStyles.bold20poppins.copyWith(
                   color: AppColors.textColorPrimary,
                 ),
                 textAlign: TextAlign.center,
@@ -35,14 +35,14 @@ class NoPropertiesSliver extends StatelessWidget {
               SizedBox(height: 8.h),
               Text(
                 'At the Moment',
-                style: AppStyles.bold28poppins.copyWith(
+                style: AppStyles.bold20poppins.copyWith(
                   color: AppColors.textColorSecondary,
                   fontWeight: FontWeight.w500,
                 ),
               ),
               SizedBox(height: 16.h),
               Container(
-                padding: EdgeInsets.all(16.r),
+                padding: EdgeInsets.all(12.r),
                 margin: EdgeInsets.symmetric(
                   horizontal: 20.r,
                 ),
@@ -50,11 +50,11 @@ class NoPropertiesSliver extends StatelessWidget {
                   color: AppColors.primary.withValues(
                     alpha: 0.1,
                   ),
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(15.r),
                 ),
                 child: Text(
                   'Please check again later.\nNew apartments are added regularly!',
-                  style: AppStyles.regular16poppins.copyWith(
+                  style: AppStyles.regular14poppins.copyWith(
                     color: AppColors.primary,
                   ),
                   textAlign: TextAlign.center,

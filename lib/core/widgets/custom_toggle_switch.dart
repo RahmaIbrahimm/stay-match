@@ -1,23 +1,31 @@
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 
 class CustomToggleSwitch extends StatefulWidget {
-  const CustomToggleSwitch({super.key, required this.onTap});
+  const CustomToggleSwitch(
+      {super.key, required this.onTap, required this.current});
 
   final VoidCallback onTap;
-
+  final bool current;
   @override
   State<CustomToggleSwitch> createState() => _CustomToggleSwitchState();
 }
 
 class _CustomToggleSwitchState extends State<CustomToggleSwitch> {
-  bool isOn = false;
+  late bool isOn = widget.current;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.onTap,
+      onTap: () {
+        setState(() {
+          log('${widget.current}');
+          isOn = !isOn;
+        });
+      },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 300),
         width: 50,

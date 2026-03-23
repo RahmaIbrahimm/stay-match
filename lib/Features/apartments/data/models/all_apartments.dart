@@ -133,6 +133,7 @@ class AllApartmentsItems {
 
   AllApartmentsItems.fromJson(dynamic json) {
     id = json['id'];
+    name = json['name'];
     monthlyRent = json['monthlyRent'];
     furnished = json['furnished'];
     availableFrom = json['availableFrom'];

@@ -10,6 +10,7 @@ import 'package:stay_match/features/filter/presentation/manager/filter_cubit.dar
 import '../../../../../../../../core/constants/app_strings.dart';
 import '../../../../../../../../core/constants/app_styles.dart';
 import '../../../../filter/presentation/widgets/filter_card.dart';
+import '../../../../filter/presentation/widgets/filter_helper.dart';
 import '../../../../shared/widgets/no_properties_sliver.dart';
 import '../../../../shared/widgets/search_app_bar.dart';
 import '../shared/apartment_card.dart';
@@ -69,7 +70,7 @@ class FindApartmentBody extends StatelessWidget {
                 ),
                 const SearchAppBar(),
                 _buildFilterHeader(),
-                FilterCard(filterType: FilterType.apartment,),
+                FilterCard(filterType: FilterTypeProperty.apartment,),
                 SliverToBoxAdapter(child: SizedBox(height: 16.h)),
                 propertiesData.isEmpty
                     ? const NoPropertiesSliver()
@@ -193,6 +194,7 @@ class FindApartmentBody extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: RichText(
+
         textAlign: TextAlign.start,
         text: TextSpan(
           children: [
@@ -253,7 +255,6 @@ class FindApartmentBody extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
-                  flex: 3,
                   child: ElevatedButton(
                     onPressed: () {
                       context.read<FilterCubit>().getAllApartments(
@@ -280,10 +281,9 @@ class FindApartmentBody extends StatelessWidget {
                 ),
                 SizedBox(width: 12.w),
                 Expanded(
-                  flex: 4,
                   child: OutlinedButton(
                     onPressed: () {
-                      context.read<FilterCubit>().resetApartmentFilters();
+                      if(context.canPop()) context.pop();
                     },
                     style: OutlinedButton.styleFrom(
                       padding: EdgeInsets.symmetric(
@@ -295,7 +295,7 @@ class FindApartmentBody extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      'Reset Filters',
+                      'Back',
                       style: AppStyles.semiBold16poppins.copyWith(
                         color: AppColors.textColorSecondary,
                       ),
@@ -365,7 +365,7 @@ class FindApartmentBody extends StatelessWidget {
           ),
           const SearchAppBar(),
           _buildFilterHeader(),
-          FilterCard(filterType: FilterType.apartment,),
+          FilterCard(filterType: FilterTypeProperty.apartment,),
           SliverToBoxAdapter(child: SizedBox(height: 16.h)),
           SliverToBoxAdapter(child: _buildLoadingStateInitial()
             ,)
