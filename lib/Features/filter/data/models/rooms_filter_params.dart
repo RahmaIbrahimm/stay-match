@@ -6,7 +6,9 @@ class RoomsFilterParams {
   final bool? allowsFamilies;
   final bool? allowsChildren;
   final bool? allowsStudents;
+  final bool? allowsWorkers;
   final String? workerGender;
+  final String? studentGender;
   final double? userLat;
   final double? userLng;
   final bool orderByOldest;
@@ -21,7 +23,9 @@ class RoomsFilterParams {
     this.allowsFamilies,
     this.allowsChildren,
     this.allowsStudents,
+    this.allowsWorkers,
     this.workerGender,
+    this.studentGender,
     this.userLat,
     this.userLng,
     this.orderByOldest = false,
@@ -38,6 +42,7 @@ class RoomsFilterParams {
         allowsFamilies != other.allowsFamilies ||
         allowsChildren != other.allowsChildren ||
         allowsStudents != other.allowsStudents ||
+        allowsWorkers != other.allowsWorkers ||
         workerGender != other.workerGender ||
         userLat != other.userLat ||
         userLng != other.userLng ||
@@ -54,7 +59,9 @@ class RoomsFilterParams {
     bool? allowsFamilies,
     bool? allowsChildren,
     bool? allowsStudents,
+    bool? allowsWorkers,
     String? workerGender,
+    String? studentGender,
     double? userLat,
     double? userLng,
     bool? orderByOldest,
@@ -69,7 +76,9 @@ class RoomsFilterParams {
       allowsFamilies: allowsFamilies ?? this.allowsFamilies,
       allowsChildren: allowsChildren ?? this.allowsChildren,
       allowsStudents: allowsStudents ?? this.allowsStudents,
+      allowsWorkers: allowsWorkers ?? this.allowsWorkers,
       workerGender: workerGender ?? this.workerGender,
+      studentGender: studentGender ?? this.studentGender,
       userLat: userLat ?? this.userLat,
       userLng: userLng ?? this.userLng,
       orderByOldest: orderByOldest ?? this.orderByOldest,

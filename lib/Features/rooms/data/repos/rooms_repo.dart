@@ -11,6 +11,8 @@ abstract class RoomsRepo{
     bool? allowsFamilies,
     bool? allowsChildren,
     bool? allowsStudents,
+    bool? allowsWorkers,
+    String? studentGender,
     String? workerGender,
     double? userLat,
     double? userLng,
