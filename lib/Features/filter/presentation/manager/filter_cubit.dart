@@ -44,6 +44,8 @@ class FilterCubit extends Cubit<FilterState> {
     bool? allowsFamilies,
     bool? allowsChildren,
     bool? allowsStudents,
+    bool? allowsWorkers,
+    String? studentGender,
     String? workerGender,
     double? userLat,
     double? userLng,
@@ -62,6 +64,8 @@ class FilterCubit extends Cubit<FilterState> {
       allowsFamilies: allowsFamilies,
       allowsChildren: allowsChildren,
       allowsStudents: allowsStudents,
+      allowsWorkers: allowsWorkers,
+      studentGender: studentGender,
       workerGender: workerGender,
       userLat: userLat,
       userLng: userLng,
@@ -167,7 +171,9 @@ class FilterCubit extends Cubit<FilterState> {
     bool? allowsFamilies,
     bool? allowsChildren,
     bool? allowsStudents,
+    bool? allowsWorkers,
     String? workerGender,
+    String? studentGender,
     double? userLat,
     double? userLng,
     bool? orderByOldest,
@@ -185,7 +191,9 @@ class FilterCubit extends Cubit<FilterState> {
       allowsFamilies: allowsFamilies,
       allowsChildren: allowsChildren,
       allowsStudents: allowsStudents,
+      allowsWorkers: allowsWorkers,
       workerGender: workerGender,
+      studentGender: studentGender,
       userLat: userLat,
       userLng: userLng,
       orderByOldest: orderByOldest,
@@ -241,7 +249,9 @@ class FilterCubit extends Cubit<FilterState> {
         allowsFamilies: _currentRoomsFilters.allowsFamilies,
         allowsChildren: _currentRoomsFilters.allowsChildren,
         allowsStudents: _currentRoomsFilters.allowsStudents,
+        allowsWorkers: _currentRoomsFilters.allowsWorkers,
         workerGender: _currentRoomsFilters.workerGender,
+        studentGender: _currentRoomsFilters.studentGender,
         userLat: _currentRoomsFilters.userLat,
         userLng: _currentRoomsFilters.userLng,
         orderByOldest: _currentRoomsFilters.orderByOldest,
@@ -269,7 +279,7 @@ class FilterCubit extends Cubit<FilterState> {
           } else {
             log('Rooms API returned isSuccess=false: ${response.message}');
             emit(RoomsFilterFailure(
-              errMessage: response.message ?? 'Error getting Rooms',
+              errMessage: response.message ?? 'Error Filtering Rooms',
             ));
           }
         },
