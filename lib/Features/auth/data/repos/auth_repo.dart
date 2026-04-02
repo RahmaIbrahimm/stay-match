@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:stay_match/core/errors/failures.dart';
-import 'package:stay_match/features/auth/data/models/forget_password_response.dart';
-import 'package:stay_match/features/auth/data/models/login_with_google_response.dart';
-import 'package:stay_match/features/auth/data/models/refresh_token_response.dart';
-import 'package:stay_match/features/auth/data/models/register_response.dart';
-import 'package:stay_match/features/auth/data/models/reset_password_response.dart';
+import 'package:stay_match/Features/auth/data/models/forget_password_response.dart';
+import 'package:stay_match/Features/auth/data/models/login_with_google_response.dart';
+import 'package:stay_match/Features/auth/data/models/refresh_token_response.dart';
+import 'package:stay_match/Features/auth/data/models/register_response.dart';
+import 'package:stay_match/Features/auth/data/models/reset_password_response.dart';
 
 import '../models/login_response.dart';
 import '../models/verify_code_response.dart';
