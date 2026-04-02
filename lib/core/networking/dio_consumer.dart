@@ -49,7 +49,7 @@ class DioConsumer extends ApiService {
       );
       return response.data;
     } on DioException catch (e) {
-      throw ServerFailure.fromDioError(e);
+      rethrow;
     } catch (e) {
       throw ServerFailure(e.toString());
     }
@@ -69,7 +69,7 @@ class DioConsumer extends ApiService {
       );
       return response.data;
     } on DioException catch (e) {
-      throw ServerFailure.fromDioError(e);
+      rethrow;
     } catch (e) {
       throw ServerFailure(e.toString());
     }
@@ -80,17 +80,16 @@ class DioConsumer extends ApiService {
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
-    bool isFormData = false,
   }) async {
     try {
       final response = await dio.patch(
         path,
-        data: isFormData ? FormData.fromMap(data) : data,
+        data: data,
         queryParameters: queryParameters,
       );
       return response.data;
     } on DioException catch (e) {
-      throw ServerFailure.fromDioError(e);
+      rethrow;
     } catch (e) {
       throw ServerFailure(e.toString());
     }
@@ -101,17 +100,18 @@ class DioConsumer extends ApiService {
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
-    bool isFormData = false,
   }) async {
     try {
       final response = await dio.post(
         path,
-        data: isFormData ? FormData.fromMap(data) : data,
+        data: data,
         queryParameters: queryParameters,
       );
       return response.data;
-    } catch (e) {
+    } on DioException catch (e) {
       rethrow;
+    } catch (e) {
+      throw ServerFailure(e.toString());
     }
   }
   // Future<Response<dynamic>> fetch(RequestOptions options) async {
