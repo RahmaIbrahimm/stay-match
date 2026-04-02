@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:stay_match/features/home/presentation/widget/rooms_section.dart';
+import 'package:stay_match/Features/home/presentation/widget/rooms_section.dart';
 
 import 'add_or_show_property.dart';
 import 'apartment_section.dart';

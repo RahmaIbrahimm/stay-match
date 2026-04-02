@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:stay_match/features/home/presentation/widget/small_custom_button.dart';
+import 'package:stay_match/Features/home/presentation/widget/small_custom_button.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_images.dart';

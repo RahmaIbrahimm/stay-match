@@ -4,18 +4,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
-import 'package:stay_match/features/filter/presentation/manager/filter_cubit.dart';
-import 'package:stay_match/features/filter/presentation/widgets/sort_by_oldest.dart';
-import '../../data/models/rooms_filter_params.dart';
+import 'package:stay_match/Features/apartments/presentation/widgets/shared/ApartmentHelper.dart';
+import 'package:stay_match/Features/filter/presentation/manager/filter_cubit.dart';
+import 'package:stay_match/Features/filter/presentation/widgets/sort_by_oldest.dart';
+
 import 'filter_helper.dart';
+import 'filter_sheet_where.dart';
 import 'filter_sheet_who.dart';
 
 class FilterCard extends StatelessWidget {
-  final FilterTypeProperty filterType;
+  final PropertyType filterType;
 
-
-   FilterCard(
-      {super.key, required this.filterType,});
+  FilterCard({super.key, required this.filterType});
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +32,18 @@ class FilterCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // WHERE search todo: implement logic
-            _buildFilterPrompt(
+            Apartmenthelper.buildFilterPrompt(
               titleText: AppStrings.where,
               prompt: _getWherePrompt(context),
               onTap: () {
                 // TODO: Implement WHERE filter
-                // _showWhereFilterSheet(context);
+                _showWhereFilterSheet(context);
               },
             ),
             Divider(color: AppColors.grey),
 
             // WHEN search todo: implement logic
-            _buildFilterPrompt(
+            Apartmenthelper.buildFilterPrompt(
               titleText: AppStrings.when,
               prompt: _getWhenPrompt(context),
               onTap: () {
@@ -54,7 +54,7 @@ class FilterCard extends StatelessWidget {
             Divider(color: AppColors.grey),
 
             // WHO search (fully implemented)
-            _buildFilterPrompt(
+            Apartmenthelper.buildFilterPrompt(
               titleText: AppStrings.who,
               prompt: _getWhoPrompt(context),
               onTap: () {
@@ -64,7 +64,7 @@ class FilterCard extends StatelessWidget {
 
             // Sort by
             SortedByOldest(
-              isApartmentFilter: filterType == FilterTypeProperty.apartment,
+              isApartmentFilter: filterType == PropertyType.apartment,
             ),
 
             // Reset filters button (only show if filters are active)
@@ -91,7 +91,7 @@ class FilterCard extends StatelessWidget {
   String _getWherePrompt(BuildContext context) {
     final cubit = context.read<FilterCubit>();
 
-    if (filterType == FilterTypeProperty.apartment) {
+    if (filterType == PropertyType.apartment) {
       final filters = cubit.currentApartmentFilters;
       final government = filters.government;
       if (government != null && government.isNotEmpty) {
@@ -110,7 +110,7 @@ class FilterCard extends StatelessWidget {
   String _getWhenPrompt(BuildContext context) {
     final cubit = context.read<FilterCubit>();
 
-    if (filterType == FilterTypeProperty.apartment) {
+    if (filterType == PropertyType.apartment) {
       final filters = cubit.currentApartmentFilters;
       final start = filters.start;
       final monthsCount = filters.monthsCount;
@@ -140,14 +140,13 @@ class FilterCard extends StatelessWidget {
     final cubit = context.read<FilterCubit>();
     final List<String> preferences = [];
 
-    if (filterType == FilterTypeProperty.apartment) {
+    if (filterType == PropertyType.apartment) {
       final filters = cubit.currentApartmentFilters;
       if (filters.allowsFamilies == true) preferences.add('Families');
       if (filters.allowsChildren == true) preferences.add('Children');
-      if (filters.allowsStudents == true) preferences.add('Students');
-      if (filters.workerGender != null && filters.workerGender!.isNotEmpty) {
-        preferences.add('Worker: ${filters.workerGender}');
-      }
+      // if (filters.allowsStudents == true) preferences.add('Students');
+      if (filters.allowsStudents== true) preferences.add('Students: ${(filters.studentGender== null || filters.studentGender!.isEmpty) ? 'Male' : 'Female'}',);
+      if (filters.allowsWorkers == true) preferences.add('Worker: ${(filters.workerGender == null || filters.workerGender!.isEmpty) ? 'Male' : 'Female'}',);
     } else {
       final filters = cubit.currentRoomsFilters;
       if (filters.allowsFamilies == true) preferences.add('Families');
@@ -167,7 +166,7 @@ class FilterCard extends StatelessWidget {
   bool _hasActiveFilters(BuildContext context) {
     final cubit = context.read<FilterCubit>();
 
-    if (filterType == FilterTypeProperty.apartment) {
+    if (filterType == PropertyType.apartment) {
       final filters = cubit.currentApartmentFilters;
       return filters.government != null ||
           filters.start != null ||
@@ -195,7 +194,7 @@ class FilterCard extends StatelessWidget {
   void _resetFilters(BuildContext context) {
     final cubit = context.read<FilterCubit>();
 
-    if (filterType == FilterTypeProperty.apartment) {
+    if (filterType == PropertyType.apartment) {
       cubit.resetApartmentFilters();
     } else {
       cubit.resetRoomsFilters();
@@ -205,7 +204,7 @@ class FilterCard extends StatelessWidget {
   void _showWhoFilterSheet(BuildContext context) {
     final cubit = context.read<FilterCubit>();
 
-    if (filterType == FilterTypeProperty.apartment) {
+    if (filterType == PropertyType.apartment) {
       final currentFilters = cubit.currentApartmentFilters;
 
       Scaffold.of(context).showBottomSheet(
@@ -221,47 +220,19 @@ class FilterCard extends StatelessWidget {
             workerGender: currentFilters.workerGender,
             onlyAvailable: currentFilters.onlyAvailable,
             studentGender: currentFilters.studentGender,
-            filterType: FilterTypeProperty.apartment,
+            filterType: PropertyType.apartment,
             allowsWorkers: currentFilters.allowsWorkers,
-            // onApply: ({
-            //   bool? allowsFamilies,
-            //   bool? allowsChildren,
-            //   bool? allowsStudents,
-            //   String? studentGender,
-            //   bool? allowsWorkers,
-            //   String? workerGender,
-            //   bool? onlyAvailable,
-            //
-            // }) {
-            //   cubit.updateApartmentFilter(
-            //     allowsFamilies: allowsFamilies,
-            //     allowsChildren: allowsChildren,
-            //     allowsStudents: allowsStudents,
-            //     workerGender: allowsWorkers == true ? workerGender : null,
-            //     onlyAvailable: onlyAvailable,
-            //     forceRefresh: true,
-            //   );
-            // },
           );
         },
       );
     } else {
       final currentFilters = cubit.currentRoomsFilters;
-      //  final tempFilters = RoomsFilterParams(
-      //   allowsFamilies: currentFilters.allowsFamilies,
-      //   allowsChildren: currentFilters.allowsChildren,
-      //   allowsStudents: currentFilters.allowsStudents,
-      //   studentGender: currentFilters.studentGender,
-      //   allowsWorkers: currentFilters.allowsWorkers,
-      //   workerGender: currentFilters.workerGender,
-      //   onlyAvailable: currentFilters.onlyAvailable,
-      // );
       Scaffold.of(context).showBottomSheet(
         backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
-            (context) {
+        (context) {
           return FilterSheetWho(
             allowsFamilies: currentFilters.allowsFamilies,
             allowsChildren: currentFilters.allowsChildren,
@@ -269,58 +240,50 @@ class FilterCard extends StatelessWidget {
             workerGender: currentFilters.workerGender,
             onlyAvailable: currentFilters.onlyAvailable,
             studentGender: currentFilters.studentGender,
-            filterType: FilterTypeProperty.room,
+            filterType: PropertyType.room,
             allowsWorkers: currentFilters.allowsWorkers,
-            // onApply: ({
-            //   bool? allowsFamilies,
-            //   bool? allowsChildren,
-            //   bool? allowsStudents,
-            //   String? studentGender,
-            //   bool? allowsWorkers,
-            //   String? workerGender,
-            //   bool? onlyAvailable,
-            // }) {
-            //   cubit.updateRoomsFilter(
-            //     allowsFamilies: allowsFamilies,
-            //     allowsChildren: allowsChildren,
-            //     allowsStudents: allowsStudents,
-            //     workerGender: allowsWorkers == true ? workerGender : null,
-            //     onlyAvailable: onlyAvailable,
-            //     forceRefresh: true,
-            //   );
-            // },
+          );
+        },
+      );
+    }
+  }
+  void _showWhereFilterSheet(BuildContext context) {
+    final cubit = context.read<FilterCubit>();
+
+    if (filterType == PropertyType.apartment) {
+      final currentFilters = cubit.currentApartmentFilters;
+
+      Scaffold.of(context).showBottomSheet(
+        backgroundColor: AppColors.containerColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+        ),
+        (context) {
+          return FilterSheetWhere();
+        },
+      );
+    } else {
+      final currentFilters = cubit.currentRoomsFilters;
+      Scaffold.of(context).showBottomSheet(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+        ),
+        (context) {
+          return FilterSheetWho(
+            allowsFamilies: currentFilters.allowsFamilies,
+            allowsChildren: currentFilters.allowsChildren,
+            allowsStudents: currentFilters.allowsStudents,
+            workerGender: currentFilters.workerGender,
+            onlyAvailable: currentFilters.onlyAvailable,
+            studentGender: currentFilters.studentGender,
+            filterType: PropertyType.room,
+            allowsWorkers: currentFilters.allowsWorkers,
           );
         },
       );
     }
   }
 
-  Widget _buildFilterPrompt({
-    required String titleText,
-    required String prompt,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: RichText(
-        textAlign: TextAlign.start,
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: titleText,
-              style: AppStyles.semiBold16poppins.copyWith(
-                color: AppColors.primary,
-              ),
-            ),
-            TextSpan(
-              text: prompt,
-              style: AppStyles.regular18poppins.copyWith(
-                color: AppColors.textColorSecondary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+
 }

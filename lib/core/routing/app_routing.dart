@@ -1,16 +1,16 @@
 // import 'package:flutter/cupertino.dart';
 // import 'package:go_router/go_router.dart';
 // import 'package:stay_match/core/widgets/layout_scaffold.dart';
-// import 'package:stay_match/features/auth/presentation/reset_password/presentation/views/reset_password_view.dart';
-// import 'package:stay_match/features/home/presentation/views/home_view.dart';
-// import 'package:stay_match/features/profile/presentation/views/profile_view.dart';
-// import 'package:stay_match/features/shared/rooms/presentation/find_room/views/find_room_view.dart';
-// import 'package:stay_match/features/shared/rooms/presentation/room_details/views/room_details_view.dart';
+// import 'package:stay_match/Features/auth/presentation/reset_password/presentation/views/reset_password_view.dart';
+// import 'package:stay_match/Features/home/presentation/views/home_view.dart';
+// import 'package:stay_match/Features/profile/presentation/views/profile_view.dart';
+// import 'package:stay_match/Features/shared/rooms/presentation/find_room/views/find_room_view.dart';
+// import 'package:stay_match/Features/shared/rooms/presentation/room_details/views/room_details_view.dart';
 //
-// import '../../features/auth/presentation/forget_password/presentation/views/forget_password_view.dart';
-// import '../../features/auth/presentation/login/presentation/views/login_view.dart';
-// import '../../features/auth/presentation/signup/presentation/views/signup_view.dart';
-// import '../../features/auth/presentation/verify_email/presentation/views/verify_email_view.dart';
+// import '../../Features/auth/presentation/forget_password/presentation/views/forget_password_view.dart';
+// import '../../Features/auth/presentation/login/presentation/views/login_view.dart';
+// import '../../Features/auth/presentation/signup/presentation/views/signup_view.dart';
+// import '../../Features/auth/presentation/verify_email/presentation/views/verify_email_view.dart';
 //
 // class AppRouting {
 //   static final GlobalKey<NavigatorState> rootNavKey =
@@ -167,18 +167,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stay_match/core/widgets/layout_scaffold.dart';
-import 'package:stay_match/features/auth/presentation/reset_password/presentation/views/reset_password_view.dart';
-import 'package:stay_match/features/home/presentation/views/home_view.dart';
-import 'package:stay_match/features/profile/presentation/views/profile_view.dart';
+import 'package:stay_match/Features/auth/presentation/reset_password/presentation/views/reset_password_view.dart';
+import 'package:stay_match/Features/home/presentation/views/home_view.dart';
+import 'package:stay_match/Features/profile/presentation/views/profile_view.dart';
 
-import '../../features/apartments/presentation/views/apartment_details_view.dart';
-import '../../features/apartments/presentation/views/find_apartment_view.dart';
-import '../../features/auth/presentation/forget_password/presentation/views/forget_password_view.dart';
-import '../../features/auth/presentation/login/presentation/views/login_view.dart';
-import '../../features/auth/presentation/signup/presentation/views/signup_view.dart';
-import '../../features/auth/presentation/verify_email/presentation/views/verify_email_view.dart';
-import '../../features/rooms/presentation/views/find_room_view.dart';
-import '../../features/rooms/presentation/views/room_details_view.dart';
+import '../../Features/apartments/presentation/views/apartment_details_view.dart';
+import '../../Features/apartments/presentation/views/find_apartment_view.dart';
+import '../../Features/auth/presentation/forget_password/presentation/views/forget_password_view.dart';
+import '../../Features/auth/presentation/login/presentation/views/login_view.dart';
+import '../../Features/auth/presentation/signup/presentation/views/signup_view.dart';
+import '../../Features/auth/presentation/verify_email/presentation/views/verify_email_view.dart';
+import '../../Features/rooms/presentation/views/find_room_view.dart';
+import '../../Features/rooms/presentation/views/room_details_view.dart';
 
 class AppRouting {
   static final GlobalKey<NavigatorState> rootNavKey = GlobalKey<NavigatorState>();
