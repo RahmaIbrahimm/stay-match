@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
-import 'package:stay_match/features/filter/presentation/manager/filter_cubit.dart';
+import 'package:stay_match/Features/filter/presentation/manager/filter_cubit.dart';
 
 import '../../../../../../../../core/constants/app_strings.dart';
 import '../../../../../../../../core/constants/app_styles.dart';
