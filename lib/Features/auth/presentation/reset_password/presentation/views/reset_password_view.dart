@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stay_match/features/auth/presentation/reset_password/presentation/views/widgets/reset_password_view_Body.dart';
+import 'package:stay_match/Features/auth/presentation/reset_password/presentation/views/widgets/reset_password_view_Body.dart';
 
 import '../../../../../../core/constants/app_colors.dart';
 
