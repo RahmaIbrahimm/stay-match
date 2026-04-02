@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stay_match/features/apartments/data/models/apartment_details_response.dart';
+import 'package:stay_match/Features/apartments/data/models/apartment_details_response.dart';
 
 class Apartmentdetailshelper {
   static String getMonth(int month) {

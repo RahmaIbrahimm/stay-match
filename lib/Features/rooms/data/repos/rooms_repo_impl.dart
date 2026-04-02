@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:stay_match/core/errors/failures.dart';
 import 'package:stay_match/core/networking/api_service.dart';
 import 'package:stay_match/core/networking/endpoints.dart';
-import 'package:stay_match/features/rooms/data/repos/rooms_repo.dart';
+import 'package:stay_match/Features/rooms/data/repos/rooms_repo.dart';
 
 import '../models/get_all_rooms.dart';
 

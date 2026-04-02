@@ -7,7 +7,7 @@ import 'package:stay_match/core/constants/app_styles.dart';
 import 'package:stay_match/core/routing/app_routing.dart';
 import 'package:stay_match/core/widgets/custom_elevated_button.dart';
 import 'package:stay_match/core/widgets/custom_text_button.dart';
-import 'package:stay_match/features/auth/presentation/verify_email/presentation/views/widgets/verify_email_otp.dart';
+import 'package:stay_match/Features/auth/presentation/verify_email/presentation/views/widgets/verify_email_otp.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
 import '../../../../../manager/auth_cubit.dart';

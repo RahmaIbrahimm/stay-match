@@ -6,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:stay_match/core/routing/app_routing.dart';
-import 'package:stay_match/features/home/presentation/widget/small_custom_button.dart';
+import 'package:stay_match/Features/home/presentation/widget/small_custom_button.dart';
 
 import '../../../../../../../../core/constants/app_colors.dart';
 import '../../../../../../../../core/constants/app_strings.dart';
