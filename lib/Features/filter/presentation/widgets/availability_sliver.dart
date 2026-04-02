@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:stay_match/features/filter/data/models/apartment_filter_params.dart';
-import 'package:stay_match/features/filter/data/models/rooms_filter_params.dart';
+import 'package:stay_match/Features/filter/data/models/apartment_filter_params.dart';
+import 'package:stay_match/Features/filter/data/models/rooms_filter_params.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
@@ -10,7 +10,7 @@ import 'filter_helper.dart';
 
 class AvailabilitySliver extends StatelessWidget {
   const AvailabilitySliver({super.key, required this.current, required this.filterType});
-  final FilterTypeProperty filterType;
+  final PropertyType filterType;
   final bool current;
   @override
   Widget build(BuildContext context) {
