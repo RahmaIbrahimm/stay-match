@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stay_match/Features/filter/presentation/manager/location_cubit.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
@@ -255,11 +256,12 @@ class FilterCard extends StatelessWidget {
 
       Scaffold.of(context).showBottomSheet(
         backgroundColor: AppColors.containerColor,
+        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
         (context) {
-          return FilterSheetWhere();
+          return FilterSheetWhere(propertyType: PropertyType.apartment,);
         },
       );
     } else {
