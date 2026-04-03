@@ -131,7 +131,7 @@ static const roomDetails = 'Room Details';
   static const apartmentDetails = 'Apartment Details';
  static const viewReviews = 'View Reviews';
 
-// search
+  // search
   static const where = 'Where';
   static const when = 'When';
   static const who = 'Who';
@@ -139,4 +139,9 @@ static const roomDetails = 'Room Details';
   static const newest = 'Newest';
   static const oldest = 'oldest';
   static const apply = 'Apply';
+
+  // ------- filter -----
+  // where
+  static const String selectCity = 'Select City';
+  static const String selectGovernorate = 'Select Governorate';
 }
