@@ -12,8 +12,12 @@ class DioConsumer extends ApiService {
     dio.options = BaseOptions(
       baseUrl: Endpoints.baseUrl,
       validateStatus: (status) {
-        return status! < 500;
+        return status != null && status >= 200 && status < 300;
       },
+      // validateStatus: (status) {
+      //   // return status! < 500 && status != 401;
+      //
+      // },
       connectTimeout: Duration(seconds: 10),
       receiveTimeout: Duration(seconds: 10),
     );
@@ -114,7 +118,4 @@ class DioConsumer extends ApiService {
       throw ServerFailure(e.toString());
     }
   }
-  // Future<Response<dynamic>> fetch(RequestOptions options) async {
-  //   return dio.fetch(options);
-  // }
 }
