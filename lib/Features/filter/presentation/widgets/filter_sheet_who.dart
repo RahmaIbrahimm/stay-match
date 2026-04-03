@@ -165,49 +165,51 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
           builder: (context, state) {
             bool isLoading =
                 state is ApartmentFilterLoading || state is RoomsFilterLoading;
-            return ApplyButtonSliver(
-              onPressed: () async {
-                try {
-                  if (widget.filterType == PropertyType.apartment) {
-                    bool reset =
-                        (widget.allowsStudents == false) ||
-                        (widget.allowsFamilies == false) ||
-                        (widget.allowsWorkers == false) ||
-                        (widget.allowsChildren == false);
-                    reset ? cubit.resetApartmentFilters()
-                        : await cubit.updateApartmentFilter(
-                            allowsFamilies: widget.allowsFamilies,
-                            allowsChildren: widget.allowsChildren,
-                            allowsStudents: widget.allowsStudents,
-                            allowsWorkers: widget.allowsWorkers,
-                            studentGender: (widget.allowsStudents ?? false)
-                                ? widget.studentGender
-                                : null,
-                            workerGender: (widget.allowsWorkers ?? false)
-                                ? widget.workerGender
-                                : null,
-                          );
-                  } else {
-                    await cubit.updateRoomsFilter(
-                      allowsFamilies: widget.allowsFamilies,
-                      allowsChildren: widget.allowsChildren,
-                      allowsStudents: widget.allowsStudents,
-                      allowsWorkers: widget.allowsWorkers,
-                      studentGender: (widget.allowsStudents ?? false)
-                          ? widget.studentGender
-                          : null,
-                      workerGender: (widget.allowsWorkers ?? false)
-                          ? widget.workerGender
-                          : null,
-                    );
+            return SliverToBoxAdapter(
+              child: ApplyButton(
+                onPressed: () async {
+                  try {
+                    if (widget.filterType == PropertyType.apartment) {
+                      bool reset =
+                          (widget.allowsStudents == false) ||
+                          (widget.allowsFamilies == false) ||
+                          (widget.allowsWorkers == false) ||
+                          (widget.allowsChildren == false);
+                      reset ? cubit.resetApartmentFilters()
+                          : await cubit.updateApartmentFilter(
+                              allowsFamilies: widget.allowsFamilies,
+                              allowsChildren: widget.allowsChildren,
+                              allowsStudents: widget.allowsStudents,
+                              allowsWorkers: widget.allowsWorkers,
+                              studentGender: (widget.allowsStudents ?? false)
+                                  ? widget.studentGender
+                                  : null,
+                              workerGender: (widget.allowsWorkers ?? false)
+                                  ? widget.workerGender
+                                  : null,
+                            );
+                    } else {
+                      await cubit.updateRoomsFilter(
+                        allowsFamilies: widget.allowsFamilies,
+                        allowsChildren: widget.allowsChildren,
+                        allowsStudents: widget.allowsStudents,
+                        allowsWorkers: widget.allowsWorkers,
+                        studentGender: (widget.allowsStudents ?? false)
+                            ? widget.studentGender
+                            : null,
+                        workerGender: (widget.allowsWorkers ?? false)
+                            ? widget.workerGender
+                            : null,
+                      );
+                    }
+                    if (mounted) context.pop();
+                  } catch (e, stackTrace) {
+              
+                    rethrow;
                   }
-                  if (mounted) context.pop();
-                } catch (e, stackTrace) {
-
-                  rethrow;
-                }
-              },
-              isLoading: isLoading,
+                },
+                isLoading: isLoading,
+              ),
             );
           },
         ),
