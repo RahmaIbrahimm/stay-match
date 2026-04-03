@@ -2,20 +2,22 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:stay_match/features/apartments/data/repos/apartment_repo.dart';
-import 'package:stay_match/features/rooms/data/models/get_all_rooms.dart';
-import 'package:stay_match/features/rooms/data/repos/rooms_repo.dart';
+import 'package:stay_match/Features/apartments/data/repos/apartment_repo.dart';
+import 'package:stay_match/Features/rooms/data/models/get_all_rooms.dart';
+import 'package:stay_match/Features/rooms/data/repos/rooms_repo.dart';
 
 import '../../../../core/utils/secure_storage_helper.dart';
 import '../../../apartments/data/models/all_apartments.dart';
 import '../../data/models/apartment_filter_params.dart';
+import '../../data/models/location_model.dart';
 import '../../data/models/rooms_filter_params.dart';
+import 'location_cubit.dart';
 
 part 'filter_state.dart';
 
 class FilterCubit extends Cubit<FilterState> {
-  ApartmentRepo apartmentRepo;
-  RoomsRepo roomsRepo;
+  final ApartmentRepo apartmentRepo;
+  final RoomsRepo roomsRepo;
 
   // Apartment filter state
   ApartmentFilterParams _currentApartmentFilters = const ApartmentFilterParams();
@@ -90,6 +92,16 @@ class FilterCubit extends Cubit<FilterState> {
       forceRefresh: true,
     );
   }
+  // location update
+  Future<void> updateApartmentLocation({required Governorate government,required City city}) async {
+    log('📍 apartment location updated: ${city.nameInEnglish} (lat: ${city.latitude}, lng: ${city.longitude})');
+    await updateApartmentFilter(
+      government: government.nameInEnglish,
+      userLat: city.latitude,
+      userLng: city.longitude,
+      forceRefresh: true,
+    );
+  }
 
   Future<void> _getAllApartmentsWithFilters({
     bool forceRefresh = false,
@@ -117,6 +129,8 @@ class FilterCubit extends Cubit<FilterState> {
         allowsFamilies: _currentApartmentFilters.allowsFamilies,
         allowsChildren: _currentApartmentFilters.allowsChildren,
         allowsStudents: _currentApartmentFilters.allowsStudents,
+        allowsWorkers: _currentApartmentFilters.allowsWorkers,
+        studentGender: _currentApartmentFilters.studentGender,
         workerGender: _currentApartmentFilters.workerGender,
         userLat: _currentApartmentFilters.userLat,
         userLng: _currentApartmentFilters.userLng,
@@ -207,6 +221,15 @@ class FilterCubit extends Cubit<FilterState> {
 
     await _getAllRoomsWithFilters(
       forceRefresh: forceRefresh || filtersChanged,
+    );
+  }
+  Future<void> updateRoomsLocation({required Governorate government,required City city}) async {
+    log('📍 Rooms location updated: ${city.nameInEnglish} (lat: ${city.latitude}, lng: ${city.longitude})');
+    await updateRoomsFilter(
+      government: government.nameInEnglish,
+      userLat: city.latitude,
+      userLng: city.longitude,
+      forceRefresh: true,
     );
   }
 

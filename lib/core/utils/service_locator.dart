@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../features/apartments/data/repos/apartment_repo_impl.dart';
-import '../../features/auth/data/repos/auth_repo_impl.dart';
-import '../../features/home/data/repos/home_repo_impl.dart';
-import '../../features/rooms/data/repos/rooms_repo_impl.dart';
+import '../../Features/apartments/data/repos/apartment_repo_impl.dart';
+import '../../Features/auth/data/repos/auth_repo_impl.dart';
+import '../../Features/filter/data/repos/location_repo_impl.dart';
+import '../../Features/filter/presentation/manager/location_cubit.dart';
+import '../../Features/home/data/repos/home_repo_impl.dart';
+import '../../Features/rooms/data/repos/rooms_repo_impl.dart';
 import '../networking/dio_consumer.dart';
 
 final getIt = GetIt.instance;
@@ -21,4 +23,8 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<HomeRepoImpl>(
     () => HomeRepoImpl(apiService: getIt<DioConsumer>()),
   );
+  getIt.registerLazySingleton<LocationRepoImpl>(() => LocationRepoImpl());
+  getIt.registerLazySingleton<LocationCubit>(() =>
+      LocationCubit(locationRepository: getIt.get<LocationRepoImpl>()));
+
 }

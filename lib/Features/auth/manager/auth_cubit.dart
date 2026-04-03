@@ -3,11 +3,11 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stay_match/core/utils/secure_storage_helper.dart';
-import 'package:stay_match/features/auth/data/models/forget_password_response.dart';
-import 'package:stay_match/features/auth/data/models/login_response.dart';
-import 'package:stay_match/features/auth/data/models/login_with_google_response.dart';
-import 'package:stay_match/features/auth/data/models/register_response.dart';
-import 'package:stay_match/features/auth/data/models/verify_code_response.dart';
+import 'package:stay_match/Features/auth/data/models/forget_password_response.dart';
+import 'package:stay_match/Features/auth/data/models/login_response.dart';
+import 'package:stay_match/Features/auth/data/models/login_with_google_response.dart';
+import 'package:stay_match/Features/auth/data/models/register_response.dart';
+import 'package:stay_match/Features/auth/data/models/verify_code_response.dart';
 
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/networking/endpoints.dart';

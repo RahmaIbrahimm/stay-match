@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
+import 'package:stay_match/Features/home/presentation/widget/section_failure.dart';
 
 import '../../../apartments/presentation/manager/apartment_cubit.dart';
 import 'apartment_list.dart';
@@ -48,7 +49,6 @@ class ApartmentSection extends StatelessWidget {
             );
           }
         }
-
         if (state is GetApartmentsLoading) {
           return ApartmentsSectionContainer(
             widget: Center(
@@ -58,38 +58,11 @@ class ApartmentSection extends StatelessWidget {
             ),
           );
         }
-
         if (state is GetApartmentsFailure) {
           return ApartmentsSectionContainer(
-            widget: Center(
-              child: GestureDetector(
-                onTap: () {
-                  context.read<ApartmentCubit>().getAllApartments();
-                },
-                child: RPadding(
-                  padding: EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.refresh,
-                        size: 18.sp,
-                        color: AppColors.textColorSecondary, // 👈 not red
-                      ),
-                      SizedBox(width: 6.w),
-                      Text(
-                        'Tap to retry',
-                        style: AppStyles.medium14poppins.copyWith(
-                          color: AppColors.textColorSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            widget: SectionFailure(property: Property.apartment,),
           );}
-        // todo : Default loading state
+        //  Default state
         return ApartmentsSectionContainer(
           widget: Center(
             child: CircularProgressIndicator(

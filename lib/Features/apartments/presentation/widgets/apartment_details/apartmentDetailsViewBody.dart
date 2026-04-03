@@ -7,7 +7,7 @@ import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
 import 'package:stay_match/core/widgets/custom_elevated_button.dart';
 import 'package:stay_match/core/widgets/location_row.dart';
-import 'package:stay_match/features/apartments/presentation/widgets/apartment_details/apartment_details_helper.dart';
+import 'package:stay_match/Features/apartments/presentation/widgets/apartment_details/apartment_details_helper.dart';
 
 import '../../../../../core/widgets/amenities_widget.dart';
 import '../../../data/models/apartment_details_response.dart';

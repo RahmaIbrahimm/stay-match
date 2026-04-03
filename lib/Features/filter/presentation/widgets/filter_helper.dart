@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
-enum FilterTypeProperty { apartment, room }
+enum PropertyType { apartment, room }
 
 enum FilterTypeGender { student, worker }
-
+enum FilterType{
+  who,
+  where,
+  when
+}
 typedef OnFiltersChanged =
     void Function({
       bool? allowsFamilies,
@@ -13,11 +17,11 @@ typedef OnFiltersChanged =
       bool? allowsWorkers,
       String? workerGender,
       bool? onlyAvailable,
-      FilterTypeProperty? filterType,
+      PropertyType? filterType,
     });
 typedef OnChangeGender = void Function(String? value);
 typedef OnChangedBool = void Function(bool? value);
-typedef OnFilterTypeChanged = void Function(FilterTypeProperty value);
+typedef OnFilterTypeChanged = void Function(PropertyType value);
 
 class FilterWidget extends StatelessWidget {
   final bool? allowsFamilies;
@@ -27,7 +31,7 @@ class FilterWidget extends StatelessWidget {
   final bool? allowsWorkers;
   final String? workerGender;
   final bool? onlyAvailable;
-  final FilterTypeProperty filterType;
+  final PropertyType filterType;
 
   // Individual callbacks
   final OnFilterTypeChanged? onFilterTypeChanged;
@@ -57,7 +61,7 @@ class FilterWidget extends StatelessWidget {
     bool? allowsWorkers,
     String? workerGender,
     bool? onlyAvailable,
-    FilterTypeProperty? filterType,
+    PropertyType? filterType,
   }) {
     // Call individual callbacks
     if (filterType != null) onFilterTypeChanged?.call(filterType);

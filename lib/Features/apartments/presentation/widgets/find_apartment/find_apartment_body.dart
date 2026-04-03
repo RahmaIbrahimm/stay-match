@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
-import 'package:stay_match/features/filter/presentation/manager/filter_cubit.dart';
+import 'package:stay_match/Features/filter/presentation/manager/filter_cubit.dart';
 
 import '../../../../../../../../core/constants/app_strings.dart';
 import '../../../../../../../../core/constants/app_styles.dart';
@@ -70,7 +70,7 @@ class FindApartmentBody extends StatelessWidget {
                 ),
                 const SearchAppBar(),
                 _buildFilterHeader(),
-                FilterCard(filterType: FilterTypeProperty.apartment,),
+                FilterCard(filterType: PropertyType.apartment,),
                 SliverToBoxAdapter(child: SizedBox(height: 16.h)),
                 propertiesData.isEmpty
                     ? const NoPropertiesSliver()
@@ -150,26 +150,6 @@ class FindApartmentBody extends StatelessWidget {
     return '\nSearch Dates';
   }
 
-  String _getWhoPrompt(BuildContext context) {
-    final cubit = context.read<FilterCubit>();
-    final allowsFamilies = cubit.currentApartmentFilters.allowsFamilies;
-    final allowsChildren = cubit.currentApartmentFilters.allowsChildren;
-    final allowsStudents = cubit.currentApartmentFilters.allowsStudents;
-    final workerGender = cubit.currentApartmentFilters.workerGender;
-
-    final List<String> preferences = [];
-    if (allowsFamilies == true) preferences.add('Families');
-    if (allowsChildren == true) preferences.add('Children');
-    if (allowsStudents == true) preferences.add('Students');
-    if (workerGender != null && workerGender.isNotEmpty) {
-      preferences.add('Worker: $workerGender');
-    }
-
-    if (preferences.isNotEmpty) {
-      return '\n${preferences.join(', ')}';
-    }
-    return '\nAdd Guests';
-  }
 
   bool _hasActiveFilters(BuildContext context) {
     final cubit = context.read<FilterCubit>();
@@ -182,8 +162,8 @@ class FindApartmentBody extends StatelessWidget {
         filters.allowsChildren != null ||
         filters.allowsStudents != null ||
         filters.workerGender != null ||
-        filters.onlyAvailable == true ||
-        filters.orderByOldest == true;
+        filters.onlyAvailable == true;
+        // || filters.orderByOldest == true;
   }
 
   GestureDetector _searchPrompt({
@@ -365,7 +345,7 @@ class FindApartmentBody extends StatelessWidget {
           ),
           const SearchAppBar(),
           _buildFilterHeader(),
-          FilterCard(filterType: FilterTypeProperty.apartment,),
+          FilterCard(filterType: PropertyType.apartment,),
           SliverToBoxAdapter(child: SizedBox(height: 16.h)),
           SliverToBoxAdapter(child: _buildLoadingStateInitial()
             ,)

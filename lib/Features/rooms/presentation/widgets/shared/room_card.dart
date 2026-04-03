@@ -5,8 +5,8 @@ import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
 import 'package:stay_match/core/routing/app_routing.dart';
-import 'package:stay_match/features/home/presentation/widget/small_custom_button.dart';
-import 'package:stay_match/features/rooms/presentation/widgets/shared/room_in_property_data.dart';
+import 'package:stay_match/Features/home/presentation/widget/small_custom_button.dart';
+import 'package:stay_match/Features/rooms/presentation/widgets/shared/room_in_property_data.dart';
 
 import '../../../../shared/widgets/card_cover_photo.dart';
 import '../../../data/models/get_all_rooms.dart';

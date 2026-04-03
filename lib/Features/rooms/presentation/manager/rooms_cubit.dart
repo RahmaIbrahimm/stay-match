@@ -37,6 +37,14 @@ class RoomsCubit extends Cubit<RoomsState> {
 
     response.fold(
       (fail) {
+        log('Failure object: $fail');
+        log('Failure type: ${fail.runtimeType}');
+        log('Failure errMessage: ${fail.errMessage}');
+
+        // Verify what we're emitting
+        final errorMessage = fail.errMessage;
+        log('Emitting error message: $errorMessage');
+
         emit(GetRoomsFailure(errMessage: fail.errMessage));
         log('2.error happened getting rooms');
       },

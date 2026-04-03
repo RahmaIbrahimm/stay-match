@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stay_match/features/auth/presentation/verify_email/presentation/views/widgets/verify_email_container_body.dart';
+import 'package:stay_match/Features/auth/presentation/verify_email/presentation/views/widgets/verify_email_container_body.dart';
 
 
 import '../../../../widgets/custom_container.dart';

@@ -6,9 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:stay_match/core/constants/app_icons.dart';
-import 'package:stay_match/features/filter/presentation/manager/filter_cubit.dart';
-import 'package:stay_match/features/filter/presentation/widgets/apply_button_sliver.dart';
-import 'package:stay_match/features/filter/presentation/widgets/filter_bottom_sheet_app_bar.dart';
+import 'package:stay_match/Features/filter/presentation/manager/filter_cubit.dart';
+import 'package:stay_match/Features/filter/presentation/widgets/apply_button_sliver.dart';
+import 'package:stay_match/Features/filter/presentation/widgets/filter_bottom_sheet_app_bar.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import 'availability_sliver.dart';
@@ -39,7 +39,7 @@ class FilterSheetWho extends StatefulWidget {
   String? workerGender;
   String? studentGender;
   bool? onlyAvailable;
-  final FilterTypeProperty filterType;
+  final PropertyType filterType;
   bool? allowsWorkers;
 
   @override
@@ -52,7 +52,7 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
     var cubit = BlocProvider.of<FilterCubit>(context);
     return CustomScrollView(
       slivers: [
-        FilterBottomSheetAppBar(),
+        FilterBottomSheetAppBar(propertyType: PropertyType.apartment,filterType: FilterType.who,),
         SliverToBoxAdapter(child: SizedBox(height: 16.h)),
         // families filter
         FilterOptionCard(
@@ -69,9 +69,7 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
           isSelected: widget.allowsFamilies ?? false,
           onChangeVoid: () {
             widget.allowsFamilies = !(widget.allowsFamilies ?? false);
-            setState(() {
-
-            });
+            setState(() {});
           },
         ),
         SliverToBoxAdapter(child: SizedBox(height: 6.h)),
@@ -90,9 +88,7 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
           isSelected: widget.allowsChildren ?? false,
           onChangeVoid: () {
             widget.allowsChildren = !(widget.allowsChildren ?? false);
-            setState(() {
-
-            });
+            setState(() {});
           },
         ),
         SliverToBoxAdapter(child: SizedBox(height: 6.h)),
@@ -117,9 +113,7 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
           isSelected: widget.allowsStudents ?? false,
           onChangeVoid: () {
             widget.allowsStudents = !(widget.allowsStudents ?? false);
-            setState(() {
-
-            });
+            setState(() {});
           },
         ),
         SliverToBoxAdapter(child: SizedBox(height: 6.h)),
@@ -140,9 +134,7 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
           isSelected: widget.allowsWorkers ?? false,
           onChangeVoid: () {
             widget.allowsWorkers = !(widget.allowsWorkers ?? false);
-            setState(() {
-
-            });
+            setState(() {});
           },
         ),
         SliverToBoxAdapter(child: SizedBox(height: 6.h)),
@@ -171,94 +163,53 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
             }
           },
           builder: (context, state) {
-            bool isLoading = state is ApartmentFilterLoading ||
-                state is RoomsFilterLoading;
-            return ApplyButtonSliver(
-              onPressed: () async {
-                // Start debug logs
-                log('========================================',
-                    name: 'APPLY_FILTER');
-                log('🔘 APPLY BUTTON PRESSED', name: 'APPLY_FILTER');
-                log('Filter Type: ${widget.filterType}', name: 'APPLY_FILTER');
-
-                // Log current filter values
-                log('📋 Current filter values:', name: 'APPLY_FILTER');
-                log('  - allowsFamilies: ${widget.allowsFamilies}',
-                    name: 'APPLY_FILTER');
-                log('  - allowsChildren: ${widget.allowsChildren}',
-                    name: 'APPLY_FILTER');
-                log('  - allowsStudents: ${widget.allowsStudents}',
-                    name: 'APPLY_FILTER');
-                log('  - allowsWorkers: ${widget.allowsWorkers}',
-                    name: 'APPLY_FILTER');
-                log('  - studentGender: ${widget.studentGender}',
-                    name: 'APPLY_FILTER');
-                log('  - workerGender: ${widget.workerGender}',
-                    name: 'APPLY_FILTER');
-
-                // Log what will be sent
-                log('📤 Sending to API:', name: 'APPLY_FILTER');
-                log('  - allowsFamilies: ${widget.allowsFamilies}',
-                    name: 'APPLY_FILTER');
-                log('  - allowsChildren: ${widget.allowsChildren}',
-                    name: 'APPLY_FILTER');
-                log('  - allowsStudents: ${widget.allowsStudents}',
-                    name: 'APPLY_FILTER');
-                log('  - allowsWorkers: ${widget.allowsWorkers}',
-                    name: 'APPLY_FILTER');
-                log('  - studentGender: ${(widget.allowsStudents ?? false)
-                    ? widget.studentGender
-                    : null}', name: 'APPLY_FILTER');
-                log('  - workerGender: ${(widget.allowsWorkers ?? false)
-                    ? widget.workerGender
-                    : null}', name: 'APPLY_FILTER');
-
-                log('⏳ Calling cubit.update...', name: 'APPLY_FILTER');
-                final stopwatch = Stopwatch()
-                  ..start();
-
-                try {
-                  if (widget.filterType == FilterTypeProperty.apartment) {
-                    log('🏢 Updating APARTMENT filters', name: 'APPLY_FILTER');
-                    await cubit.updateApartmentFilter(
-                      allowsFamilies: widget.allowsFamilies,
-                      allowsChildren: widget.allowsChildren,
-                      allowsStudents: widget.allowsStudents,
-                      allowsWorkers: widget.allowsWorkers,
-                      studentGender: (widget.allowsStudents ?? false) ? widget
-                          .studentGender : null,
-                      workerGender: (widget.allowsWorkers ?? false) ? widget
-                          .workerGender : null,
-                    );
-                  } else {
-                    log('🛏️ Updating ROOMS filters', name: 'APPLY_FILTER');
-                    await cubit.updateRoomsFilter(
-                      allowsFamilies: widget.allowsFamilies,
-                      allowsChildren: widget.allowsChildren,
-                      allowsStudents: widget.allowsStudents,
-                      allowsWorkers: widget.allowsWorkers,
-                      studentGender: (widget.allowsStudents ?? false) ? widget
-                          .studentGender : null,
-                      workerGender: (widget.allowsWorkers ?? false) ? widget
-                          .workerGender : null,
-                    );
+            bool isLoading =
+                state is ApartmentFilterLoading || state is RoomsFilterLoading;
+            return SliverToBoxAdapter(
+              child: ApplyButton(
+                onPressed: () async {
+                  try {
+                    if (widget.filterType == PropertyType.apartment) {
+                      bool reset =
+                          (widget.allowsStudents == false) ||
+                          (widget.allowsFamilies == false) ||
+                          (widget.allowsWorkers == false) ||
+                          (widget.allowsChildren == false);
+                      reset ? cubit.resetApartmentFilters()
+                          : await cubit.updateApartmentFilter(
+                              allowsFamilies: widget.allowsFamilies,
+                              allowsChildren: widget.allowsChildren,
+                              allowsStudents: widget.allowsStudents,
+                              allowsWorkers: widget.allowsWorkers,
+                              studentGender: (widget.allowsStudents ?? false)
+                                  ? widget.studentGender
+                                  : null,
+                              workerGender: (widget.allowsWorkers ?? false)
+                                  ? widget.workerGender
+                                  : null,
+                            );
+                    } else {
+                      await cubit.updateRoomsFilter(
+                        allowsFamilies: widget.allowsFamilies,
+                        allowsChildren: widget.allowsChildren,
+                        allowsStudents: widget.allowsStudents,
+                        allowsWorkers: widget.allowsWorkers,
+                        studentGender: (widget.allowsStudents ?? false)
+                            ? widget.studentGender
+                            : null,
+                        workerGender: (widget.allowsWorkers ?? false)
+                            ? widget.workerGender
+                            : null,
+                      );
+                    }
+                    if (mounted) context.pop();
+                  } catch (e, stackTrace) {
+              
+                    rethrow;
                   }
-
-                  stopwatch.stop();
-                  log('✅ Filter update COMPLETED in ${stopwatch
-                      .elapsedMilliseconds}ms', name: 'APPLY_FILTER');
-                  log('========================================',
-                      name: 'APPLY_FILTER');
-                  if (mounted) context.pop();
-                } catch (e, stackTrace) {
-                  log('❌ ERROR in filter update: $e', name: 'APPLY_FILTER',
-                      error: e,
-                      stackTrace: stackTrace);
-                  log('========================================',
-                      name: 'APPLY_FILTER');
-                  rethrow;
-                }
-              }, isLoading: isLoading,
+                },
+                isLoading: isLoading,
+              ),
             );
           },
         ),
