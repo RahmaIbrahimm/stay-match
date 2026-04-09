@@ -2,14 +2,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:stay_match/Features/apartments/presentation/widgets/apartment_details/apartment_details_helper.dart';
+import 'package:stay_match/Features/google_maps/presentation/widgets/maps_helper.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
+import 'package:stay_match/core/routing/app_routing.dart';
 import 'package:stay_match/core/widgets/custom_elevated_button.dart';
 import 'package:stay_match/core/widgets/location_row.dart';
-import 'package:stay_match/Features/apartments/presentation/widgets/apartment_details/apartment_details_helper.dart';
 
 import '../../../../../core/widgets/amenities_widget.dart';
+import '../../../../google_maps/presentation/views/google_maps_view.dart';
 import '../../../data/models/apartment_details_response.dart';
 import '../../manager/apartment_details_cubit.dart';
 import 'apartment_about_sliver.dart';
@@ -32,7 +37,7 @@ class ApartmentDetailsViewBody extends StatefulWidget {
 class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
   String? allowedStudentTenantGender;
   late final ValueNotifier<int> currentPic;
-
+  GoogleMapController? controller;
   @override
   void initState() {
     super.initState();
@@ -45,6 +50,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
     // TODO: implement dispose
     super.dispose();
     currentPic.dispose();
+    controller?.dispose();
   }
 
   @override
@@ -403,6 +409,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
               SliverToBoxAdapter(child: SizedBox(height: 16)),
               ApartmentAboutSliver(details: details),
               SliverToBoxAdapter(child: SizedBox(height: 16)),
+              // amenities  title
               SliverToBoxAdapter(
                 child: RPadding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
@@ -415,6 +422,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                 ),
               ),
               AmenitiesWidget(amenities: amenities),
+              // where you'll be title
               SliverToBoxAdapter(
                 child: RPadding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
@@ -426,8 +434,41 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                   ),
                 ),
               ),
-              _buildButtons(),
-              SliverFillRemaining(),
+              SliverToBoxAdapter(child: SizedBox(height: 10.h,),),
+              SliverToBoxAdapter(
+                child: GestureDetector(
+                  onTap: () {
+                    if (context.canPop()) context.pushNamed(AppRouting.googleMapsViewName);
+                  },
+                  onLongPress: () {
+                    if (context.canPop()) context.pushNamed(AppRouting.googleMapsViewName);
+                  },
+                  child: RPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: SizedBox(
+                      height: 180.h,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16.r),
+                        child: GoogleMapsView(
+                          initialLatitude: details.latitude,
+                          initialLongitude: details.longitude,
+                          mapView: MapViewType.partialView,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(height: 24.h),
+                    _buildButtons(),
+                  ],
+                ),
+              ),
             ],
           );
         }
@@ -467,10 +508,9 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
     );
   }
 
-  SliverToBoxAdapter _buildButtons() {
-    return SliverToBoxAdapter(
-      child: RPadding(
-        padding: const EdgeInsets.all(16),
+  RPadding _buildButtons() {
+    return RPadding(
+      padding: const EdgeInsets.all(16),
         child: Row(
           children: [
             Flexible(
@@ -502,7 +542,6 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
             ),
           ],
         ),
-      ),
     );
   }
 
