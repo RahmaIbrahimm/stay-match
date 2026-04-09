@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 import '../../data/models/apartment_details_response.dart';
 import '../../data/repos/apartment_repo.dart';
