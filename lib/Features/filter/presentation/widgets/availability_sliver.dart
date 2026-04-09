@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:stay_match/Features/filter/data/models/apartment_filter_params.dart';
-import 'package:stay_match/Features/filter/data/models/rooms_filter_params.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
@@ -9,12 +7,11 @@ import '../../../../core/widgets/custom_toggle_switch.dart';
 import 'filter_helper.dart';
 
 class AvailabilitySliver extends StatelessWidget {
-  const AvailabilitySliver({super.key, required this.current, required this.filterType});
-  final PropertyType filterType;
+  const AvailabilitySliver({super.key, required this.current, required this.propertyType});
+  final PropertyType propertyType;
   final bool current;
   @override
   Widget build(BuildContext context) {
-    // var _tempFilters = filterType == FilterType.apartment ? ApartmentFilterParams() : RoomsFilterParams();
     return SliverToBoxAdapter(
       child: RPadding(
         padding: const EdgeInsets.all(16.0),
@@ -40,7 +37,7 @@ class AvailabilitySliver extends StatelessWidget {
               ),
             ),
             // todo: implement filtering for availability
-            CustomToggleSwitch(onTap: () {},current:current),
+            CustomToggleSwitch(onTap: () {}, current: current),
           ],
         ),
       ),

@@ -16,4 +16,6 @@ abstract class Endpoints {
   // client ids uses for google login
   static const String webClientId= '936135595361-tkjd357n4h18pd6pc4pfoch6rto0vlh5.apps.googleusercontent.com';
   static const String androidClientId= '936135595361-h3462ve7821dq8hcqamq5f3i632qruf9.apps.googleusercontent.com';
+  static const String mapsApiKey = 'AIzaSyBwB2ppYr6L3eXhGoRaql8iNdxIjTzvT3g';
+  static const String placesApiKey = 'AIzaSyD3WRKYi-q6lImsJKkUcZ5uU07vfYEWq2M';
 }

@@ -46,6 +46,7 @@ class FilterBottomSheetAppBar extends StatelessWidget {
             propertyType == PropertyType.apartment
                 ? context.read<FilterCubit>().resetApartmentFilters()
                 : context.read<FilterCubit>().resetRoomsFilters();
+            if (context.canPop()) context.pop();
           },
           text: 'Reset',
           isUnderlined: false,

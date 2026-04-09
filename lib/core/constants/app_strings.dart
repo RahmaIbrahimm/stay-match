@@ -144,4 +144,22 @@ static const roomDetails = 'Room Details';
   // where
   static const String selectCity = 'Select City';
   static const String selectGovernorate = 'Select Governorate';
+
+  // when
+  static const List<String> weekDayLabels = [
+    'SUN',
+    'MON',
+    'TUE',
+    'WED',
+    'THU',
+    'FRI',
+    'SAT'
+  ];
+  static const checkOut = 'Checkout';
+  static const addMonths = 'add Months';
+  static const theCheckInDateCantBeEmpty = 'the Check in date can\'t be empty';
+  static const male = 'Male';
+  static const female = 'Female';
+  static const confirm = 'Confirm';
+
 }

@@ -1,95 +1,147 @@
+//
+// import 'package:flutter/material.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:stay_match/core/constants/app_strings.dart';
+//
+// import '../../../../core/constants/app_colors.dart';
+// import '../../../../core/constants/app_styles.dart';
+//
+// enum PropertyType { apartment, room }
+// enum FilterTypeGender { student, worker }
+// enum FilterType{
+//   who,
+//   where,
+//   when
+// }
+// typedef OnFiltersChanged =
+//     void Function({
+//       bool? allowsFamilies,
+//       bool? allowsChildren,
+//       bool? allowsStudents,
+//       String? studentGender,
+//       bool? allowsWorkers,
+//       String? workerGender,
+//       bool? onlyAvailable,
+//       PropertyType? filterType,
+//     });
+// typedef OnChangeGender = void Function(String? value);
+// typedef OnChangedBool = void Function(bool? value);
+// class FilterHelper {
+//   static void _showDateRequiredSnackBar(BuildContext context) {
+//     final messenger = ScaffoldMessenger.maybeOf(context);
+//     if (messenger == null) {
+//       return;
+//     }
+//
+//     messenger
+//       ..clearSnackBars()
+//       ..showSnackBar(
+//         SnackBar(
+//           behavior: SnackBarBehavior.floating,
+//           margin: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 24.h),
+//           shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.circular(16.r),
+//           ),
+//           elevation: 6,
+//           content: Text(
+//             AppStrings.theCheckInDateCantBeEmpty,
+//             style: AppStyles.medium14poppins.copyWith(
+//               color: AppColors.textColorWhite,
+//             ),
+//           ),
+//         ),
+//       );
+//   }
+// }
+//
+//
+//
+//
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stay_match/core/constants/app_strings.dart';
+import 'package:intl/intl.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_styles.dart';
 
 enum PropertyType { apartment, room }
-
 enum FilterTypeGender { student, worker }
-enum FilterType{
+enum FilterType {
   who,
   where,
   when
 }
-typedef OnFiltersChanged =
-    void Function({
-      bool? allowsFamilies,
-      bool? allowsChildren,
-      bool? allowsStudents,
-      String? studentGender,
-      bool? allowsWorkers,
-      String? workerGender,
-      bool? onlyAvailable,
-      PropertyType? filterType,
-    });
+
+typedef OnFiltersChanged = void Function({
+bool? allowsFamilies,
+bool? allowsChildren,
+bool? allowsStudents,
+String? studentGender,
+bool? allowsWorkers,
+String? workerGender,
+bool? onlyAvailable,
+PropertyType? filterType,
+});
+
 typedef OnChangeGender = void Function(String? value);
 typedef OnChangedBool = void Function(bool? value);
-typedef OnFilterTypeChanged = void Function(PropertyType value);
 
-class FilterWidget extends StatelessWidget {
-  final bool? allowsFamilies;
-  final bool? allowsChildren;
-  final bool? allowsStudents;
-  final String? studentGender;
-  final bool? allowsWorkers;
-  final String? workerGender;
-  final bool? onlyAvailable;
-  final PropertyType filterType;
+class FilterHelper {
+  static void showDateRequiredSnackBar(BuildContext context) {
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    if (messenger == null) {
+      return;
+    }
 
-  // Individual callbacks
-  final OnFilterTypeChanged? onFilterTypeChanged;
-
-  // Combined callback
-  final OnFiltersChanged? onFiltersChanged;
-
-  const FilterWidget({
-    super.key,
-    this.allowsFamilies,
-    this.allowsChildren,
-    this.allowsStudents,
-    this.studentGender,
-    this.allowsWorkers,
-    this.workerGender,
-    this.onlyAvailable,
-    required this.filterType,
-    this.onFilterTypeChanged,
-    this.onFiltersChanged,
-  });
-
-  void _notifyChanges({
-    bool? allowsFamilies,
-    bool? allowsChildren,
-    bool? allowsStudents,
-    String? studentGender,
-    bool? allowsWorkers,
-    String? workerGender,
-    bool? onlyAvailable,
-    PropertyType? filterType,
-  }) {
-    // Call individual callbacks
-    if (filterType != null) onFilterTypeChanged?.call(filterType);
-
-    // Call combined callback with all values
-    onFiltersChanged?.call(
-      allowsFamilies: allowsFamilies ?? this.allowsFamilies,
-      allowsChildren: allowsChildren ?? this.allowsChildren,
-      allowsStudents: allowsStudents ?? this.allowsStudents,
-      studentGender: studentGender ?? this.studentGender,
-      allowsWorkers: allowsWorkers ?? this.allowsWorkers,
-      workerGender: workerGender ?? this.workerGender,
-      onlyAvailable: onlyAvailable ?? this.onlyAvailable,
-      filterType: filterType ?? this.filterType,
-    );
+    messenger
+      ..clearSnackBars()
+      ..showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 24.h),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          elevation: 6,
+          content: Text(
+            AppStrings.theCheckInDateCantBeEmpty,
+            style: AppStyles.medium14poppins.copyWith(
+              color: AppColors.textColorWhite,
+            ),
+          ),
+        ),
+      );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Example usage
-        Switch(
-          value: allowsFamilies ?? false,
-          onChanged: (value) => _notifyChanges(allowsFamilies: value),
-        ),
-        // ... rest of your UI
-      ],
+
+  static String formatDate(dynamic value) {
+    if (value == null) return '';
+    if (value is DateTime) {
+      return DateFormat('yyyy-MM-dd').format(value);
+    }
+    if (value is String) {
+      final parsed = DateTime.tryParse(value);
+      if (parsed != null) {
+        return DateFormat('yyyy-MM-dd').format(parsed);
+      }
+      return value; // fallback if backend returns non-ISO string
+    }
+    return value.toString();
+  }
+
+  // Extracted from repeated bottom sheet code
+  static void showFilterBottomSheet({
+    required BuildContext context,
+    required Widget Function(BuildContext) builder,
+  }) {
+    Scaffold.of(context).showBottomSheet(
+      backgroundColor: AppColors.containerColor,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder,
     );
   }
 }

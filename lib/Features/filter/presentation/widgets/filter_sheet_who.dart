@@ -141,7 +141,7 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
         // availability and switch
         AvailabilitySliver(
           current: widget.onlyAvailable ?? true,
-          filterType: widget.filterType,
+          propertyType: widget.filterType,
         ),
         // Apply button
         SliverToBoxAdapter(child: SizedBox(height: 24.h)),

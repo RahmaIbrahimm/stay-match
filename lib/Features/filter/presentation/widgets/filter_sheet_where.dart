@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:stay_match/Features/filter/data/models/location_model.dart';
 import 'package:stay_match/Features/filter/presentation/manager/location_cubit.dart';
 import 'package:stay_match/Features/filter/presentation/widgets/filter_bottom_sheet_app_bar.dart';
@@ -9,6 +14,7 @@ import 'package:stay_match/Features/filter/presentation/widgets/filter_helper.da
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
+import 'package:stay_match/core/routing/app_routing.dart';
 import 'package:stay_match/core/widgets/custom_drop_down_menu.dart';
 
 import '../manager/filter_cubit.dart';
@@ -26,7 +32,8 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
 
   Governorate? selectedGovernorate;
   City? selectedCity;
-
+  bool isLoading = false;
+  LatLng? selectedMapLocation;
   @override
   void initState() {
     super.initState();
@@ -79,7 +86,6 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
             ),
           );
         }
-
         // Success - Governorates Loaded
         if (state is GovernoratesLoadedState) {
           final governorates = state.governorates;
@@ -90,7 +96,6 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
                 propertyType: PropertyType.apartment,
                 filterType: FilterType.where,
               ),
-
               // Governorate Dropdown
               SliverToBoxAdapter(
                   child: RPadding(
@@ -125,7 +130,6 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
                         ]
                     ),)
               ),
-
               // City Dropdown
               if (selectedGovernorate != null)
                 SliverToBoxAdapter(
@@ -162,27 +166,162 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
               SliverFillRemaining(
                 hasScrollBody: false,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Spacer(),
+                    //todo: use current location
+                    GestureDetector(
+                      onTap: () async {
+                        // Get current location first
+                        Position position = await Geolocator
+                            .getCurrentPosition();
+                        final result = LatLng(
+                            position.latitude, position.longitude);
+
+                        setState(() {
+                          selectedMapLocation = result;
+                          selectedGovernorate = null;
+                          selectedCity = null;
+                        });
+                      },
+                      child: RPadding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: AppColors.primary.withValues(
+                                  alpha: 0.1),
+                              child: Icon(
+                                FontAwesome.location_arrow_solid, size: 15
+                                  .sp, color: AppColors.primary,),
+                            ),
+                            SizedBox(width: 12.w,),
+                            RichText(text: TextSpan(children: [
+                              TextSpan(text: 'Use Current Location',
+                                  style: AppStyles.semiBold14poppins.copyWith(
+                                      color: AppColors.textColorPrimary)),
+                              TextSpan(text: '\nFind Properties near you',
+                                  style: AppStyles.regular12poppins.copyWith(
+                                      color: AppColors.textColorSecondary))
+                            ]))
+                          ],
+                        ),
+                      ),
+                    ),
+                    // choose location on the map
+                    GestureDetector(
+                      onTap: () async {
+                        final result = await context.pushNamed(
+                          AppRouting.googleMapsViewName,
+                        );
+                        if (result is LatLng) {
+                          setState(() {
+                            selectedMapLocation = result;
+                            selectedGovernorate = null;
+                            selectedCity = null;
+                          });
+                        }
+                      },
+                      child: RPadding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: AppColors.primary.withValues(
+                                  alpha: 0.1),
+                              child: Icon(
+                                Icons.map_outlined, size: 18
+                                  .sp, color: AppColors.primary,),
+                            ),
+                            SizedBox(width: 12.w,),
+                            RichText(text: TextSpan(children: [
+                              TextSpan(text: 'Pick on Map',
+                                  style: AppStyles.semiBold14poppins.copyWith(
+                                      color: AppColors.textColorPrimary)),
+                              TextSpan(text: '\nBrowse visually on the map',
+                                  style: AppStyles.regular12poppins.copyWith(
+                                      color: AppColors.textColorSecondary))
+                            ]))
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 24.h,),
                     ApplyButton(
                       onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+
+                        // Handle map location selection
+                        if (selectedMapLocation != null) {
+                          log('📍 Applying map location: ${selectedMapLocation!
+                              .latitude}, ${selectedMapLocation!.longitude}');
+
+                          if (widget.propertyType == PropertyType.apartment) {
+                            await context
+                                .read<FilterCubit>()
+                                .updateApartmentFilter(
+                              userLat: selectedMapLocation!.latitude,
+                              userLng: selectedMapLocation!.longitude,
+                              government: null,
+                              forceRefresh: true,
+                            );
+                          } else {
+                            await context.read<FilterCubit>().updateRoomsFilter(
+                              userLat: selectedMapLocation!.latitude,
+                              userLng: selectedMapLocation!.longitude,
+                              government: null,
+                              forceRefresh: true,
+                            );
+                          }
+
+                          setState(() {
+                            isLoading = false;
+                          });
+
+                          if (context.canPop()) context.pop();
+                          return;
+                        }
+
+                        // Handle governorate/city selection
                         if (selectedCity != null &&
                             selectedGovernorate != null) {
-                          widget.propertyType == PropertyType.apartment
-                              ? await context
-                              .read<FilterCubit>()
-                              .updateApartmentLocation(city: selectedCity!,
-                              government: selectedGovernorate!)
-                              : await context
-                              .read<FilterCubit>()
-                              .updateRoomsLocation(
+                          log('📍 Applying city/governorate: ${selectedCity!
+                              .nameInEnglish}, ${selectedGovernorate!
+                              .nameInEnglish}');
+
+                          if (widget.propertyType == PropertyType.apartment) {
+                            await context
+                                .read<FilterCubit>()
+                                .updateApartmentLocation(
+                              city: selectedCity!,
                               government: selectedGovernorate!,
-                              city: selectedCity!);
+                            );
+                          } else {
+                            await context
+                                .read<FilterCubit>()
+                                .updateRoomsLocation(
+                              government: selectedGovernorate!,
+                              city: selectedCity!,
+                            );
+                          }
+
+                          setState(() {
+                            isLoading = false;
+                          });
+
+                          if (context.canPop()) context.pop();
+                          return;
                         }
-                        if (context.canPop()) context.pop();
-                        // Your logic
+
+                        setState(() {
+                          isLoading = false;
+                        });
                       },
-                    ),
+                      isLoading: isLoading,
+                    )
                   ],
                 ),
               ),

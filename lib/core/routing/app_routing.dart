@@ -166,10 +166,12 @@
 // }
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stay_match/core/widgets/layout_scaffold.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stay_match/Features/auth/presentation/reset_password/presentation/views/reset_password_view.dart';
+import 'package:stay_match/Features/google_maps/presentation/views/google_maps_view.dart';
 import 'package:stay_match/Features/home/presentation/views/home_view.dart';
 import 'package:stay_match/Features/profile/presentation/views/profile_view.dart';
+import 'package:stay_match/core/widgets/layout_scaffold.dart';
 
 import '../../Features/apartments/presentation/views/apartment_details_view.dart';
 import '../../Features/apartments/presentation/views/find_apartment_view.dart';
@@ -196,6 +198,8 @@ class AppRouting {
   static const verifyEmailViewName = 'verifyEmail';
   static const resetPasswordViewName = 'resetPassword';
 
+  // google maps
+  static const googleMapsView = '/google-maps';
   // =========== main app routes ==============
   static const homeView = '/home';
   static const profileView = '/profile';
@@ -205,6 +209,7 @@ class AppRouting {
   static const roomDetailsView = 'room-details/:id';
   static const findApartmentView = 'find-apartment';
   static const apartmentDetailsView = 'apartment-details/:id';
+  static const mapBody = '/mapBody';
 
   //main app names
   static const homeViewName = 'home';
@@ -213,7 +218,8 @@ class AppRouting {
   static const roomDetailsViewName = 'roomDetails';
   static const findApartmentViewName = 'findApartment';
   static const apartmentDetailsViewName = 'apartmentDetails';
-
+  static const googleMapsViewName = 'googleMaps';
+  static const mapName = 'map';
   static final router = GoRouter(
     navigatorKey: rootNavKey,
     initialLocation: loginView,
@@ -244,7 +250,30 @@ class AppRouting {
         name: resetPasswordViewName,
         builder: (context, state) => const ResetPasswordView(),
       ),
+      // google maps
+      GoRoute(
+        path: googleMapsView,
+        name: googleMapsViewName,
+        builder: (context, state) =>  GoogleMapsView(),),
+      GoRoute(
+        path: mapBody,
+        builder: (context, state) {
+          final latitudeStr = state.uri.queryParameters['latitude'];
+          final longitudeStr = state.uri.queryParameters['longitude'];
 
+          final latitude = latitudeStr != null ? double.tryParse(latitudeStr) : null;
+          final longitude = longitudeStr != null ? double.tryParse(longitudeStr) : null;
+
+          // Get onLocationSelected callback from extra (optional)
+          final onLocationSelected = state.extra as void Function(LatLng)?;
+
+          return GoogleMapsView(
+            initialLatitude: latitude,
+            initialLongitude: longitude,
+            onLocationSelected: onLocationSelected,
+          );
+        },
+      ),
       // MAIN APP SHELL - protected routes
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
