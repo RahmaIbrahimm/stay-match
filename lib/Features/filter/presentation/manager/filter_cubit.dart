@@ -57,8 +57,21 @@ class FilterCubit extends Cubit<FilterState> {
     num? pageSize,
     bool forceRefresh = false,
   }) async {
-    log('Updating apartment filters: orderByOldest=$orderByOldest, government=$government');
-
+    if (start != null) log('🏢 Apartment | start: $start');
+    if (monthsCount != null) log('🏢 Apartment | monthsCount: $monthsCount');
+    if (government != null) log('🏢 Apartment | government: $government');
+    if (allowsFamilies != null) log('🏢 Apartment | allowsFamilies: $allowsFamilies');
+    if (allowsChildren != null) log('🏢 Apartment | allowsChildren: $allowsChildren');
+    if (allowsStudents != null) log('🏢 Apartment | allowsStudents: $allowsStudents');
+    if (allowsWorkers != null) log('🏢 Apartment | allowsWorkers: $allowsWorkers');
+    if (studentGender != null) log('🏢 Apartment | studentGender: $studentGender');
+    if (workerGender != null) log('🏢 Apartment | workerGender: $workerGender');
+    if (userLat != null) log('🏢 Apartment | userLat: $userLat');
+    if (userLng != null) log('🏢 Apartment | userLng: $userLng');
+    if (orderByOldest != null) log('🏢 Apartment | orderByOldest: $orderByOldest');
+    if (onlyAvailable != null) log('🏢 Apartment | onlyAvailable: $onlyAvailable');
+    if (page != null) log('🏢 Apartment | page: $page');
+    if (pageSize != null) log('🏢 Apartment | pageSize: $pageSize');
     _currentApartmentFilters = _currentApartmentFilters.copyWith(
       start: start,
       monthsCount: monthsCount,
@@ -93,12 +106,12 @@ class FilterCubit extends Cubit<FilterState> {
     );
   }
   // location update
-  Future<void> updateApartmentLocation({required Governorate government,required City city}) async {
-    log('📍 apartment location updated: ${city.nameInEnglish} (lat: ${city.latitude}, lng: ${city.longitude})');
+  Future<void> updateApartmentLocation({required Governorate? government,required City? city}) async {
+    log('📍 apartment location updated: ${city?.nameInEnglish} (lat: ${city?.latitude}, lng: ${city?.longitude})');
     await updateApartmentFilter(
-      government: government.nameInEnglish,
-      userLat: city.latitude,
-      userLng: city.longitude,
+      government: government?.nameInEnglish,
+      userLat: city?.latitude,
+      userLng: city?.longitude,
       forceRefresh: true,
     );
   }
@@ -106,9 +119,6 @@ class FilterCubit extends Cubit<FilterState> {
   Future<void> _getAllApartmentsWithFilters({
     bool forceRefresh = false,
   }) async {
-    log('Getting apartments with filters: orderByOldest=${_currentApartmentFilters.orderByOldest}, '
-        'government=${_currentApartmentFilters.government}, '
-        'page=${_currentApartmentFilters.page}');
 
     if (!forceRefresh &&
         _apartmentCachedResponse != null &&
@@ -196,8 +206,22 @@ class FilterCubit extends Cubit<FilterState> {
     num? pageSize,
     bool forceRefresh = false,
   }) async {
-    log('Updating rooms filters: orderByOldest=$orderByOldest, government=$government');
-
+// Add this at the beginning of updateRoomsFilter method
+    if (start != null) log('🚪 Rooms | start: $start');
+    if (monthsCount != null) log('🚪 Rooms | monthsCount: $monthsCount');
+    if (government != null) log('🚪 Rooms | government: $government');
+    if (allowsFamilies != null) log('🚪 Rooms | allowsFamilies: $allowsFamilies');
+    if (allowsChildren != null) log('🚪 Rooms | allowsChildren: $allowsChildren');
+    if (allowsStudents != null) log('🚪 Rooms | allowsStudents: $allowsStudents');
+    if (allowsWorkers != null) log('🚪 Rooms | allowsWorkers: $allowsWorkers');
+    if (workerGender != null) log('🚪 Rooms | workerGender: $workerGender');
+    if (studentGender != null) log('🚪 Rooms | studentGender: $studentGender');
+    if (userLat != null) log('🚪 Rooms | userLat: $userLat');
+    if (userLng != null) log('🚪 Rooms | userLng: $userLng');
+    if (orderByOldest != null) log('🚪 Rooms | orderByOldest: $orderByOldest');
+    if (onlyAvailable != null) log('🚪 Rooms | onlyAvailable: $onlyAvailable');
+    if (page != null) log('🚪 Rooms | page: $page');
+    if (pageSize != null) log('🚪 Rooms | pageSize: $pageSize');
     _currentRoomsFilters = _currentRoomsFilters.copyWith(
       start: start,
       monthsCount: monthsCount,
@@ -223,12 +247,12 @@ class FilterCubit extends Cubit<FilterState> {
       forceRefresh: forceRefresh || filtersChanged,
     );
   }
-  Future<void> updateRoomsLocation({required Governorate government,required City city}) async {
-    log('📍 Rooms location updated: ${city.nameInEnglish} (lat: ${city.latitude}, lng: ${city.longitude})');
+  Future<void> updateRoomsLocation({required Governorate? government,required City? city}) async {
+    log('📍 Rooms location updated: ${city?.nameInEnglish} (lat: ${city?.latitude}, lng: ${city?.longitude})');
     await updateRoomsFilter(
-      government: government.nameInEnglish,
-      userLat: city.latitude,
-      userLng: city.longitude,
+      government: government?.nameInEnglish,
+      userLat: city?.latitude,
+      userLng: city?.longitude,
       forceRefresh: true,
     );
   }
