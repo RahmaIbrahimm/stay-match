@@ -7,7 +7,7 @@ import 'package:stay_match/core/utils/service_locator.dart';
 import '../../../shared/widgets/details_view_app_bar.dart';
 import '../../data/repos/apartment_repo_impl.dart';
 import '../manager/apartment_details_cubit.dart';
-import '../widgets/apartment_details/apartmentDetailsViewBody.dart';
+import '../widgets/apartment_details/apartment_details_view_body.dart';
 
 class ApartmentDetailsView extends StatelessWidget {
   const ApartmentDetailsView({super.key, required this.id});
