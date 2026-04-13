@@ -12,5 +12,8 @@ abstract class AppImages {
 
   // home
   static const homeHeader = '$path/home_header_pic.png';
+  // addProperty
+  static const addPropertyImg = '$path/add_apartment_img.png';
+  static const addRoomImg = '$path/add_room_img.png';
 
 }
