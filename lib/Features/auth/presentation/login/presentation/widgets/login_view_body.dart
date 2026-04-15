@@ -14,7 +14,7 @@ class LoginViewBody extends StatelessWidget {
         LoginViewHeader(),
         const SizedBox(height: 20),
         Expanded(
-          child: CustomBottomSheet(sheetBody: LoginViewBodyBottomSheet())
+          child: CustomBottomSheet(sheetBody: LoginViewBodyBottomSheet()),
         ),
       ],
     );

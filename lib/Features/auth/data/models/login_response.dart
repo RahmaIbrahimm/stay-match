@@ -43,7 +43,8 @@ class LoginData {
   final String? userId;
 
   LoginData(
-    this.token, this.refreshToken,{
+    this.token,
+    this.refreshToken, {
     this.expiration,
     this.email,
     this.displayName,
@@ -56,7 +57,7 @@ class LoginData {
       email = json['email'] as String?,
       displayName = json['displayName'] as String?,
       userId = json['userId'] as String?,
-        refreshToken = json['refreshToken'] ?? '';
+      refreshToken = json['refreshToken'] ?? '';
 
   Map<String, dynamic> toJson() {
     return {

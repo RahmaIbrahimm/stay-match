@@ -4,26 +4,25 @@
 
 import 'dart:convert';
 
-RoomDetailsResponse roomDetailsResponseFromJson(String str) => RoomDetailsResponse.fromJson(json.decode(str));
+RoomDetailsResponse roomDetailsResponseFromJson(String str) =>
+    RoomDetailsResponse.fromJson(json.decode(str));
 
-String roomDetailsResponseToJson(RoomDetailsResponse data) => json.encode(data.toJson());
+String roomDetailsResponseToJson(RoomDetailsResponse data) =>
+    json.encode(data.toJson());
 
 class RoomDetailsResponse {
   final bool? isSuccess;
   final String? message;
   final RoomData? data;
 
-  RoomDetailsResponse({
-    this.isSuccess,
-    this.message,
-    this.data,
-  });
+  RoomDetailsResponse({this.isSuccess, this.message, this.data});
 
-  factory RoomDetailsResponse.fromJson(Map<String, dynamic> json) => RoomDetailsResponse(
-    isSuccess: json["isSuccess"],
-    message: json["message"],
-    data: json["data"] == null ? null : RoomData.fromJson(json["data"]),
-  );
+  factory RoomDetailsResponse.fromJson(Map<String, dynamic> json) =>
+      RoomDetailsResponse(
+        isSuccess: json["isSuccess"],
+        message: json["message"],
+        data: json["data"] == null ? null : RoomData.fromJson(json["data"]),
+      );
 
   Map<String, dynamic> toJson() => {
     "isSuccess": isSuccess,
@@ -102,16 +101,26 @@ class RoomData {
     deposit: json["deposit"],
     furnished: json["furnished"],
     availableFrom: json["availableFrom"],
-    allowedTenants: json["allowedTenants"] == null ? null : AllowedTenants.fromJson(json["allowedTenants"]),
-    amenities: json["amenities"] == null ? null : RoomAmenities.fromJson(json["amenities"]),
-    nearbyServices: json["nearbyServices"] == null ? null : NearbyServices.fromJson(json["nearbyServices"]),
+    allowedTenants: json["allowedTenants"] == null
+        ? null
+        : AllowedTenants.fromJson(json["allowedTenants"]),
+    amenities: json["amenities"] == null
+        ? null
+        : RoomAmenities.fromJson(json["amenities"]),
+    nearbyServices: json["nearbyServices"] == null
+        ? null
+        : NearbyServices.fromJson(json["nearbyServices"]),
     street: json["street"],
     city: json["city"],
     government: json["government"],
     latitude: json["latitude"]?.toDouble(),
     longitude: json["longitude"]?.toDouble(),
     size: json["size"],
-    propertyImages: json["propertyImages"] == null ? [] : List<PropertyImage>.from(json["propertyImages"]!.map((x) => PropertyImage.fromJson(x))),
+    propertyImages: json["propertyImages"] == null
+        ? []
+        : List<PropertyImage>.from(
+            json["propertyImages"]!.map((x) => PropertyImage.fromJson(x)),
+          ),
     minimumStay: json["minimumStay"],
     capacity: json["capacity"],
     capacityAvailable: json["capacityAvailable"],
@@ -120,8 +129,14 @@ class RoomData {
     balcony: json["balcony"],
     window: json["window"],
     petsAllowed: json["petsAllowed"],
-    blockedPeriods: json["blockedPeriods"] == null ? [] : List<BlockedPeriod>.from(json["blockedPeriods"]!.map((x) => BlockedPeriod.fromJson(x))),
-    beds: json["beds"] == null ? [] : List<Bed>.from(json["beds"]!.map((x) => Bed.fromJson(x))),
+    blockedPeriods: json["blockedPeriods"] == null
+        ? []
+        : List<BlockedPeriod>.from(
+            json["blockedPeriods"]!.map((x) => BlockedPeriod.fromJson(x)),
+          ),
+    beds: json["beds"] == null
+        ? []
+        : List<Bed>.from(json["beds"]!.map((x) => Bed.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -341,11 +356,7 @@ class PropertyImage {
   final String? imageUrl;
   final bool? isCover;
 
-  PropertyImage({
-    this.id,
-    this.imageUrl,
-    this.isCover,
-  });
+  PropertyImage({this.id, this.imageUrl, this.isCover});
 
   factory PropertyImage.fromJson(Map<String, dynamic> json) => PropertyImage(
     id: json["id"],
@@ -364,34 +375,27 @@ class BlockedPeriod {
   final String? from;
   final String? to;
 
-  BlockedPeriod({
-    this.from,
-    this.to,
-  });
+  BlockedPeriod({this.from, this.to});
 
-  factory BlockedPeriod.fromJson(Map<String, dynamic> json) => BlockedPeriod(
-    from: json["from"],
-    to: json["to"],
-  );
+  factory BlockedPeriod.fromJson(Map<String, dynamic> json) =>
+      BlockedPeriod(from: json["from"], to: json["to"]);
 
-  Map<String, dynamic> toJson() => {
-    "from": from,
-    "to": to,
-  };
+  Map<String, dynamic> toJson() => {"from": from, "to": to};
 }
 
 class Bed {
   final int? bedNumber;
   final List<BlockedPeriod>? blockedPeriods;
 
-  Bed({
-    this.bedNumber,
-    this.blockedPeriods,
-  });
+  Bed({this.bedNumber, this.blockedPeriods});
 
   factory Bed.fromJson(Map<String, dynamic> json) => Bed(
     bedNumber: json["bedNumber"],
-    blockedPeriods: json["blockedPeriods"] == null ? [] : List<BlockedPeriod>.from(json["blockedPeriods"]!.map((x) => BlockedPeriod.fromJson(x))),
+    blockedPeriods: json["blockedPeriods"] == null
+        ? []
+        : List<BlockedPeriod>.from(
+            json["blockedPeriods"]!.map((x) => BlockedPeriod.fromJson(x)),
+          ),
   );
 
   Map<String, dynamic> toJson() => {

@@ -2,9 +2,7 @@
 /// code : "600"
 
 class VerifyCodeRequest {
-  VerifyCodeRequest({
-      this.email, 
-      this.code,});
+  VerifyCodeRequest({this.email, this.code});
 
   VerifyCodeRequest.fromJson(dynamic json) {
     email = json['email'];
@@ -19,5 +17,4 @@ class VerifyCodeRequest {
     map['code'] = code;
     return map;
   }
-
 }

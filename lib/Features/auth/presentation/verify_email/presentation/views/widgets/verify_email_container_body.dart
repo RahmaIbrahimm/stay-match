@@ -64,7 +64,9 @@ class VerifyEmailContainerBody extends StatelessWidget {
               // TODO: implement logic Email sent to
               Text(
                 authCubit.forgetEmailController.text,
-                style: AppStyles.medium20poppins.copyWith(color: AppColors.secondary),
+                style: AppStyles.medium20poppins.copyWith(
+                  color: AppColors.secondary,
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -109,7 +111,7 @@ class VerifyEmailContainerBody extends StatelessWidget {
                   ),
                   CustomTextButton(
                     onPressed: () {
-                      if (state is SendCodeStateSuccess ) {
+                      if (state is SendCodeStateSuccess) {
                         authCubit.sendCode();
                       }
                     },

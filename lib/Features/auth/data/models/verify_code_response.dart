@@ -62,9 +62,7 @@ class VerifyData {
   VerifyData.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
   }
-  Map<String,dynamic> toJson() {
-    return {
-      'userId' : userId
-    };
+  Map<String, dynamic> toJson() {
+    return {'userId': userId};
   }
 }

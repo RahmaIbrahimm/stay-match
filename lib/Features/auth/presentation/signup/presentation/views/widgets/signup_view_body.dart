@@ -15,10 +15,13 @@ class SignUpViewBody extends StatelessWidget {
         const SizedBox(height: 45),
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: AuthHeaderText(greeting: AppStrings.signUpGreeting, title: AppStrings.signUpTitle,)
+          child: AuthHeaderText(
+            greeting: AppStrings.signUpGreeting,
+            title: AppStrings.signUpTitle,
+          ),
         ),
         const SizedBox(height: 20),
-        Expanded(child: CustomBottomSheet(sheetBody:  BottomSheetBody())),
+        Expanded(child: CustomBottomSheet(sheetBody: BottomSheetBody())),
       ],
     );
   }

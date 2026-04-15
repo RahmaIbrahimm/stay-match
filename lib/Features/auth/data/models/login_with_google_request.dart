@@ -1,8 +1,7 @@
 /// idToken : "string"
 
 class LoginWithGoogleRequest {
-  LoginWithGoogleRequest({
-      this.idToken,});
+  LoginWithGoogleRequest({this.idToken});
 
   LoginWithGoogleRequest.fromJson(dynamic json) {
     idToken = json['idToken'];
@@ -14,5 +13,4 @@ class LoginWithGoogleRequest {
     map['idToken'] = idToken;
     return map;
   }
-
 }

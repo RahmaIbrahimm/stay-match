@@ -3,10 +3,7 @@
 /// errors : {"PasswordTooShort":["Passwords must be at least 6 characters."],"PasswordRequiresNonAlphanumeric":["Passwords must have at least one non alphanumeric character."],"PasswordRequiresDigit":["Passwords must have at least one digit ('0'-'9')."],"InvalidUser":["Something went wrong."],"ConfirmPassword":["Passwords do not match."]}
 
 class ResetPasswordResponse {
-  ResetPasswordResponse({
-      this.isSuccess, 
-      this.message, 
-      this.errors,});
+  ResetPasswordResponse({this.isSuccess, this.message, this.errors});
 
   ResetPasswordResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
@@ -26,7 +23,6 @@ class ResetPasswordResponse {
     }
     return map;
   }
-
 }
 
 /// PasswordTooShort : ["Passwords must be at least 6 characters."]
@@ -37,18 +33,30 @@ class ResetPasswordResponse {
 
 class Errors {
   Errors({
-      this.passwordTooShort, 
-      this.passwordRequiresNonAlphanumeric, 
-      this.passwordRequiresDigit, 
-      this.invalidUser, 
-      this.confirmPassword,});
+    this.passwordTooShort,
+    this.passwordRequiresNonAlphanumeric,
+    this.passwordRequiresDigit,
+    this.invalidUser,
+    this.confirmPassword,
+  });
 
   Errors.fromJson(dynamic json) {
-    passwordTooShort = json['PasswordTooShort'] != null ? json['PasswordTooShort'].cast<String>() : [];
-    passwordRequiresNonAlphanumeric = json['PasswordRequiresNonAlphanumeric'] != null ? json['PasswordRequiresNonAlphanumeric'].cast<String>() : [];
-    passwordRequiresDigit = json['PasswordRequiresDigit'] != null ? json['PasswordRequiresDigit'].cast<String>() : [];
-    invalidUser = json['InvalidUser'] != null ? json['InvalidUser'].cast<String>() : [];
-    confirmPassword = json['ConfirmPassword'] != null ? json['ConfirmPassword'].cast<String>() : [];
+    passwordTooShort = json['PasswordTooShort'] != null
+        ? json['PasswordTooShort'].cast<String>()
+        : [];
+    passwordRequiresNonAlphanumeric =
+        json['PasswordRequiresNonAlphanumeric'] != null
+        ? json['PasswordRequiresNonAlphanumeric'].cast<String>()
+        : [];
+    passwordRequiresDigit = json['PasswordRequiresDigit'] != null
+        ? json['PasswordRequiresDigit'].cast<String>()
+        : [];
+    invalidUser = json['InvalidUser'] != null
+        ? json['InvalidUser'].cast<String>()
+        : [];
+    confirmPassword = json['ConfirmPassword'] != null
+        ? json['ConfirmPassword'].cast<String>()
+        : [];
   }
   List<String>? passwordTooShort;
   List<String>? passwordRequiresNonAlphanumeric;
@@ -65,5 +73,4 @@ class Errors {
     map['ConfirmPassword'] = confirmPassword;
     return map;
   }
-
 }

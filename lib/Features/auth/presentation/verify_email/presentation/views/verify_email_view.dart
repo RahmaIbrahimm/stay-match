@@ -6,8 +6,6 @@ class VerifyEmailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: const Scaffold(body: VerifyEmailViewBody()),
-    );
+    return SafeArea(child: const Scaffold(body: VerifyEmailViewBody()));
   }
 }

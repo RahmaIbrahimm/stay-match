@@ -57,7 +57,7 @@ class ResetPasswordContainerBody extends StatelessWidget {
               ),
               const SizedBox(height: 25),
               FormSection(
-                validator:(val)=>  authCubit.passwordValidator(password: val),
+                validator: (val) => authCubit.passwordValidator(password: val),
                 hintText: AppStrings.enterYourNewPass,
                 fieldTitle: AppStrings.newPassword,
                 suffixIcon: Icon(
@@ -68,7 +68,11 @@ class ResetPasswordContainerBody extends StatelessWidget {
               ),
               const SizedBox(height: 28),
               FormSection(
-                validator: (val)=>  authCubit.passwordMatchValidator(password: authCubit.resetPasswordController.text, confirmPassword: authCubit.resetConfirmPasswordController.text),
+                validator: (val) => authCubit.passwordMatchValidator(
+                  password: authCubit.resetPasswordController.text,
+                  confirmPassword:
+                      authCubit.resetConfirmPasswordController.text,
+                ),
                 hintText: AppStrings.enterYourNewPass,
                 fieldTitle: AppStrings.confirmPassword,
                 suffixIcon: Icon(

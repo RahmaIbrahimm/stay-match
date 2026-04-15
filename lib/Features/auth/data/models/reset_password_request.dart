@@ -3,10 +3,7 @@
 /// confirmPassword : "string"
 
 class ResetPasswordRequest {
-  ResetPasswordRequest({
-      this.userId, 
-      this.newPassword, 
-      this.confirmPassword,});
+  ResetPasswordRequest({this.userId, this.newPassword, this.confirmPassword});
 
   ResetPasswordRequest.fromJson(dynamic json) {
     userId = json['userId'];
@@ -24,5 +21,4 @@ class ResetPasswordRequest {
     map['confirmPassword'] = confirmPassword;
     return map;
   }
-
 }

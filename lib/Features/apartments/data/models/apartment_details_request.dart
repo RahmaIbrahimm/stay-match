@@ -2,9 +2,7 @@
 /// PropertyId : 0
 
 class ApartmentDetailsRequest {
-  ApartmentDetailsRequest({
-      this.roomid, 
-      this.propertyId,});
+  ApartmentDetailsRequest({this.roomid, this.propertyId});
 
   ApartmentDetailsRequest.fromJson(dynamic json) {
     roomid = json['Roomid'];
@@ -19,5 +17,4 @@ class ApartmentDetailsRequest {
     map['PropertyId'] = propertyId;
     return map;
   }
-
 }

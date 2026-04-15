@@ -1,8 +1,7 @@
 /// refreshToken : "string"
 
 class RefreshTokenRequest {
-  RefreshTokenRequest({
-      this.refreshToken,});
+  RefreshTokenRequest({this.refreshToken});
 
   RefreshTokenRequest.fromJson(dynamic json) {
     refreshToken = json['refreshToken'];
@@ -14,5 +13,4 @@ class RefreshTokenRequest {
     map['refreshToken'] = refreshToken;
     return map;
   }
-
 }

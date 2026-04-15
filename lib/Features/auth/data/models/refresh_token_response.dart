@@ -5,10 +5,11 @@
 
 class RefreshTokenResponse {
   RefreshTokenResponse({
-      this.isSuccess, 
-      this.message, 
-      this.token, 
-      this.refreshToken,});
+    this.isSuccess,
+    this.message,
+    this.token,
+    this.refreshToken,
+  });
 
   RefreshTokenResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
@@ -29,5 +30,4 @@ class RefreshTokenResponse {
     map['refreshToken'] = refreshToken;
     return map;
   }
-
 }

@@ -3,15 +3,14 @@
 /// data : {"id":88,"hostId":"1121c342-dd7a-4a29-bc66-c94f6aa43212","hostName":"Abanoub Yousry","name":"شقة فاخرة للإيجار بالمعادي","description":"شقة واسعة ومفروشة بالكامل تقع في منطقة هادئة قريبة من المترو والخدمات.","monthlyRent":8500,"deposite":5000,"furnished":true,"availableFrom":"2026-03-15T00:00:00","availableTo":null,"numberOfBedrooms":3,"numberOfLivingRooms":1,"numberOfEnSuiteBathrooms":1,"numberOfGuestBathrooms":1,"allowedTenants":{"allowsFamilies":false,"allowsChildren":false,"allowsStudents":true,"studentGender":"male","allowsWorkers":true,"workerGender":"male","petsAllowed":false},"amenities":{"wifi":true,"tv":true,"cooktop":true,"oven":true,"kettle":true,"dishwasher":false,"refrigerator":true,"microwave":true,"washer":true,"freeParking":true,"airConditioning":true,"smokeAlarm":true,"fireExtinguisher":false},"nearbyServices":{"hasGroceryStore":true,"hasPharmacy":true,"hasHospital":true,"hasSchool":false,"hasUniversity":true,"hasPublicTransport":true,"hasParking":true,"hasMall":true,"hasRestaurants":true,"hasPark":true,"hasGym":true,"isSafeArea":true,"hasPoliceStation":true,"isQuietArea":true,"hasChurchNearby":true,"hasMosqueNearby":true},"street":"شارع 9","city":"المعادي","government":"القاهرة","latitude":29.9602,"longitude":31.2569,"size":120,"propertyImages":[{"id":400,"imageUrl":null,"isCover":true},{"id":401,"imageUrl":null,"isCover":false}],"minimumStay":6,"distanceInKm":0,"blockedPeriods":[]}
 
 class ApartmentDetailsResponse {
-  ApartmentDetailsResponse({
-      this.isSuccess,
-      this.message,
-      this.data,});
+  ApartmentDetailsResponse({this.isSuccess, this.message, this.data});
 
   ApartmentDetailsResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? ApartmentDetailsData.fromJson(json['data']) : null;
+    data = json['data'] != null
+        ? ApartmentDetailsData.fromJson(json['data'])
+        : null;
   }
   bool? isSuccess;
   String? message;
@@ -26,7 +25,6 @@ class ApartmentDetailsResponse {
     }
     return map;
   }
-
 }
 
 /// id : 88
@@ -59,33 +57,34 @@ class ApartmentDetailsResponse {
 
 class ApartmentDetailsData {
   ApartmentDetailsData({
-      this.id,
-      this.hostId,
-      this.hostName,
-      this.name,
-      this.description,
-      this.monthlyRent,
-      this.deposite,
-      this.furnished,
-      this.availableFrom,
-      this.availableTo,
-      this.numberOfBedrooms,
-      this.numberOfLivingRooms,
-      this.numberOfEnSuiteBathrooms,
-      this.numberOfGuestBathrooms,
-      this.allowedTenants,
-      this.amenities,
-      this.nearbyServices,
-      this.street,
-      this.city,
-      this.government,
-      this.latitude,
-      this.longitude,
-      this.size,
-      this.propertyImages,
-      this.minimumStay,
-      this.distanceInKm,
-      this.blockedPeriods,});
+    this.id,
+    this.hostId,
+    this.hostName,
+    this.name,
+    this.description,
+    this.monthlyRent,
+    this.deposite,
+    this.furnished,
+    this.availableFrom,
+    this.availableTo,
+    this.numberOfBedrooms,
+    this.numberOfLivingRooms,
+    this.numberOfEnSuiteBathrooms,
+    this.numberOfGuestBathrooms,
+    this.allowedTenants,
+    this.amenities,
+    this.nearbyServices,
+    this.street,
+    this.city,
+    this.government,
+    this.latitude,
+    this.longitude,
+    this.size,
+    this.propertyImages,
+    this.minimumStay,
+    this.distanceInKm,
+    this.blockedPeriods,
+  });
 
   ApartmentDetailsData.fromJson(dynamic json) {
     id = json['id'];
@@ -102,9 +101,15 @@ class ApartmentDetailsData {
     numberOfLivingRooms = json['numberOfLivingRooms'];
     numberOfEnSuiteBathrooms = json['numberOfEnSuiteBathrooms'];
     numberOfGuestBathrooms = json['numberOfGuestBathrooms'];
-    allowedTenants = json['allowedTenants'] != null ? AllowedTenants.fromJson(json['allowedTenants']) : null;
-    amenities = json['amenities'] != null ? ApartmentAmenities.fromJson(json['amenities']) : null;
-    nearbyServices = json['nearbyServices'] != null ? NearbyServices.fromJson(json['nearbyServices']) : null;
+    allowedTenants = json['allowedTenants'] != null
+        ? AllowedTenants.fromJson(json['allowedTenants'])
+        : null;
+    amenities = json['amenities'] != null
+        ? ApartmentAmenities.fromJson(json['amenities'])
+        : null;
+    nearbyServices = json['nearbyServices'] != null
+        ? NearbyServices.fromJson(json['nearbyServices'])
+        : null;
     street = json['street'];
     city = json['city'];
     government = json['government'];
@@ -195,16 +200,13 @@ class ApartmentDetailsData {
     }
     return map;
   }
-
 }
 
 /// id : 400
 /// imageUrl : null
 /// isCover : true
 class BlockedPeriods {
-  BlockedPeriods({
-    this.from,
-    this.to,});
+  BlockedPeriods({this.from, this.to});
 
   BlockedPeriods.fromJson(dynamic json) {
     from = json['from'];
@@ -219,14 +221,10 @@ class BlockedPeriods {
     map['to'] = to;
     return map;
   }
-
 }
 
 class PropertyImages {
-  PropertyImages({
-      this.id,
-      this.imageUrl,
-      this.isCover,});
+  PropertyImages({this.id, this.imageUrl, this.isCover});
 
   PropertyImages.fromJson(dynamic json) {
     id = json['id'];
@@ -234,7 +232,7 @@ class PropertyImages {
     isCover = json['isCover'];
   }
   int? id;
-  String?imageUrl;
+  String? imageUrl;
   bool? isCover;
 
   Map<String, dynamic> toJson() {
@@ -244,7 +242,6 @@ class PropertyImages {
     map['isCover'] = isCover;
     return map;
   }
-
 }
 
 /// hasGroceryStore : true
@@ -266,22 +263,23 @@ class PropertyImages {
 
 class NearbyServices {
   NearbyServices({
-      this.hasGroceryStore,
-      this.hasPharmacy,
-      this.hasHospital,
-      this.hasSchool,
-      this.hasUniversity,
-      this.hasPublicTransport,
-      this.hasParking,
-      this.hasMall,
-      this.hasRestaurants,
-      this.hasPark,
-      this.hasGym,
-      this.isSafeArea,
-      this.hasPoliceStation,
-      this.isQuietArea,
-      this.hasChurchNearby,
-      this.hasMosqueNearby,});
+    this.hasGroceryStore,
+    this.hasPharmacy,
+    this.hasHospital,
+    this.hasSchool,
+    this.hasUniversity,
+    this.hasPublicTransport,
+    this.hasParking,
+    this.hasMall,
+    this.hasRestaurants,
+    this.hasPark,
+    this.hasGym,
+    this.isSafeArea,
+    this.hasPoliceStation,
+    this.isQuietArea,
+    this.hasChurchNearby,
+    this.hasMosqueNearby,
+  });
 
   NearbyServices.fromJson(dynamic json) {
     hasGroceryStore = json['hasGroceryStore'];
@@ -338,7 +336,6 @@ class NearbyServices {
     map['hasMosqueNearby'] = hasMosqueNearby;
     return map;
   }
-
 }
 
 /// wifi : true
@@ -357,19 +354,20 @@ class NearbyServices {
 
 class ApartmentAmenities {
   ApartmentAmenities({
-      this.wifi,
-      this.tv,
-      this.cooktop,
-      this.oven,
-      this.kettle,
-      this.dishwasher,
-      this.refrigerator,
-      this.microwave,
-      this.washer,
-      this.freeParking,
-      this.airConditioning,
-      this.smokeAlarm,
-      this.fireExtinguisher,});
+    this.wifi,
+    this.tv,
+    this.cooktop,
+    this.oven,
+    this.kettle,
+    this.dishwasher,
+    this.refrigerator,
+    this.microwave,
+    this.washer,
+    this.freeParking,
+    this.airConditioning,
+    this.smokeAlarm,
+    this.fireExtinguisher,
+  });
 
   ApartmentAmenities.fromJson(dynamic json) {
     wifi = json['wifi'];
@@ -417,7 +415,6 @@ class ApartmentAmenities {
     map['fireExtinguisher'] = fireExtinguisher;
     return map;
   }
-
 }
 
 /// allowsFamilies : false
@@ -430,13 +427,14 @@ class ApartmentAmenities {
 
 class AllowedTenants {
   AllowedTenants({
-      this.allowsFamilies,
-      this.allowsChildren,
-      this.allowsStudents,
-      this.studentGender,
-      this.allowsWorkers,
-      this.workerGender,
-      this.petsAllowed,});
+    this.allowsFamilies,
+    this.allowsChildren,
+    this.allowsStudents,
+    this.studentGender,
+    this.allowsWorkers,
+    this.workerGender,
+    this.petsAllowed,
+  });
 
   AllowedTenants.fromJson(dynamic json) {
     allowsFamilies = json['allowsFamilies'];
@@ -466,5 +464,4 @@ class AllowedTenants {
     map['petsAllowed'] = petsAllowed;
     return map;
   }
-
 }

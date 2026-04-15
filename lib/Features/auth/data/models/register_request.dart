@@ -9,14 +9,15 @@
 
 class RegisterRequest {
   RegisterRequest({
-      this.firstName, 
-      this.lastName, 
-      this.email, 
-      this.password, 
-      this.confirmPassword, 
-      this.genderType, 
-      this.birthDate, 
-      this.city,});
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.password,
+    this.confirmPassword,
+    this.genderType,
+    this.birthDate,
+    this.city,
+  });
 
   RegisterRequest.fromJson(dynamic json) {
     firstName = json['firstName'];
@@ -49,5 +50,4 @@ class RegisterRequest {
     map['city'] = city;
     return map;
   }
-
 }

@@ -25,7 +25,9 @@ class RoomsSection extends StatelessWidget {
         }
         // Failure state
         else if (state is GetRoomsFailure) {
-          return RoomsSectionContainer(widget: SectionFailure(property: Property.room,));
+          return RoomsSectionContainer(
+            widget: SectionFailure(property: Property.room),
+          );
         } else if (state is RoomsInitial) {
           return Container(); // todo: or loading, or nothing
         } else if (state is GetRoomsLoading) {

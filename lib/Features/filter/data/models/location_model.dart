@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-class Governorate extends Equatable{
+class Governorate extends Equatable {
   final double latitude;
   final double longitude;
   final String nameInArabic;
@@ -31,10 +31,10 @@ class Governorate extends Equatable{
 
   @override
   // TODO: implement props
-  List<Object?> get props => [latitude,longitude,nameInEnglish,nameInArabic];
+  List<Object?> get props => [latitude, longitude, nameInEnglish, nameInArabic];
 }
 
-class City extends Equatable{
+class City extends Equatable {
   final double latitude;
   final double longitude;
   final String nameInArabic;
@@ -58,5 +58,5 @@ class City extends Equatable{
 
   @override
   // TODO: implement props
-  List<Object?> get props => [latitude,longitude,nameInEnglish,nameInArabic];
+  List<Object?> get props => [latitude, longitude, nameInEnglish, nameInArabic];
 }

@@ -28,11 +28,11 @@ class LocationCubit extends Cubit<LocationState> {
     print('Response received: $response');
 
     response.fold(
-          (fail) {
+      (fail) {
         print('Error: ${fail.errMessage}');
         emit(LocationErrorState(message: fail.errMessage));
       },
-          (resp) {
+      (resp) {
         print('Success: ${resp.length} governorates loaded');
         allGovernorates = resp;
         emit(GovernoratesLoadedState(resp));
@@ -42,7 +42,7 @@ class LocationCubit extends Cubit<LocationState> {
 
   // REMOVED CitiesLoadedState - just update local variables
   void selectGovernorate(Governorate? governorate) {
-    log('government selected',name: 'location cubit');
+    log('government selected', name: 'location cubit');
 
     selectedGovernorate = governorate;
     if (governorate != null) {
@@ -55,7 +55,7 @@ class LocationCubit extends Cubit<LocationState> {
   }
 
   void selectCity(City? city) {
-    log('city selected',name: 'location cubit');
+    log('city selected', name: 'location cubit');
     selectedCity = city;
     // Don't emit anything - let the widget manage UI state
   }

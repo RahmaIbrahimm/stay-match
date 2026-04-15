@@ -3,10 +3,7 @@
 /// errors : {"InvalidGoogleToken":["Invalid Google token"],"IdTokenRequired":["IdToken is required"]}
 
 class LoginWithGoogleResponse {
-  LoginWithGoogleResponse({
-      this.isSuccess, 
-      this.message, 
-      this.errors,});
+  LoginWithGoogleResponse({this.isSuccess, this.message, this.errors});
 
   LoginWithGoogleResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
@@ -26,20 +23,21 @@ class LoginWithGoogleResponse {
     }
     return map;
   }
-
 }
 
 /// InvalidGoogleToken : ["Invalid Google token"]
 /// IdTokenRequired : ["IdToken is required"]
 
 class Errors {
-  Errors({
-      this.invalidGoogleToken, 
-      this.idTokenRequired,});
+  Errors({this.invalidGoogleToken, this.idTokenRequired});
 
   Errors.fromJson(dynamic json) {
-    invalidGoogleToken = json['InvalidGoogleToken'] != null ? json['InvalidGoogleToken'].cast<String>() : [];
-    idTokenRequired = json['IdTokenRequired'] != null ? json['IdTokenRequired'].cast<String>() : [];
+    invalidGoogleToken = json['InvalidGoogleToken'] != null
+        ? json['InvalidGoogleToken'].cast<String>()
+        : [];
+    idTokenRequired = json['IdTokenRequired'] != null
+        ? json['IdTokenRequired'].cast<String>()
+        : [];
   }
   List<String>? invalidGoogleToken;
   List<String>? idTokenRequired;
@@ -50,5 +48,4 @@ class Errors {
     map['IdTokenRequired'] = idTokenRequired;
     return map;
   }
-
 }

@@ -15,14 +15,17 @@ class LoginViewHeader extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Image.asset(AppImages.loginDecorLeft, scale: 1.2 ,),
+            Image.asset(AppImages.loginDecorLeft, scale: 1.2),
             Image.asset(AppImages.loginDecorRight, scale: 1.2),
           ],
         ),
         Positioned(
           bottom: 1,
           left: 16,
-          child: AuthHeaderText(greeting: AppStrings.loginGreeting, title: AppStrings.login,),
+          child: AuthHeaderText(
+            greeting: AppStrings.loginGreeting,
+            title: AppStrings.login,
+          ),
         ),
       ],
     );

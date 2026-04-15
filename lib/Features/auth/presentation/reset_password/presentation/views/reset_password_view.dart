@@ -8,6 +8,11 @@ class ResetPasswordView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(backgroundColor:AppColors.primary,body: ResetPasswordViewBody()));
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColors.primary,
+        body: ResetPasswordViewBody(),
+      ),
+    );
   }
 }

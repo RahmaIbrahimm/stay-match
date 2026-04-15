@@ -13,24 +13,28 @@ class LocationRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RichText(maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        text: TextSpan(children: [
-          WidgetSpan(child: Icon(
-            Icons.location_pin,
-            size: 20.sp,
-            weight: 2,
-            color: AppColors.primary,
-          ),),
+    return RichText(
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      text: TextSpan(
+        children: [
+          WidgetSpan(
+            child: Icon(
+              Icons.location_pin,
+              size: 20.sp,
+              weight: 2,
+              color: AppColors.primary,
+            ),
+          ),
           TextSpan(
-            text: '${city ?? 'City location'}, ${street ??
-                'street location'}',
+            text: '${city ?? 'City location'}, ${street ?? 'street location'}',
             style: AppStyles.medium14poppins.copyWith(
               color: AppColors.primary,
               decoration: TextDecoration.underline,
             ),
-
           ),
-        ]));
+        ],
+      ),
+    );
   }
 }
