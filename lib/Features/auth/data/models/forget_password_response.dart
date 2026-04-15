@@ -3,10 +3,7 @@
 /// errors : {"Email":["The Email field is not a valid e-mail address."]}
 
 class ForgetPasswordResponse {
-  ForgetPasswordResponse({
-      this.isSuccess, 
-      this.message, 
-      this.errors,});
+  ForgetPasswordResponse({this.isSuccess, this.message, this.errors});
 
   ForgetPasswordResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
@@ -26,14 +23,12 @@ class ForgetPasswordResponse {
     }
     return map;
   }
-
 }
 
 /// Email : ["The Email field is not a valid e-mail address."]
 
 class Errors {
-  Errors({
-      this.email,});
+  Errors({this.email});
 
   Errors.fromJson(dynamic json) {
     email = json['Email'] != null ? json['Email'].cast<String>() : [];
@@ -45,5 +40,4 @@ class Errors {
     map['Email'] = email;
     return map;
   }
-
 }

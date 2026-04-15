@@ -1,8 +1,7 @@
 /// email : "user@example.com"
 
 class ForgetPasswordRequest {
-  ForgetPasswordRequest({
-      this.email,});
+  ForgetPasswordRequest({this.email});
 
   ForgetPasswordRequest.fromJson(dynamic json) {
     email = json['email'];
@@ -14,5 +13,4 @@ class ForgetPasswordRequest {
     map['email'] = email;
     return map;
   }
-
 }
