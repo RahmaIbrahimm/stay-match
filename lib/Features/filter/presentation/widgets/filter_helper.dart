@@ -60,29 +60,29 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:intl/intl.dart';
+import 'package:stay_match/core/constants/app_strings.dart';
+
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
 
-enum PropertyType { apartment, room }
-enum FilterTypeGender { student, worker }
-enum FilterType {
-  who,
-  where,
-  when
-}
+enum PropertyType { apartment, room, none }
 
-typedef OnFiltersChanged = void Function({
-bool? allowsFamilies,
-bool? allowsChildren,
-bool? allowsStudents,
-String? studentGender,
-bool? allowsWorkers,
-String? workerGender,
-bool? onlyAvailable,
-PropertyType? filterType,
-});
+enum FilterTypeGender { student, worker }
+
+enum FilterType { who, where, when }
+
+typedef OnFiltersChanged =
+    void Function({
+      bool? allowsFamilies,
+      bool? allowsChildren,
+      bool? allowsStudents,
+      String? studentGender,
+      bool? allowsWorkers,
+      String? workerGender,
+      bool? onlyAvailable,
+      PropertyType? filterType,
+    });
 
 typedef OnChangeGender = void Function(String? value);
 typedef OnChangedBool = void Function(bool? value);
@@ -113,7 +113,6 @@ class FilterHelper {
         ),
       );
   }
-
 
   static String formatDate(dynamic value) {
     if (value == null) return '';
