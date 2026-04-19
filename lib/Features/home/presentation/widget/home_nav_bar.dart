@@ -4,7 +4,7 @@ import '../../../../../core/constants/app_icons.dart';
 import 'custom_bottom_nav_button.dart';
 
 class HomeNavBar extends StatelessWidget {
-   HomeNavBar({super.key});
+  HomeNavBar({super.key});
 
   final List<Widget> navBarDestinations = [
     // file exchange
