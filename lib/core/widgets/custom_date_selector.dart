@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_styles.dart';
+
 class CustomDateSelector extends StatefulWidget {
   const CustomDateSelector({
     super.key,
     required this.size,
-    required this.dateController
+    required this.dateController,
   });
 
   final Size size;
@@ -20,7 +21,7 @@ class _CustomDateSelectorState extends State<CustomDateSelector> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: ()async {
+      onTap: () async {
         var results = await showCalendarDatePicker2Dialog(
           context: context,
           config: CalendarDatePicker2WithActionButtonsConfig(
@@ -36,25 +37,20 @@ class _CustomDateSelectorState extends State<CustomDateSelector> {
         );
         if (results != null) {
           widget.dateController.text =
-          '${results[0]?.year}-${results[0]?.month != null ? (results[0]!.month < 10 ? '0${results[0]!.month}' : results[0]!.month.toString()) : ''}-${results[0]?.day != null ? (results[0]!.day < 10 ? '0${results[0]!.day}' : results[0]!.day.toString()) : ''}';
-          setState(() {
-
-          });
+              '${results[0]?.year}-${results[0]?.month != null ? (results[0]!.month < 10 ? '0${results[0]!.month}' : results[0]!.month.toString()) : ''}-${results[0]?.day != null ? (results[0]!.day < 10 ? '0${results[0]!.day}' : results[0]!.day.toString()) : ''}';
+          setState(() {});
         }
       },
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.only(
-          right: 8,
-          left: 16,
-          top: 16,
-          bottom: 16,
-        ),
+        padding: const EdgeInsets.only(right: 8, left: 16, top: 16, bottom: 16),
         decoration: BoxDecoration(
           color: AppColors.containerColor,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
-            color:  widget.dateController.text == AppStrings.dateFormat ? Colors.red: AppColors.primary,
+            color: widget.dateController.text == AppStrings.dateFormat
+                ? Colors.red
+                : AppColors.primary,
             width: 2,
           ),
           boxShadow: AppColors.boxShadow,
@@ -63,15 +59,8 @@ class _CustomDateSelectorState extends State<CustomDateSelector> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              widget.dateController.text ,
-              style: AppStyles.regular12poppins,
-            ),
-            Icon(
-              Icons.calendar_month,
-              color: AppColors.primary,
-              size: 20,
-            ),
+            Text(widget.dateController.text, style: AppStyles.regular12poppins),
+            Icon(Icons.calendar_month, color: AppColors.primary, size: 20),
           ],
         ),
       ),
