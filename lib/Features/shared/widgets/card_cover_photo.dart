@@ -6,7 +6,11 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
 
 class CardCoverPhoto extends StatelessWidget {
-  const CardCoverPhoto({super.key, required this.imageUrl,  this.ScaleUp = false});
+  const CardCoverPhoto({
+    super.key,
+    required this.imageUrl,
+    this.ScaleUp = false,
+  });
 
   final String? imageUrl;
   final bool ScaleUp;
@@ -26,45 +30,45 @@ class CardCoverPhoto extends StatelessWidget {
             fit: BoxFit.cover,
 
             // Placeholder
-            placeholder: (context, url) =>
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.bgGrey,
-                    border: Border(
-                      left: BorderSide(color: AppColors.primary),
-                      right: BorderSide(color: AppColors.primary),
-                      top: BorderSide(color: AppColors.primary),
-                    ),
-                  ),
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primary,
-                      strokeWidth: 2.w,
-                    ),
-                  ),
+            placeholder: (context, url) => Container(
+              decoration: BoxDecoration(
+                color: AppColors.bgGrey,
+                border: Border(
+                  left: BorderSide(color: AppColors.primary),
+                  right: BorderSide(color: AppColors.primary),
+                  top: BorderSide(color: AppColors.primary),
                 ),
+              ),
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primary,
+                  strokeWidth: 2.w,
+                ),
+              ),
+            ),
 
             // Error
-            errorWidget: (context, url, error) =>
-                Container(
-                  decoration: BoxDecoration(border:Border(
-                    top: BorderSide(color: AppColors.primary),
-                    right: BorderSide(color: AppColors.primary),
-                    left: BorderSide(color: AppColors.primary),
-                  ), color: AppColors.bgGrey,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10.r),
-                      topRight: Radius.circular(10.r),
-                  )
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.broken_image_outlined,
-                      size: 30.sp,
-                      color: Colors.grey[500],
-                    ),
-                  ),
+            errorWidget: (context, url, error) => Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(color: AppColors.primary),
+                  right: BorderSide(color: AppColors.primary),
+                  left: BorderSide(color: AppColors.primary),
                 ),
+                color: AppColors.bgGrey,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10.r),
+                  topRight: Radius.circular(10.r),
+                ),
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.broken_image_outlined,
+                  size: 30.sp,
+                  color: Colors.grey[500],
+                ),
+              ),
+            ),
           ),
         ),
         Container(
@@ -91,7 +95,12 @@ class CardCoverPhoto extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.bgGrey,
               borderRadius: BorderRadius.circular(5.r),
-              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.2),blurRadius: 1)]
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.2),
+                  blurRadius: 1,
+                ),
+              ],
             ),
             //todo: add actual match logic when api given
             alignment: Alignment.topRight,
