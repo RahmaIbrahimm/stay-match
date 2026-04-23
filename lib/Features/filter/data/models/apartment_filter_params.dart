@@ -51,7 +51,7 @@ class ApartmentFilterParams {
         allowsStudents != other.allowsStudents ||
         allowsWorkers != other.allowsWorkers ||
         workerGender != other.workerGender ||
-        studentGender!= other.studentGender||
+        studentGender != other.studentGender ||
         userLat != other.userLat ||
         userLng != other.userLng ||
         orderByOldest != other.orderByOldest ||
