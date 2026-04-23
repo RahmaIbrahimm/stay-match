@@ -10,6 +10,7 @@ sealed class AuthState extends Equatable {
 class AuthStateInitial extends AuthState {}
 
 class LoginStateLoading extends AuthState {}
+
 class LoginStateSuccess extends AuthState {
   final LoginResponse user;
 
@@ -18,6 +19,7 @@ class LoginStateSuccess extends AuthState {
   @override
   List<Object> get props => [user];
 }
+
 class LoginStateFailure extends AuthState {
   final String errMessage;
 
@@ -25,6 +27,7 @@ class LoginStateFailure extends AuthState {
 }
 
 class GoogleLoginStateLoading extends AuthState {}
+
 class GoogleLoginStateSuccess extends AuthState {
   final LoginWithGoogleResponse? resp;
 
@@ -33,6 +36,7 @@ class GoogleLoginStateSuccess extends AuthState {
   @override
   List<Object> get props => [?resp];
 }
+
 class GoogleLoginStateFailure extends AuthState {
   final String errMessage;
 
@@ -40,12 +44,14 @@ class GoogleLoginStateFailure extends AuthState {
 }
 
 class RegisterStateLoading extends AuthState {}
+
 class RegisterStateSuccess extends AuthState {
   final RegisterResponse response;
   RegisterStateSuccess({required this.response});
   @override
   List<Object> get props => [response];
 }
+
 class RegisterStateFailure extends AuthState {
   final String errMessage;
 
@@ -55,6 +61,7 @@ class RegisterStateFailure extends AuthState {
 }
 
 class SendCodeStateLoading extends AuthState {}
+
 class SendCodeStateSuccess extends AuthState {
   final ForgetPasswordResponse response;
   final String email;
@@ -64,6 +71,7 @@ class SendCodeStateSuccess extends AuthState {
   @override
   List<Object> get props => [response];
 }
+
 class SendCodeStateFailure extends AuthState {
   final String errMessage;
 
@@ -74,6 +82,7 @@ class SendCodeStateFailure extends AuthState {
 }
 
 class VerifyCodeStateLoading extends AuthState {}
+
 class VerifyCodeStateSuccess extends AuthState {
   final VerifyCodeResponse response;
 
@@ -81,8 +90,8 @@ class VerifyCodeStateSuccess extends AuthState {
 
   @override
   List<Object> get props => [response];
-
 }
+
 class VerifyCodeStateFailure extends AuthState {
   final String errMessage;
 
@@ -93,6 +102,7 @@ class VerifyCodeStateFailure extends AuthState {
 }
 
 class ResetPassStateLoading extends AuthState {}
+
 class ResetPassStateSuccess extends AuthState {
   final ResetPasswordResponse response;
 
@@ -101,6 +111,7 @@ class ResetPassStateSuccess extends AuthState {
   @override
   List<Object> get props => [response];
 }
+
 class ResetPassStateFailure extends AuthState {
   final String errMessage;
 
