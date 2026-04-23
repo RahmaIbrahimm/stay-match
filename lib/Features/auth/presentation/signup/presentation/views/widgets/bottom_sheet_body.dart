@@ -62,7 +62,7 @@ class BottomSheetBody extends StatelessWidget {
               children: [
                 Expanded(
                   child: FormSection(
-                    validator:(val)=>authCubit.nullFieldValidator(text: val),
+                    validator: (val) => authCubit.nullFieldValidator(text: val),
                     hintText: AppStrings.enterYourFirstName,
                     fieldTitle: AppStrings.firstName,
                     controller: authCubit.signFirstNameController,
@@ -71,7 +71,7 @@ class BottomSheetBody extends StatelessWidget {
                 SizedBox(width: 16.w),
                 Expanded(
                   child: FormSection(
-                    validator: (val)=>authCubit.nullFieldValidator(text: val),
+                    validator: (val) => authCubit.nullFieldValidator(text: val),
                     hintText: AppStrings.enterYourLastName,
                     fieldTitle: AppStrings.lastName,
                     controller: authCubit.signLastNameController,
@@ -79,10 +79,10 @@ class BottomSheetBody extends StatelessWidget {
                 ),
               ],
             ),
-             SizedBox(height: 22.h),
+            SizedBox(height: 22.h),
             // info: email
             FormSection(
-              validator: (val)=>authCubit.emailValidator(email: val),
+              validator: (val) => authCubit.emailValidator(email: val),
               hintText: AppStrings.enterYourEmail,
               fieldTitle: AppStrings.email,
               suffixIcon: ImageIcon(AssetImage(AppIcons.emailIcon)),
@@ -94,7 +94,8 @@ class BottomSheetBody extends StatelessWidget {
               valueListenable: _isObscureNotifierPass,
               builder: (context, isObscure, child) {
                 return FormSection(
-                  validator:(val)=> authCubit.passwordValidator(password: val),
+                  validator: (val) =>
+                      authCubit.passwordValidator(password: val),
                   hintText: AppStrings.enterYourPassword,
                   fieldTitle: AppStrings.password,
                   suffixIcon: IconButton(
@@ -120,7 +121,11 @@ class BottomSheetBody extends StatelessWidget {
               valueListenable: _isObscureNotifierConfirmPass,
               builder: (context, isObscure, child) {
                 return FormSection(
-                  validator: (val)=> authCubit.passwordMatchValidator(password: authCubit.signPasswordController.text, confirmPassword: authCubit.signConfirmPasswordController.text),
+                  validator: (val) => authCubit.passwordMatchValidator(
+                    password: authCubit.signPasswordController.text,
+                    confirmPassword:
+                        authCubit.signConfirmPasswordController.text,
+                  ),
                   hintText: AppStrings.enterYourPassword,
                   fieldTitle: AppStrings.confirmPassword,
                   suffixIcon: IconButton(
@@ -166,8 +171,10 @@ class BottomSheetBody extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(AppStrings.birthDate,
-                          style: AppStyles.semibold24poppins),
+                      Text(
+                        AppStrings.birthDate,
+                        style: AppStyles.semibold24poppins,
+                      ),
                       SizedBox(height: 8.h),
                       CustomDateSelector(
                         size: size,
@@ -184,7 +191,7 @@ class BottomSheetBody extends StatelessWidget {
             SizedBox(height: 8.h),
             CustomDropDownMenu(
               hasSearch: false,
-              menuItems: AppStrings.genderMenuItems,
+              menuItems: AppStrings.authGenderMenuItems,
               hintText: AppStrings.enterYourGender,
               selectedValue: authCubit.genderController,
             ),
