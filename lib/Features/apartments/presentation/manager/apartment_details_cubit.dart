@@ -11,7 +11,7 @@ class ApartmentDetailsCubit extends Cubit<ApartmentDetailsState> {
   final int id;
 
   ApartmentDetailsCubit(this.apartmentRepo, this.id)
-      : super(ApartmentDetailsInitial()) {
+    : super(ApartmentDetailsInitial()) {
     _loadInitialData();
   }
 
@@ -32,10 +32,10 @@ class ApartmentDetailsCubit extends Cubit<ApartmentDetailsState> {
       var response = await apartmentRepo.getApartmentDetail(id: id);
 
       response.fold(
-            (fail) {
+        (fail) {
           emit(GetApartmentDetailsFailure(errMessage: fail.errMessage));
         },
-            (response) {
+        (response) {
           if (response.isSuccess == true) {
             _cachedResponse = response;
             emit(GetApartmentDetailsSuccess(response: response));
@@ -43,7 +43,7 @@ class ApartmentDetailsCubit extends Cubit<ApartmentDetailsState> {
             emit(
               GetApartmentDetailsFailure(
                 errMessage:
-                response.message ?? 'Error getting Apartment Details',
+                    response.message ?? 'Error getting Apartment Details',
               ),
             );
           }
