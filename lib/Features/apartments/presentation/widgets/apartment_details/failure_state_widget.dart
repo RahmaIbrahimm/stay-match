@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stay_match/core/constants/app_strings.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_styles.dart';
 import '../../manager/apartment_details_cubit.dart';
+
 class FailureState extends StatelessWidget {
-  const FailureState({
-    super.key,
-    required this.errMessage,
-    required this.id,
-  });
+  const FailureState({super.key, required this.errMessage, required this.id});
 
   final String errMessage;
   final int id;
@@ -76,7 +74,7 @@ class FailureState extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'Try Again',
+                  AppStrings.tryAgain,
                   style: AppStyles.semiBold16poppins.copyWith(
                     color: Colors.white,
                   ),
