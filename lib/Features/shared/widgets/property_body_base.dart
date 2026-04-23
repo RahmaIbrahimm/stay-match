@@ -8,18 +8,13 @@ import 'package:stay_match/core/constants/app_styles.dart';
 
 /// Shared UI components for both Apartment and Room screens
 class PropertyBodyBase {
-
   static Widget buildHeader(BuildContext context) {
     return SliverToBoxAdapter(
       child: Row(
         children: [
           IconButton(
             onPressed: () => context.pop(),
-            icon: Icon(
-              Icons.arrow_back,
-              size: 20.sp,
-              color: AppColors.primary,
-            ),
+            icon: Icon(Icons.arrow_back, size: 20.sp, color: AppColors.primary),
           ),
           Text(
             AppStrings.stayMatch,
@@ -105,9 +100,7 @@ class PropertyBodyBase {
                     onPressed: onTryAgain,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
-                      padding: EdgeInsets.symmetric(
-                        vertical: 12.h,
-                      ),
+                      padding: EdgeInsets.symmetric(vertical: 12.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.r),
                       ),
@@ -151,9 +144,7 @@ class PropertyBodyBase {
     );
   }
 
-  static Widget buildLoadingStateInitial({
-    required String loadingMessage,
-  }) {
+  static Widget buildLoadingStateInitial({required String loadingMessage}) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -230,19 +221,14 @@ class PropertyBodyBase {
             onPressed: onStartSearching,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
-              padding: EdgeInsets.symmetric(
-                horizontal: 32.w,
-                vertical: 12.h,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.r),
               ),
             ),
             child: Text(
               'Start Searching',
-              style: AppStyles.semiBold16poppins.copyWith(
-                color: Colors.white,
-              ),
+              style: AppStyles.semiBold16poppins.copyWith(color: Colors.white),
             ),
           ),
         ],
