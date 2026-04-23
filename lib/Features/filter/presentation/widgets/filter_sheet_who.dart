@@ -52,7 +52,10 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
     var cubit = BlocProvider.of<FilterCubit>(context);
     return CustomScrollView(
       slivers: [
-        FilterBottomSheetAppBar(propertyType: PropertyType.apartment,filterType: FilterType.who,),
+        FilterBottomSheetAppBar(
+          propertyType: PropertyType.apartment,
+          filterType: FilterType.who,
+        ),
         SliverToBoxAdapter(child: SizedBox(height: 16.h)),
         // families filter
         FilterOptionCard(
@@ -175,7 +178,8 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
                           (widget.allowsFamilies == false) ||
                           (widget.allowsWorkers == false) ||
                           (widget.allowsChildren == false);
-                      reset ? cubit.resetApartmentFilters()
+                      reset
+                          ? cubit.resetApartmentFilters()
                           : await cubit.updateApartmentFilter(
                               allowsFamilies: widget.allowsFamilies,
                               allowsChildren: widget.allowsChildren,
@@ -204,7 +208,6 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
                     }
                     if (mounted) context.pop();
                   } catch (e, stackTrace) {
-              
                     rethrow;
                   }
                 },
