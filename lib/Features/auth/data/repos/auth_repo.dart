@@ -54,6 +54,6 @@ abstract class AuthRepo {
   });
   // reset token
   Future<Either<Failure, RefreshTokenResponse>> refreshToken({
-    required String refreshToken
+    required String refreshToken,
   });
 }
