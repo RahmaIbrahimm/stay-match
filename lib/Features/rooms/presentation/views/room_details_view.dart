@@ -16,7 +16,10 @@ class RoomDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DetailsViewAppBar(title: AppStrings.roomDetails,barHeight: kToolbarHeight,),
+      appBar: DetailsViewAppBar(
+        title: AppStrings.roomDetails,
+        barHeight: kToolbarHeight,
+      ),
       body: RoomDetailsBody(),
     );
   }
