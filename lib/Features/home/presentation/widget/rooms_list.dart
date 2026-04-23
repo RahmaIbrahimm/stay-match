@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stay_match/core/constants/app_strings.dart';
 
 import '../../../rooms/data/models/get_all_rooms.dart';
 import '../../../rooms/presentation/widgets/shared/room_card.dart';
@@ -15,7 +16,7 @@ class RoomsList extends StatelessWidget {
     return roomPropertiesData!.isEmpty
         ? Center(
             child: Text(
-              'No rooms available',
+              AppStrings.noRoomsAvailable,
               style: TextStyle(fontSize: 30.sp),
             ),
           )
