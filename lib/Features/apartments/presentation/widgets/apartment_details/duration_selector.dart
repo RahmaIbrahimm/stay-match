@@ -3,10 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_styles.dart';
+
 class DurationSelector extends StatelessWidget {
-  const DurationSelector({
-    super.key,
-  });
+  const DurationSelector({super.key});
 
   @override
   Widget build(BuildContext context) {
