@@ -2,18 +2,17 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:stay_match/core/utils/secure_storage_helper.dart';
 import 'package:stay_match/Features/auth/data/models/forget_password_response.dart';
 import 'package:stay_match/Features/auth/data/models/login_response.dart';
 import 'package:stay_match/Features/auth/data/models/login_with_google_response.dart';
 import 'package:stay_match/Features/auth/data/models/register_response.dart';
 import 'package:stay_match/Features/auth/data/models/verify_code_response.dart';
+import 'package:stay_match/core/utils/secure_storage_helper.dart';
 
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/networking/endpoints.dart';
 import '../data/models/reset_password_response.dart';
 import '../data/repos/auth_repo.dart';
-
 
 part 'auth_state.dart';
 
@@ -62,13 +61,12 @@ class AuthCubit extends Cubit<AuthState> {
       TextEditingController();
 
   final TextEditingController birthDateController = TextEditingController(
-    text: AppStrings.dateFormat
+    text: AppStrings.dateFormat,
   );
 
   // gender
   final TextEditingController genderController = TextEditingController();
 
-  // birth date ==========================
   //=========== forget password page ===========
   final GlobalKey<FormState> forgetFormKey = GlobalKey<FormState>(
     debugLabel: 'forget form key',
@@ -100,11 +98,15 @@ class AuthCubit extends Cubit<AuthState> {
     required GlobalKey<FormState> key,
     required Future<void> authMethod,
     bool hasConfirmPassword = false,
-    String? pass ,
-    String? confirmPass
+    String? pass,
+    String? confirmPass,
   }) async {
     final formState = key.currentState;
-    if (formState is FormState && formState.validate() == true && hasConfirmPassword? pass == confirmPass : true ) {
+    if (formState is FormState &&
+            formState.validate() == true &&
+            hasConfirmPassword
+        ? pass == confirmPass
+        : true) {
       await authMethod;
     }
   }
@@ -123,12 +125,14 @@ class AuthCubit extends Cubit<AuthState> {
 
     return null;
   }
+
   String? nullFieldValidator({String? text}) {
     if (text?.trim() == null || text!.trim().isEmpty) {
       return 'Required';
     }
     return null;
   }
+
   String? emailValidator({String? email}) {
     email = email?.trim();
     if (email == null || email.isEmpty) {
@@ -152,6 +156,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
     return null;
   }
+
   String? passwordValidator({String? password}) {
     if (password == null || password.isEmpty) {
       return 'Password is required';
@@ -193,8 +198,14 @@ class AuthCubit extends Cubit<AuthState> {
       },
       (response) async {
         if (response.isSuccess == true) {
-          await SecureStorageHelper.storage.write(key: SecureStorageHelper.tokenKey, value: response.data?.token);
-          await SecureStorageHelper.storage.write(key: SecureStorageHelper.refreshTokenKey, value: response.data?.refreshToken);
+          await SecureStorageHelper.storage.write(
+            key: SecureStorageHelper.tokenKey,
+            value: response.data?.token,
+          );
+          await SecureStorageHelper.storage.write(
+            key: SecureStorageHelper.refreshTokenKey,
+            value: response.data?.refreshToken,
+          );
           emit(LoginStateSuccess(response));
         } else {
           emit(LoginStateFailure(errMessage: "Invalid Email or Password"));
@@ -203,9 +214,6 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-
-
-
   // ----- google login ------
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
   final scopes = <String>["https://www.googleapis.com/auth/userinfo.email"];
@@ -213,12 +221,10 @@ class AuthCubit extends Cubit<AuthState> {
     emit(GoogleLoginStateLoading());
 
     try {
-      await _googleSignIn.initialize(
-        serverClientId: Endpoints.webClientId,
-      );
+      await _googleSignIn.initialize(serverClientId: Endpoints.webClientId);
 
-      final GoogleSignInAccount? googleUser =
-      await _googleSignIn.authenticate();
+      final GoogleSignInAccount? googleUser = await _googleSignIn
+          .authenticate();
 
       // ✅ Handle cancel
       if (googleUser == null) {
@@ -226,43 +232,40 @@ class AuthCubit extends Cubit<AuthState> {
         return;
       }
 
-      final GoogleSignInAuthentication googleAuth =
-          googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
       final String? idToken = googleAuth.idToken;
 
       if (idToken == null) {
-        emit(GoogleLoginStateFailure(
-          errMessage: "Failed to get ID token",
-        ));
+        emit(GoogleLoginStateFailure(errMessage: "Failed to get ID token"));
         return;
       }
 
       final response = await authRepo.loginWithGoogle(idToken: idToken);
 
       response.fold(
-            (failure) {
-          emit(GoogleLoginStateFailure(
-            errMessage: failure.errMessage,
-          ));
+        (failure) {
+          emit(GoogleLoginStateFailure(errMessage: failure.errMessage));
         },
-            (resp) {
+        (resp) {
           if (resp.isSuccess == true) {
             emit(GoogleLoginStateSuccess(resp: resp));
-            SecureStorageHelper.addToSecureStorage(key: SecureStorageHelper.tokenKey, value: idToken);
+            SecureStorageHelper.addToSecureStorage(
+              key: SecureStorageHelper.tokenKey,
+              value: idToken,
+            );
           } else {
-            emit(GoogleLoginStateFailure(
-              errMessage: _extractErrorMessage(resp),
-            ));
+            emit(
+              GoogleLoginStateFailure(errMessage: _extractErrorMessage(resp)),
+            );
           }
         },
       );
     } catch (e) {
-      emit(GoogleLoginStateFailure(
-        errMessage: "Google Sign-In failed",
-      ));
+      emit(GoogleLoginStateFailure(errMessage: "Google Sign-In failed"));
     }
   }
+
   String _extractErrorMessage(LoginWithGoogleResponse resp) {
     if (resp.errors != null) {
       if (resp.errors!.invalidGoogleToken?.isNotEmpty == true) {
@@ -315,7 +318,6 @@ class AuthCubit extends Cubit<AuthState> {
   //   }
   // }
 
-
   // -------- signup ----------
   Future<void> signup() async {
     var response = await authRepo.signup(
@@ -345,6 +347,7 @@ class AuthCubit extends Cubit<AuthState> {
       },
     );
   }
+
   // -------- forget password ----------
   Future<void> sendCode() async {
     emit(SendCodeStateLoading());
