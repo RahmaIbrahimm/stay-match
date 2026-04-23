@@ -7,5 +7,4 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeRepo homeRepo;
   HomeCubit(this.homeRepo) : super(HomeInitial());
-
 }
