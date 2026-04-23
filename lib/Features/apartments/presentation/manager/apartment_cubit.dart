@@ -26,20 +26,21 @@ class ApartmentCubit extends Cubit<ApartmentsState> {
 
   // get all apartments
   // todo: add parameters for filter..
-  Future<void> getAllApartments({bool forceRefresh = false,
-  String? start,
-  int? monthsCount,
-  String? government,
-  bool? allowsFamilies,
-  bool? allowsChildren,
-  bool? allowsStudents,
-  String? workerGender,
-  double? userLat,
-  double? userLng,
-  bool orderByOldest = false,
-  bool onlyAvailable = false,
-  num? page = 1,
-  num? pageSize = 3,
+  Future<void> getAllApartments({
+    bool forceRefresh = false,
+    String? start,
+    int? monthsCount,
+    String? government,
+    bool? allowsFamilies,
+    bool? allowsChildren,
+    bool? allowsStudents,
+    String? workerGender,
+    double? userLat,
+    double? userLng,
+    bool orderByOldest = false,
+    bool onlyAvailable = false,
+    num? page = 1,
+    num? pageSize = 3,
   }) async {
     if (!forceRefresh && _cachedResponse != null) {
       emit(GetApartmentsSuccess(response: _cachedResponse!));
@@ -50,28 +51,26 @@ class ApartmentCubit extends Cubit<ApartmentsState> {
 
     try {
       var response = await apartmentRepo.getAllApartments(
-
-          start: start,
-          monthsCount: monthsCount,
-          government: government,
-          allowsFamilies: allowsFamilies,
-          allowsChildren: allowsChildren,
-          allowsStudents: allowsStudents,
-          workerGender: workerGender,
-          userLat: userLat,
-          userLng: userLng,
-          orderByOldest: orderByOldest,
-          onlyAvailable: onlyAvailable,
-          page: page,
-          pageSize: pageSize,
-
+        start: start,
+        monthsCount: monthsCount,
+        government: government,
+        allowsFamilies: allowsFamilies,
+        allowsChildren: allowsChildren,
+        allowsStudents: allowsStudents,
+        workerGender: workerGender,
+        userLat: userLat,
+        userLng: userLng,
+        orderByOldest: orderByOldest,
+        onlyAvailable: onlyAvailable,
+        page: page,
+        pageSize: pageSize,
       );
 
       response.fold(
-            (fail) {
+        (fail) {
           emit(GetApartmentsFailure(errMessage: fail.errMessage));
         },
-            (response) {
+        (response) {
           if (response.isSuccess == true) {
             _cachedResponse = response;
             emit(GetApartmentsSuccess(response: response));
@@ -93,5 +92,5 @@ class ApartmentCubit extends Cubit<ApartmentsState> {
     await getAllApartments(forceRefresh: true);
   }
 
-// get apartment details by id
+  // get apartment details by id
 }
