@@ -5,6 +5,7 @@ import 'package:readmore/readmore.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_styles.dart';
 import '../../../data/models/apartment_details_response.dart';
+
 class ApartmentAboutSliver extends StatelessWidget {
   const ApartmentAboutSliver({super.key, required this.details});
 
