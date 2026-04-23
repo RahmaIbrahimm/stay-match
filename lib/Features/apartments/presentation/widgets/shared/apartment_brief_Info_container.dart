@@ -22,7 +22,10 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
     required this.monthlyRent,
     this.property,
     required this.id,
-    this.scaleUp = false, required this.size, required this.numBathrooms, required this.numBedrooms,
+    this.scaleUp = false,
+    required this.size,
+    required this.numBathrooms,
+    required this.numBedrooms,
   });
 
   final String? name;
@@ -37,8 +40,14 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
   final int? numBedrooms;
   @override
   Widget build(BuildContext context) {
-    log(property?.name ?? 'wth no name sent for some reason',name: 'apartment brief name');
-    log(name ?? 'wth no name sent for some reason',name: 'apartment brief name');
+    log(
+      property?.name ?? 'wth no name sent for some reason',
+      name: 'apartment brief name',
+    );
+    log(
+      name ?? 'wth no name sent for some reason',
+      name: 'apartment brief name',
+    );
     return Container(
       decoration: BoxDecoration(
         color: AppColors.containerColor,
@@ -60,7 +69,7 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
           children: [
             SizedBox(height: 4.h),
             Text(
-              name ?? 'No name' ,
+              name ?? 'No name',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style:
@@ -171,7 +180,8 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
               color: Colors.black,
               size: scaleUp ? 20.sp : 12.sp,
             ),
-            text: '${numBedrooms ?? 0} ${(numBedrooms ?? 0) > 1 ? 'Beds' : 'Bed'}',
+            text:
+                '${numBedrooms ?? 0} ${(numBedrooms ?? 0) > 1 ? 'Beds' : 'Bed'}',
           ),
           _buildFeature(
             icon: FaIcon(FontAwesomeIcons.bath, size: scaleUp ? 20.sp : 12.sp),
