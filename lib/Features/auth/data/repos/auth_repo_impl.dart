@@ -33,6 +33,7 @@ class AuthRepoImpl implements AuthRepo {
       return left(ServerFailure.fromDioError(e));
     }
   }
+
   @override
   Future<Either<Failure, RegisterResponse>> signup({
     required String firstName,
@@ -132,7 +133,9 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<Either<Failure, RefreshTokenResponse>> refreshToken({required String refreshToken}) async {
+  Future<Either<Failure, RefreshTokenResponse>> refreshToken({
+    required String refreshToken,
+  }) async {
     try {
       var response = await apiService.post(
         Endpoints.refreshToken,
