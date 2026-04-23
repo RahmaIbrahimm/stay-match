@@ -7,7 +7,11 @@ import '../../../../core/widgets/custom_toggle_switch.dart';
 import 'filter_helper.dart';
 
 class AvailabilitySliver extends StatelessWidget {
-  const AvailabilitySliver({super.key, required this.current, required this.propertyType});
+  const AvailabilitySliver({
+    super.key,
+    required this.current,
+    required this.propertyType,
+  });
   final PropertyType propertyType;
   final bool current;
   @override
