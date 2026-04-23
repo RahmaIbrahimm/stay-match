@@ -57,7 +57,6 @@ class HomeHeader extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
               ],
             ),
           ),
