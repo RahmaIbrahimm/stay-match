@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
 
-
 class AuthHeaderText extends StatelessWidget {
   const AuthHeaderText({
-    super.key, required this.greeting, required this.title,
+    super.key,
+    required this.greeting,
+    required this.title,
   });
   final String greeting;
   final String title;
