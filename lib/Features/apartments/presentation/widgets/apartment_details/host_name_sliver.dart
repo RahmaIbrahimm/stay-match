@@ -4,11 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_styles.dart';
 import '../../../data/models/apartment_details_response.dart';
+
 class HostNameSliver extends StatelessWidget {
-  const HostNameSliver({
-    super.key,
-    required this.details,
-  });
+  const HostNameSliver({super.key, required this.details});
 
   final ApartmentDetailsData? details;
 
