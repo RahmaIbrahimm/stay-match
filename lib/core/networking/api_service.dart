@@ -1,4 +1,4 @@
-abstract class ApiService{
+abstract class ApiService {
   Future<dynamic> get(
     String path, {
     Object? data,
@@ -10,7 +10,11 @@ abstract class ApiService{
     dynamic data,
     Map<String, dynamic>? queryParameters,
   });
-
+  Future<dynamic> put(
+      String path, {
+        dynamic data,
+        Map<String, dynamic>? queryParameters,
+      });
   Future<dynamic> patch(
     String path, {
     dynamic data,
@@ -22,4 +26,5 @@ abstract class ApiService{
     dynamic data,
     Map<String, dynamic>? queryParameters,
   });
+
 }
