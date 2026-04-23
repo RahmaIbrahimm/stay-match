@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stay_match/core/constants/app_strings.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_styles.dart';
+
 class NoPropertiesSliver extends StatelessWidget {
-  const NoPropertiesSliver({
-    super.key,
-  });
+  const NoPropertiesSliver({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +20,11 @@ class NoPropertiesSliver extends StatelessWidget {
               Icon(
                 Icons.house_outlined,
                 size: 90.sp,
-                color: AppColors.primary.withValues(
-                  alpha: 0.5,
-                ),
+                color: AppColors.primary.withValues(alpha: 0.5),
               ),
               SizedBox(height: 16.h),
               Text(
-                'No Apartments Available',
+                AppStrings.noApartmentsAvailable,
                 style: AppStyles.bold20poppins.copyWith(
                   color: AppColors.textColorPrimary,
                 ),
@@ -43,13 +41,9 @@ class NoPropertiesSliver extends StatelessWidget {
               SizedBox(height: 16.h),
               Container(
                 padding: EdgeInsets.all(12.r),
-                margin: EdgeInsets.symmetric(
-                  horizontal: 20.r,
-                ),
+                margin: EdgeInsets.symmetric(horizontal: 20.r),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(
-                    alpha: 0.1,
-                  ),
+                  color: AppColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(15.r),
                 ),
                 child: Text(
