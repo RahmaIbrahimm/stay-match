@@ -31,7 +31,7 @@ class ApartmentRepoImpl extends ApartmentRepo {
     bool onlyAvailable = false,
     num? page = 1,
     num? pageSize = 5,
-  })async {
+  }) async {
     try {
       var response = await apiService.get(
         Endpoints.getAllApartments,
@@ -44,7 +44,7 @@ class ApartmentRepoImpl extends ApartmentRepo {
           'allowsStudents': allowsStudents,
           'workerGender': workerGender,
           'studentGender': studentGender,
-          'allowsWorkers':allowsWorkers,
+          'allowsWorkers': allowsWorkers,
           'userLat': userLat,
           'userLng': userLng,
           'orderByOldest': orderByOldest,
