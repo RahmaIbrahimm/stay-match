@@ -3,7 +3,7 @@ import 'package:stay_match/core/errors/failures.dart';
 
 import '../models/get_all_rooms.dart';
 
-abstract class RoomsRepo{
+abstract class RoomsRepo {
   Future<Either<Failure, GetAllRooms>> getAllRooms({
     String? start,
     num? monthsCount,
@@ -19,6 +19,6 @@ abstract class RoomsRepo{
     bool orderByOldest = false,
     bool onlyAvailable = false,
     num? page,
-    num? pageSize
+    num? pageSize,
   });
 }
