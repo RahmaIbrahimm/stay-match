@@ -14,10 +14,6 @@ class DioConsumer extends ApiService {
       validateStatus: (status) {
         return status != null && status >= 200 && status < 300;
       },
-      // validateStatus: (status) {
-      //   // return status! < 500 && status != 401;
-      //
-      // },
       connectTimeout: Duration(seconds: 10),
       receiveTimeout: Duration(seconds: 10),
     );
@@ -35,7 +31,6 @@ class DioConsumer extends ApiService {
         responseHeader: true,
       ),
     );
-    
   }
 
   @override
@@ -109,6 +104,27 @@ class DioConsumer extends ApiService {
       final response = await dio.post(
         path,
         data: data,
+        queryParameters: queryParameters,
+      );
+      return response.data;
+    } on DioException catch (e) {
+      rethrow;
+    } catch (e) {
+      throw ServerFailure(e.toString());
+    }
+  }
+
+  @override
+  Future<dynamic> put(
+      String path, {
+        dynamic data,
+        Map<String, dynamic>? queryParameters,
+        bool isFormData = false,
+      }) async {
+    try {
+      final response = await dio.put(
+        path,
+        data: isFormData ? FormData.fromMap(data) : data,
         queryParameters: queryParameters,
       );
       return response.data;
