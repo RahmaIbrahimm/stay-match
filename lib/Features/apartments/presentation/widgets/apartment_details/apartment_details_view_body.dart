@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,7 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stay_match/Features/apartments/presentation/widgets/apartment_details/apartment_details_helper.dart';
-import 'package:stay_match/Features/google_maps/presentation/widgets/maps_helper.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
@@ -13,8 +14,9 @@ import 'package:stay_match/core/routing/app_routing.dart';
 import 'package:stay_match/core/widgets/custom_elevated_button.dart';
 import 'package:stay_match/core/widgets/location_row.dart';
 
-import '../../../../../core/widgets/amenities_widget.dart';
 import '../../../../google_maps/presentation/views/google_maps_view.dart';
+import '../../../../google_maps/presentation/widgets/maps_helper.dart';
+import '../../../../shared/widgets/amenities_widget.dart';
 import '../../../data/models/apartment_details_response.dart';
 import '../../manager/apartment_details_cubit.dart';
 import 'apartment_about_sliver.dart';
@@ -71,8 +73,6 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                   ),
                 ),
                 SizedBox(height: 16.h),
-
-                // Loading text with shimmer effect (optional)
                 Text(
                   'Loading apartment details...',
                   style: AppStyles.medium16poppins.copyWith(
@@ -81,8 +81,6 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                 ),
 
                 SizedBox(height: 8.h),
-
-                // Animated dots
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -99,6 +97,8 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
         // Helper method for animated dots
         if (state is GetApartmentDetailsSuccess) {
           final details = state.response.data;
+          log('${details?.latitude!}');
+          log('${details?.longitude!}');
           if (details?.allowedTenants?.allowsStudents ?? false) {
             allowedStudentTenantGender =
                 details?.allowedTenants?.studentGender?.trim().toLowerCase() ??
@@ -365,7 +365,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                               text: TextSpan(
                                 children: [
                                   TextSpan(
-                                    text: 'Available',
+                                    text: AppStrings.available,
                                     style: AppStyles.bold14poppins.copyWith(
                                       color: AppColors.primary,
                                     ),
@@ -383,7 +383,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 8),
+                      SizedBox(height: 8.h),
                       Divider(
                         color: AppColors.textColorSecondary.withValues(
                           alpha: 0.3,
@@ -394,7 +394,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [deposit(details), minimumStay(details)],
                       ),
-                      SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                       // todo : logic for choosing time
                       DurationSelector(),
                     ],
@@ -406,9 +406,9 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                 numBeds: numBeds,
                 numBathrooms: numBathrooms,
               ),
-              SliverToBoxAdapter(child: SizedBox(height: 16)),
+              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
               ApartmentAboutSliver(details: details),
-              SliverToBoxAdapter(child: SizedBox(height: 16)),
+              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
               // amenities  title
               SliverToBoxAdapter(
                 child: RPadding(
@@ -434,14 +434,24 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                   ),
                 ),
               ),
-              SliverToBoxAdapter(child: SizedBox(height: 10.h,),),
+              SliverToBoxAdapter(child: SizedBox(height: 10.h)),
               SliverToBoxAdapter(
                 child: GestureDetector(
                   onTap: () {
-                    if (context.canPop()) context.pushNamed(AppRouting.googleMapsViewName);
+                    if (context.canPop())
+                      context.pushNamed(AppRouting.googleMapsViewName);
                   },
                   onLongPress: () {
-                    if (context.canPop()) context.pushNamed(AppRouting.googleMapsViewName);
+                    if (context.mounted) {
+                      context.pushNamed(
+                        AppRouting.googleMapsViewName,
+                        queryParameters: {
+                          'latitude': details.latitude.toString(),
+                          'longitude': details.longitude.toString(),
+                          'isStatic': 'true', // This string is what the route looks for
+                        },
+                      );
+                    }
                   },
                   child: RPadding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -450,6 +460,8 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16.r),
                         child: GoogleMapsView(
+                          key: ValueKey(details.id),
+                          mapContext: MapContext.staticView,
                           initialLatitude: details.latitude,
                           initialLongitude: details.longitude,
                           mapView: MapViewType.partialView,
@@ -511,37 +523,39 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
   RPadding _buildButtons() {
     return RPadding(
       padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Flexible(
-              flex: 3,
-              child: CustomElevatedButton(
-                borderRadius: 10,
-                textStyle: AppStyles.bold14poppins,
-                text: 'Message',
-                textColor: AppColors.primary,
-                suffixIcon: Icon(
-                  Icons.messenger_outline,
-                  color: AppColors.primary,
-                  size: 15.r,
-                ),
-                borderColor: AppColors.primary,
-                backgroundColor: AppColors.containerColor,
-                onPressed: () {},
+      child: Row(
+        children: [
+          Flexible(
+            flex: 3,
+            child: CustomElevatedButton(
+              borderRadius: 10,
+              textStyle: AppStyles.bold14poppins,
+              text: AppStrings.message,
+              textColor: AppColors.primary,
+              suffixIcon: Icon(
+                Icons.messenger_outline,
+                color: AppColors.primary,
+                size: 15.r,
               ),
+              borderColor: AppColors.primary,
+              backgroundColor: AppColors.containerColor,
+              onPressed: () {
+                if (mounted) context.pushNamed(AppRouting.chatListName);
+              },
             ),
-            SizedBox(width: 16),
-            Flexible(
-              flex: 4,
-              child: CustomElevatedButton(
-                borderRadius: 10,
-                text: 'Book Now',
-                textStyle: AppStyles.bold14poppins,
-                onPressed: () {},
-              ),
+          ),
+          SizedBox(width: 16.w),
+          Flexible(
+            flex: 4,
+            child: CustomElevatedButton(
+              borderRadius: 10,
+              text: AppStrings.bookNow,
+              textStyle: AppStyles.bold14poppins,
+              onPressed: () {},
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -550,7 +564,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
       text: TextSpan(
         children: [
           TextSpan(
-            text: 'SECURITY DEPOSIT',
+            text: AppStrings.securityDeposit,
             style: AppStyles.bold12poppins.copyWith(
               color: AppColors.textColorSecondary,
             ),
@@ -571,7 +585,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
       text: TextSpan(
         children: [
           TextSpan(
-            text: 'MINIMUM STAY',
+            text: AppStrings.minimumStay,
             style: AppStyles.bold12poppins.copyWith(
               color: AppColors.textColorSecondary,
             ),
@@ -592,6 +606,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
       ),
     );
   }
+
   Widget _buildLoadingDot(double delay) {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.5, end: 1.0),
