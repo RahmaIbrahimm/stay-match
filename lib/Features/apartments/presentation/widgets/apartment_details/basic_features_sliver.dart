@@ -5,6 +5,7 @@ import 'package:icons_plus/icons_plus.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/widgets/build_feature.dart';
 import '../../../data/models/apartment_details_response.dart';
+
 class BasicFeaturesSliver extends StatelessWidget {
   const BasicFeaturesSliver({
     super.key,
