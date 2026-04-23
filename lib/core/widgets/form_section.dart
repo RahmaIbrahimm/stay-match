@@ -31,7 +31,7 @@ class FormSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(fieldTitle, style: AppStyles.semibold24poppins),
-         SizedBox(height: 8.h),
+        SizedBox(height: 8.h),
         CustomTextFormField(
           hintText: hintText,
           validator: validator,
