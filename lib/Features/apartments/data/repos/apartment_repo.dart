@@ -22,5 +22,7 @@ abstract class ApartmentRepo {
     num? page = 1,
     num? pageSize = 5,
   });
-  Future<Either<Failure,ApartmentDetailsResponse>> getApartmentDetail({required int id});
+  Future<Either<Failure, ApartmentDetailsResponse>> getApartmentDetail({
+    required int id,
+  });
 }
