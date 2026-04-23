@@ -6,9 +6,7 @@ import '../../../../../core/constants/app_strings.dart';
 import '../../../../../core/constants/app_styles.dart';
 
 class HomeSearchField extends StatelessWidget {
-  const HomeSearchField({
-    super.key,
-  });
+  const HomeSearchField({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,18 +14,12 @@ class HomeSearchField extends StatelessWidget {
       style: AppStyles.medium10poppins,
 
       decoration: InputDecoration(
-        suffixIconConstraints:  BoxConstraints(
-          minHeight: 20.r,
-          minWidth: 20.r,
-        ),
+        suffixIconConstraints: BoxConstraints(minHeight: 20.r, minWidth: 20.r),
         isDense: true,
         border: OutlineInputBorder(
           gapPadding: 4,
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(
-            color: AppColors.primary,
-            width: 0.5,
-          ),
+          borderSide: BorderSide(color: AppColors.primary, width: 0.5),
         ),
         contentPadding: EdgeInsetsGeometry.symmetric(
           vertical: 8,
