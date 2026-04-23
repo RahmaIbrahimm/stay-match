@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/constants/app_strings.dart';
 import '../../../../../core/constants/app_styles.dart';
+
 class PropertyNameSliver extends StatelessWidget {
-  const PropertyNameSliver({
-    super.key,
-   required this.name,
-  });
+  const PropertyNameSliver({super.key, required this.name});
 
   final String? name;
   @override
@@ -21,7 +20,7 @@ class PropertyNameSliver extends StatelessWidget {
             Expanded(
               flex: 4,
               child: Text(
-                name ?? 'Property name',
+                name ?? AppStrings.propertyName,
                 style: AppStyles.bold24poppins,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
