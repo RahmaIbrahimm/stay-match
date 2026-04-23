@@ -17,11 +17,9 @@ class CustomBottomNavButton extends StatelessWidget {
       onPressed: onPressed,
       style: IconButton.styleFrom(
         backgroundColor: Colors.white,
-        side: BorderSide(color: AppColors.stroke,width: 2),
+        side: BorderSide(color: AppColors.stroke, width: 2),
         padding: EdgeInsets.all(12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         iconSize: 24,
       ),
       color: AppColors.primary,
