@@ -29,7 +29,6 @@ class FilterSheetWhere extends StatefulWidget {
 }
 
 class _FilterSheetWhereState extends State<FilterSheetWhere> {
-
   Governorate? selectedGovernorate;
   City? selectedCity;
   bool isLoading = false;
@@ -98,37 +97,43 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
               ),
               // Governorate Dropdown
               SliverToBoxAdapter(
-                  child: RPadding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Column(
-                        spacing: 8,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(AppStrings.selectGovernorate,
-                            style: AppStyles.bold12poppins.copyWith(
-                                color: AppColors.textColorSecondary),
-                            textAlign: TextAlign.start,),
-                          CustomDropDownMenu<Governorate>(
-                            hintText: 'Select Governorate',
-                            menuItems: governorates,
-                            selectedItem: selectedGovernorate,
-                            displayString: (gov) => gov.nameInEnglish,
-                            onChanged: (governorate) {
-                              setState(() {
-                                selectedGovernorate = governorate;
-                                selectedCity = null;
-                                context.read<LocationCubit>().selectGovernorate(
-                                    null);
-                              });
-                              if (governorate != null) {
-                                context.read<LocationCubit>().selectGovernorate(
-                                    governorate);
-                              }
-                            },
-                            hasSearch: true,
-                          ),
-                        ]
-                    ),)
+                child: RPadding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    spacing: 8,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppStrings.selectGovernorate,
+                        style: AppStyles.bold12poppins.copyWith(
+                          color: AppColors.textColorSecondary,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                      CustomDropDownMenu<Governorate>(
+                        hintText: 'Select Governorate',
+                        menuItems: governorates,
+                        selectedItem: selectedGovernorate,
+                        displayString: (gov) => gov.nameInEnglish,
+                        onChanged: (governorate) {
+                          setState(() {
+                            selectedGovernorate = governorate;
+                            selectedCity = null;
+                            context.read<LocationCubit>().selectGovernorate(
+                              null,
+                            );
+                          });
+                          if (governorate != null) {
+                            context.read<LocationCubit>().selectGovernorate(
+                              governorate,
+                            );
+                          }
+                        },
+                        hasSearch: true,
+                      ),
+                    ],
+                  ),
+                ),
               ),
               // City Dropdown
               if (selectedGovernorate != null)
@@ -139,12 +144,15 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
                       spacing: 8,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(AppStrings.selectCity,
+                        Text(
+                          AppStrings.selectCity,
                           style: AppStyles.bold12poppins.copyWith(
-                              color: AppColors.textColorSecondary),
-                          textAlign: TextAlign.start,),
+                            color: AppColors.textColorSecondary,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
                         CustomDropDownMenu<City>(
-                          hintText: 'Select City',
+                          hintText: AppStrings.selectCity,
                           menuItems: selectedGovernorate!.citiesAndVillages,
                           selectedItem: selectedCity,
                           displayString: (city) => city.nameInEnglish,
@@ -173,10 +181,12 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
                     GestureDetector(
                       onTap: () async {
                         // Get current location first
-                        Position position = await Geolocator
-                            .getCurrentPosition();
+                        Position position =
+                            await Geolocator.getCurrentPosition();
                         final result = LatLng(
-                            position.latitude, position.longitude);
+                          position.latitude,
+                          position.longitude,
+                        );
 
                         setState(() {
                           selectedMapLocation = result;
@@ -187,24 +197,36 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
                       child: RPadding(
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
-
                           children: [
                             CircleAvatar(
                               backgroundColor: AppColors.primary.withValues(
-                                  alpha: 0.1),
+                                alpha: 0.1,
+                              ),
                               child: Icon(
-                                FontAwesome.location_arrow_solid, size: 15
-                                  .sp, color: AppColors.primary,),
+                                FontAwesome.location_arrow_solid,
+                                size: 15.sp,
+                                color: AppColors.primary,
+                              ),
                             ),
-                            SizedBox(width: 12.w,),
-                            RichText(text: TextSpan(children: [
-                              TextSpan(text: 'Use Current Location',
-                                  style: AppStyles.semiBold14poppins.copyWith(
-                                      color: AppColors.textColorPrimary)),
-                              TextSpan(text: '\nFind Properties near you',
-                                  style: AppStyles.regular12poppins.copyWith(
-                                      color: AppColors.textColorSecondary))
-                            ]))
+                            SizedBox(width: 12.w),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Use Current Location',
+                                    style: AppStyles.semiBold14poppins.copyWith(
+                                      color: AppColors.textColorPrimary,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '\nFind Properties near you',
+                                    style: AppStyles.regular12poppins.copyWith(
+                                      color: AppColors.textColorSecondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -229,25 +251,38 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
                           children: [
                             CircleAvatar(
                               backgroundColor: AppColors.primary.withValues(
-                                  alpha: 0.1),
+                                alpha: 0.1,
+                              ),
                               child: Icon(
-                                Icons.map_outlined, size: 18
-                                  .sp, color: AppColors.primary,),
+                                Icons.map_outlined,
+                                size: 18.sp,
+                                color: AppColors.primary,
+                              ),
                             ),
-                            SizedBox(width: 12.w,),
-                            RichText(text: TextSpan(children: [
-                              TextSpan(text: 'Pick on Map',
-                                  style: AppStyles.semiBold14poppins.copyWith(
-                                      color: AppColors.textColorPrimary)),
-                              TextSpan(text: '\nBrowse visually on the map',
-                                  style: AppStyles.regular12poppins.copyWith(
-                                      color: AppColors.textColorSecondary))
-                            ]))
+                            SizedBox(width: 12.w),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Pick on Map',
+                                    style: AppStyles.semiBold14poppins.copyWith(
+                                      color: AppColors.textColorPrimary,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '\nBrowse visually on the map',
+                                    style: AppStyles.regular12poppins.copyWith(
+                                      color: AppColors.textColorSecondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     ),
-                    SizedBox(height: 24.h,),
+                    SizedBox(height: 24.h),
                     ApplyButton(
                       onPressed: () async {
                         setState(() {
@@ -256,18 +291,19 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
 
                         // Handle map location selection
                         if (selectedMapLocation != null) {
-                          log('📍 Applying map location: ${selectedMapLocation!
-                              .latitude}, ${selectedMapLocation!.longitude}');
+                          log(
+                            '📍 Applying map location: ${selectedMapLocation!.latitude}, ${selectedMapLocation!.longitude}',
+                          );
 
                           if (widget.propertyType == PropertyType.apartment) {
                             await context
                                 .read<FilterCubit>()
                                 .updateApartmentFilter(
-                              userLat: selectedMapLocation!.latitude,
-                              userLng: selectedMapLocation!.longitude,
-                              government: null,
-                              forceRefresh: true,
-                            );
+                                  userLat: selectedMapLocation!.latitude,
+                                  userLng: selectedMapLocation!.longitude,
+                                  government: null,
+                                  forceRefresh: true,
+                                );
                           } else {
                             await context.read<FilterCubit>().updateRoomsFilter(
                               userLat: selectedMapLocation!.latitude,
@@ -288,24 +324,24 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
                         // Handle governorate/city selection
                         if (selectedCity != null &&
                             selectedGovernorate != null) {
-                          log('📍 Applying city/governorate: ${selectedCity!
-                              .nameInEnglish}, ${selectedGovernorate!
-                              .nameInEnglish}');
+                          log(
+                            '📍 Applying city/governorate: ${selectedCity!.nameInEnglish}, ${selectedGovernorate!.nameInEnglish}',
+                          );
 
                           if (widget.propertyType == PropertyType.apartment) {
                             await context
                                 .read<FilterCubit>()
                                 .updateApartmentLocation(
-                              city: selectedCity!,
-                              government: selectedGovernorate!,
-                            );
+                                  city: selectedCity!,
+                                  government: selectedGovernorate!,
+                                );
                           } else {
                             await context
                                 .read<FilterCubit>()
                                 .updateRoomsLocation(
-                              government: selectedGovernorate!,
-                              city: selectedCity!,
-                            );
+                                  government: selectedGovernorate!,
+                                  city: selectedCity!,
+                                );
                           }
 
                           setState(() {
@@ -321,7 +357,7 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
                         });
                       },
                       isLoading: isLoading,
-                    )
+                    ),
                   ],
                 ),
               ),
