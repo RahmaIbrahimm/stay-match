@@ -21,12 +21,14 @@ class CustomTextFormField extends StatelessWidget {
     this.strokeColor,
     this.borderRadius,
     this.hasShadow = true,
+    this.prefixIcon, this.fillColor, this.maxLines, this.keyboardType, this.onChanged,
   });
 
   final String? Function(String?) validator;
   final String hintText;
   final TextStyle? hintStyle;
   final Widget? suffixIcon;
+  final Widget? prefixIcon;
   final bool stroke;
   final TextEditingController controller;
   final bool isObscure;
@@ -37,7 +39,10 @@ class CustomTextFormField extends StatelessWidget {
   final Color? strokeColor;
   final double? borderRadius;
   final bool hasShadow;
-
+  final Color? fillColor;
+  final int? maxLines;
+  final TextInputType? keyboardType;
+  final Function(String)? onChanged;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,8 +51,11 @@ class CustomTextFormField extends StatelessWidget {
         borderRadius: BorderRadius.circular(15.r),
       ),
       child: TextFormField(
+        maxLines: maxLines ?? 1,
         obscureText: isObscure,
+        keyboardType: keyboardType,
         decoration: InputDecoration(
+          prefixIcon: prefixIcon,
           hintText: hintText,
           enabled: enabled,
           contentPadding: EdgeInsets.symmetric(
@@ -56,7 +64,9 @@ class CustomTextFormField extends StatelessWidget {
           ),
           hintStyle:
               hintStyle ??
-              AppStyles.regular12poppins.copyWith(color: AppColors.textColorSecondary),
+                  AppStyles.regular12poppins.copyWith(
+                    color: AppColors.textColorSecondary,
+                  ),
           border: buildOutlineInputBorder(),
           // TODO: add borders for each case
           errorBorder: OutlineInputBorder(
@@ -70,10 +80,11 @@ class CustomTextFormField extends StatelessWidget {
           focusColor: AppColors.primary,
           suffixIcon: suffixIcon,
           suffixIconColor: AppColors.primary,
-          fillColor: AppColors.containerColor,
+          fillColor: fillColor ?? AppColors.containerColor,
           filled: true,
         ),
         validator: validator,
+        onChanged: onChanged,
         controller: controller,
       ),
     );
