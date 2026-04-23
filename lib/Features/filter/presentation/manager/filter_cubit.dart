@@ -20,7 +20,8 @@ class FilterCubit extends Cubit<FilterState> {
   final RoomsRepo roomsRepo;
 
   // Apartment filter state
-  ApartmentFilterParams _currentApartmentFilters = const ApartmentFilterParams();
+  ApartmentFilterParams _currentApartmentFilters =
+      const ApartmentFilterParams();
   ApartmentFilterParams? _lastAppliedApartmentFilters;
   AllApartmentsResponse? _apartmentCachedResponse;
 
@@ -30,7 +31,7 @@ class FilterCubit extends Cubit<FilterState> {
   GetAllRooms? _roomsCachedResponse;
 
   FilterCubit({required this.roomsRepo, required this.apartmentRepo})
-      : super(FilterInitial()) {
+    : super(FilterInitial()) {
     log('FilterCubit initialized');
   }
 
@@ -60,16 +61,23 @@ class FilterCubit extends Cubit<FilterState> {
     if (start != null) log('🏢 Apartment | start: $start');
     if (monthsCount != null) log('🏢 Apartment | monthsCount: $monthsCount');
     if (government != null) log('🏢 Apartment | government: $government');
-    if (allowsFamilies != null) log('🏢 Apartment | allowsFamilies: $allowsFamilies');
-    if (allowsChildren != null) log('🏢 Apartment | allowsChildren: $allowsChildren');
-    if (allowsStudents != null) log('🏢 Apartment | allowsStudents: $allowsStudents');
-    if (allowsWorkers != null) log('🏢 Apartment | allowsWorkers: $allowsWorkers');
-    if (studentGender != null) log('🏢 Apartment | studentGender: $studentGender');
+    if (allowsFamilies != null)
+      log('🏢 Apartment | allowsFamilies: $allowsFamilies');
+    if (allowsChildren != null)
+      log('🏢 Apartment | allowsChildren: $allowsChildren');
+    if (allowsStudents != null)
+      log('🏢 Apartment | allowsStudents: $allowsStudents');
+    if (allowsWorkers != null)
+      log('🏢 Apartment | allowsWorkers: $allowsWorkers');
+    if (studentGender != null)
+      log('🏢 Apartment | studentGender: $studentGender');
     if (workerGender != null) log('🏢 Apartment | workerGender: $workerGender');
     if (userLat != null) log('🏢 Apartment | userLat: $userLat');
     if (userLng != null) log('🏢 Apartment | userLng: $userLng');
-    if (orderByOldest != null) log('🏢 Apartment | orderByOldest: $orderByOldest');
-    if (onlyAvailable != null) log('🏢 Apartment | onlyAvailable: $onlyAvailable');
+    if (orderByOldest != null)
+      log('🏢 Apartment | orderByOldest: $orderByOldest');
+    if (onlyAvailable != null)
+      log('🏢 Apartment | onlyAvailable: $onlyAvailable');
     if (page != null) log('🏢 Apartment | page: $page');
     if (pageSize != null) log('🏢 Apartment | pageSize: $pageSize');
     _currentApartmentFilters = _currentApartmentFilters.copyWith(
@@ -90,7 +98,8 @@ class FilterCubit extends Cubit<FilterState> {
       pageSize: pageSize,
     );
 
-    final bool filtersChanged = _lastAppliedApartmentFilters == null ||
+    final bool filtersChanged =
+        _lastAppliedApartmentFilters == null ||
         _currentApartmentFilters.hasChanges(_lastAppliedApartmentFilters);
 
     await _getAllApartmentsWithFilters(
@@ -99,15 +108,23 @@ class FilterCubit extends Cubit<FilterState> {
   }
 
   Future<void> toggleApartmentSortOrder() async {
-    log('Toggling apartment sort order from ${_currentApartmentFilters.orderByOldest} to ${!_currentApartmentFilters.orderByOldest}');
+    log(
+      'Toggling apartment sort order from ${_currentApartmentFilters.orderByOldest} to ${!_currentApartmentFilters.orderByOldest}',
+    );
     await updateApartmentFilter(
       orderByOldest: !_currentApartmentFilters.orderByOldest,
       forceRefresh: true,
     );
   }
+
   // location update
-  Future<void> updateApartmentLocation({required Governorate? government,required City? city}) async {
-    log('📍 apartment location updated: ${city?.nameInEnglish} (lat: ${city?.latitude}, lng: ${city?.longitude})');
+  Future<void> updateApartmentLocation({
+    required Governorate? government,
+    required City? city,
+  }) async {
+    log(
+      '📍 apartment location updated: ${city?.nameInEnglish} (lat: ${city?.latitude}, lng: ${city?.longitude})',
+    );
     await updateApartmentFilter(
       government: government?.nameInEnglish,
       userLat: city?.latitude,
@@ -116,10 +133,7 @@ class FilterCubit extends Cubit<FilterState> {
     );
   }
 
-  Future<void> _getAllApartmentsWithFilters({
-    bool forceRefresh = false,
-  }) async {
-
+  Future<void> _getAllApartmentsWithFilters({bool forceRefresh = false}) async {
     if (!forceRefresh &&
         _apartmentCachedResponse != null &&
         _lastAppliedApartmentFilters != null &&
@@ -151,33 +165,39 @@ class FilterCubit extends Cubit<FilterState> {
       );
 
       response.fold(
-            (fail) {
+        (fail) {
           log('Apartment API failure: ${fail.errMessage}');
           emit(ApartmentFilterFailure(errMessage: fail.errMessage));
         },
-            (response) {
+        (response) {
           if (response.isSuccess == true) {
             _apartmentCachedResponse = response;
             _lastAppliedApartmentFilters = _currentApartmentFilters;
-            log('Emitting ApartmentFilterSuccess with ${response.data?.items?.length ?? 0} items');
+            log(
+              'Emitting ApartmentFilterSuccess with ${response.data?.items?.length ?? 0} items',
+            );
             emit(ApartmentFilterSuccess(response: response));
           } else {
             log('Apartment API returned isSuccess=false: ${response.message}');
-            emit(ApartmentFilterFailure(
-              errMessage: response.message ?? 'Error getting Apartments',
-            ));
+            emit(
+              ApartmentFilterFailure(
+                errMessage: response.message ?? 'Error getting Apartments',
+              ),
+            );
           }
         },
       );
     } catch (e, stackTrace) {
-      log('Exception in getAllApartments: $e', error: e, stackTrace: stackTrace);
+      log(
+        'Exception in getAllApartments: $e',
+        error: e,
+        stackTrace: stackTrace,
+      );
       emit(ApartmentFilterFailure(errMessage: e.toString()));
     }
   }
 
-  Future<void> getAllApartments({
-    bool forceRefresh = false,
-  }) async {
+  Future<void> getAllApartments({bool forceRefresh = false}) async {
     await _getAllApartmentsWithFilters(forceRefresh: forceRefresh);
   }
 
@@ -206,13 +226,16 @@ class FilterCubit extends Cubit<FilterState> {
     num? pageSize,
     bool forceRefresh = false,
   }) async {
-// Add this at the beginning of updateRoomsFilter method
+    // Add this at the beginning of updateRoomsFilter method
     if (start != null) log('🚪 Rooms | start: $start');
     if (monthsCount != null) log('🚪 Rooms | monthsCount: $monthsCount');
     if (government != null) log('🚪 Rooms | government: $government');
-    if (allowsFamilies != null) log('🚪 Rooms | allowsFamilies: $allowsFamilies');
-    if (allowsChildren != null) log('🚪 Rooms | allowsChildren: $allowsChildren');
-    if (allowsStudents != null) log('🚪 Rooms | allowsStudents: $allowsStudents');
+    if (allowsFamilies != null)
+      log('🚪 Rooms | allowsFamilies: $allowsFamilies');
+    if (allowsChildren != null)
+      log('🚪 Rooms | allowsChildren: $allowsChildren');
+    if (allowsStudents != null)
+      log('🚪 Rooms | allowsStudents: $allowsStudents');
     if (allowsWorkers != null) log('🚪 Rooms | allowsWorkers: $allowsWorkers');
     if (workerGender != null) log('🚪 Rooms | workerGender: $workerGender');
     if (studentGender != null) log('🚪 Rooms | studentGender: $studentGender');
@@ -240,15 +263,20 @@ class FilterCubit extends Cubit<FilterState> {
       pageSize: pageSize,
     );
 
-    final bool filtersChanged = _lastAppliedRoomsFilters == null ||
+    final bool filtersChanged =
+        _lastAppliedRoomsFilters == null ||
         _currentRoomsFilters.hasChanges(_lastAppliedRoomsFilters);
 
-    await _getAllRoomsWithFilters(
-      forceRefresh: forceRefresh || filtersChanged,
-    );
+    await _getAllRoomsWithFilters(forceRefresh: forceRefresh || filtersChanged);
   }
-  Future<void> updateRoomsLocation({required Governorate? government,required City? city}) async {
-    log('📍 Rooms location updated: ${city?.nameInEnglish} (lat: ${city?.latitude}, lng: ${city?.longitude})');
+
+  Future<void> updateRoomsLocation({
+    required Governorate? government,
+    required City? city,
+  }) async {
+    log(
+      '📍 Rooms location updated: ${city?.nameInEnglish} (lat: ${city?.latitude}, lng: ${city?.longitude})',
+    );
     await updateRoomsFilter(
       government: government?.nameInEnglish,
       userLat: city?.latitude,
@@ -258,19 +286,21 @@ class FilterCubit extends Cubit<FilterState> {
   }
 
   Future<void> toggleRoomsSortOrder() async {
-    log('Toggling rooms sort order from ${_currentRoomsFilters.orderByOldest} to ${!_currentRoomsFilters.orderByOldest}');
+    log(
+      'Toggling rooms sort order from ${_currentRoomsFilters.orderByOldest} to ${!_currentRoomsFilters.orderByOldest}',
+    );
     await updateRoomsFilter(
       orderByOldest: !_currentRoomsFilters.orderByOldest,
       forceRefresh: true,
     );
   }
 
-  Future<void> _getAllRoomsWithFilters({
-    bool forceRefresh = false,
-  }) async {
-    log('Getting rooms with filters: orderByOldest=${_currentRoomsFilters.orderByOldest}, '
-        'government=${_currentRoomsFilters.government}, '
-        'page=${_currentRoomsFilters.page}');
+  Future<void> _getAllRoomsWithFilters({bool forceRefresh = false}) async {
+    log(
+      'Getting rooms with filters: orderByOldest=${_currentRoomsFilters.orderByOldest}, '
+      'government=${_currentRoomsFilters.government}, '
+      'page=${_currentRoomsFilters.page}',
+    );
 
     if (!forceRefresh &&
         _roomsCachedResponse != null &&
@@ -285,9 +315,11 @@ class FilterCubit extends Cubit<FilterState> {
 
     try {
       final token = await SecureStorageHelper.readFromSecureStorage(
-          key: SecureStorageHelper.refreshTokenKey
+        key: SecureStorageHelper.refreshTokenKey,
       );
-      log('Token before rooms request: ${token != null ? 'Token present (${token.length} chars)' : 'NO TOKEN'}');
+      log(
+        'Token before rooms request: ${token != null ? 'Token present (${token.length} chars)' : 'NO TOKEN'}',
+      );
 
       var response = await roomsRepo.getAllRooms(
         start: _currentRoomsFilters.start,
@@ -308,26 +340,32 @@ class FilterCubit extends Cubit<FilterState> {
       );
 
       response.fold(
-            (fail) {
+        (fail) {
           log('Rooms API failure: ${fail.errMessage}');
           emit(RoomsFilterFailure(errMessage: fail.errMessage));
         },
-            (response) async {
+        (response) async {
           final tokenAfter = await SecureStorageHelper.readFromSecureStorage(
-              key: SecureStorageHelper.refreshTokenKey
+            key: SecureStorageHelper.refreshTokenKey,
           );
-          log('Token after rooms request: ${tokenAfter != null ? 'Token present (${tokenAfter.length} chars)' : 'NO TOKEN'}');
+          log(
+            'Token after rooms request: ${tokenAfter != null ? 'Token present (${tokenAfter.length} chars)' : 'NO TOKEN'}',
+          );
 
           if (response.isSuccess == true) {
             _roomsCachedResponse = response;
             _lastAppliedRoomsFilters = _currentRoomsFilters;
-            log('Emitting RoomsFilterSuccess with ${response.data?.items?.length ?? 0} rooms');
+            log(
+              'Emitting RoomsFilterSuccess with ${response.data?.items?.length ?? 0} rooms',
+            );
             emit(RoomsFilterSuccess(response: response));
           } else {
             log('Rooms API returned isSuccess=false: ${response.message}');
-            emit(RoomsFilterFailure(
-              errMessage: response.message ?? 'Error Filtering Rooms',
-            ));
+            emit(
+              RoomsFilterFailure(
+                errMessage: response.message ?? 'Error Filtering Rooms',
+              ),
+            );
           }
         },
       );
@@ -337,9 +375,7 @@ class FilterCubit extends Cubit<FilterState> {
     }
   }
 
-  Future<void> getAllRooms({
-    bool forceRefresh = false,
-  }) async {
+  Future<void> getAllRooms({bool forceRefresh = false}) async {
     await _getAllRoomsWithFilters(forceRefresh: forceRefresh);
   }
 
