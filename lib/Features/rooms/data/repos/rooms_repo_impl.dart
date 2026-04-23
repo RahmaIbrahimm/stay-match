@@ -28,7 +28,7 @@ class RoomsRepoImpl extends RoomsRepo {
     bool orderByOldest = false,
     bool onlyAvailable = false,
     num? page = 1,
-    num? pageSize = 10
+    num? pageSize = 10,
   }) async {
     try {
       var response = await apiService.get(
@@ -47,8 +47,8 @@ class RoomsRepoImpl extends RoomsRepo {
           'userLng': userLng,
           'orderByOldest': orderByOldest,
           'onlyAvailable': onlyAvailable,
-          'page' : page,
-          'pageSize':pageSize
+          'page': page,
+          'pageSize': pageSize,
         },
       );
       return right(GetAllRooms.fromJson(response));
