@@ -9,7 +9,7 @@ import '../../../../core/constants/app_styles.dart';
 import '../../../../core/widgets/custom_text_button.dart';
 
 class RoomsSectionContainer extends StatelessWidget {
-  const RoomsSectionContainer({super.key,  required this.widget});
+  const RoomsSectionContainer({super.key, required this.widget});
 
   final Widget widget;
 
@@ -38,6 +38,7 @@ class RoomsSectionContainer extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildHeader(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
