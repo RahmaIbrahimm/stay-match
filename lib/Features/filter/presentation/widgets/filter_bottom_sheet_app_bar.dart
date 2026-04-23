@@ -10,8 +10,11 @@ import '../../../../core/constants/app_styles.dart';
 import '../../../../core/widgets/custom_text_button.dart';
 
 class FilterBottomSheetAppBar extends StatelessWidget {
-  const FilterBottomSheetAppBar(
-      {super.key, required this.propertyType, required this.filterType});
+  const FilterBottomSheetAppBar({
+    super.key,
+    required this.propertyType,
+    required this.filterType,
+  });
 
   final PropertyType propertyType;
   final FilterType filterType;
@@ -31,8 +34,11 @@ class FilterBottomSheetAppBar extends StatelessWidget {
       backgroundColor: AppColors.containerColor,
       foregroundColor: Colors.transparent,
       title: Text(
-        filterType == FilterType.who ? 'Who\'s coming?' : filterType ==
-            FilterType.where ? 'Where to?' : 'Select Dates',
+        filterType == FilterType.who
+            ? 'Who\'s coming?'
+            : filterType == FilterType.where
+            ? 'Where to?'
+            : 'Select Dates',
         style: AppStyles.bold18poppins.copyWith(
           color: AppColors.textColorPrimary,
           letterSpacing: -0.45.r,
