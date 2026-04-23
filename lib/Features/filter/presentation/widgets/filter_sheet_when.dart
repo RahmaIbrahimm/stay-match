@@ -27,8 +27,6 @@ class _FilterSheetWhenState extends State<FilterSheetWhen> {
   int numMonthsToStay = 1;
   bool isLoading = false;
 
-
-
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
