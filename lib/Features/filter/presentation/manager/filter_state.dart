@@ -13,6 +13,7 @@ final class ApartmentFilterLoading extends FilterState {
   // TODO: implement props
   List<Object?> get props => [];
 }
+
 final class ApartmentFilterSuccess extends FilterState {
   final AllApartmentsResponse response;
 
@@ -22,6 +23,7 @@ final class ApartmentFilterSuccess extends FilterState {
   // TODO: implement props
   List<Object?> get props => [response];
 }
+
 final class ApartmentFilterFailure extends FilterState {
   String errMessage;
 
@@ -37,6 +39,7 @@ final class RoomsFilterLoading extends FilterState {
   // TODO: implement props
   List<Object?> get props => [];
 }
+
 final class RoomsFilterSuccess extends FilterState {
   final GetAllRooms response;
 
@@ -46,6 +49,7 @@ final class RoomsFilterSuccess extends FilterState {
   // TODO: implement props
   List<Object?> get props => [response];
 }
+
 final class RoomsFilterFailure extends FilterState {
   final String errMessage;
 
