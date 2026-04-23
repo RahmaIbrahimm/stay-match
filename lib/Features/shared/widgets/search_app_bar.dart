@@ -20,7 +20,7 @@ class SearchAppBar extends StatelessWidget {
       elevation: 0,
       surfaceTintColor: Colors.transparent,
 
-     flexibleSpace: CustomTextFormField(
+      flexibleSpace: CustomTextFormField(
         hasShadow: false,
         suffixIcon: Icon(
           Icons.search,
