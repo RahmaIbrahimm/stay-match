@@ -24,7 +24,10 @@ class ApartmentDetailsView extends StatelessWidget {
         backgroundColor: AppColors.darkerGrey,
         extendBodyBehindAppBar: true,
         extendBody: true,
-        appBar: DetailsViewAppBar(title: AppStrings.apartmentDetails, barHeight: kToolbarHeight,),
+        appBar: DetailsViewAppBar(
+          title: AppStrings.apartmentDetails,
+          barHeight: kToolbarHeight,
+        ),
         body: ApartmentDetailsViewBody(id: id),
       ),
     );
