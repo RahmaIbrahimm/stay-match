@@ -3,10 +3,7 @@
 /// data : {"totalCount":22,"page":1,"pageSize":2,"totalPages":11,"hasNext":true,"hasPrevious":false,"items":[{"id":92,"name":"Beshoysososooop","monthlyRent":1200,"furnished":false,"availableFrom":"2026-03-12T10:39:41.242","numberOfBedrooms":1,"numberOfLivingRooms":1,"numberOfEnSuiteBathrooms":0,"numberOfGuestBathrooms":0,"street":"xxxxxxxxxxxxxxxo","city":"cairo","government":"xxxxxxxvxxs","latitude":30.0444,"longitude":31.2357,"size":120,"coverImageUrl":"[object Object]","allowedTenants":{"allowsFamilies":true,"allowsChildren":false,"allowsStudents":true,"studentGender":"male","allowsWorkers":false,"workerGender":"male","petsAllowed":false},"status":"Available","bookingFrom":null,"bookingTo":null,"distanceInKm":0},{"id":93,"name":"Beshoysososoosa","monthlyRent":1200,"furnished":false,"availableFrom":"2026-03-12T10:58:24.256","numberOfBedrooms":1,"numberOfLivingRooms":1,"numberOfEnSuiteBathrooms":1,"numberOfGuestBathrooms":1,"street":"dddddddddddda","city":"cairo","government":"xxxxxxxvxxs","latitude":30.0444,"longitude":31.2357,"size":120,"coverImageUrl":"https://graduationproject1.runasp.net/images/properties/b99c7cf2-ee2f-4db2-b3f4-7da0bcbfb9a0_Screenshot 2026-02-10 143849.png","allowedTenants":{"allowsFamilies":true,"allowsChildren":false,"allowsStudents":false,"studentGender":"male","allowsWorkers":false,"workerGender":"male","petsAllowed":false},"status":"Available","bookingFrom":null,"bookingTo":null,"distanceInKm":0}]}
 
 class AllApartmentsResponse {
-  AllApartmentsResponse({
-      this.isSuccess,
-      this.message,
-      this.data,});
+  AllApartmentsResponse({this.isSuccess, this.message, this.data});
 
   AllApartmentsResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
@@ -26,7 +23,6 @@ class AllApartmentsResponse {
     }
     return map;
   }
-
 }
 
 /// totalCount : 22
@@ -39,13 +35,14 @@ class AllApartmentsResponse {
 
 class ApartmentData {
   ApartmentData({
-      this.totalCount,
-      this.page,
-      this.pageSize,
-      this.totalPages,
-      this.hasNext,
-      this.hasPrevious,
-      this.items,});
+    this.totalCount,
+    this.page,
+    this.pageSize,
+    this.totalPages,
+    this.hasNext,
+    this.hasPrevious,
+    this.items,
+  });
 
   ApartmentData.fromJson(dynamic json) {
     totalCount = json['totalCount'];
@@ -82,7 +79,6 @@ class ApartmentData {
     }
     return map;
   }
-
 }
 
 /// id : 92
@@ -109,27 +105,28 @@ class ApartmentData {
 
 class AllApartmentsItems {
   AllApartmentsItems({
-      this.id,
-      this.name,
-      this.monthlyRent,
-      this.furnished,
-      this.availableFrom,
-      this.numberOfBedrooms,
-      this.numberOfLivingRooms,
-      this.numberOfEnSuiteBathrooms,
-      this.numberOfGuestBathrooms,
-      this.street,
-      this.city,
-      this.government,
-      this.latitude,
-      this.longitude,
-      this.size,
-      this.coverImageUrl,
-      this.allowedTenants,
-      this.status,
-      this.bookingFrom,
-      this.bookingTo,
-      this.distanceInKm,});
+    this.id,
+    this.name,
+    this.monthlyRent,
+    this.furnished,
+    this.availableFrom,
+    this.numberOfBedrooms,
+    this.numberOfLivingRooms,
+    this.numberOfEnSuiteBathrooms,
+    this.numberOfGuestBathrooms,
+    this.street,
+    this.city,
+    this.government,
+    this.latitude,
+    this.longitude,
+    this.size,
+    this.coverImageUrl,
+    this.allowedTenants,
+    this.status,
+    this.bookingFrom,
+    this.bookingTo,
+    this.distanceInKm,
+  });
 
   AllApartmentsItems.fromJson(dynamic json) {
     id = json['id'];
@@ -148,7 +145,9 @@ class AllApartmentsItems {
     longitude = json['longitude'];
     size = json['size'];
     coverImageUrl = json['coverImageUrl'];
-    allowedTenants = json['allowedTenants'] != null ? AllowedTenants.fromJson(json['allowedTenants']) : null;
+    allowedTenants = json['allowedTenants'] != null
+        ? AllowedTenants.fromJson(json['allowedTenants'])
+        : null;
     status = json['status'];
     bookingFrom = json['bookingFrom'];
     bookingTo = json['bookingTo'];
@@ -203,7 +202,6 @@ class AllApartmentsItems {
     map['distanceInKm'] = distanceInKm;
     return map;
   }
-
 }
 
 /// allowsFamilies : true
@@ -216,13 +214,14 @@ class AllApartmentsItems {
 
 class AllowedTenants {
   AllowedTenants({
-      this.allowsFamilies,
-      this.allowsChildren,
-      this.allowsStudents,
-      this.studentGender,
-      this.allowsWorkers,
-      this.workerGender,
-      this.petsAllowed,});
+    this.allowsFamilies,
+    this.allowsChildren,
+    this.allowsStudents,
+    this.studentGender,
+    this.allowsWorkers,
+    this.workerGender,
+    this.petsAllowed,
+  });
 
   AllowedTenants.fromJson(dynamic json) {
     allowsFamilies = json['allowsFamilies'];
@@ -252,5 +251,4 @@ class AllowedTenants {
     map['petsAllowed'] = petsAllowed;
     return map;
   }
-
 }
