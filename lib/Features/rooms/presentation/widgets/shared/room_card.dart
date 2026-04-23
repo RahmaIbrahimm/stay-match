@@ -34,8 +34,6 @@ class RoomCard extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
       width: size.width * 0.5.h,
-      // width: size.width * 0.5.w,
-      // height: 400.h,
       margin: EdgeInsets.only(right: 16.r),
       decoration: BoxDecoration(
         color: AppColors.containerColor,
@@ -139,6 +137,7 @@ class RoomCard extends StatelessWidget {
             width: double.infinity,
             child: SmallCustomButton(
               text: AppStrings.viewDetails,
+              textStyle: AppStyles.semiBold16poppins,
               onPressed: () {
                 context.pushNamed(
                   AppRouting.roomDetailsViewName,
