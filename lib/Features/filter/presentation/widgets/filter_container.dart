@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class FilterContainer extends StatelessWidget {
-  const FilterContainer({
-    super.key, required this.filterContainerBody,
-  });
+  const FilterContainer({super.key, required this.filterContainerBody});
 
   final Widget filterContainerBody;
 
