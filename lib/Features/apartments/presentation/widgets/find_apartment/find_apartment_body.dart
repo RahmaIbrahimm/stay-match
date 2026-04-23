@@ -398,7 +398,9 @@ class FindApartmentBody extends StatelessWidget {
 
         if (state is ApartmentFilterSuccess) {
           var propertiesData = state.response.data?.items ?? [];
-          log('Displaying ${propertiesData.length} apartments, sortOrder: ${context.read<FilterCubit>().currentApartmentFilters.orderByOldest}');
+          log(
+            'Displaying ${propertiesData.length} apartments, sortOrder: ${context.read<FilterCubit>().currentApartmentFilters.orderByOldest}',
+          );
 
           return RPadding(
             padding: const EdgeInsets.all(16.0),
@@ -415,17 +417,17 @@ class FindApartmentBody extends StatelessWidget {
                 propertiesData.isEmpty
                     ? const NoPropertiesSliver()
                     : SliverList.separated(
-                  itemCount: propertiesData.length,
-                  itemBuilder: (context, index) {
-                    return ApartmentCard(
-                      scaleUp: true,
-                      property: propertiesData[index],
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(height: 16.h);
-                  },
-                ),
+                        itemCount: propertiesData.length,
+                        itemBuilder: (context, index) {
+                          return ApartmentCard(
+                            scaleUp: true,
+                            property: propertiesData[index],
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return SizedBox(height: 16.h);
+                        },
+                      ),
               ],
             ),
           );
