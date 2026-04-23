@@ -19,24 +19,20 @@ class FindApartmentView extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) =>
-                FilterCubit(
-                  apartmentRepo: ApartmentRepoImpl(
-                      apiService: getIt.get<DioConsumer>())
-                  , roomsRepo: RoomsRepoImpl(apiService: getIt.get<DioConsumer>
-                  ()),)
-            ,
+            create: (context) => FilterCubit(
+              apartmentRepo: ApartmentRepoImpl(
+                apiService: getIt.get<DioConsumer>(),
+              ),
+              roomsRepo: RoomsRepoImpl(apiService: getIt.get<DioConsumer>()),
+            ),
           ),
           BlocProvider(
-            create: (context) =>
-                LocationCubit(
-                    locationRepository: getIt.get<LocationRepoImpl>()),
+            create: (context) => LocationCubit(
+              locationRepository: getIt.get<LocationRepoImpl>(),
+            ),
           ),
         ],
-        child: Scaffold(
-          body: FindApartmentBody(),
-
-        ),
+        child: Scaffold(body: FindApartmentBody()),
       ),
     );
   }
