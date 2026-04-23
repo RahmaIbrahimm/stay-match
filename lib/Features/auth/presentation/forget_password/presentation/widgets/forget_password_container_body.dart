@@ -49,7 +49,7 @@ class ForgetPasswordContainerBody extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               FormSection(
-                validator: (val)=> authCubit.emailValidator(email: val),
+                validator: (val) => authCubit.emailValidator(email: val),
                 hintText: AppStrings.enterYourEmail,
                 fieldTitle: AppStrings.emailAddress,
                 stroke: false,
