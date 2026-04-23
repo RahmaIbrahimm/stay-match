@@ -8,7 +8,11 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
 
 class DetailsViewAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const DetailsViewAppBar({super.key, required this.title, required this.barHeight});
+  const DetailsViewAppBar({
+    super.key,
+    required this.title,
+    required this.barHeight,
+  });
 
   final String title;
   final double barHeight;
