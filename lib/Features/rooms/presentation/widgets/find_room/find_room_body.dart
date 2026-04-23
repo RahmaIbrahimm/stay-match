@@ -120,7 +120,7 @@ class FindRoomBody extends StatelessWidget {
                 PropertyBodyBase.buildHeader(context),
                 const SearchAppBar(),
                 PropertyBodyBase.buildFilterHeader(
-                  title: 'Find your Room',
+                  title: AppStrings.findYourRoom,
                   subtitle: AppStrings.browseRoom,
                 ),
                 FilterCard(filterType: PropertyType.room),
@@ -131,8 +131,7 @@ class FindRoomBody extends StatelessWidget {
               ],
             ),
           );
-        }
-        else if (state is RoomsFilterFailure) {
+        } else if (state is RoomsFilterFailure) {
           log(state.errMessage);
           return PropertyBodyBase.buildErrorState(
             context: context,
@@ -145,7 +144,7 @@ class FindRoomBody extends StatelessWidget {
           return PropertyBodyBase.buildLoadingState(
             context: context,
             filterHeader: PropertyBodyBase.buildFilterHeader(
-              title: 'Find your Room',
+              title: AppStrings.findYourRoom,
               subtitle: AppStrings.browseRoom,
             ),
             filterCard: FilterCard(filterType: PropertyType.room),
