@@ -17,7 +17,8 @@ class CustomElevatedButton extends StatelessWidget {
     this.horizontalPadding,
     this.borderRadius,
     this.suffixIcon,
-    this.borderColor, this.maxLines,
+    this.borderColor,
+    this.maxLines, this.mainAxisAlignment,
   });
 
   final Color? backgroundColor;
@@ -33,31 +34,33 @@ class CustomElevatedButton extends StatelessWidget {
   final Widget? suffixIcon;
   final Color? borderColor;
   final int? maxLines;
+  final MainAxisAlignment? mainAxisAlignment;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
+
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor ?? AppColors.primary,
-          side: borderColor != null ? BorderSide(color: borderColor!) : null,
+        side: borderColor != null ? BorderSide(color: borderColor!) : null,
         padding: EdgeInsets.symmetric(
           vertical: verticalPadding?.r ?? 10.r,
           horizontal: horizontalPadding?.r ?? 16.r,
         ),
         shape: borderRadius != null
             ? RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius!.r),
+                borderRadius: BorderRadius.circular(borderRadius!.r),
               )
             : null,
-          minimumSize: (verticalPadding != null || horizontalPadding != null)
-              ? Size(0, 0)
-              : null
+        minimumSize: (verticalPadding != null || horizontalPadding != null)
+            ? Size(0, 0)
+            : null,
       ),
       onPressed: onPressed,
       child: isLoading
           ? CircularProgressIndicator(color: AppColors.textColorWhite)
           : Row(
-        spacing: 8.w,
-              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 8.w,
+              mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.center,
               children: [
                 if (suffixIcon != null) suffixIcon!,
                 Text(
