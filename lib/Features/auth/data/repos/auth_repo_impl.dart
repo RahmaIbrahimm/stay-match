@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:stay_match/Features/auth/data/models/logout_response.dart';
 import 'package:stay_match/core/errors/failures.dart';
 import 'package:stay_match/core/networking/api_service.dart';
 import 'package:stay_match/Features/auth/data/models/forget_password_response.dart';
@@ -142,6 +143,18 @@ class AuthRepoImpl implements AuthRepo {
         data: {"refreshToken": refreshToken},
       );
       return right(RefreshTokenResponse.fromJson(response));
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDioError(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, LogoutResponse>> logout() async{
+    try {
+      var response = await apiService.post(
+        Endpoints.logout,
+      );
+      return right(LogoutResponse.fromJson(response));
     } on DioException catch (e) {
       return Left(ServerFailure.fromDioError(e));
     }
