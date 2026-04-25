@@ -120,3 +120,18 @@ class ResetPassStateFailure extends AuthState {
   @override
   List<Object> get props => [errMessage];
 }
+
+class LogoutStateLoading extends AuthState {}
+class LogoutStateSuccess extends AuthState {
+  final LogoutResponse response;
+  LogoutStateSuccess({required this.response});
+  @override
+  List<Object> get props => [response];
+}
+class LogoutStateFailure extends AuthState {
+  final String errMessage;
+  const LogoutStateFailure({required this.errMessage});
+  @override
+  List<Object> get props => [errMessage];
+
+}
