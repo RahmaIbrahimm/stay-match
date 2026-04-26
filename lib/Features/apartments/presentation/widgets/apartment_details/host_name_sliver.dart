@@ -18,6 +18,7 @@ class HostNameSliver extends StatelessWidget {
         child: Align(
           alignment: Alignment.centerLeft,
           child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 4.r),
             alignment: Alignment.center,
             width: 200.w,
             height: 30.h,
@@ -30,13 +31,15 @@ class HostNameSliver extends StatelessWidget {
               spacing: 8.w,
               children: [
                 Icon(Icons.person, size: 20.sp, color: Colors.white),
-                Text(
-                  details?.hostName ?? 'Host Name',
-                  style: AppStyles.semiBold16poppins.copyWith(
-                    color: Colors.white,
+                Expanded(
+                  child: Text(
+                    details?.hostName ?? 'Host Name',
+                    style: AppStyles.semiBold16poppins.copyWith(
+                      color: Colors.white,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
