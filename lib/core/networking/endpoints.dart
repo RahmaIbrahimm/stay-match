@@ -1,29 +1,34 @@
 abstract class Endpoints {
-  static const String baseUrl = 'https://graduationproject1.runasp.net/';
+  static const String baseUrl = 'https://graduationproject1.runasp.net';
   // auth
-  static const String login = 'login';
-  static const String forgetPassword = 'api/Account/forgot-password';
-  static const String verifyCode = 'api/Account/verify-code';
-  static const String resetPassword = 'api/Account/reset-password';
-  static const String googleLogin = 'api/Account/google-login';
-  static const String register = 'register';
+  static const String login = '/login';
+  static const String forgetPassword = '/api/Account/forgot-password';
+  static const String verifyCode = '/api/Account/verify-code';
+  static const String resetPassword = '/api/Account/reset-password';
+  static const String googleLogin = '/api/Account/google-login';
+  static const String register = '/register';
   // home
-  static const String getAllRooms = 'api/Property/GetAllWithRooms';
-  static const String getAllApartments = 'api/Property';
-  static const String getApartmentDetails = 'api/Property/';
-  static const String refreshToken = 'api/Account/refresh-token';
+  static const String getAllRooms = '/api/Property/GetAllWithRooms';
+  static const String getAllApartments = '/api/Property';
+  static const String getApartmentDetails = '/api/Property/';
+  static const String refreshToken = '/api/Account/refresh-token';
+  static const String logout = '/api/Account/logout-all';
   // chat
-  static const String myChats = 'api/Chat/mychats';
-  static const String startChat = 'api/Chat/start';
-  static const String markRead = 'api/Chat/mark-as-read';
-  static const String sendMessage = 'api/Chat/send';
+  static const String chatHubPath = 'https://graduationproject1.runasp.net/chatHub';
+  static const String myChats = '/api/Chat/mychats';
+  static const String startChat = '/api/Chat/start';
+  static const String markRead = '/api/Chat/mark-as-read';
+  static const String sendMessage = '/api/Chat/send';
   // add Property
-  static const String addApartment = 'api/Property/AddEntireProperty';
-  static const String addRoom = 'api/Property/AddSharedProperty';
-  static const String uploadImage = 'api/Property/upload-image';
-  static const String myProperties = 'api/Property/MyProperty';
-  static const String profileData = 'api/UserProfile';
-  static const String updateProfile = 'api/UserProfile';
+  static const String addApartment = '/api/Property/AddEntireProperty';
+  static const String addRoom = '/api/Property/AddSharedProperty';
+  static const String uploadImage = '/api/Property/upload-image';
+  static const String myProperties = '/api/Property/MyProperty';
+  static const String profileData = '/api/UserProfile';
+  static const String updateProfile = '/api/UserProfile';
+  static const String updateProfilePic = '/api/UserProfile/UpdateProfilePicture';
+  static const String uploadProfilePic = '/api/UserProfile/UploadProfilePicture';
+  static const String deleteAccount = '/api/UserProfile/delete-account';
 
   // client ids uses for google login
   static const String webClientId =
