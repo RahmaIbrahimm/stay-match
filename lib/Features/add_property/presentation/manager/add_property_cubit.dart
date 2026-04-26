@@ -102,7 +102,6 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
     log('🚀 Starting Sequential Submission...');
     emit(AddPropertyLoading());
 
-    // Fix: Ensure name matches exactly what you use in the loop
     List<PropertyImages> uploadedImages = [];
     String? errorMessage;
 
@@ -111,7 +110,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
       final bool isCover = (i == 0);
       log('📸 Uploading image $i: ${localImages[i].path}');
 
-      final result = await addPropertyRepo.uploadImg(
+      final result = await addPropertyRepo.uploadPropertyImg(
         file: localImages[i].path,
         isCover: isCover,
       );
