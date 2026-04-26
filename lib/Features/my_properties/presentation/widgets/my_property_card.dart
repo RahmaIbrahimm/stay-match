@@ -39,7 +39,7 @@ class MyPropertyCard extends StatelessWidget {
           children: [
             AspectRatio(
               aspectRatio: 1.5, // Keeps image height consistent
-              child: CardCoverPhoto(imageUrl: property.coverImageUrl),
+              child: CardCoverPhoto(imageUrl: property.coverImageUrl,showRating: false,showCompatibility: false,),
             ),
 
             // 2. Body Section (Title & Location)
