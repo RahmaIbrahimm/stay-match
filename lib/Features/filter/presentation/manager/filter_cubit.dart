@@ -5,6 +5,8 @@ import 'package:equatable/equatable.dart';
 import 'package:stay_match/Features/apartments/data/repos/apartment_repo.dart';
 import 'package:stay_match/Features/rooms/data/models/get_all_rooms.dart';
 import 'package:stay_match/Features/rooms/data/repos/rooms_repo.dart';
+import 'package:stay_match/core/utils/secure_storage_keys.dart';
+import 'package:stay_match/core/utils/service_locator.dart';
 
 import '../../../../core/utils/secure_storage_helper.dart';
 import '../../../apartments/data/models/all_apartments.dart';
@@ -314,9 +316,8 @@ class FilterCubit extends Cubit<FilterState> {
     emit(RoomsFilterLoading());
 
     try {
-      final token = await SecureStorageHelper.readFromSecureStorage(
-        key: SecureStorageHelper.refreshTokenKey,
-      );
+      final secureStorage = getIt.get<SecureStorageHelper>();
+      final token = await secureStorage.readFromSecureStorage(key:SecureStorageKeys.refreshTokenKey );
       log(
         'Token before rooms request: ${token != null ? 'Token present (${token.length} chars)' : 'NO TOKEN'}',
       );
@@ -345,11 +346,10 @@ class FilterCubit extends Cubit<FilterState> {
           emit(RoomsFilterFailure(errMessage: fail.errMessage));
         },
         (response) async {
-          final tokenAfter = await SecureStorageHelper.readFromSecureStorage(
-            key: SecureStorageHelper.refreshTokenKey,
-          );
+          final secureStorage = getIt.get<SecureStorageHelper>();
+          final token = await secureStorage.readFromSecureStorage(key:SecureStorageKeys.refreshTokenKey );
           log(
-            'Token after rooms request: ${tokenAfter != null ? 'Token present (${tokenAfter.length} chars)' : 'NO TOKEN'}',
+            'Token after rooms request: ${token != null ? 'Token present (${token.length} chars)' : 'NO TOKEN'}',
           );
 
           if (response.isSuccess == true) {
