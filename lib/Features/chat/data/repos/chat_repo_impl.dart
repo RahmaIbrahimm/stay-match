@@ -34,7 +34,8 @@ class ChatRepoImpl extends ChatRepo {
     try {
       var response = await apiService.post(
         Endpoints.startChat,
-        queryParameters: {'otherUserId': otherUserId},
+        data: {'otherUserId': otherUserId},
+        // data: {},
       );
       return right(StartChatResponse.fromJson(response));
     } on DioException catch (e) {
@@ -60,32 +61,26 @@ class ChatRepoImpl extends ChatRepo {
     required int chatId,
     String? content,
     String? filePath,
-    required String type, // هنا هنبعتها String زي ما هو واضح في الصورة (مثلاً "Text")
+    required String type,
   }) async {
     try {
-      // تجهيز البيانات
       Map<String, dynamic> dataMap = {
         'ChatId': chatId,
         'Type': type,
       };
-
-      if (content != null) dataMap['Content'] = content;
-
-      // معالجة الملف إذا وجد
+      dataMap['Content'] = content ?? "";
       if (filePath != null && filePath.isNotEmpty) {
         dataMap['File'] = await MultipartFile.fromFile(
           filePath,
           filename: filePath.split('/').last,
         );
       }
-
       FormData formData = FormData.fromMap(dataMap);
 
       var response = await apiService.post(
         Endpoints.sendMessage,
-        data: formData, // نرسل الـ formData في الـ body
+        data: formData,
       );
-
       return right(SendMessageResponse.fromJson(response));
     } on DioException catch (e) {
       return left(ServerFailure.fromDioError(e));
