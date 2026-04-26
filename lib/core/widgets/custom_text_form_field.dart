@@ -11,7 +11,7 @@ class CustomTextFormField extends StatelessWidget {
     this.suffixIcon,
     required this.validator,
     this.stroke = true,
-    required this.controller,
+     this.controller,
     this.isObscure = false,
     this.strokeWidth,
     this.horizontalPadding,
@@ -21,7 +21,7 @@ class CustomTextFormField extends StatelessWidget {
     this.strokeColor,
     this.borderRadius,
     this.hasShadow = true,
-    this.prefixIcon, this.fillColor, this.maxLines, this.keyboardType, this.onChanged,
+    this.prefixIcon, this.fillColor, this.maxLines, this.keyboardType, this.onChanged, this.focusColor,
   });
 
   final String? Function(String?) validator;
@@ -30,13 +30,14 @@ class CustomTextFormField extends StatelessWidget {
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final bool stroke;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final bool isObscure;
   final double? strokeWidth;
   final double? horizontalPadding;
   final double? verticalPadding;
   final bool enabled;
   final Color? strokeColor;
+  final Color? focusColor;
   final double? borderRadius;
   final bool hasShadow;
   final Color? fillColor;
@@ -77,7 +78,7 @@ class CustomTextFormField extends StatelessWidget {
             ),
           ),
           enabledBorder: buildOutlineInputBorder(),
-          focusColor: AppColors.primary,
+          focusColor: focusColor ??AppColors.primary,
           suffixIcon: suffixIcon,
           suffixIconColor: AppColors.primary,
           fillColor: fillColor ?? AppColors.containerColor,

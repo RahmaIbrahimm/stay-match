@@ -1,17 +1,17 @@
-part of 'chat_cubit.dart';
+part of 'chat_list_cubit.dart';
 
 @immutable
-sealed class ChatState extends Equatable {}
+sealed class ChatListState extends Equatable {}
 
-final class ChatInitial extends ChatState {
+final class ChatInitial extends ChatListState {
   @override
   List<Object?> get props => [];
 }
-final class ChatLoading extends ChatState {
+final class ChatlLoading extends ChatListState {
   @override
   List<Object?> get props => [];
 }
-final class ChatSuccess extends ChatState {
+final class ChatSuccess extends ChatListState {
   final MyChats response;
 
   ChatSuccess({required this.response});
@@ -19,7 +19,7 @@ final class ChatSuccess extends ChatState {
   @override
   List<Object?> get props => [response];
 }
-final class ChatFailure extends ChatState {
+final class ChatFailure extends ChatListState {
   final String errMessage;
 
   ChatFailure({required this.errMessage});

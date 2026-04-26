@@ -1,6 +1,8 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
+
 import '../constants/app_colors.dart';
 import '../constants/app_styles.dart';
 
@@ -28,7 +30,7 @@ class _CustomDateSelectorState extends State<CustomDateSelector> {
             selectedDayHighlightColor: AppColors.primary,
             firstDate: DateTime.now().subtract(Duration(days: 110 * 365)),
             currentDate: DateTime.now(),
-            lastDate: DateTime.now(),
+            lastDate: DateTime.now().subtract(Duration(days: 13 * 365)),
             animateToDisplayedMonthDate: true,
             gapBetweenCalendarAndButtons: 16,
           ),
@@ -60,7 +62,7 @@ class _CustomDateSelectorState extends State<CustomDateSelector> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(widget.dateController.text, style: AppStyles.regular12poppins),
-            Icon(Icons.calendar_month, color: AppColors.primary, size: 20),
+            Icon(Icons.calendar_month, color: AppColors.primary, size: 20.sp),
           ],
         ),
       ),

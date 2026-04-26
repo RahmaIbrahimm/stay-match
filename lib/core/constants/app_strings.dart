@@ -218,6 +218,9 @@ abstract class AppStrings {
   static const aboutMe= 'About Me';
   static const education= "Education";
   static const culturalImportance= "Cultural Importance";
+  static const myProfile= "My Profile";
+  static const personalInfo= "personalInfo";
+  static const typeMessage= "Type a message...";
 
   // ==========================================
   // DATA LISTS

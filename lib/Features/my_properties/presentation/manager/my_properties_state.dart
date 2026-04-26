@@ -1,19 +1,14 @@
 part of 'my_properties_cubit.dart';
 
 @immutable
-sealed class MyPropertiesState extends Equatable {}
-
-final class MyPropertiesInitial extends MyPropertiesState {
+sealed class MyPropertiesState extends Equatable {
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 
-final class MyPropertiesLoading extends MyPropertiesState {
-  @override
-  // TODO: implement props
-  List<Object?> get props => [];
-}
+final class MyPropertiesInitial extends MyPropertiesState {}
+
+final class MyPropertiesLoading extends MyPropertiesState {}
 
 final class MyPropertiesSuccess extends MyPropertiesState {
   final MyPropertiesResponse response;
@@ -21,7 +16,6 @@ final class MyPropertiesSuccess extends MyPropertiesState {
   MyPropertiesSuccess({required this.response});
 
   @override
-  // TODO: implement props
   List<Object?> get props => [response];
 }
 
@@ -31,6 +25,5 @@ final class MyPropertiesFailure extends MyPropertiesState {
   MyPropertiesFailure({required this.errMessage});
 
   @override
-  // TODO: implement props
   List<Object?> get props => [errMessage];
 }

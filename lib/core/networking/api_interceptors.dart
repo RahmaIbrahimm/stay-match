@@ -5,6 +5,9 @@ import 'package:dio/dio.dart';
 import 'package:stay_match/core/networking/endpoints.dart';
 import 'package:stay_match/core/utils/secure_storage_helper.dart';
 
+import '../utils/secure_storage_keys.dart';
+import '../utils/service_locator.dart';
+
 class ApiInterceptors extends Interceptor {
   final Dio dio;
   bool _isRefreshing = false;
@@ -12,6 +15,7 @@ class ApiInterceptors extends Interceptor {
   // Use a list of completers or a simple list of pending requests to retry
   final List<({RequestOptions options, ErrorInterceptorHandler handler})>
   _pendingRequests = [];
+  final secureStorage = getIt.get<SecureStorageHelper>();
 
   ApiInterceptors(this.dio);
 
@@ -21,9 +25,8 @@ class ApiInterceptors extends Interceptor {
     RequestInterceptorHandler handler,
   ) async {
     log('onRequest', name: 'ApiInterceptors');
-    final token = await SecureStorageHelper.readFromSecureStorage(
-      key: SecureStorageHelper.tokenKey,
-    );
+    final token = await secureStorage.readFromSecureStorage(
+        key: SecureStorageKeys.tokenKey);
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
     }
@@ -67,9 +70,9 @@ class ApiInterceptors extends Interceptor {
     _isRefreshing = true;
 
     try {
-      final refreshToken = await SecureStorageHelper.readFromSecureStorage(
-        key: SecureStorageHelper.refreshTokenKey,
-      );
+
+      final refreshToken = await secureStorage.readFromSecureStorage(
+          key: SecureStorageKeys.refreshTokenKey);
       log('refresh token : $refreshToken', name: 'ApiInterceptors');
       if (refreshToken == null) {
         log('no refresh token', name: 'ApiInterceptors');
@@ -89,17 +92,9 @@ class ApiInterceptors extends Interceptor {
         final newToken = response.data['token'];
         final newRefreshToken = response.data['refreshToken'];
 
-        // FIXED: Save to the correct keys
-        await SecureStorageHelper.addToSecureStorage(
-          key: SecureStorageHelper.tokenKey,
-          value: newToken,
-        );
-        await SecureStorageHelper.addToSecureStorage(
-          key: SecureStorageHelper.refreshTokenKey,
-          value: newRefreshToken,
-        );
-
-        // 1. Retry the original request that triggered the refresh
+        await secureStorage.addToSecureStorage(
+            key: SecureStorageKeys.refreshTokenKey,
+            value: newRefreshToken); // 1. Retry the original request that triggered the refresh
         await _retryRequest(originalError.requestOptions, handler);
 
         // 2. Retry all other pending requests that were queued
@@ -123,10 +118,8 @@ class ApiInterceptors extends Interceptor {
     RequestOptions requestOptions,
     ErrorInterceptorHandler handler,
   ) async {
-    final newToken = await SecureStorageHelper.readFromSecureStorage(
-      key: SecureStorageHelper.tokenKey,
-    );
-
+    final newToken = await secureStorage.readFromSecureStorage(
+        key: SecureStorageKeys.tokenKey);
     if (newToken != null) {
       requestOptions.headers['Authorization'] = 'Bearer $newToken';
     }
@@ -147,9 +140,6 @@ class ApiInterceptors extends Interceptor {
   Future<void> _forceLogout() async {
     _isRefreshing = false;
     _pendingRequests.clear();
-    await SecureStorageHelper.storage.deleteAll();
-
-    // TODO: Add your navigation logic here, e.g.,
-    // getIt<AppRouter>().router.go(Routes.login);
+    await secureStorage.storage.deleteAll();
   }
 }

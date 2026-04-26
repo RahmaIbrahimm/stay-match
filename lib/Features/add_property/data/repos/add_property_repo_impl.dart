@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -55,7 +54,7 @@ class AddPropertyRepoImpl extends AddPropertyRepo {
   }
 
   @override
-  Future<Either<Failure, UploadImageResponse>> uploadImg({
+  Future<Either<Failure, UploadImageResponse>> uploadPropertyImg({
     required String file,
     required bool isCover,
   }) async {

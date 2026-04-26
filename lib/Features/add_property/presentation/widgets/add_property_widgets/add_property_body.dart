@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stay_match/Features/add_property/presentation/widgets/add_property_widgets/property_card.dart';
+import 'package:stay_match/Features/add_property/presentation/widgets/add_property_widgets/property_choice_card.dart';
 import 'package:stay_match/core/routing/app_routing.dart';
 
 import '../../../../../core/constants/app_colors.dart';
@@ -45,7 +45,7 @@ class AddPropertyBody extends StatelessWidget {
 
               // Selection Card 1: Whole Apartment
               SliverToBoxAdapter(
-                child: PropertyCard(
+                child: PropertyChoiceCard(
                   title: AppStrings.wholeApartment,
                   subtitle: AppStrings.wholeApartmentDesc,
                   imagePath: AppImages.addPropertyImg,
@@ -59,7 +59,7 @@ class AddPropertyBody extends StatelessWidget {
 
               // Selection Card 2: Divided Into Rooms
               SliverToBoxAdapter(
-                child: PropertyCard(
+                child: PropertyChoiceCard(
                   title: AppStrings.dividedIntoRooms,
                   subtitle: AppStrings.dividedIntoRoomsDesc,
                   imagePath: AppImages.addRoomImg,

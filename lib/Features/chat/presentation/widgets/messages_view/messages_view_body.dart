@@ -1,79 +1,267 @@
+// import 'dart:developer';
+// import 'dart:io';
+//
+// import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:signalr_netcore/utils.dart';
+// import 'package:stay_match/Features/chat/presentation/manager/message_cubit.dart';
+// import 'package:stay_match/core/constants/app_styles.dart';
+// import 'package:stay_match/core/networking/endpoints.dart';
+// import 'package:stay_match/core/utils/secure_storage_helper.dart';
+// import 'package:stay_match/core/utils/secure_storage_keys.dart';
+// import 'package:stay_match/core/utils/service_locator.dart';
+// import 'package:url_launcher/url_launcher.dart';
 //
-// import '../../manager/message_cubit.dart';
-//
-// import 'package:flutter/material.dart';
-//
+// import '../../../../../core/constants/app_colors.dart';
+// import '../../../data/models/start_chat_response.dart';
+// import '../chat_list_view/chat_helper.dart';
 // import 'chat_bubble.dart';
-// import 'message_input_field.dart';
-// class MessagesViewBody extends StatelessWidget {
+//
+// class MessagesViewBody extends StatefulWidget {
 //   const MessagesViewBody({super.key});
 //
 //   @override
+//   State<MessagesViewBody> createState() => _MessagesViewBodyState();
+// }
+//
+// class _MessagesViewBodyState extends State<MessagesViewBody> {
+//   late String? myId;
+//
+//   @override
+//   void initState() {
+//     // TODO: implement initState
+//     super.initState();
+//     getIt.get<SecureStorageHelper>()
+//         .readFromSecureStorage(key: SecureStorageKeys.userIdKey)
+//         .then((value) {
+//       setState(() {
+//         myId = value;
+//       });
+//     });
+//   }
+//
+//   @override
 //   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         // ١. منطقة عرض الرسائل
-//         Expanded(
-//           child: BlocBuilder<MessageCubit, MessageState>(
-//             builder: (context, state) {
-//               if (state is MessageLoading) {
-//                 return const Center(child: CircularProgressIndicator());
-//               }
+//     return BlocBuilder<MessageCubit, MessageState>(
+//       builder: (context, state) {
+//         if (state is MessageSuccess) {
+//           final chatId = state.chatId;
+//           final otherUserName = state.otherUserName;
+//           final messages = state.messages;
+//           final profilePic = state.otherUserProfile;
 //
-//               if (state is MessageSuccess) {
-//                 final messages = state.messages;
+//           log('my id is : $myId');
+//           return CustomScrollView(
+//             slivers: [
+//               SliverAppBar(
+//                 pinned: true,
+//                 backgroundColor: AppColors.containerColor,
+//                 title: Row(
+//                   spacing: 12,
+//                   children: [
+//                     // Container(
+//                     //   height: 35.r,
+//                     //   width: 35.r,
+//                     //   decoration: BoxDecoration(
+//                     //     shape: BoxShape.circle,
+//                     //     color: AppColors.containerColor,
+//                     //     border: Border.all(
+//                     //       color: AppColors.primary.withValues(alpha: 0.05),
+//                     //       width: 2.r,
+//                     //     ),
+//                     //     image: (profilePic != null && profilePic.isNotEmpty)
+//                     //         ? DecorationImage(
+//                     //       fit: BoxFit.cover,
+//                     //       image: CachedNetworkImageProvider(profilePic),
+//                     //     )
+//                     //         : null,
+//                     //   ),
+//                     //   child: (profilePic == null || profilePic.isEmpty)
+//                     //       ? Icon(
+//                     //     Icons.person,
+//                     //     size: 30.sp,
+//                     //     color: AppColors.textColorSecondary.withValues(
+//                     //         alpha: 0.7),
+//                     //   )
+//                     //       : null,
+//                     // ),
+//                     SizedBox(
+//                       width: 35.r,
+//                       height: 35.r,
+//                       child: ClipOval(
+//                         child: (profilePic == null || profilePic.isEmpty)
+//                             ? ChatHelper.buildPlaceholder(
+//                             otherUserName ?? 'Guest User', fontSize: 14)
+//                             : CachedNetworkImage(
+//                           imageUrl: otherUserName ?? '',
+//                           fit: BoxFit.cover,
+//                           placeholder: (context, url) =>
+//                               ChatHelper.buildPlaceholder(
+//                                   otherUserName ?? 'Guest User', fontSize: 14),
+//                           errorWidget: (context, url, error) =>
+//                               ChatHelper.buildPlaceholder(
+//                                   otherUserName ?? 'Guest User', fontSize: 14),
+//                         ),
+//                       ),
+//                     ),
 //
-//                 if (messages.isEmpty) {
-//                   return const Center(child: Text("No messages yet. Say Hi!"));
-//                 }
+//                     Text(otherUserName ?? 'User Name',
+//                       style: AppStyles.semiBold14poppins,),
+//                   ],
+//                 ),
+//               ),
+//               SliverToBoxAdapter(child: Divider(color: AppColors.stroke)),
+//               SliverList(
+//                   delegate: SliverChildBuilderDelegate(
+//                           (context, index) =>
+//                           ChatBubble(message: messages[index],
+//                               isMe: messages[index].senderId == myId,
+//                               imageUrl: profilePic,
+//                               fullName: otherUserName),
+//                       childCount: messages.length)),
 //
-//                 return ListView.builder(
-//                   reverse: true, // مهم جداً: الرسائل تبدأ من تحت
-//                   padding: EdgeInsets.symmetric(vertical: 10.h),
-//                   itemCount: messages.length,
-//                   itemBuilder: (context, index) {
-//                     // بنعرض الرسايل من الأحدث للأقدم بسبب الـ reverse
-//                     final msg = messages.reversed.toList()[index];
-//
-//                     // تحديد لو الرسالة دي "مني" ولا "منه"
-//                     // كلمة "You" بتيجي من الـ API بتاعكم للرسائل الخاصة بيك
-//                     final bool isMe = msg.senderFullName == "You";
-//
-//                     return ChatBubble(message: msg, isMe: isMe);
-//                   },
-//                 );
-//               }
-//
-//               if (state is MessageFailure) {
-//                 return Center(child: Text(state.errMessage));
-//               }
-//
-//               return const SizedBox.shrink();
-//             },
-//           ),
-//         ),
-//
-//         // // ٢. منطقة الكتابة (Input Field)
-//         // MessageInputField(
-//         //   onSendMessage: (text) {
-//         //     // هنا بننادي الـ Cubit عشان يبعت الرسالة
-//         //     // الـ chatId ممكن تجيبه من الـ state.chatId في MessageSuccess
-//         //     final state = context.read<MessageCubit>().state;
-//         //     if (state is MessageSuccess && state.chatId != null) {
-//         //       context.read<MessageCubit>().sendMessage(
-//         //         chatId: state.chatId!,
-//         //         content: text,
-//         //       );
-//         //     }
-//         //   },
-//         //   // onAttachFile: () {
-//         //   //   // منطق اختيار الصور
-//         //   // },
-//         // ),
-//       ],
+//             ],
+//           );
+//         }
+//         return SizedBox.shrink();
+//       },
 //     );
 //   }
 // }
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stay_match/Features/chat/presentation/manager/message_cubit.dart';
+import 'package:stay_match/core/constants/app_styles.dart';
+import 'package:stay_match/core/networking/endpoints.dart';
+import 'package:stay_match/core/utils/secure_storage_helper.dart';
+import 'package:stay_match/core/utils/secure_storage_keys.dart';
+import 'package:stay_match/core/utils/service_locator.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../../core/constants/app_colors.dart';
+import '../../../data/models/start_chat_response.dart';
+import '../chat_list_view/chat_helper.dart';
+import 'chat_bubble.dart';
+
+class MessagesViewBody extends StatefulWidget {
+  const MessagesViewBody({super.key});
+
+  @override
+  State<MessagesViewBody> createState() => _MessagesViewBodyState();
+}
+
+class _MessagesViewBodyState extends State<MessagesViewBody> {
+  String? myId;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserId();
+  }
+
+  Future<void> _loadUserId() async {
+    final value = await getIt.get<SecureStorageHelper>()
+        .readFromSecureStorage(key: SecureStorageKeys.userIdKey);
+    setState(() {
+      myId = value;
+    });
+  }
+
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<MessageCubit, MessageState>(
+      listener: (context, state) {
+        if (state is MessageSuccess) {
+          WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+        }
+      },
+      builder: (context, state) {
+        if (state is MessageSuccess) {
+          final chatId = state.chatId;
+          final otherUserName = state.otherUserName;
+          final messages = state.messages;
+          final profilePic = state.otherUserProfile;
+
+          return Column(
+            children: [
+              Expanded(
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  slivers: [
+                    SliverAppBar(
+                      pinned: true,
+                      elevation: 0.5,
+                      backgroundColor: AppColors.containerColor,
+                      title: Row(
+                        children: [
+                          _buildHeaderAvatar(profilePic, otherUserName),
+                          SizedBox(width: 12.w),
+                          Text(otherUserName ?? 'User', style: AppStyles.semiBold14poppins),
+                        ],
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(vertical: 10.h),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                              (context, index) => ChatBubble(
+                            message: messages[index],
+                            isMe: messages[index].senderId == myId,
+                            imageUrl: profilePic,
+                            fullName: otherUserName,
+                          ),
+                          childCount: messages.length,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Widget _buildHeaderAvatar(String? url, String? name) {
+    return SizedBox(
+      width: 35.r,
+      height: 35.r,
+      child: ClipOval(
+        child: (url == null || url.isEmpty)
+            ? ChatHelper.buildPlaceholder(name ?? '?', fontSize: 14)
+            : CachedNetworkImage(
+          imageUrl: url,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => ChatHelper.buildPlaceholder(name ?? '?', fontSize: 14),
+          errorWidget: (context, url, error) => ChatHelper.buildPlaceholder(name ?? '?', fontSize: 14),
+        ),
+      ),
+    );
+  }
+}

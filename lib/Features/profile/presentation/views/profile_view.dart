@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +8,8 @@ import 'package:stay_match/Features/profile/presentation/manager/profile_cubit.d
 import 'package:stay_match/core/widgets/custom_drop_down_menu.dart';
 import 'package:stay_match/core/widgets/custom_elevated_button.dart';
 import 'package:stay_match/core/widgets/custom_text_form_field.dart';
+import 'package:stay_match/core/widgets/app_drawer/main_app_drawer.dart';
+import 'package:stay_match/core/widgets/menu_icon_button.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
@@ -66,11 +69,11 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: MainAppDrawer(),
       appBar: AppBar(
         title: Text(AppStrings.editProfile, style: AppStyles.semiBold20poppins),
         backgroundColor: AppColors.containerColor,
         centerTitle: true,
-        leading: IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
       ),
       body: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
@@ -140,7 +143,7 @@ class _ProfileViewState extends State<ProfileView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildLabel("Phone"),
+                    _buildLabel(AppStrings.phone),
                     _buildField(
                       hintText: AppStrings.phone,
                       validator: (val) => val!.isEmpty ? "Required" : null,
@@ -195,8 +198,12 @@ class _ProfileViewState extends State<ProfileView> {
             onChanged: (val) =>
                 cubit.updateRequest(UpdateProfileRequest(jobTitle: val)),
           ),
-          SizedBox(height: 32.h),
-
+          SizedBox(height: 16.h),
+          Container(
+            height: 16.h,
+            color: AppColors.fieldFillColor,
+          ),
+          SizedBox(height: 16.h),
           _buildSectionTitle("Compatibility Preferences"),
           _buildLabel(AppStrings.aboutMe),
           _buildField(
@@ -234,8 +241,13 @@ class _ProfileViewState extends State<ProfileView> {
             onChanged: () => null,
           ),
 
-          SizedBox(height: 24.h),
-          _buildSectionTitle("Housing Preferences"),
+          SizedBox(height: 16.h),
+          Container(
+            height: 16.h,
+            color: AppColors.fieldFillColor,
+          ),
+          SizedBox(height: 16.h),
+          _buildSectionTitle(AppStrings.housingPref),
           Row(
             children: [
               Expanded(
@@ -280,7 +292,12 @@ class _ProfileViewState extends State<ProfileView> {
             ],
           ),
 
-          SizedBox(height: 24.h),
+          SizedBox(height: 16.h),
+          Container(
+            height: 16.h,
+            color: AppColors.fieldFillColor,
+          ),
+          SizedBox(height: 16.h),
           _buildSectionTitle("Vibe Check"),
           VibeCheckSlider(
             title: AppStrings.culturalImportance,
@@ -305,8 +322,12 @@ class _ProfileViewState extends State<ProfileView> {
             },
           ),
 
-          SizedBox(height: 24.h),
-          _buildSectionTitle(AppStrings.accountSecurity),
+          SizedBox(height: 16.h),
+          Container(
+            height: 16.h,
+            color: AppColors.fieldFillColor,
+          ),
+          SizedBox(height: 16.h),          _buildSectionTitle(AppStrings.accountSecurity),
           _buildField(
             hintText: AppStrings.newPassword,
             fillColor: AppColors.containerColor,

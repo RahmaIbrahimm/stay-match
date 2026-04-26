@@ -55,7 +55,7 @@ class BottomSheetBody extends StatelessWidget {
           }
         },
         child: ListView(
-          padding: EdgeInsets.only(top: 30),
+          padding: EdgeInsets.only(top: 30.r),
           children: [
             // info: name
             Row(
@@ -208,6 +208,7 @@ class BottomSheetBody extends StatelessWidget {
                 );
               },
             ),
+            // info: nav to login page
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

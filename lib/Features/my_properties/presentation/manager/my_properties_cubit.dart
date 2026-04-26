@@ -16,8 +16,7 @@ class MyPropertiesCubit extends Cubit<MyPropertiesState> {
   }
 
   MyPropertiesResponse? _cachedResponse;
-
-  Future<void> _loadInitialData() async {
+   String selectedFilter = 'All Properties';  Future<void> _loadInitialData() async {
     if (_cachedResponse != null) {
       emit(MyPropertiesSuccess(response: _cachedResponse!));
     } else {

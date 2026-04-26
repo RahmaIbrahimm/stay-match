@@ -1,9 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stay_match/Features/chat/data/repos/chat_repo_impl.dart';
 import 'package:stay_match/Features/my_properties/data/repos/my_properties_repo_impl.dart';
 import 'package:stay_match/Features/profile/data/repos/profile_repo_impl.dart';
 import 'package:stay_match/Features/profile/presentation/manager/profile_cubit.dart';
+import 'package:stay_match/core/utils/secure_storage_helper.dart';
+import 'package:stay_match/core/utils/cache_service.dart';
 
 import '../../Features/add_property/data/repos/add_property_repo_impl.dart';
 import '../../Features/apartments/data/repos/apartment_repo_impl.dart';
@@ -13,50 +16,46 @@ import '../../Features/filter/presentation/manager/location_cubit.dart';
 import '../../Features/home/data/repos/home_repo_impl.dart';
 import '../../Features/my_properties/data/repos/my_properties_repo.dart';
 import '../../Features/rooms/data/repos/rooms_repo_impl.dart';
+import '../networking/chat_service.dart';
 import '../networking/dio_consumer.dart';
 
 final getIt = GetIt.instance;
 
-void setupServiceLocator() {
-  getIt.registerSingleton<DioConsumer>(DioConsumer(Dio()));
-  getIt.registerSingleton<AuthRepoImpl>(AuthRepoImpl(getIt.get<DioConsumer>()));
-  getIt.registerLazySingleton<ApartmentRepoImpl>(
-    () => ApartmentRepoImpl(apiService: getIt<DioConsumer>()),
+// خليناها Future عشان SharedPreferences
+Future<void> setupServiceLocator() async {
+
+  // 1. التخزين (External Services)
+  final sharedPrefs = await SharedPreferences.getInstance();
+  getIt.registerSingleton<SharedPreferences>(sharedPrefs);
+
+  getIt.registerLazySingleton<CacheService>(
+          () => CacheService(sharedPrefs: getIt<SharedPreferences>())
   );
-  getIt.registerLazySingleton<RoomsRepoImpl>(
-    () => RoomsRepoImpl(apiService: getIt<DioConsumer>()),
-  );
-  getIt.registerLazySingleton<HomeRepoImpl>(
-    () => HomeRepoImpl(apiService: getIt<DioConsumer>()),
-  );
+
+  getIt.registerLazySingleton<SecureStorageHelper>(() => SecureStorageHelper());
+
+  // 2. الشبكة (Networking)
+  getIt.registerLazySingleton<Dio>(() => Dio()); // تسجيل Dio نفسه
+  getIt.registerLazySingleton<DioConsumer>(() => DioConsumer(getIt<Dio>()));
+
+  // 3. المستودعات (Repositories - Singleton is fine here)
+  getIt.registerLazySingleton<AuthRepoImpl>(() => AuthRepoImpl(getIt<DioConsumer>()));
+  getIt.registerLazySingleton<ApartmentRepoImpl>(() => ApartmentRepoImpl(apiService: getIt<DioConsumer>()));
+  getIt.registerLazySingleton<RoomsRepoImpl>(() => RoomsRepoImpl(apiService: getIt<DioConsumer>()));
+  getIt.registerLazySingleton<HomeRepoImpl>(() => HomeRepoImpl(apiService: getIt<DioConsumer>()));
   getIt.registerLazySingleton<LocationRepoImpl>(() => LocationRepoImpl());
-  getIt.registerLazySingleton<LocationCubit>(
-        () => LocationCubit(locationRepository: getIt.get<LocationRepoImpl>()),
+  getIt.registerLazySingleton<ChatRepoImpl>(() => ChatRepoImpl(getIt<DioConsumer>()));
+  getIt.registerLazySingleton<AddPropertyRepoImpl>(() => AddPropertyRepoImpl(getIt<DioConsumer>()));
+  getIt.registerLazySingleton<MyPropertiesRepo>(() => MyPropertiesRepoImpl(apiService: getIt<DioConsumer>()));
+  getIt.registerLazySingleton<ProfileRepoImpl>(() => ProfileRepoImpl(apiService: getIt<DioConsumer>()));
+
+  getIt.registerFactory<LocationCubit>(
+        () => LocationCubit(locationRepository: getIt<LocationRepoImpl>()),
   );
-  getIt.registerLazySingleton<ChatRepoImpl>(() =>
-      ChatRepoImpl(getIt<DioConsumer>()));
-  getIt.registerLazySingleton<AddPropertyRepoImpl>(() =>
-      AddPropertyRepoImpl(getIt<DioConsumer>()));
-  getIt.registerLazySingleton<MyPropertiesRepo>(() =>
-      MyPropertiesRepoImpl( apiService: getIt<DioConsumer>(),));
 
-  getIt.registerLazySingleton<ProfileRepoImpl>(() =>
-      ProfileRepoImpl( apiService: getIt<DioConsumer>(),));
-  getIt.registerLazySingleton<ProfileCubit>(() =>
-      ProfileCubit( profileRepo: getIt<ProfileRepoImpl>(),));
-  // getIt.registerSingleton<HubConnection>(
-  //   HubConnectionBuilder()
-  //       .withUrl(
-  //       {${Endpoints.baseUrl}${Endpoints.startChat}, // رابط الهاب بتاعكم
-  //         options: HttpConnectionOptions(
-  //           accessTokenFactory: () async => "YOUR_TOKEN_HERE",
-  //           // لو فيه توكن ابعته هنا
-  //           logging: (level, message) => log('SignalR: $message'),
-  //         ),
-  //   )
-  //       .withAutomaticReconnect() // عشان لو النت قطع يرجع يوصل لوحده
-  //       .build(),
-  // );
+  getIt.registerFactory<ProfileCubit>(
+        () => ProfileCubit(profileRepo: getIt<ProfileRepoImpl>()),
+  );
 
-
+  getIt.registerLazySingleton<ChatService>(() => ChatService());
 }

@@ -41,6 +41,8 @@ class LoginData {
   final String? email;
   final String? displayName;
   final String? userId;
+  final String? otherUserProfileImageUrl;
+  final bool? profileComplete;
 
   LoginData(
     this.token,
@@ -49,6 +51,8 @@ class LoginData {
     this.email,
     this.displayName,
     this.userId,
+    this.otherUserProfileImageUrl,
+    this.profileComplete,
   });
 
   LoginData.fromJson(Map<String, dynamic> json)
@@ -57,6 +61,8 @@ class LoginData {
       email = json['email'] as String?,
       displayName = json['displayName'] as String?,
       userId = json['userId'] as String?,
+      otherUserProfileImageUrl = json['otherUserProfileImageUrl'] as String?,
+      profileComplete = json['profileComplete'] as bool?,
       refreshToken = json['refreshToken'] ?? '';
 
   Map<String, dynamic> toJson() {
@@ -67,6 +73,8 @@ class LoginData {
       'displayName': displayName,
       'userId': userId,
       'refreshToken': refreshToken,
+      'otherUserProfileImageUrl': otherUserProfileImageUrl,
+      'profileComplete': profileComplete,
     };
   }
 }

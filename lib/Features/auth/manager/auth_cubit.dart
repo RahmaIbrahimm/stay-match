@@ -5,12 +5,16 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stay_match/Features/auth/data/models/forget_password_response.dart';
 import 'package:stay_match/Features/auth/data/models/login_response.dart';
 import 'package:stay_match/Features/auth/data/models/login_with_google_response.dart';
+import 'package:stay_match/Features/auth/data/models/logout_response.dart';
 import 'package:stay_match/Features/auth/data/models/register_response.dart';
 import 'package:stay_match/Features/auth/data/models/verify_code_response.dart';
+import 'package:stay_match/core/utils/cache_service.dart';
 import 'package:stay_match/core/utils/secure_storage_helper.dart';
+import 'package:stay_match/core/utils/service_locator.dart';
 
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/networking/endpoints.dart';
+import '../../../core/utils/secure_storage_keys.dart';
 import '../data/models/reset_password_response.dart';
 import '../data/repos/auth_repo.dart';
 
@@ -198,14 +202,20 @@ class AuthCubit extends Cubit<AuthState> {
       },
       (response) async {
         if (response.isSuccess == true) {
-          await SecureStorageHelper.storage.write(
-            key: SecureStorageHelper.tokenKey,
-            value: response.data?.token,
-          );
-          await SecureStorageHelper.storage.write(
-            key: SecureStorageHelper.refreshTokenKey,
-            value: response.data?.refreshToken,
-          );
+          final secureStorage = getIt.get<SecureStorageHelper>();
+          await secureStorage.storage.write(
+              key: SecureStorageKeys.tokenKey, value: response.data?.token);
+          await secureStorage.storage.write(
+              key: SecureStorageKeys.refreshTokenKey,
+              value: response.data?.refreshToken);
+          await secureStorage.storage.write(key: SecureStorageKeys.userIdKey,
+              value: response.data?.userId);
+
+          final cacheHelper = getIt.get<CacheService>();
+          await cacheHelper.setData(
+              key: cacheHelper.userNameKey, value: response.data?.displayName);
+          await cacheHelper.setData(key: cacheHelper.userProfilePicKey,
+              value: response.data?.otherUserProfileImageUrl);
           emit(LoginStateSuccess(response));
         } else {
           emit(LoginStateFailure(errMessage: "Invalid Email or Password"));
@@ -226,7 +236,6 @@ class AuthCubit extends Cubit<AuthState> {
       final GoogleSignInAccount? googleUser = await _googleSignIn
           .authenticate();
 
-      // ✅ Handle cancel
       if (googleUser == null) {
         emit(GoogleLoginStateFailure(errMessage: "Login cancelled"));
         return;
@@ -247,13 +256,12 @@ class AuthCubit extends Cubit<AuthState> {
         (failure) {
           emit(GoogleLoginStateFailure(errMessage: failure.errMessage));
         },
-        (resp) {
+            (resp) async {
           if (resp.isSuccess == true) {
             emit(GoogleLoginStateSuccess(resp: resp));
-            SecureStorageHelper.addToSecureStorage(
-              key: SecureStorageHelper.tokenKey,
-              value: idToken,
-            );
+            final secureStorage = getIt.get<SecureStorageHelper>();
+            await secureStorage.storage.write(
+                key: SecureStorageKeys.tokenKey, value: idToken);
           } else {
             emit(
               GoogleLoginStateFailure(errMessage: _extractErrorMessage(resp)),
@@ -279,45 +287,6 @@ class AuthCubit extends Cubit<AuthState> {
 
     return resp.message ?? "Login failed";
   }
-  // Future<void> googleLogin() async {
-  //   emit(GoogleLoginStateLoading());
-  //
-  //   try {
-  //     await _googleSignIn.initialize(serverClientId: Endpoints.webClientId);
-  //     final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
-  //
-  //     final GoogleSignInAuthentication googleAuth = googleUser.authentication;
-  //
-  //     final String? idToken = googleAuth.idToken;
-  //
-  //     if (idToken == null) {
-  //       emit(GoogleLoginStateFailure(errMessage: "Failed to get ID token"));
-  //       return;
-  //     }
-  //     var response = await authRepo.loginWithGoogle(idToken: idToken);
-  //
-  //     response.fold(
-  //       (failure) {
-  //         emit(GoogleLoginStateFailure(errMessage: failure.errMessage));
-  //       },
-  //       (resp) {
-  //         if (resp.isSuccess == true) {
-  //           emit(GoogleLoginStateSuccess(resp: resp));
-  //           SecureStorageHelper.addToSecureStorage(key: SecureStorageHelper.tokenKey, value: idToken);
-  //         } else {
-  //           emit(
-  //             GoogleLoginStateFailure(
-  //               errMessage: resp.message ?? "Login failed",
-  //             ),
-  //           );
-  //         }
-  //       },
-  //     );
-  //   } catch (e) {
-  //     emit(GoogleLoginStateFailure(errMessage: "Google Sign-In failed: $e"));
-  //   }
-  // }
-
   // -------- signup ----------
   Future<void> signup() async {
     var response = await authRepo.signup(
@@ -416,7 +385,22 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  // ---- overriden ---
+  // ---------- reset password ---------
+  Future<void> logout() async {
+    emit(LogoutStateLoading());
+    var response = await authRepo.logout();
+    response.fold((fail) => LogoutStateFailure(errMessage: fail.errMessage), (
+        resp) {
+      if (resp.isSuccess == true) {
+        emit(LogoutStateSuccess(response: resp));
+      }
+      else {
+        LogoutStateFailure(errMessage: 'Something went wrong');
+      }
+    });
+  }
+
+  // ---- overridden ---
   @override
   Future<void> close() {
     // TODO: implement close

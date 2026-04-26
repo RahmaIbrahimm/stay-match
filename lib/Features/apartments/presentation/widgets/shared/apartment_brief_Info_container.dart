@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:stay_match/core/routing/app_routing.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:stay_match/Features/home/presentation/widget/small_custom_button.dart';
+import 'package:stay_match/core/routing/app_routing.dart';
 
 import '../../../../../../../../core/constants/app_colors.dart';
 import '../../../../../../../../core/constants/app_strings.dart';
@@ -184,12 +184,12 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
                 '${numBedrooms ?? 0} ${(numBedrooms ?? 0) > 1 ? 'Beds' : 'Bed'}',
           ),
           _buildFeature(
-            icon: FaIcon(FontAwesomeIcons.bath, size: scaleUp ? 20.sp : 12.sp),
+            icon: Icon(MdiIcons.bathtub, size: scaleUp ? 20.sp : 12.sp),
             text:
                 '${numBathrooms ?? 0} ${(numBathrooms ?? 0) > 1 ? 'Bathrooms' : 'Bathroom'}',
           ),
           _buildFeature(
-            icon: FaIcon(FontAwesomeIcons.expand, size: scaleUp ? 20.r : 12.r),
+            icon: Icon(MdiIcons.floorPlan, size: scaleUp ? 20.r : 12.r),
             text: '${size ?? 0} m²',
           ),
         ],

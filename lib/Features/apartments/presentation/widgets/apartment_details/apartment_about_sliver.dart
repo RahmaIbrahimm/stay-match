@@ -24,6 +24,9 @@ class ApartmentAboutSliver extends StatelessWidget {
                 style: AppStyles.bold18poppins.copyWith(
                   color: AppColors.textColorPrimary,
                 ),
+              ), TextSpan(
+                text: '\n',
+
               ),
               WidgetSpan(
                 child: ReadMoreText(
