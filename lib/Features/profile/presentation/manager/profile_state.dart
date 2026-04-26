@@ -9,21 +9,36 @@ final class ProfileInitial extends ProfileState {
   List<Object?> get props => [];
 }
 
-final class ProfileLoading extends ProfileState {
-  @override
-  List<Object?> get props => [];
-}
-
-final class ProfileSuccess extends ProfileState {
-  ProfileResponse response;
-  ProfileSuccess({required this.response});
-  @override
-  List<Object?> get props => [response];
-}
-
+final class ProfileLoading extends ProfileState {@override List<Object?> get props => [];}
 final class ProfileFailure extends ProfileState {
-  String errMessage;
+  final String errMessage;
   ProfileFailure({required this.errMessage});
   @override
   List<Object?> get props => [errMessage];
+}
+final class ProfileSuccess extends ProfileState {
+  final ProfileResponse response;
+
+  ProfileSuccess(
+      {required this.response});
+
+  @override
+  List<Object?> get props =>
+      [response];
+}
+final class ChangeProfilePictureFailure extends ProfileState{
+  final String errMessage;
+  ChangeProfilePictureFailure({required this.errMessage});
+  @override
+  List<Object?> get props => [errMessage];
+}
+final class ChangeProfilePictureSuccess extends ProfileState {
+  UpdateProfilePictureResponse? updateProfilePictureResponse;
+  UploadProfilePictureResponse? uploadProfilePictureResponse;
+
+  ChangeProfilePictureSuccess(
+      {this.updateProfilePictureResponse, this.uploadProfilePictureResponse});
+  @override
+  List<Object?> get props =>
+      [ updateProfilePictureResponse, uploadProfilePictureResponse];
 }
