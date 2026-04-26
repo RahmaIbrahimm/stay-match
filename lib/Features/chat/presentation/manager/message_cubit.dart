@@ -1,156 +1,384 @@
-// // import 'dart:developer';
-// //
-// // import 'package:bloc/bloc.dart';
-// // import 'package:equatable/equatable.dart';
-// // import 'package:meta/meta.dart';
-// // import 'package:signalr_netcore/hub_connection.dart';
-// // import 'package:stay_match/Features/chat/data/models/start_chat_response.dart';
-// // import 'package:stay_match/Features/chat/data/repos/chat_repo.dart';
-//
-//
-// // class MessageCubit extends Cubit<MessageState> {
-// //   final ChatRepo chatRepo;
-// //   final HubConnection hubConnection;
-// //
-// //   MessageCubit({required this.chatRepo, required this.hubConnection})
-// //     : super(MessageInitial());
-// //
-// //   List<Messages> _chatMessages = [];
-// //
-// //   Future<void> startChat({required String otherUserId}) async {
-// //     emit(MessageLoading());
-// //     log('person message loading');
-// //     var response = await chatRepo.startChat(otherUserId: otherUserId);
-// //     response.fold((fail) => emit(MessageFailure(errMessage: fail.errMessage)), (
-// //         res,
-// //     ) {
-// //       if (res.isSuccess == true) {
-// //         log('emit message success for person');
-// //         _chatMessages = res.data?.messages ?? [];
-// //         _listenToSignalR();
-// //         emit(MessageSuccess(
-// //             messages: List.from(_chatMessages),
-// //             chatId: res.data?.chatId
-// //         ));
-// //       } else {
-// //         emit(
-// //           MessageFailure(errMessage: res.message ?? 'Error getting chats'),
-// //         );
-// //         log('emit message fail for person');
-// //       }
-// //     });
-// //   }
-// //
-// //   void _listenToSignalR() {
-// //     // ركز هنا: "ReceiveMessage" لازم تكون مكتوبة زي الـ Backend بالظبط
-// //     hubConnection.on("ReceiveMessage", (arguments) {
-// //       if (arguments != null && arguments.isNotEmpty) {
-// //         // تحويل البيانات اللي جاية من SignalR لـ Messages Object
-// //         final newMessage = Messages.fromJson(arguments[0]);
-// //
-// //         // إضافة الرسالة الجديدة للقائمة الحالية
-// //         _chatMessages.add(newMessage);
-// //
-// //         // إرسال الحالة الجديدة للـ UI عشان يضيف الـ Bubble الجديدة فوراً
-// //         emit(MessageSuccess(messages: List.from(_chatMessages)));
-// //       }
-// //     });
-// //   }
-// //   @override
-// //   Future<void> close() {
-// //     hubConnection.off("ReceiveMessage");
-// //     return super.close();
-// //   }
-// // }
 // import 'dart:developer';
+// import 'dart:io';
+//
 // import 'package:equatable/equatable.dart';
-// import 'package:flutter/cupertino.dart';
+// import 'package:file_picker/file_picker.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:signalr_netcore/signalr_client.dart';
+// import 'package:path_provider/path_provider.dart'; // Add this
+// import 'package:record/record.dart'; // Add this
+// import 'package:stay_match/core/networking/chat_service.dart';
+//
 // import '../../data/models/start_chat_response.dart';
 // import '../../data/repos/chat_repo.dart';
+//
 // part 'message_state.dart';
 //
 // class MessageCubit extends Cubit<MessageState> {
 //   final ChatRepo chatRepo;
-//   // final HubConnection hubConnection;
+//   final ChatService chatService;
+//   bool _isServiceStarted = false;
+//   final String otherUserId;
+//   int? _chatId;
 //
-//   MessageCubit({required this.chatRepo}) : super(MessageInitial());
-//   // MessageCubit({required this.chatRepo, required this.hubConnection}) : super(MessageInitial());
+//   // Voice Recording Instance
+//   final AudioRecorder _audioRecorder = AudioRecorder();
 //
-//   // 1. تشغيل الشات (Start/Resume)
+//   int? get chatId => _chatId;
+//
+//   MessageCubit({
+//     required this.chatRepo,
+//     required this.chatService,
+//     required this.otherUserId,
+//   }) : super(MessageInitial());
+//
+//   // --- 1. Voice Recording Logic ---
+//
+//   Future<void> startRecording() async {
+//     try {
+//       log("🎙️ [Voice] Checking permissions...");
+//       if (await _audioRecorder.hasPermission()) {
+//         final directory = await getApplicationDocumentsDirectory();
+//         // Create unique path for the audio file
+//         final String filePath =
+//             '${directory.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
+//
+//         log("🎙️ [Voice] Starting record at: $filePath");
+//         await _audioRecorder.start(const RecordConfig(), path: filePath);
+//       } else {
+//         log("❌ [Voice] Permission denied");
+//       }
+//     } catch (e) {
+//       log("❌ [Voice] Start Error: $e");
+//     }
+//   }
+//
+//   Future<void> stopAndSendRecording() async {
+//     try {
+//       final String? path = await _audioRecorder.stop();
+//       if (path != null && _chatId != null) {
+//         log("✅ [Voice] Record stopped. Path: $path. Sending...");
+//
+//         // Directly call the repo with the "Audio" type
+//         var result = await chatRepo.sendMessage(
+//           chatId: _chatId!,
+//           filePath: path,
+//           type: "Voice",
+//         );
+//
+//         result.fold(
+//               (failure) => log("❌ [Voice] Send Failure: ${failure.errMessage}"),
+//               (success) => log("✨ [Voice] Voice Message Sent Successfully"),
+//         );
+//       }
+//     } catch (e) {
+//       log("❌ [Voice] Stop Error: $e");
+//     }
+//   }
+//
+//   // --- 2. Pick File Logic ---
+//
+//   Future<void> pickAFile() async {
+//     try {
+//       FilePickerResult? result = await FilePicker.pickFiles();
+//
+//       if (result != null && result.files.single.path != null) {
+//         String filePath = result.files.single.path!;
+//         String fileName = result.files.single.name;
+//
+//         if (state is MessageSuccess) {
+//           emit((state as MessageSuccess).copyWith(
+//             stagedFileName: fileName,
+//             stagedFileBase64: filePath,
+//           ));
+//         }
+//       }
+//     } catch (e) {
+//       log("❌ [pickAFile] Error: $e");
+//     }
+//   }
+//
+//   // --- 3. Start Chat Logic ---
+//
 //   Future<void> startChat({required String otherUserId}) async {
-//     emit(MessageLoading());
-//     var result = await chatRepo.startChat(otherUserId: otherUserId);
+//     if (state is! MessageSuccess) {
+//       emit(MessageLoading());
+//     }
 //
+//     var result = await chatRepo.startChat(otherUserId: otherUserId);
 //     result.fold(
-//           (failure) => emit(MessageFailure(errMessage:  failure.errMessage)),
+//           (failure) => emit(MessageFailure(errMessage: failure.errMessage)),
 //           (response) {
 //         final chatData = response.data;
-//         final messagesList = chatData?.messages ?? [];
+//         final messagesList = List<Messages>.from(chatData?.messages ?? []);
+//         _chatId = chatData?.chatId;
 //
-//         emit(MessageSuccess(
-//           messages: messagesList,
-//           chatId: chatData?.chatId,
-//           otherUserName: chatData?.otherUserFullName,
-//           otherUserProfile: chatData?.otherUserProfilePicture,
-//         ));
+//         if (!isClosed) {
+//           emit(MessageSuccess(
+//             messages: messagesList,
+//             chatId: chatData?.chatId,
+//             otherUserName: chatData?.otherUserFullName,
+//             otherUserProfile: chatData?.otherUserProfilePicture,
+//           ));
+//         }
 //
-//         // ربط الـ SignalR بالـ ChatId اللي رجع لاستقبال الرسائل
-//         if (chatData?.chatId != null) {
-//           _listenToMessages();
+//         if (!_isServiceStarted) {
+//           _isServiceStarted = true;
+//           chatService.initHub(
+//             onRefresh: () => startChat(otherUserId: otherUserId),
+//           );
 //         }
 //       },
 //     );
 //   }
 //
-//   // 2. الاستماع للرسائل (SignalR Listener)
-//   void _listenToMessages() {
-//     hubConnection.off("ReceiveMessage");
-//     hubConnection.on("ReceiveMessage", (arguments) {
-//       if (arguments != null && state is MessageSuccess) {
-//         final currentState = state as MessageSuccess;
+//   // --- 4. Main Send Logic (Text/Image/File) ---
 //
-//         // تحويل الـ JSON اللي جاي من السيرفر لموديل Messages
-//         final newMessage = Messages.fromJson(arguments[0]);
+//   Future<void> handleSendMessage({String? text}) async {
+//     if (state is! MessageSuccess) return;
 //
-//         // تحديث القائمة فوراً بإضافة الرسالة الجديدة
-//         final updatedMessages = List<Messages>.from(currentState.messages)..add(newMessage);
+//     final currentState = state as MessageSuccess;
+//     final String? path = currentState.stagedFileBase64;
+//     final String? fileName = currentState.stagedFileName;
 //
-//         emit(MessageSuccess(
-//           messages: updatedMessages,
-//           chatId: currentState.chatId,
-//           otherUserName: currentState.otherUserName,
-//           otherUserProfile: currentState.otherUserProfile,
-//         ));
-//       }
-//     });
-//   }
+//     String apiType = "Text";
+//     if (path != null) {
+//       apiType = _isImage(fileName) ? "Image" : "File";
+//     }
 //
-//   // 3. إرسال الرسالة (API POST)
-//   Future<void> sendMessage({
-//     required int chatId,
-//     String? content,
-//     String? filePath,
-//     required String type,
-//   }) async {
-//     // نرسل الطلب، والرد هيجيلنا أوتوماتيك عبر SignalR في ميثود _listenToMessages
 //     var result = await chatRepo.sendMessage(
-//       chatId: chatId,
-//       content: content,
-//       filePath: filePath,
-//       type: type,
+//       chatId: _chatId!,
+//       content: text,
+//       filePath: path,
+//       type: apiType,
 //     );
 //
 //     result.fold(
-//           (failure) => log("Error sending message: ${failure.errMessage}"),
-//           (response) => log("API: Message sent successfully"),
+//           (failure) => log("❌ [handleSendMessage] Error: ${failure.errMessage}"),
+//           (success) {
+//         emit(currentState.copyWith(
+//           stagedFileName: null,
+//           stagedFileBase64: null,
+//         ));
+//       },
 //     );
+//   }
+//
+//   bool _isImage(String? fileName) {
+//     if (fileName == null) return false;
+//     final images = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+//     return images.any((ext) => fileName.toLowerCase().endsWith(ext));
 //   }
 //
 //   @override
 //   Future<void> close() {
-//     hubConnection.off("ReceiveMessage"); // تنظيف الـ Listener عند إغلاق الشات
+//     _audioRecorder.dispose(); // Dispose the recorder
+//     chatService.hubConnection.off('ReceiveMessage');
 //     return super.close();
 //   }
 // }
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:equatable/equatable.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:record/record.dart';
+import 'package:stay_match/core/networking/chat_service.dart';
+
+import '../../data/models/start_chat_response.dart';
+import '../../data/repos/chat_repo.dart';
+
+part 'message_state.dart';
+
+class MessageCubit extends Cubit<MessageState> {
+  final ChatRepo chatRepo;
+  final ChatService chatService;
+  final String otherUserId;
+
+  bool _isServiceStarted = false;
+  int? _chatId;
+  final AudioRecorder _audioRecorder = AudioRecorder();
+
+  int? get chatId => _chatId;
+
+  MessageCubit({
+    required this.chatRepo,
+    required this.chatService,
+    required this.otherUserId,
+  }) : super(MessageInitial()) {
+    log("🛠️ [MessageCubit] Initialized for: $otherUserId");
+  }
+
+  // --- 1. START CHAT & REFRESH LOGIC ---
+  // isRefresh: If true, fetches data without emitting MessageLoading()
+  Future<void> startChat({required String otherUserId, bool isRefresh = false}) async {
+    if (state is! MessageSuccess && !isRefresh) {
+      emit(MessageLoading());
+    }
+
+    var result = await chatRepo.startChat(otherUserId: otherUserId);
+
+    result.fold(
+          (failure) {
+        log("❌ [startChat] Error: ${failure.errMessage}");
+        if (!isRefresh) emit(MessageFailure(errMessage: failure.errMessage));
+      },
+          (response) {
+        final chatData = response.data;
+        final messagesList = List<Messages>.from(chatData?.messages ?? []);
+        _chatId = chatData?.chatId;
+
+        if (!isClosed) {
+          if (isRefresh && state is MessageSuccess) {
+            // Update only the message list to keep staged files/previews intact
+            final currentState = state as MessageSuccess;
+            emit(currentState.copyWith(messages: messagesList));
+          } else {
+            emit(MessageSuccess(
+              messages: messagesList,
+              chatId: chatData?.chatId,
+              otherUserName: chatData?.otherUserFullName,
+              otherUserProfile: chatData?.otherUserProfilePicture,
+            ));
+          }
+        }
+
+        // Initialize SignalR only once
+        if (!_isServiceStarted) {
+          _isServiceStarted = true;
+          log("📡 [SignalR] Initializing Hub Connection...");
+          chatService.initHub(
+            onRefresh: () {
+              log("🔄 [SignalR] Event Received: Refreshing chat...");
+              startChat(otherUserId: otherUserId, isRefresh: true);
+            },
+          );
+        }
+      },
+    );
+  }
+
+  // --- 2. VOICE RECORDING LOGIC ---
+  Future<void> startRecording() async {
+    try {
+      log("🎙️ [Voice] Checking microphone permissions...");
+      if (await _audioRecorder.hasPermission()) {
+        final directory = await getApplicationDocumentsDirectory();
+        final String filePath = '${directory.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
+
+        log("🎙️ [Voice] Recording started: $filePath");
+        await _audioRecorder.start(const RecordConfig(), path: filePath);
+      } else {
+        log("⚠️ [Voice] Permission denied by user");
+      }
+    } catch (e) {
+      log("❌ [Voice] Start Error: $e");
+    }
+  }
+// Add this inside your MessageCubit class
+  Future<void> discardRecording() async {
+    try {
+      // This stops the recorder but we ignore the returned path
+      await _audioRecorder.stop();
+      log("🗑️ [Voice] Recording discarded locally.");
+    } catch (e) {
+      log("❌ [Voice] Discard Error: $e");
+    }
+  }
+  Future<void> stopAndSendRecording() async {
+    try {
+      final String? path = await _audioRecorder.stop();
+      if (path != null && _chatId != null) {
+        log("✅ [Voice] Record stopped. Sending file at: $path");
+
+        var result = await chatRepo.sendMessage(
+          chatId: _chatId!,
+          filePath: path,
+          type: "Voice",
+        );
+
+        result.fold(
+              (failure) => log("❌ [Voice] Send API Error: ${failure.errMessage}"),
+              (success) => log("✨ [Voice] Message Sent Successfully"),
+        );
+      }
+    } catch (e) {
+      log("❌ [Voice] Stop/Send Error: $e");
+    }
+  }
+
+  // --- 3. FILE PICKING LOGIC ---
+  Future<void> pickAFile() async {
+    try {
+      log("🔵 [FilePicker] Opening picker...");
+      FilePickerResult? result = await FilePicker.pickFiles();
+
+      if (result != null && result.files.single.path != null) {
+        String filePath = result.files.single.path!;
+        String fileName = result.files.single.name;
+
+        if (state is MessageSuccess) {
+          emit((state as MessageSuccess).copyWith(
+            stagedFileName: fileName,
+            stagedFileBase64: filePath, // Storing the path for Multipart
+          ));
+          log("✅ [FilePicker] Staged: $fileName");
+        }
+      }
+    } catch (e) {
+      log("❌ [FilePicker] Error: $e");
+    }
+  }
+
+  // --- 4. MAIN SEND MESSAGE (Text, Image, or File) ---
+  Future<void> handleSendMessage({String? text}) async {
+    if (state is! MessageSuccess || _chatId == null) return;
+
+    final currentState = state as MessageSuccess;
+    final String? path = currentState.stagedFileBase64;
+    final String? fileName = currentState.stagedFileName;
+
+    // Logic to determine API type
+    String apiType = "Text";
+    if (path != null) {
+      apiType = _isImage(fileName) ? "Image" : "File";
+    }
+
+    log("🚀 [SendMessage] Sending $apiType...");
+
+    var result = await chatRepo.sendMessage(
+      chatId: _chatId!,
+      content: text,
+      filePath: path,
+      type: apiType,
+    );
+
+    result.fold(
+          (failure) => log("❌ [SendMessage] Error: ${failure.errMessage}"),
+          (success) {
+        log("✨ [SendMessage] Success");
+        // Reset staged files after successful send
+        emit(currentState.copyWith(
+          stagedFileName: null,
+          stagedFileBase64: null,
+        ));
+      },
+    );
+  }
+
+  // --- HELPERS ---
+  bool _isImage(String? fileName) {
+    if (fileName == null) return false;
+    final imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+    return imageExtensions.any((ext) => fileName.toLowerCase().endsWith(ext));
+  }
+
+  @override
+  Future<void> close() {
+    log("⚰️ [MessageCubit] Disposing resources...");
+    _audioRecorder.dispose();
+    chatService.hubConnection.off('ReceiveMessage');
+    return super.close();
+  }
+}
