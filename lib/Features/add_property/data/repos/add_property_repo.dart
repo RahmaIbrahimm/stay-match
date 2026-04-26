@@ -16,7 +16,7 @@ abstract class AddPropertyRepo {
   Future<Either<Failure, AddRoomResponse>> addRoom({
     required AddRoomRequest request,
   });
-  Future<Either<Failure, UploadImageResponse>> uploadImg({
+  Future<Either<Failure, UploadImageResponse>> uploadPropertyImg({
     required String file,
     required bool isCover
   });
