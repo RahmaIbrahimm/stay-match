@@ -4,7 +4,7 @@ import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
 
-class PropertyCard extends StatelessWidget {
+class PropertyChoiceCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final String imagePath;
@@ -12,7 +12,7 @@ class PropertyCard extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
-  const PropertyCard({
+  const PropertyChoiceCard({
     super.key,
     required this.title,
     required this.subtitle,
