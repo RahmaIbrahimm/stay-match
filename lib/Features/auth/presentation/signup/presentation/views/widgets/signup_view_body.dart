@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart%20';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import '../../../../widgets/auth_header.dart';
 import '../../../../widgets/custom_bottom_sheet.dart';
@@ -12,9 +13,9 @@ class SignUpViewBody extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const SizedBox(height: 45),
+         SizedBox(height: 45.h),
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding:  EdgeInsets.all(16.0.r),
           child: AuthHeaderText(
             greeting: AppStrings.signUpGreeting,
             title: AppStrings.signUpTitle,
