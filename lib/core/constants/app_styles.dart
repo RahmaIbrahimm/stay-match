@@ -193,10 +193,13 @@ abstract class AppStyles {
   // ---------------- Manrope ----------------
 
   // ---------------- POPPINS - 16 ----------------
-  static TextStyle get semiBold16manrope =>
+  static TextStyle get bold14manrope =>
+      _manrope(fontSize: 16, fontWeight: FontWeight.bold);  static TextStyle get semiBold16manrope =>
       _manrope(fontSize: 16, fontWeight: FontWeight.w600);
 
   // ---------------- POPPINS - 14 ----------------
+  static TextStyle get semiBold14manrope =>
+      _manrope(fontSize: 14, fontWeight: FontWeight.w600);
   static TextStyle get medium14manrope =>
       _manrope(fontSize: 14, fontWeight: FontWeight.w500);
 
