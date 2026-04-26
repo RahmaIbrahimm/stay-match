@@ -102,11 +102,11 @@ class Messages {
   }
   int? id;
   String? content;
-  dynamic fileUrl;
+  String? fileUrl;
   String? type;
   String? senderId;
   String? senderFullName;
-  dynamic senderProfileImageUrl;
+  String? senderProfileImageUrl;
   String? sentAt;
 
   Map<String, dynamic> toJson() {
