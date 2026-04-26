@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stay_match/Features/auth/presentation/reset_password/presentation/views/reset_password_view.dart';
+import 'package:stay_match/Features/chat/presentation/views/chat_list_view.dart';
+import 'package:stay_match/Features/chat/presentation/views/messages_view.dart';
 import 'package:stay_match/Features/google_maps/presentation/views/google_maps_view.dart';
 import 'package:stay_match/Features/home/presentation/views/home_view.dart';
 import 'package:stay_match/Features/profile/presentation/manager/profile_cubit.dart';
@@ -24,6 +26,7 @@ import '../../Features/auth/presentation/login/presentation/views/login_view.dar
 import '../../Features/auth/presentation/signup/presentation/views/signup_view.dart';
 import '../../Features/auth/presentation/verify_email/presentation/views/verify_email_view.dart';
 import '../../Features/google_maps/presentation/widgets/maps_helper.dart';
+import '../../Features/my_properties/presentation/views/my_properties_view.dart';
 import '../../Features/rooms/presentation/views/find_room_view.dart';
 import '../../Features/rooms/presentation/views/room_details_view.dart';
 
@@ -48,24 +51,26 @@ class AppRouting {
   static const googleMapsView = '/google-maps';
   // =========== main app routes ==============
   static const homeView = '/home';
-  static const chatList = '/chat-list';
+  static const chatListPath = '/chat-list';
   static const addPropertyPath = '/add-property';
+  static const profilePath = '/profile';
   // Nested routes (no leading slash)
-  static const findRoomView = 'find-room';
+  static const findRoomView = '/find-room';
   static const roomDetailsViewPath = 'room-details/:id';
-  static const findApartmentView = 'find-apartment';
+  static const findApartmentView = '/find-apartment';
   static const apartmentDetailsViewPath = 'apartment-details/:id';
   static const mapBodyPath = '/mapBody';
-  static const messagesPath = '/messages/:id';
+  static const messagesPath = '/messages/:otherUserId';
   static const addPropertyInfoPath = 'add-property-info';
   static const addAmenitiesPath = 'add-amenities';
   static const addLocationAndGalleryPath = 'add-location-and-gallery';
   static const addPropertySuccessPath = 'add-property-success';
-  static const profilePath = '/profile';
+  static const myPropertiesPath = '/my-properties';
 
   //main app names
   static const homeViewName = 'home';
   static const addPropertyName = 'addProperty';
+  static const profileName = 'profile';
   static const findRoomViewName = 'findRoom';
   static const roomDetailsViewName = 'roomDetails';
   static const findApartmentViewName = 'findApartment';
@@ -78,7 +83,7 @@ class AppRouting {
   static const addAmenitiesName = 'addAmenities';
   static const addLocationAndGalleryName = 'addLocationAndGallery';
   static const addPropertySuccessName = 'addPropertySuccess';
-  static const profileName = 'profile';
+  static const myPropertiesName = 'myProperties';
   static final router = GoRouter(
     navigatorKey: rootNavKey,
     initialLocation: loginView,
@@ -138,16 +143,80 @@ class AppRouting {
           );
         },
       ),
+
+      // property related routes
+      // Nested route: /home/find-apartment/apartment-details/123
+      GoRoute(
+        parentNavigatorKey: rootNavKey,
+        path: findApartmentView,
+        name: findApartmentViewName,
+        builder: (context, state) => const FindApartmentView(),
+        routes: [
+          GoRoute(
+            path: apartmentDetailsViewPath,
+            name: apartmentDetailsViewName,
+            builder: (context, state) {
+              final id =
+                  int.tryParse(
+                    state.pathParameters['id'] ?? '-1',
+                  ) ??
+                      -1;
+              return ApartmentDetailsView(id: id);
+            },
+          ),
+        ],
+      ),
+      // Nested route: /home/find-room/room-details/123
+      GoRoute(
+        parentNavigatorKey: rootNavKey,
+        path: findRoomView,
+        name: findRoomViewName,
+        builder: (context, state) => const FindRoomView(),
+        routes: [
+          // Nested route: /home/find-room/room-details/123
+          GoRoute(
+            parentNavigatorKey: rootNavKey,
+            path: roomDetailsViewPath,
+            name: roomDetailsViewName,
+            builder: (context, state) {
+              final roomId =
+                  int.tryParse(
+                    state.pathParameters['roomId'] ?? '-1',
+                  ) ??
+                      -1;
+              final propertyId =
+                  int.tryParse(
+                    state.pathParameters['propertyId'] ?? '-1',
+                  ) ??
+                      -1;
+              return RoomDetailsView(
+                roomId: roomId,
+                propertyId: propertyId,
+              );
+            },
+          ),
+        ],
+      ),
+
+      GoRoute(
+        path: myPropertiesPath,
+        name: myPropertiesName,
+        builder: (context, state) => const MyPropertiesView(),
+        routes: [],
+      ),
       // chat
-      // GoRoute(
-      //   path: messagesPath,
-      //   name: messagesName,
-      //   builder: (context, state) {
-      //     final id = state.pathParameters['id'] ?? '-1';
-      //     return MessagesView(otherUserId: id);
-      //   },
-      // ),
-      // MAIN APP SHELL - protected routes
+      GoRoute(
+        path: messagesPath,
+        name: messagesName,
+        builder: (context, state) {
+          final otherUserId =
+              state.pathParameters['otherUserId'] ?? '-1';
+
+          return MessagesView(otherUserId: otherUserId);
+        },
+        routes: [],
+      ),
+
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return LayoutScaffold(navigationShell: navigationShell);
@@ -160,60 +229,21 @@ class AppRouting {
                 name: homeViewName,
                 builder: (context, _) => const HomeView(),
                 routes: [
-                  // Nested route: /home/find-apartment/apartment-details/123
-                  GoRoute(
-                    path: findApartmentView,
-                    name: findApartmentViewName,
-                    builder: (context, state) => const FindApartmentView(),
-                    routes: [
-                      GoRoute(
-                        path: apartmentDetailsViewPath,
-                        name: apartmentDetailsViewName,
-                        builder: (context, state) {
-                          final id =
-                              int.tryParse(
-                                state.pathParameters['id'] ?? '-1',
-                              ) ??
-                              -1;
-                          return ApartmentDetailsView(id: id);
-                        },
-                      ),
-                    ],
-                  ),
-                  // Nested route: /home/find-room/room-details/123
-                  GoRoute(
-                    path: findRoomView,
-                    name: findRoomViewName,
-                    builder: (context, state) => const FindRoomView(),
-                    routes: [
-                      // Nested route: /home/find-room/room-details/123
-                      GoRoute(
-                        path: roomDetailsViewPath,
-                        name: roomDetailsViewName,
-                        builder: (context, state) {
-                          final roomId =
-                              int.tryParse(
-                                state.pathParameters['roomId'] ?? '-1',
-                              ) ??
-                              -1;
-                          final propertyId =
-                              int.tryParse(
-                                state.pathParameters['propertyId'] ?? '-1',
-                              ) ??
-                              -1;
-                          return RoomDetailsView(
-                            roomId: roomId,
-                            propertyId: propertyId,
-                          );
-                        },
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ],
           ),
-
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: chatListPath,
+                name: chatListName,
+                builder: (context, _) => const ChatListView(),
+                routes: [
+                ],
+              ),
+            ],
+          ),
           StatefulShellBranch(
             routes: [
               ShellRoute(
