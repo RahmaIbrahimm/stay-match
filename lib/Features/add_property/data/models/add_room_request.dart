@@ -48,7 +48,7 @@ class AddRoomRequest {
     if (json['propertyImages'] != null) {
       propertyImages = [];
       json['propertyImages'].forEach((v) {
-        propertyImages?.add(PropertyImages.fromJson(v));
+        propertyImages?.add(SharedPropertyImages.fromJson(v));
       });
     }
     if (json['rooms'] != null) {
@@ -71,7 +71,7 @@ class AddRoomRequest {
   String? government;
   int? latitude;
   int? longitude;
-  List<PropertyImages>? propertyImages;
+  List<SharedPropertyImages>? propertyImages;
   List<Rooms>? rooms;
   bool? isDraft;
 
@@ -158,7 +158,7 @@ class Rooms {
     if (json['propertyImages'] != null) {
       propertyImages = [];
       json['propertyImages'].forEach((v) {
-        propertyImages?.add(PropertyImages.fromJson(v));
+        propertyImages?.add(SharedPropertyImages.fromJson(v));
       });
     }
     roomAmenities = json['amenities'] != null ? RoomAmenities.fromJson(json['amenities']) : null;
@@ -177,7 +177,7 @@ class Rooms {
   bool? balcony;
   bool? window;
   bool? petsAllowed;
-  List<PropertyImages>? propertyImages;
+  List<SharedPropertyImages>? propertyImages;
   RoomAmenities? roomAmenities;
   AllowedTenants? allowedTenants;
 
@@ -297,13 +297,13 @@ class RoomAmenities {
 /// imageUrl : "string"
 /// isCover : true
 
-class PropertyImages {
-  PropertyImages({
+class SharedPropertyImages {
+  SharedPropertyImages({
       this.id, 
       this.imageUrl, 
       this.isCover,});
 
-  PropertyImages.fromJson(dynamic json) {
+  SharedPropertyImages.fromJson(dynamic json) {
     id = json['id'];
     imageUrl = json['imageUrl'];
     isCover = json['isCover'];
