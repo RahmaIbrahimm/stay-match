@@ -16,4 +16,7 @@ abstract class AppImages {
   static const addPropertyImg = '$path/add_apartment_img.png';
   static const addRoomImg = '$path/add_room_img.png';
   static const listingSuccess = '$path/listing_success.png';
+  // error
+  static const errorImg =  '$path/error_img.png';
+
 }
