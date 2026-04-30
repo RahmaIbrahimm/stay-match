@@ -343,7 +343,7 @@ import 'package:stay_match/core/networking/endpoints.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../data/models/start_chat_response.dart';
-import '../chat_list_view/chat_helper.dart';
+import '../shared/chat_helper.dart';
 
 class ChatBubble extends StatelessWidget {
   final Messages message;
