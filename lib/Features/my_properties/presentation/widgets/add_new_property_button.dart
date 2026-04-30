@@ -13,10 +13,7 @@ class AddNewPropertyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  GestureDetector(
-      onTap: (){
-        StatefulNavigationShell.of(context).goBranch(1);
-        context.goNamed(AppRouting.addPropertyName);
-      },
+      onTap: () => context.goNamed(AppRouting.addPropertyName),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 4.r, vertical: 12.r),
         decoration: BoxDecoration(
@@ -24,7 +21,7 @@ class AddNewPropertyButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(
-              color: const Color(0x33000000), // shadowColor
+              color: const Color(0x33000000),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
