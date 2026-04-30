@@ -58,12 +58,8 @@ class MapPickerSection extends StatelessWidget {
               child: GoogleMapsView(
                 key: ValueKey('$latitude-$longitude'),
                 mapView: MapViewType.partialView,
-                initialLatitude: (latitude != null && latitude != 0)
-                    ? 30.0444
-                    : latitude,
-                initialLongitude: (longitude != null && longitude != 0)
-                    ? 31.2357
-                    : longitude,
+                initialLatitude: (latitude == null || latitude == 0) ? 30.0444 : latitude,
+                initialLongitude: (longitude == null || longitude == 0) ? 31.2357 : longitude,
                 mapContext: MapContext.picker,
                 onLocationSelected: onLocationSelected,
               ),
