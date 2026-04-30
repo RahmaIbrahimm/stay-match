@@ -81,7 +81,7 @@ class MyPropertyCard extends StatelessWidget {
             // 3. Divider
             Divider(height: 1.h, color: AppColors.stroke, indent: 8.w, endIndent: 8.w),
 
-            // 4. Bottom Section (Price & Heart)
+            // 4. Bottom Section (Price)
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
               child: Row(
@@ -92,7 +92,7 @@ class MyPropertyCard extends StatelessWidget {
                       TextSpan(
                         children: [
                           TextSpan(
-                            text: 'EGP ${property.monthlyRent}', // Static for now per your request
+                            text: 'EGP ${property.monthlyRent}',
                             style: AppStyles.bold16poppins.copyWith(
                               color: AppColors.textColorPrimary,
                               fontSize: 15.sp,
@@ -109,11 +109,11 @@ class MyPropertyCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Icon(
-                    Icons.favorite_border_rounded,
-                    size: 16.sp,
-                    color: AppColors.textColorSecondary,
-                  ),
+                  // Icon(
+                  //   Icons.favorite_border_rounded,
+                  //   size: 16.sp,
+                  //   color: AppColors.textColorSecondary,
+                  // ),
                 ],
               ),
             ),
