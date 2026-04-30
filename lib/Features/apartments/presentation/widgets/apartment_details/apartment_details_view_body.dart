@@ -40,6 +40,8 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
   String? allowedStudentTenantGender;
   late final ValueNotifier<int> currentPic;
   GoogleMapController? controller;
+  DateTime? moveInDate;
+  int? duration;
   @override
   void initState() {
     super.initState();
@@ -396,7 +398,16 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                       ),
                       SizedBox(height: 12.h),
                       // todo : logic for choosing time
-                      DurationSelector(),
+                      // DurationSelector(),
+                      DurationSelector(
+                        minimumStay: details.minimumStay?.toInt() ?? 1,
+                        selectedDate: moveInDate,
+                        selectedMonths: duration,
+                        onDateChanged: (date) =>
+                            setState(() => moveInDate = date),
+                        onDurationChanged: (months) =>
+                            setState(() => duration = months),
+                      ),
                     ],
                   ),
                 ),
@@ -438,8 +449,9 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
               SliverToBoxAdapter(
                 child: GestureDetector(
                   onTap: () {
-                    if (context.canPop())
+                    if (context.canPop()) {
                       context.pushNamed(AppRouting.googleMapsViewName);
+                    }
                   },
                   onLongPress: () {
                     if (context.mounted) {
@@ -448,7 +460,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                         queryParameters: {
                           'latitude': details.latitude.toString(),
                           'longitude': details.longitude.toString(),
-                          'isStatic': 'true', // This string is what the route looks for
+                          'isStatic': 'true',
                         },
                       );
                     }
@@ -477,7 +489,11 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     SizedBox(height: 24.h),
-                    _buildButtons(),
+                    _buildButtons(hostId: details.hostId.toString(),
+                        startDate: moveInDate?.toUtc().toIso8601String(),
+                        duration: duration,
+                        propertyId: widget.id,
+                        details: details),
                   ],
                 ),
               ),
@@ -520,7 +536,9 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
     );
   }
 
-  RPadding _buildButtons() {
+  RPadding _buildButtons(
+      {required String hostId, required String? startDate, required ApartmentDetailsData?
+      details, required int? duration, required int? propertyId}) {
     return RPadding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -540,7 +558,12 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
               borderColor: AppColors.primary,
               backgroundColor: AppColors.containerColor,
               onPressed: () {
-                if (mounted) context.pushNamed(AppRouting.chatListName);
+                if (mounted) {
+                  context.pushNamed(
+                      AppRouting.messagesName, pathParameters: {
+                    'otherUserId': hostId
+                  });
+                }
               },
             ),
           ),
@@ -551,14 +574,50 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
               borderRadius: 10,
               text: AppStrings.bookNow,
               textStyle: AppStyles.bold14poppins,
-              onPressed: () {},
-            ),
+              onPressed: (moveInDate == null || duration == null)
+                  ? null
+                  : () => _onBookNowPressed(details: details),),
           ),
         ],
       ),
     );
   }
 
+  void _onBookNowPressed({required ApartmentDetailsData?
+  details}) {
+    // 1. Check for nulls
+    if (moveInDate == null || duration == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text("Please select both a Move In date and Duration"),
+          backgroundColor: Colors.redAccent,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10)),
+        ),
+      );
+      return; // Stop execution here
+    }
+
+    // 2. If valid, proceed with navigation
+    if (mounted) {
+      context.pushNamed(
+        AppRouting.bookingRequestName,
+        extra: {
+          'propertyId': widget.id,
+          'startDate': moveInDate!.toIso8601String(), // Safe to use ! now
+          'duration': duration,
+          'monthlyRent': details?.monthlyRent,
+          'street':details?.street ?? '',
+          'city': details?.city ?? '',
+          'hostName': details?.hostName,
+          'propertyName': details?.name,
+          'propertyImg': details!.propertyImages?[0].imageUrl,
+          // 'hostImg': details.host?[0],
+        },
+      );
+    }
+  }
   RichText deposit(ApartmentDetailsData details) {
     return RichText(
       text: TextSpan(
@@ -619,7 +678,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
           margin: EdgeInsets.symmetric(horizontal: 4.w),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: AppColors.primary.withOpacity(value),
+            color: AppColors.primary.withValues(alpha: value),
           ),
         );
       },
