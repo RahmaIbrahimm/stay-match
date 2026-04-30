@@ -19,7 +19,7 @@ class AmenitiesAndServicesBody extends StatelessWidget {
     return BlocBuilder<AddPropertyCubit, AddPropertyState>(
       builder: (context, state) {
         final cubit = context.read<AddPropertyCubit>();
-        final request = cubit.request;
+        final request = cubit.apartmentRequest;
 
         return Scaffold(
           body: SafeArea(
