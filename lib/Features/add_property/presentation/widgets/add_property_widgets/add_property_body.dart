@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:stay_match/Features/add_property/presentation/widgets/add_property_widgets/property_choice_card.dart';
 import 'package:stay_match/core/routing/app_routing.dart';
 
@@ -9,7 +8,6 @@ import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_images.dart';
 import '../../../../../core/constants/app_strings.dart';
 import '../../../../../core/constants/app_styles.dart';
-import '../../../../../core/widgets/custom_elevated_button.dart';
 import '../../../../filter/presentation/widgets/filter_helper.dart';
 import '../../manager/add_property_cubit.dart';
 import '../shared/add_property_app_bar.dart';
@@ -73,7 +71,9 @@ class AddPropertyBody extends StatelessWidget {
               SliverToBoxAdapter(
                 child: AddPropertyButtons(
                   cubit: cubit,
-                  nextPageRoute: AppRouting.addPropertyInfoName,
+                  nextPageRoute: cubit.selectedType == PropertyType.apartment
+                      ? AppRouting.addPropertyInfoName
+                      : AppRouting.addRoomName,
                   hasBackButton: false,
                 ),
               ),
