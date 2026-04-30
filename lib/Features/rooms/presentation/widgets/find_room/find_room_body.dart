@@ -80,6 +80,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/Features/filter/presentation/manager/filter_cubit.dart';
 import 'package:stay_match/Features/rooms/presentation/widgets/find_room/show_search_rooms.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
+import 'package:stay_match/core/widgets/global_error_widget.dart';
 
 import '../../../../filter/presentation/widgets/filter_card.dart';
 import '../../../../filter/presentation/widgets/filter_helper.dart';
@@ -132,14 +133,19 @@ class FindRoomBody extends StatelessWidget {
             ),
           );
         } else if (state is RoomsFilterFailure) {
+          final cubit = context.read<FilterCubit>();
           log(state.errMessage);
-          return PropertyBodyBase.buildErrorState(
-            context: context,
-            errorMessage: state.errMessage,
-            onTryAgain: () {
-              context.read<FilterCubit>().getAllRooms(forceRefresh: true);
-            },
-          );
+          // return PropertyBodyBase.buildErrorState(
+          //   context: context,
+          //   errorMessage: state.errMessage,
+          //   onTryAgain: () {
+          //     context.read<FilterCubit>().getAllRooms(forceRefresh: true);
+          //   },
+          // );
+          return GlobalErrorWidget(onTryAgain: (){
+            cubit.getAllRooms();
+
+          });
         } else if (state is RoomsFilterLoading) {
           return PropertyBodyBase.buildLoadingState(
             context: context,
