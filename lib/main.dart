@@ -6,6 +6,8 @@ import 'package:stay_match/Features/auth/data/repos/auth_repo_impl.dart';
 import 'package:stay_match/core/theme/app_theme.dart';
 import 'package:stay_match/core/utils/secure_storage_keys.dart';
 import 'package:stay_match/core/utils/service_locator.dart';
+import 'package:stay_match/core/widgets/global_error_widget.dart';
+import 'package:stay_match/core/widgets/restart_widget.dart';
 
 import 'Features/auth/manager/auth_cubit.dart';
 import 'core/routing/app_routing.dart';
@@ -16,6 +18,17 @@ Future<void> main() async {
   final secureStorage = getIt.get<SecureStorageHelper>();
   String? token = await secureStorage.readFromSecureStorage(
       key: SecureStorageKeys.tokenKey);
+  // ErrorWidget.builder = (FlutterErrorDetails details) {
+  //   return GlobalErrorWidget(
+  //     onTryAgain: () {
+  //       // Use the navigator key to get a context even when the UI is crashed
+  //       final context = AppRouting.rootNavKey.currentContext;
+  //       if (context != null) {
+  //         RestartWidget.restartApp(context);
+  //       }
+  //     },
+  //   );
+  // };
   runApp(
     MultiBlocProvider(
       providers: [
