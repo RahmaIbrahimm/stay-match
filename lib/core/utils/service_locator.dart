@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stay_match/Features/booking/data/repos/booking_repo_impl.dart';
 import 'package:stay_match/Features/chat/data/repos/chat_repo_impl.dart';
 import 'package:stay_match/Features/my_properties/data/repos/my_properties_repo_impl.dart';
 import 'package:stay_match/Features/profile/data/repos/profile_repo_impl.dart';
@@ -48,6 +49,7 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton<AddPropertyRepoImpl>(() => AddPropertyRepoImpl(getIt<DioConsumer>()));
   getIt.registerLazySingleton<MyPropertiesRepo>(() => MyPropertiesRepoImpl(apiService: getIt<DioConsumer>()));
   getIt.registerLazySingleton<ProfileRepoImpl>(() => ProfileRepoImpl(apiService: getIt<DioConsumer>()));
+  getIt.registerLazySingleton<BookingRepoImpl>(() => BookingRepoImpl(getIt<DioConsumer>()));
 
   getIt.registerFactory<LocationCubit>(
         () => LocationCubit(locationRepository: getIt<LocationRepoImpl>()),
