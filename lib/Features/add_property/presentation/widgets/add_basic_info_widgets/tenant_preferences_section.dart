@@ -36,7 +36,7 @@ class TenantPreferencesSection extends StatelessWidget {
   }
 
   Widget _buildTenantGrid(AddPropertyCubit cubit) {
-    final t = cubit.request.allowedTenants;
+    final t = cubit.apartmentRequest.allowedTenants;
     final Map<String, bool> tenantStatus = {
       AppStrings.pets: t?.petsAllowed ?? false,
       AppStrings.families: t?.allowsFamilies ?? false,
