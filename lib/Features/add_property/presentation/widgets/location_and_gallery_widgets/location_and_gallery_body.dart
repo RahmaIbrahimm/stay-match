@@ -16,7 +16,7 @@ import '../shared/progress_bar.dart';
 import '../shared/section_header.dart';
 import '../shared/validation_helper.dart';
 import 'address_details_section.dart';
-import 'image_upload_section.dart';
+import 'property_gallery_widget.dart';
 import 'map_picker_section.dart';
 
 class LocationAndGalleryBody extends StatefulWidget {
@@ -35,7 +35,7 @@ class _LocationAndGalleryBodyState extends State<LocationAndGalleryBody> {
   void initState() {
     super.initState();
     final cubit = context.read<AddPropertyCubit>();
-    _streetController = TextEditingController(text: cubit.request.street);
+    _streetController = TextEditingController(text: cubit.apartmentRequest.street);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
@@ -55,7 +55,7 @@ class _LocationAndGalleryBodyState extends State<LocationAndGalleryBody> {
     return BlocBuilder<AddPropertyCubit, AddPropertyState>(
       builder: (context, propertyState) {
         final cubit = context.read<AddPropertyCubit>();
-        final request = cubit.request;
+        final request = cubit.apartmentRequest;
 
         return Form(
           key:_formKey,
@@ -172,7 +172,7 @@ class _LocationAndGalleryBodyState extends State<LocationAndGalleryBody> {
 
   void _handleFinalValidation() {
     final cubit = context.read<AddPropertyCubit>();
-    final req = cubit.request;
+    final req = cubit.apartmentRequest;
 
     // 1. Standard Form Validation
     if (!_formKey.currentState!.validate()) return;
@@ -185,7 +185,7 @@ class _LocationAndGalleryBodyState extends State<LocationAndGalleryBody> {
     if (ValidationHelper.isLocationAndGalleryValid(req)) {
       debugPrint('🚀 VALIDATION PASSED - Calling Submit');
       // cubit.nextStep();
-      cubit.submitProperty();
+      cubit.submitApartment();
     } else {
       debugPrint('❌ VALIDATION FAILED on Helper check');
       _showError("Please check location and gallery details");
@@ -224,8 +224,8 @@ class _LocationAndGalleryBodyState extends State<LocationAndGalleryBody> {
         selectedGovernorate = closestGov;
         selectedCity = closestCity;
         final cubit = context.read<AddPropertyCubit>();
-        cubit.request.government = closestGov?.nameInEnglish ?? "";
-        cubit.request.city = closestCity?.nameInEnglish ?? "";
+        cubit.apartmentRequest.government = closestGov?.nameInEnglish ?? "";
+        cubit.apartmentRequest.city = closestCity?.nameInEnglish ?? "";
       });
     }
   }
