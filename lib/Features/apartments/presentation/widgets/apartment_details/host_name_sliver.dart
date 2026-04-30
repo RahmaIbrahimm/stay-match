@@ -29,6 +29,7 @@ class HostNameSliver extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               spacing: 8.w,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.person, size: 20.sp, color: Colors.white),
                 Expanded(
