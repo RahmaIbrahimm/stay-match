@@ -108,7 +108,6 @@ class RoomCard extends StatelessWidget {
                 size: 10.r,
               ),
               Flexible(
-                // Use Flexible instead of Expanded
                 child: Text(
                   '${street ?? 'No street'}, ${city ?? 'No city'}',
                   maxLines: 1,
