@@ -34,7 +34,7 @@ class _AddBasicInfoBodyState extends State<AddBasicInfoBody> {
   @override
   void initState() {
     super.initState();
-    final req = context.read<AddPropertyCubit>().request;
+    final req = context.read<AddPropertyCubit>().apartmentRequest;
     nameController = TextEditingController(text: req.name);
     descController = TextEditingController(text: req.description);
     rentController = TextEditingController(
@@ -77,7 +77,7 @@ class _AddBasicInfoBodyState extends State<AddBasicInfoBody> {
       String isoDate = picked.toIso8601String();
       setState(() => dateController.text = isoDate.split('T')[0]);
       if (context.mounted)
-        context.read<AddPropertyCubit>().request.availableFrom = isoDate;
+        context.read<AddPropertyCubit>().apartmentRequest.availableFrom = isoDate;
     }
   }
 
@@ -144,7 +144,7 @@ class _AddBasicInfoBodyState extends State<AddBasicInfoBody> {
 
   void _handleValidationAndNavigation() {
     final cubit = context.read<AddPropertyCubit>();
-    final req = cubit.request;
+    final req = cubit.apartmentRequest;
     final t = req.allowedTenants;
 
     // 1. Check TextFields (Name, Description, Rent, Size)
