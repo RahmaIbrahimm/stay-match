@@ -34,7 +34,7 @@ class PropertyDetailsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final req = cubit.request;
+    final req = cubit.apartmentRequest;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
