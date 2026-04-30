@@ -7,7 +7,7 @@ import 'package:stay_match/core/constants/app_styles.dart';
 import 'package:stay_match/core/routing/app_routing.dart';
 
 import '../../../data/models/my_chats.dart';
-import 'chat_helper.dart';
+import '../shared/chat_helper.dart';
 
 class ChatTile extends StatelessWidget {
   final MyChatsData chatData;
