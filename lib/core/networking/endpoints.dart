@@ -29,6 +29,9 @@ abstract class Endpoints {
   static const String updateProfilePic = '/api/UserProfile/UpdateProfilePicture';
   static const String uploadProfilePic = '/api/UserProfile/UploadProfilePicture';
   static const String deleteAccount = '/api/UserProfile/delete-account';
+  // booking
+  static const String  requestApartmentBooking= '/api/Booking/entire-apartment';
+  static const String  requestRoomBooking= '/api/Booking/room';
 
   // client ids uses for google login
   static const String webClientId =
