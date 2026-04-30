@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_strings.dart';
 import '../../../../../core/widgets/custom_elevated_button.dart';
+import '../../../../filter/presentation/widgets/filter_helper.dart';
 import '../../manager/add_property_cubit.dart';
 
 class AddPropertyButtons extends StatelessWidget {
@@ -23,7 +24,7 @@ class AddPropertyButtons extends StatelessWidget {
   final AddPropertyCubit cubit;
   final bool submit;
   final VoidCallback? onNextPressed;
-
+  // final PropertyType propertyType;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -59,7 +60,7 @@ class AddPropertyButtons extends StatelessWidget {
                 onNextPressed!();
               } else {
                 if (submit) {
-                  cubit.submitProperty();
+                  cubit.submitApartment();
                 } else {
                   cubit.nextStep();
                   context.pushNamed(nextPageRoute);
