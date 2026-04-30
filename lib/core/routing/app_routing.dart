@@ -18,6 +18,7 @@ import '../../Features/add_property/presentation/views/add_basic_info_view.dart'
 import '../../Features/add_property/presentation/views/add_property_success_view.dart';
 import '../../Features/add_property/presentation/views/add_property_view.dart';
 import '../../Features/add_property/presentation/views/amenities_and_services_view.dart';
+import '../../Features/add_property/presentation/views/individual_room_details_view.dart';
 import '../../Features/add_property/presentation/views/location_and_gallery_view.dart';
 import '../../Features/apartments/presentation/views/apartment_details_view.dart';
 import '../../Features/apartments/presentation/views/find_apartment_view.dart';
@@ -25,6 +26,7 @@ import '../../Features/auth/presentation/forget_password/presentation/views/forg
 import '../../Features/auth/presentation/login/presentation/views/login_view.dart';
 import '../../Features/auth/presentation/signup/presentation/views/signup_view.dart';
 import '../../Features/auth/presentation/verify_email/presentation/views/verify_email_view.dart';
+import '../../Features/booking/presentation/views/booking_request_view.dart';
 import '../../Features/google_maps/presentation/widgets/maps_helper.dart';
 import '../../Features/my_properties/presentation/views/my_properties_view.dart';
 import '../../Features/rooms/presentation/views/find_room_view.dart';
@@ -60,12 +62,20 @@ class AppRouting {
   static const findApartmentView = '/find-apartment';
   static const apartmentDetailsViewPath = 'apartment-details/:id';
   static const mapBodyPath = '/mapBody';
+
+  //chat
   static const messagesPath = '/messages/:otherUserId';
+
+  // add property
   static const addPropertyInfoPath = 'add-property-info';
+  static const addRoomPath = 'add-room';
   static const addAmenitiesPath = 'add-amenities';
   static const addLocationAndGalleryPath = 'add-location-and-gallery';
   static const addPropertySuccessPath = 'add-property-success';
   static const myPropertiesPath = '/my-properties';
+
+  // booking
+  static const bookingRequestPath = '/booking-request';
 
   //main app names
   static const homeViewName = 'home';
@@ -79,11 +89,17 @@ class AppRouting {
   static const mapName = 'map';
   static const chatListName = 'chatListName';
   static const messagesName = 'messages';
+
+  // add property
   static const addPropertyInfoName = 'addPropertyInfo';
+  static const addRoomName = 'addRoom';
   static const addAmenitiesName = 'addAmenities';
   static const addLocationAndGalleryName = 'addLocationAndGallery';
   static const addPropertySuccessName = 'addPropertySuccess';
   static const myPropertiesName = 'myProperties';
+
+  // booking
+  static const bookingRequestName = 'bookingRequest';
   static final router = GoRouter(
     navigatorKey: rootNavKey,
     initialLocation: loginView,
@@ -216,6 +232,39 @@ class AppRouting {
         },
         routes: [],
       ),
+      // booking
+      GoRoute(
+        path: bookingRequestPath,
+        name: bookingRequestName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+
+          final propertyId = extra['propertyId'] as int? ?? 0;
+          final startDate = extra['startDate'] as String? ??
+              ''; // Keep as String
+          final duration = extra['duration'] as int? ?? -1;
+          // final joinYear = extra['joinYear'] as int? ?? -1;
+          final monthlyRent = extra['monthlyRent'] as double? ?? -1;
+          final city = extra['city'] as String? ?? ''; // Keep as String
+          final street = extra['street'] as String? ?? ''; // Keep as String
+          final hostName = extra['hostName'] as String? ?? ''; // Keep as String
+          final propertyName = extra['propertyName'] as String? ?? '';
+          final propertyImg = extra['propertyImg'] as String? ?? '';
+          // final hostImg = extra['hostImg'] as String? ?? ''; // Keep as String
+
+          return BookingRequestView(
+            propertyId: propertyId,
+            startDate: startDate,
+            duration: duration,
+            hostName: hostName,
+            street: street,
+            city: city,
+            propertyName: propertyName,
+            propertyImg: propertyImg, monthlyRent: monthlyRent,
+            // hostImg: hostImg,
+            // joinYear: joinYear,
+          );
+        },),
 
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -244,6 +293,7 @@ class AppRouting {
               ),
             ],
           ),
+
           StatefulShellBranch(
             routes: [
               ShellRoute(
@@ -284,6 +334,12 @@ class AppRouting {
                         name: addPropertySuccessName,
                         builder: (context, state) =>
                             const AddPropertySuccessView(),
+                      ),
+                      GoRoute(
+                        path: addRoomPath, // 'add-amenities'
+                        name: addRoomName,
+                        builder: (context, state) =>
+                        const IndividualRoomDetailsView(),
                       ),
                     ],
                   ),
