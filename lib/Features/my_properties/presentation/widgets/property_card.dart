@@ -63,6 +63,9 @@ class PropertyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      foregroundDecoration :  property.status == 'Rejected' ? BoxDecoration(
+          color: Colors.white.withAlpha(80)
+      ):null,
       margin: EdgeInsets.only(bottom: 16.h),
       decoration: BoxDecoration(
         color: Colors.white, // containerColor
@@ -136,6 +139,7 @@ class PropertyCard extends StatelessWidget {
                   ),
                 ),
               ),
+
             ],
           ),
           Container(
