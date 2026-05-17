@@ -73,7 +73,7 @@ class AddPropertyBody extends StatelessWidget {
                   cubit: cubit,
                   nextPageRoute: cubit.selectedType == PropertyType.apartment
                       ? AppRouting.addPropertyInfoName
-                      : AppRouting.addRoomName,
+                      : AppRouting.addSharedApartmentDetailsName,
                   hasBackButton: false,
                 ),
               ),
