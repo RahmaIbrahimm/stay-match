@@ -1,34 +1,45 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
+import 'package:stay_match/core/widgets/custom_elevated_button.dart';
 import 'package:stay_match/core/widgets/custom_text_form_field.dart';
-import 'package:stay_match/core/widgets/menu_icon_button.dart';
 
 import '../../manager/chat_list_cubit.dart';
 import 'chat_tile.dart';
 
 class ChatListBody extends StatelessWidget {
-  const ChatListBody({super.key});
+  ChatListBody({super.key});
 
+  final TextEditingController _searchController = TextEditingController();
+  Timer? _debounce;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ChatListCubit, ChatListState>(
       builder: (context, state) {
-        if (state is ChatlLoading) {
-          return const Center(child: CircularProgressIndicator());
+        if (state is ChatLoading) {
+          return const Center(
+              child: CircularProgressIndicator(color: AppColors.primary,));
         }
 
         if (state is ChatSuccess) {
           // Accessing your data list from the full response you wanted to keep
-          final chats = state.response.data ?? [];
+          final List<dynamic> chats = state.isSearchMode
+              ? (state.searchResponse?.data ?? [])
+              : (state.response?.data ?? []);
           final chatCubit = BlocProvider.of<ChatListCubit>(context);
-          if (chats.isEmpty) {
-            return const Center(child: Text("No conversations yet."));
+          // todo: make this pretty
+          void onSearchChanged(String query) {
+            if (_debounce?.isActive ?? false) _debounce?.cancel();
+            _debounce = Timer(const Duration(milliseconds: 500), () {
+              // Calling the unified method in your Cubit
+              context.read<ChatListCubit>().getInbox(query: query);
+            });
           }
-
           return CustomScrollView(
             slivers: [
               SliverAppBar(
@@ -41,13 +52,12 @@ class ChatListBody extends StatelessWidget {
                 ),
                 centerTitle: true,
                 pinned: true,
-                // todo : Implement menu button
-                leading: MenuIconButton(),
               ),
               SliverToBoxAdapter(
                 child: RPadding(
                   padding: EdgeInsets.symmetric(horizontal: 16.r),
                   child: CustomTextFormField(
+                    controller: _searchController,
                     hintText: AppStrings.searchConvo,
                     validator: (val) => null,
                     hasShadow: false,
@@ -55,6 +65,7 @@ class ChatListBody extends StatelessWidget {
                       Icons.search,
                       color: AppColors.textColorSecondary,
                     ),
+                    onChanged: onSearchChanged,
                     fillColor: AppColors.fieldFillColor,
                     stroke: false,
                     borderRadius: 12,
@@ -62,7 +73,7 @@ class ChatListBody extends StatelessWidget {
                   ),
                 ),
               ),
-              SliverPadding(
+              if(chats.isNotEmpty)SliverPadding(
                 padding: EdgeInsets.symmetric(vertical: 8.r),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
@@ -81,6 +92,65 @@ class ChatListBody extends StatelessWidget {
                   ),
                 ),
               ),
+              if(chats.isEmpty)
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30.w),
+                    // Extra padding for the whole column
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          _searchController.text.isEmpty
+                              ? Icons.chat_bubble_outline_rounded
+                              : Icons.search_off_rounded,
+                          size: 80.r,
+                          color: AppColors.textColorSecondary.withOpacity(0.4),
+                        ),
+                        SizedBox(height: 16.h),
+                        Text(
+                          _searchController.text.isEmpty
+                              ? "No Conversations Yet"
+                              : "No Results Found",
+                          style: AppStyles.bold18poppins.copyWith(
+                            color: AppColors.textColorPrimary,
+                          ),
+                        ),
+                        SizedBox(height: 8.h),
+                        Text(
+                          _searchController.text.isEmpty
+                              ? "Start a chat with your matches to see them here."
+                              : "We couldn't find any chats matching '${_searchController
+                              .text}'.",
+                          textAlign: TextAlign.center,
+                          style: AppStyles.regular14poppins.copyWith(
+                            color: AppColors.textColorSecondary,
+                          ),
+                        ),
+
+                        // --- THE NEW BUTTON STYLE ---
+                        if (_searchController.text.isNotEmpty) ...[
+                          SizedBox(height: 32.h),
+                          SizedBox(
+                              width: double.infinity,
+                              height: 50.h,
+                              child: CustomElevatedButton(
+                                text: "Clear Search Results",
+                                onPressed: () {
+                                  _searchController.clear();
+                                  context.read<ChatListCubit>().getInbox();
+                                },
+                                textStyle: AppStyles.semiBold16manrope,
+                                textColor: Colors.white,
+                                borderRadius: 12,
+                              )
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                )
             ],
           );
         }
@@ -93,4 +163,5 @@ class ChatListBody extends StatelessWidget {
       },
     );
   }
+
 }
