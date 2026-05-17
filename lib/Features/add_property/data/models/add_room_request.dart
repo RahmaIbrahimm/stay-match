@@ -69,8 +69,8 @@ class AddRoomRequest {
   String? street;
   String? city;
   String? government;
-  int? latitude;
-  int? longitude;
+  double? latitude;
+  double? longitude;
   List<SharedPropertyImages>? propertyImages;
   List<Rooms>? rooms;
   bool? isDraft;
