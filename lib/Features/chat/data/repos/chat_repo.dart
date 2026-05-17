@@ -4,6 +4,7 @@ import 'package:stay_match/Features/chat/data/models/my_chats.dart';
 import 'package:stay_match/Features/chat/data/models/start_chat_response.dart';
 import 'package:stay_match/core/errors/failures.dart';
 
+import '../models/search_chats_response.dart';
 import '../models/send_message_response.dart';
 
 abstract class ChatRepo {
@@ -19,6 +20,10 @@ abstract class ChatRepo {
     required int chatId,
     String? content,
     String? filePath,
-    required String type, // هنا هنبعتها String زي ما هو واضح في الصورة (مثلاً "Text")
+    required String type,
+  });
+
+  Future<Either<Failure, SearchChatsResponse>> searchChats({
+    required String search,
   });
 }
