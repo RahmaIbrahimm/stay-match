@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:stay_match/core/constants/app_icons.dart';
 import 'package:stay_match/Features/filter/presentation/manager/filter_cubit.dart';
 import 'package:stay_match/Features/filter/presentation/widgets/apply_button_sliver.dart';
 import 'package:stay_match/Features/filter/presentation/widgets/filter_bottom_sheet_app_bar.dart';
+import 'package:stay_match/core/constants/app_icons.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import 'availability_sliver.dart';
@@ -145,6 +145,12 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
         AvailabilitySliver(
           current: widget.onlyAvailable ?? true,
           propertyType: widget.filterType,
+          onChangedBool: (bool? value) {
+            setState(() {
+              widget.onlyAvailable = value ?? false;
+            });
+            log('Availability toggled to: ${widget.onlyAvailable}');
+          },
         ),
         // Apply button
         SliverToBoxAdapter(child: SizedBox(height: 24.h)),
@@ -177,9 +183,10 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
                           (widget.allowsStudents == false) ||
                           (widget.allowsFamilies == false) ||
                           (widget.allowsWorkers == false) ||
-                          (widget.allowsChildren == false);
+                          (widget.allowsChildren == false)||
+                      (widget.onlyAvailable == true);
                       reset
-                          ? cubit.resetApartmentFilters()
+                          ? await cubit.resetApartmentFilters()
                           : await cubit.updateApartmentFilter(
                               allowsFamilies: widget.allowsFamilies,
                               allowsChildren: widget.allowsChildren,
@@ -190,6 +197,9 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
                                   : null,
                               workerGender: (widget.allowsWorkers ?? false)
                                   ? widget.workerGender
+                                  : null,
+                              onlyAvailable: (widget.onlyAvailable ?? false)
+                                  ? widget.onlyAvailable
                                   : null,
                             );
                     } else {
@@ -203,6 +213,9 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
                             : null,
                         workerGender: (widget.allowsWorkers ?? false)
                             ? widget.workerGender
+                            : null,
+                        onlyAvailable: (widget.onlyAvailable ?? false)
+                            ? widget.onlyAvailable
                             : null,
                       );
                     }
