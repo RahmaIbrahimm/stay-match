@@ -7,17 +7,21 @@ final class ChatInitial extends ChatListState {
   @override
   List<Object?> get props => [];
 }
-final class ChatlLoading extends ChatListState {
+final class ChatLoading extends ChatListState {
   @override
   List<Object?> get props => [];
 }
 final class ChatSuccess extends ChatListState {
-  final MyChats response;
+  final MyChats? response;
+  final SearchChatsResponse? searchResponse;
 
-  ChatSuccess({required this.response});
+  ChatSuccess({this.searchResponse, this.response});
+
+  // Helper to determine which data source to use
+  bool get isSearchMode => searchResponse != null;
 
   @override
-  List<Object?> get props => [response];
+  List<Object?> get props => [response, searchResponse];
 }
 final class ChatFailure extends ChatListState {
   final String errMessage;
