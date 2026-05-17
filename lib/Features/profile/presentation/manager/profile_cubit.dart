@@ -41,6 +41,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       university: original?.university,
       fieldOfStudy: original?.fieldOfStudy,
       jobTitle: original?.jobTitle,
+      aboutMe: original?.aboutMe,
     );
 
     final dirty = _request != originalRequest || pickedImageFile != null;
@@ -77,6 +78,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             university: data?.university,
             fieldOfStudy: data?.fieldOfStudy,
             jobTitle: data?.jobTitle,
+            aboutMe: data?.aboutMe,
           );
           hasProfilePic = profileResponse.data?.profilePicture != null;
           emit(ProfileSuccess(response: profileResponse));
@@ -125,6 +127,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       university: update.university ?? _request?.university,
       fieldOfStudy: update.fieldOfStudy ?? _request?.fieldOfStudy,
       jobTitle: update.jobTitle ?? _request?.jobTitle,
+      aboutMe: update.aboutMe ?? _request?.aboutMe,
       password: update.password ?? _request?.password,
       passwordConfirmation: update.passwordConfirmation ?? _request?.passwordConfirmation,
     );
@@ -158,6 +161,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       university: original?.university,
       fieldOfStudy: original?.fieldOfStudy,
       jobTitle: original?.jobTitle,
+      aboutMe: original?.aboutMe,
     );
     log('💾 Saving Profile Changes...');
     emit(ProfileLoading());
