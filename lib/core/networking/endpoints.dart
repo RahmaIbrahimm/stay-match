@@ -19,6 +19,7 @@ abstract class Endpoints {
   static const String startChat = '/api/Chat/start';
   static const String markRead = '/api/Chat/mark-as-read';
   static const String sendMessage = '/api/Chat/send';
+  static const String searchChats = '/api/Chat/search';
   // add Property
   static const String addApartment = '/api/Property/AddEntireProperty';
   static const String addRoom = '/api/Property/AddSharedProperty';
@@ -32,6 +33,11 @@ abstract class Endpoints {
   // booking
   static const String  requestApartmentBooking= '/api/Booking/entire-apartment';
   static const String  requestRoomBooking= '/api/Booking/room';
+  static const String  recommendedProperties= '/api/Saved/recommended';
+  static const String  mySavedProperties= '/api/Saved/my-saved';
+  static const String  savedPropertiesCount= '/api/Saved/count';
+  static const String  toggleSavedApartment= '/api/Saved/toggle';
+  static const String  toggleSavedRoom= '/api/Saved/save-room';
 
   // client ids uses for google login
   static const String webClientId =
