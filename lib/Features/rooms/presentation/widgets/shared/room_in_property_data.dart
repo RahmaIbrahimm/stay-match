@@ -8,7 +8,7 @@ import '../../../data/models/get_all_rooms.dart';
 class RoomInPropertyData extends StatelessWidget {
   const RoomInPropertyData({super.key, required this.rooms});
 
-  final List<Rooms> rooms;
+  final List<AllRooms> rooms;
 
   @override
   Widget build(BuildContext context) {
