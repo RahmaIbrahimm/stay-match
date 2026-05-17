@@ -358,11 +358,122 @@
 //     );
 //   }
 // }
-import 'dart:developer';
 
+
+
+
+// import 'dart:developer';
+//
+// import 'package:flutter/material.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:stay_match/Features/filter/presentation/manager/filter_cubit.dart';
+// import 'package:stay_match/core/constants/app_colors.dart';
+// import 'package:stay_match/core/constants/app_strings.dart';
+//
+// import '../../../../filter/presentation/widgets/filter_card.dart';
+// import '../../../../filter/presentation/widgets/filter_helper.dart';
+// import '../../../../shared/widgets/no_properties_sliver.dart';
+// import '../../../../shared/widgets/property_body_base.dart';
+// import '../../../../shared/widgets/search_app_bar.dart';
+// import '../shared/apartment_card.dart';
+//
+// class FindApartmentBody extends StatelessWidget {
+//   const FindApartmentBody({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     // Load apartments when widget first appears
+//     WidgetsBinding.instance.addPostFrameCallback((_) {
+//       final cubit = context.read<FilterCubit>();
+//       if (cubit.state is FilterInitial) {
+//         log('Initial load of apartments');
+//         cubit.getAllApartments();
+//       }
+//     });
+//
+//     return BlocBuilder<FilterCubit, FilterState>(
+//       builder: (context, state) {
+//         if (state is FilterInitial) {
+//           return PropertyBodyBase.buildLoadingStateInitial(
+//             loadingMessage: 'Finding apartments for you...',
+//           );
+//         }
+//
+//         if (state is ApartmentFilterSuccess) {
+//           var propertiesData = state.response.data?.items ?? [];
+//           log(
+//             'Displaying ${propertiesData.length} apartments, sortOrder: ${context.read<FilterCubit>().currentApartmentFilters.orderByOldest}',
+//           );
+//
+//           return RPadding(
+//             padding: const EdgeInsets.all(16.0),
+//             child: CustomScrollView(
+//               slivers: [
+//                 PropertyBodyBase.buildHeader(context),
+//                 const SearchAppBar(),
+//                 PropertyBodyBase.buildFilterHeader(
+//                   title: AppStrings.findYourApartment,
+//                   subtitle: AppStrings.browseApartment,
+//                 ),
+//                 FilterCard(filterType: PropertyType.apartment),
+//                 SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+//                 propertiesData.isEmpty
+//                     ? const NoPropertiesSliver()
+//                     : SliverList.separated(
+//                         itemCount: propertiesData.length,
+//                         itemBuilder: (context, index) {
+//                           return ApartmentCard(
+//                             scaleUp: true,
+//                             property: propertiesData[index],
+//                           );
+//                         },
+//                         separatorBuilder: (BuildContext context, int index) {
+//                           return SizedBox(height: 16.h);
+//                         },
+//                       ),
+//               ],
+//             ),
+//           );
+//         } else if (state is ApartmentFilterFailure) {
+//           log(state.errMessage);
+//           return PropertyBodyBase.buildErrorState(
+//             context: context,
+//             errorMessage: state.errMessage,
+//             onTryAgain: () {
+//               context.read<FilterCubit>().getAllApartments(forceRefresh: true);
+//             },
+//           );
+//         } else if (state is ApartmentFilterLoading) {
+//           return PropertyBodyBase.buildLoadingState(
+//             context: context,
+//             filterHeader: PropertyBodyBase.buildFilterHeader(
+//               title: AppStrings.findYourApartment,
+//               subtitle: AppStrings.browseApartment,
+//             ),
+//             filterCard: FilterCard(filterType: PropertyType.apartment),
+//             loadingMessage: 'Finding apartments for you...',
+//           );
+//         }
+//
+//         return PropertyBodyBase.buildInitialState(
+//           context: context,
+//           icon: Icons.apartment_rounded,
+//           message: 'Ready to find your perfect stay?',
+//           onStartSearching: () {
+//             context.read<FilterCubit>().getAllApartments();
+//           },
+//         );
+//       },
+//     );
+//   }
+// }
+
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:stay_match/Features/filter/presentation/manager/filter_cubit.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
@@ -372,95 +483,96 @@ import '../../../../filter/presentation/widgets/filter_helper.dart';
 import '../../../../shared/widgets/no_properties_sliver.dart';
 import '../../../../shared/widgets/property_body_base.dart';
 import '../../../../shared/widgets/search_app_bar.dart';
+import '../../../data/models/all_apartments.dart';
 import '../shared/apartment_card.dart';
 
-class FindApartmentBody extends StatelessWidget {
+class FindApartmentBody extends StatefulWidget {
   const FindApartmentBody({super.key});
 
   @override
+  State<FindApartmentBody> createState() => _FindApartmentBodyState();
+}
+
+class _FindApartmentBodyState extends State<FindApartmentBody> {
+  @override
+  void initState() {
+    super.initState();
+    // Safely binds the page request listener on initial layout load
+    context.read<FilterCubit>().initApartmentPagination();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Load apartments when widget first appears
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final cubit = context.read<FilterCubit>();
-      if (cubit.state is FilterInitial) {
-        log('Initial load of apartments');
-        cubit.getAllApartments();
-      }
-    });
+    final cubit = context.read<FilterCubit>();
 
-    return BlocBuilder<FilterCubit, FilterState>(
-      builder: (context, state) {
-        if (state is FilterInitial) {
-          return PropertyBodyBase.buildLoadingStateInitial(
-            loadingMessage: 'Finding apartments for you...',
-          );
-        }
+    return RPadding(
+      padding: const EdgeInsets.all(16.0),
+      child: CustomScrollView(
+        slivers: [
+          // ── Persistent Layout Elements ─────────────────────────────────────
+          PropertyBodyBase.buildHeader(context),
+          const SearchAppBar(),
+          PropertyBodyBase.buildFilterHeader(
+            title: AppStrings.findYourApartment,
+            subtitle: AppStrings.browseApartment,
+          ),
+          FilterCard(filterType: PropertyType.apartment),
+          SliverToBoxAdapter(child: SizedBox(height: 16.h)),
 
-        if (state is ApartmentFilterSuccess) {
-          var propertiesData = state.response.data?.items ?? [];
-          log(
-            'Displaying ${propertiesData.length} apartments, sortOrder: ${context.read<FilterCubit>().currentApartmentFilters.orderByOldest}',
-          );
-
-          return RPadding(
-            padding: const EdgeInsets.all(16.0),
-            child: CustomScrollView(
-              slivers: [
-                PropertyBodyBase.buildHeader(context),
-                const SearchAppBar(),
-                PropertyBodyBase.buildFilterHeader(
-                  title: AppStrings.findYourApartment,
-                  subtitle: AppStrings.browseApartment,
-                ),
-                FilterCard(filterType: PropertyType.apartment),
-                SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-                propertiesData.isEmpty
-                    ? const NoPropertiesSliver()
-                    : SliverList.separated(
-                        itemCount: propertiesData.length,
-                        itemBuilder: (context, index) {
-                          return ApartmentCard(
-                            scaleUp: true,
-                            property: propertiesData[index],
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return SizedBox(height: 16.h);
-                        },
-                      ),
-              ],
-            ),
-          );
-        } else if (state is ApartmentFilterFailure) {
-          log(state.errMessage);
-          return PropertyBodyBase.buildErrorState(
-            context: context,
-            errorMessage: state.errMessage,
-            onTryAgain: () {
-              context.read<FilterCubit>().getAllApartments(forceRefresh: true);
+          // ── Infinite Scrolling Dynamic List ────────────────────────────────
+          PagedSliverList<int, AllApartmentsItems>.separated(
+            pagingController: cubit.apartmentPagingController,
+            separatorBuilder: (BuildContext context, int index) {
+              return SizedBox(height: 16.h);
             },
-          );
-        } else if (state is ApartmentFilterLoading) {
-          return PropertyBodyBase.buildLoadingState(
-            context: context,
-            filterHeader: PropertyBodyBase.buildFilterHeader(
-              title: AppStrings.findYourApartment,
-              subtitle: AppStrings.browseApartment,
-            ),
-            filterCard: FilterCard(filterType: PropertyType.apartment),
-            loadingMessage: 'Finding apartments for you...',
-          );
-        }
+            builderDelegate: PagedChildBuilderDelegate<AllApartmentsItems>(
+              itemBuilder: (context, item, index) {
+                return ApartmentCard(
+                  scaleUp: true,
+                  property: item,
+                );
+              },
 
-        return PropertyBodyBase.buildInitialState(
-          context: context,
-          icon: Icons.apartment_rounded,
-          message: 'Ready to find your perfect stay?',
-          onStartSearching: () {
-            context.read<FilterCubit>().getAllApartments();
-          },
-        );
-      },
+              // FIXED: Removed manual SliverToBoxAdapter wrappers here
+              firstPageProgressIndicatorBuilder: (_) => const Padding(
+                padding: EdgeInsets.all(32.0),
+                child: Center(child: CircularProgressIndicator()),
+              ),
+
+              // FIXED: Removed manual SliverToBoxAdapter wrappers here
+              newPageProgressIndicatorBuilder: (_) => const Padding(
+                padding: EdgeInsets.symmetric(vertical: 24.0),
+                child: Center(child: CircularProgressIndicator()),
+              ),
+
+              // FIXED: Removed manual SliverToBoxAdapter wrappers here
+              firstPageErrorIndicatorBuilder: (_) => Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        cubit.apartmentPagingController.error?.toString() ?? 'Failed to load apartments',
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 12.h),
+                      ElevatedButton(
+                        onPressed: () => cubit.refreshApartmentPagination(),
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Note: Keep NoPropertiesSliver here if it is already built specifically as a Sliver widget type.
+              // If NoPropertiesSliver throws a similar layout error, wrap its contents inside a standard Box instead.
+              noItemsFoundIndicatorBuilder: (_) => const NoPropertiesSliver(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
