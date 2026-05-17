@@ -201,7 +201,6 @@ class _ProfileBodyState extends State<ProfileBody> {
             validator: (val) => null,
             controller: _bioController,
             maxLines: 4,
-            // todo --- PENDING BACKEND INTEGRATION ---
             onChanged: (val) => cubit.updateRequest(UpdateProfileRequest(aboutMe: val)),
           ),
           SizedBox(height: 24.h),

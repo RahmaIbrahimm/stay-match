@@ -5,7 +5,6 @@ sealed class ProfileState extends Equatable {}
 
 final class ProfileInitial extends ProfileState {
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 

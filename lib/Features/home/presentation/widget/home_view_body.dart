@@ -24,7 +24,6 @@ class _HomeViewBodyState extends State<HomeViewBody>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
   }
@@ -33,14 +32,12 @@ class _HomeViewBodyState extends State<HomeViewBody>
   bool get wantKeepAlive => true; // Keeps state alive
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
 
   @override
   void dispose() {
     super.dispose();
-    // TODO: implement dispose
     _tabController.dispose();
   }
 
@@ -58,7 +55,6 @@ class _HomeViewBodyState extends State<HomeViewBody>
           await context.read<ApartmentCubit>().refreshApartments();
           await context.read<RoomsCubit>().refreshRooms();
           await context.read<MyPropertiesCubit>().getMyProperties();
-          // todo: add refreshing my properties
         },
         child: CustomScrollView(
           slivers: [

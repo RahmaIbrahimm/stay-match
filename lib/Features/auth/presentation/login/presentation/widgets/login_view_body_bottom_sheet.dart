@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
@@ -59,8 +60,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
           bool isLoading = state is LoginStateLoading;
           return ListView(
             children: [
-              const SizedBox(height: 33),
-              // todo: implement validator email
+               SizedBox(height: 33.h),
               FormSection(
                 validator: (val) => authCubit.emailValidator(email: val),
                 hintText: AppStrings.enterYourEmail,
@@ -68,8 +68,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                 suffixIcon: ImageIcon(AssetImage(AppIcons.emailIcon)),
                 controller: authCubit.loginEmailController,
               ),
-              const SizedBox(height: 37),
-              // todo: implement validator password
+              SizedBox(height: 37.h),
               ValueListenableBuilder<bool>(
                 valueListenable: _isObscureNotifier,
                 builder: (context, isObscure, child) {
@@ -103,7 +102,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                   text: AppStrings.forgetPasswordQuestion,
                 ),
               ),
-              const SizedBox(height: 50),
+              SizedBox(height: 50.h),
               SizedBox(
                 width: double.infinity,
                 child: CustomElevatedButton(
@@ -119,9 +118,9 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                   isLoading: isLoading,
                 ),
               ),
-              const SizedBox(height: 15),
+               SizedBox(height: 15.h),
               DividerBetweenLoginButtons(size: size),
-              const SizedBox(height: 15),
+               SizedBox(height: 15.h),
               // google login button
               SizedBox(
                 width: double.infinity,
@@ -129,7 +128,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                   text: AppStrings.loginWithGoogle,
                   backgroundColor: AppColors.secondary,
                   textColor: AppColors.backgroundColor,
-                  icon: Brand(Brands.google, size: 20),
+                  icon: Brand(Brands.google, size: 20.sp),
                   onPressed: () async {
                     await authCubit.googleLogin();
                   },
@@ -140,7 +139,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(AppStrings.dontHaveAnAccount),
-                  const SizedBox(height: 6),
+                   SizedBox(height: 6.h),
                   CustomTextButton(
                     onPressed: () {
                       context.go(AppRouting.signupView);

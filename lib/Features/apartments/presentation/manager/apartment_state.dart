@@ -5,14 +5,12 @@ sealed class ApartmentsState extends Equatable {}
 
 final class ApartmentsInitial extends ApartmentsState {
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 
 // get all apartments
 final class GetApartmentsLoading extends ApartmentsState {
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 

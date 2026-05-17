@@ -4,14 +4,12 @@ sealed class RoomsState extends Equatable {}
 
 final class RoomsInitial extends RoomsState {
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 
 // get all rooms
 final class GetRoomsLoading extends RoomsState {
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 

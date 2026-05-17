@@ -30,7 +30,6 @@ class Governorate extends Equatable {
   }
 
   @override
-  // TODO: implement props
   List<Object?> get props => [latitude, longitude, nameInEnglish, nameInArabic];
 }
 
@@ -57,6 +56,5 @@ class City extends Equatable {
   }
 
   @override
-  // TODO: implement props
   List<Object?> get props => [latitude, longitude, nameInEnglish, nameInArabic];
 }

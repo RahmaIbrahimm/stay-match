@@ -403,7 +403,6 @@ class AuthCubit extends Cubit<AuthState> {
   // ---- overridden ---
   @override
   Future<void> close() {
-    // TODO: implement close
     loginEmailController.dispose();
     loginPasswordController.dispose();
     otpController.dispose();

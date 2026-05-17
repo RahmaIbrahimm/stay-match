@@ -4,13 +4,11 @@ abstract class RecommendedState extends Equatable {}
 
 class RecommendedInitial extends RecommendedState {
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 
 class RecommendedLoading extends RecommendedState {
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 class RecommendedFailure extends RecommendedState {
@@ -18,7 +16,6 @@ class RecommendedFailure extends RecommendedState {
 
   RecommendedFailure({required this.errMessage});
   @override
-  // TODO: implement props
   List<Object?> get props => [errMessage];
 }
 
@@ -28,7 +25,6 @@ class RecommendedSuccess extends RecommendedState {
   RecommendedSuccess({required this.response});
 
   @override
-  // TODO: implement props
   List<Object?> get props => [response];
 }
 class RecommendedMoreLoading extends RecommendedState {

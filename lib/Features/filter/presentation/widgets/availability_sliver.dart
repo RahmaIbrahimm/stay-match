@@ -43,19 +43,8 @@ class AvailabilitySliver extends StatelessWidget {
                 ],
               ),
             ),
-            // todo: implement filtering for availability
             CustomToggleSwitch(
               current: current,
-              // onTap: ()async {
-              //   final cubit = context.read<FilterCubit>();
-              //   final newValue = !current;
-              //
-              //   if (propertyType == PropertyType.apartment) {
-              //     await cubit.updateApartmentFilter(onlyAvailable: newValue,forceRefresh: true);
-              //   } else {
-              //    await cubit.updateRoomsFilter(onlyAvailable: newValue,forceRefresh: true);
-              //   }
-              // },
               onChangedBool: onChangedBool
             ),
           ],
