@@ -181,7 +181,7 @@ class _AddBasicInfoBodyState extends State<AddBasicInfoBody> {
     }
 
     // 5. Final Step: If the helper confirms everything is 100% valid
-    if (ValidationHelper.isBasicInfoValid(req)) {
+    if (ValidationHelper.isBasicInfoApartmentValid(req)) {
       cubit.nextStep();
       context.pushNamed(AppRouting.addAmenitiesName);
     }
