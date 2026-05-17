@@ -121,7 +121,7 @@ class Items {
     if (json['rooms'] != null) {
       rooms = [];
       json['rooms'].forEach((v) {
-        rooms?.add(Rooms.fromJson(v));
+        rooms?.add(AllRooms.fromJson(v));
       });
     }
     distanceInKm = json['distanceInKm'];
@@ -135,7 +135,7 @@ class Items {
   num? longitude;
   num? size;
   String? coverImageUrl;
-  List<Rooms>? rooms;
+  List<AllRooms>? rooms;
   num? distanceInKm;
 
   Map<String, dynamic> toJson() {
@@ -167,8 +167,8 @@ class Items {
 /// createdAt : "2026-03-15T00:00:00"
 /// status : "Available"
 
-class Rooms {
-  Rooms({
+class AllRooms {
+  AllRooms({
     this.id,
     this.roomName,
     this.monthRent,
@@ -180,7 +180,7 @@ class Rooms {
     this.status,
   });
 
-  Rooms.fromJson(dynamic json) {
+  AllRooms.fromJson(dynamic json) {
     id = json['id'];
     roomName = json['roomName'];
     monthRent = json['month_rent'];
