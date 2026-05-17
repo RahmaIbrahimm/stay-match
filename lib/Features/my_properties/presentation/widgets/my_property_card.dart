@@ -92,7 +92,7 @@ class MyPropertyCard extends StatelessWidget {
                       TextSpan(
                         children: [
                           TextSpan(
-                            text: 'EGP ${property.monthlyRent}',
+                            text: 'EGP ${property.monthlyRent?.toInt() ?? 0}',
                             style: AppStyles.bold16poppins.copyWith(
                               color: AppColors.textColorPrimary,
                               fontSize: 15.sp,
