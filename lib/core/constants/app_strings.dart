@@ -233,4 +233,25 @@ abstract class AppStrings {
     'Sohag', 'South Sinai', 'Suez',
   ];
   static const culturalImportanceSliderOptions = <String>["Low", "Medium", "High", "Essential"];
+  // --- Saved Screen ---
+  static const savedListings = 'Saved Listings';
+  static const savedSubtitle = 'properties bookmarked for your next move.';
+  static const noSavedYet = 'No saved properties yet.';
+  static const youHave = 'You have ';
+  static const rooms = 'Rooms';
+  static const wholeApartments = 'Whole Apartments';
+  static const shared = 'Shared';
+  static const showMoreProperties = 'Show more properties';
+  static const showMoreSuggestions = 'Show more Suggestions';
+  static const anthologyCurated = 'ANTHOLOGY CURATED';
+  static const recommendedForYou = 'Recommended for You';
+  static const noRecommendations = 'No recommendations available';
+  static const noSavedProperties = 'No saved properties yet';
+  static const somethingWentWrong = 'Something went wrong';
+  static const retry = 'Retry';
+  static const savedListUpdated = 'Saved list updated';
+  static const verified = 'VERIFIED';
+  static const studio = 'Studio';
+  static const bed = 'Bed';
+  static const perMonth = '/month';
 }
