@@ -11,9 +11,12 @@ class AvailabilitySliver extends StatelessWidget {
     super.key,
     required this.current,
     required this.propertyType,
+    required this.onChangedBool,
   });
   final PropertyType propertyType;
   final bool current;
+  final OnChangedBool onChangedBool;
+
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -41,7 +44,20 @@ class AvailabilitySliver extends StatelessWidget {
               ),
             ),
             // todo: implement filtering for availability
-            CustomToggleSwitch(onTap: () {}, current: current),
+            CustomToggleSwitch(
+              current: current,
+              // onTap: ()async {
+              //   final cubit = context.read<FilterCubit>();
+              //   final newValue = !current;
+              //
+              //   if (propertyType == PropertyType.apartment) {
+              //     await cubit.updateApartmentFilter(onlyAvailable: newValue,forceRefresh: true);
+              //   } else {
+              //    await cubit.updateRoomsFilter(onlyAvailable: newValue,forceRefresh: true);
+              //   }
+              // },
+              onChangedBool: onChangedBool
+            ),
           ],
         ),
       ),
