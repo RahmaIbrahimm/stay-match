@@ -35,7 +35,6 @@ class FilterCard extends StatelessWidget {
               titleText: AppStrings.where,
               prompt: _getWherePrompt(context),
               onTap: () {
-                // TODO: Implement WHERE filter
                 _showWhereFilterSheet(context);
               },
             ),
@@ -181,7 +180,7 @@ class FilterCard extends StatelessWidget {
           filters.allowsFamilies != null ||
           filters.allowsChildren != null ||
           filters.allowsStudents != null ||
-          filters.workerGender != null ||
+          filters.allowsWorkers != null ||
           filters.onlyAvailable == true;
     } else {
       final filters = cubit.currentRoomsFilters;
@@ -191,7 +190,7 @@ class FilterCard extends StatelessWidget {
           filters.allowsFamilies != null ||
           filters.allowsChildren != null ||
           filters.allowsStudents != null ||
-          filters.workerGender != null ||
+          filters.allowsWorkers != null ||
           filters.onlyAvailable == true;
     }
   }
