@@ -10,7 +10,7 @@ import '../../../data/models/my_chats.dart';
 import '../shared/chat_helper.dart';
 
 class ChatTile extends StatelessWidget {
-  final MyChatsData chatData;
+  final dynamic chatData;
   const ChatTile({super.key, required this.chatData});
 
   @override
