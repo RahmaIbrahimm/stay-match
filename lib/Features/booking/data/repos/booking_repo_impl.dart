@@ -8,6 +8,7 @@ import 'package:stay_match/core/errors/failures.dart';
 import 'package:stay_match/core/networking/api_service.dart';
 
 import '../../../../core/networking/endpoints.dart';
+import '../../../saved/data/models/recommended_properties_response.dart';
 import '../model/room_booking_request_response.dart';
 
 class BookingRepoImpl extends BookingRepo {
@@ -49,4 +50,5 @@ class BookingRepoImpl extends BookingRepo {
       return Left(ServerFailure.fromDioError(e));
     }
   }
+
 }
