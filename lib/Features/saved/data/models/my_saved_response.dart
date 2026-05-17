@@ -222,7 +222,7 @@ class SavedItems {
   String? itemName;
   String? itemType;
   String? displayType;
-  int? price;
+  num? price;
   String? priceDisplay;
   String? address;
   String? imageUrl;
