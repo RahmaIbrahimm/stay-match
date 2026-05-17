@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
+import 'package:stay_match/core/routing/app_routing.dart';
 import 'package:stay_match/core/utils/service_locator.dart';
 
 import '../../../../core/constants/app_styles.dart';
+import '../../../../core/widgets/app_drawer/main_app_drawer.dart';
 import '../../data/repos/my_properties_repo.dart';
 import '../manager/my_properties_cubit.dart';
 import '../widgets/my_properties_body.dart';
@@ -31,7 +33,7 @@ class _MyPropertiesViewState extends State<MyPropertiesView> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Color(0xFF182E6E)),
             onPressed: () {
-              if (context.mounted) context.pop();
+              context.goNamed(AppRouting.homeViewName);
             },
           ),
           title: Text(
@@ -41,13 +43,8 @@ class _MyPropertiesViewState extends State<MyPropertiesView> {
             ),
           ),
           centerTitle: true,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.menu, color: Color(0xFF182E6E)),
-              onPressed: () {},
-            ),
-          ],
         ),
+        endDrawer: MainAppDrawer(),
         body: MyPropertiesBody(),
       ),
     );
