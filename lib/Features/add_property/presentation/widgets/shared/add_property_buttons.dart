@@ -60,7 +60,9 @@ class AddPropertyButtons extends StatelessWidget {
                 onNextPressed!();
               } else {
                 if (submit) {
-                  cubit.submitApartment();
+                  cubit.selectedType == PropertyType.apartment
+                      ? cubit.submitApartment()
+                      : cubit.submitRoomProperty();
                 } else {
                   cubit.nextStep();
                   context.pushNamed(nextPageRoute);
