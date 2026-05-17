@@ -6,8 +6,9 @@ import 'package:stay_match/Features/chat/data/repos/chat_repo_impl.dart';
 import 'package:stay_match/Features/my_properties/data/repos/my_properties_repo_impl.dart';
 import 'package:stay_match/Features/profile/data/repos/profile_repo_impl.dart';
 import 'package:stay_match/Features/profile/presentation/manager/profile_cubit.dart';
-import 'package:stay_match/core/utils/secure_storage_helper.dart';
+import 'package:stay_match/Features/saved/data/repos/saved_properties_repo_impl.dart';
 import 'package:stay_match/core/utils/cache_service.dart';
+import 'package:stay_match/core/utils/secure_storage_helper.dart';
 
 import '../../Features/add_property/data/repos/add_property_repo_impl.dart';
 import '../../Features/apartments/data/repos/apartment_repo_impl.dart';
@@ -22,10 +23,8 @@ import '../networking/dio_consumer.dart';
 
 final getIt = GetIt.instance;
 
-// خليناها Future عشان SharedPreferences
 Future<void> setupServiceLocator() async {
 
-  // 1. التخزين (External Services)
   final sharedPrefs = await SharedPreferences.getInstance();
   getIt.registerSingleton<SharedPreferences>(sharedPrefs);
 
@@ -50,6 +49,8 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton<MyPropertiesRepo>(() => MyPropertiesRepoImpl(apiService: getIt<DioConsumer>()));
   getIt.registerLazySingleton<ProfileRepoImpl>(() => ProfileRepoImpl(apiService: getIt<DioConsumer>()));
   getIt.registerLazySingleton<BookingRepoImpl>(() => BookingRepoImpl(getIt<DioConsumer>()));
+  getIt.registerLazySingleton<SavedPropertiesRepoImpl>(() =>
+      SavedPropertiesRepoImpl(apiService: getIt<DioConsumer>()));
 
   getIt.registerFactory<LocationCubit>(
         () => LocationCubit(locationRepository: getIt<LocationRepoImpl>()),
