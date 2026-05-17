@@ -78,7 +78,7 @@ class _ProfileBodyState extends State<ProfileBody> {
           _educationController.text = data?.fieldOfStudy ?? '';
           _jobController.text = data?.jobTitle ?? '';
           _governorateController.text = data?.governorate ?? '';
-          // _bioController.text = data?.bio ?? '';
+          _bioController.text = data?.aboutMe ?? '';
           // _budgetController.text = data?.budget?.toString() ?? '';
 
           _isInitialSyncDone =
@@ -202,7 +202,7 @@ class _ProfileBodyState extends State<ProfileBody> {
             controller: _bioController,
             maxLines: 4,
             // todo --- PENDING BACKEND INTEGRATION ---
-            // onChanged: (val) => cubit.updateRequest(UpdateProfileRequest(bio: val)),
+            onChanged: (val) => cubit.updateRequest(UpdateProfileRequest(aboutMe: val)),
           ),
           SizedBox(height: 24.h),
 
