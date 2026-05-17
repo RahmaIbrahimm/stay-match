@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/Features/auth/data/repos/auth_repo_impl.dart';
+import 'package:stay_match/Features/saved/data/repos/saved_properties_repo_impl.dart';
+import 'package:stay_match/Features/saved/presentation/manager/recommended_cubit.dart';
 import 'package:stay_match/core/theme/app_theme.dart';
 import 'package:stay_match/core/utils/secure_storage_keys.dart';
 import 'package:stay_match/core/utils/service_locator.dart';
-import 'package:stay_match/core/widgets/global_error_widget.dart';
-import 'package:stay_match/core/widgets/restart_widget.dart';
 
 import 'Features/auth/manager/auth_cubit.dart';
+import 'Features/saved/presentation/manager/saved_properties_cubit.dart';
 import 'core/routing/app_routing.dart';
 import 'core/utils/secure_storage_helper.dart';
 Future<void> main() async {
@@ -18,21 +19,12 @@ Future<void> main() async {
   final secureStorage = getIt.get<SecureStorageHelper>();
   String? token = await secureStorage.readFromSecureStorage(
       key: SecureStorageKeys.tokenKey);
-  // ErrorWidget.builder = (FlutterErrorDetails details) {
-  //   return GlobalErrorWidget(
-  //     onTryAgain: () {
-  //       // Use the navigator key to get a context even when the UI is crashed
-  //       final context = AppRouting.rootNavKey.currentContext;
-  //       if (context != null) {
-  //         RestartWidget.restartApp(context);
-  //       }
-  //     },
-  //   );
-  // };
+
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthCubit(getIt.get<AuthRepoImpl>())),
+        BlocProvider(create: (context) => SavedPropertiesCubit(getIt.get<SavedPropertiesRepoImpl>())),
       ],
       child: StayMatch(isLoggedIn: token != null),
     ),
