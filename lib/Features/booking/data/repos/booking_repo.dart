@@ -4,6 +4,7 @@ import 'package:stay_match/Features/booking/data/model/apartment_booking_request
 import 'package:stay_match/Features/booking/data/model/room_booking_request_request.dart';
 import 'package:stay_match/core/errors/failures.dart';
 
+import '../../../saved/data/models/recommended_properties_response.dart';
 import '../model/room_booking_request_response.dart';
 
 abstract class BookingRepo {
