@@ -25,7 +25,6 @@ class UserProfileTile extends StatelessWidget {
 
     return Column(
       children: [
-        const Divider(color: AppColors.stroke),
         SizedBox(height: 10.h),
         ListTile(
           contentPadding: EdgeInsets.zero,
@@ -55,7 +54,7 @@ class UserProfileTile extends StatelessWidget {
                 : null,
           ),
           title: Text(
-            userName ?? 'Guest User', // لو الاسم مش موجود يظهر Guest
+            userName ?? 'Guest User',
             style: AppStyles.semiBold15poppins.copyWith(
               color: AppColors.textColorPrimary,
             ),
