@@ -34,13 +34,22 @@ class MapPickerSection extends StatelessWidget {
             onDoubleTap: () {
               context.pushNamed(
                 AppRouting.googleMapsViewName,
+                // queryParameters: {
+                //   'latitude': (latitude != null && latitude != 0)
+                //       ? 30.0444.toString()
+                //       : latitude.toString(),
+                //   'longitude': (longitude != null && longitude != 0)
+                //       ? 31.2357.toString()
+                //       : longitude.toString(),
+                //   'isStatic': 'false',
+                // },
                 queryParameters: {
-                  'latitude': (latitude != null && latitude != 0)
-                      ? 30.0444.toString()
-                      : latitude.toString(),
-                  'longitude': (longitude != null && longitude != 0)
-                      ? 31.2357.toString()
-                      : longitude.toString(),
+                  'latitude': (latitude == null || latitude == 0)
+                      ? "30.0444" // Default if empty
+                      : latitude.toString(), // Use actual value if exists
+                  'longitude': (longitude == null || longitude == 0)
+                      ? "31.2357" // Default if empty
+                      : longitude.toString(), // Use actual value if exists
                   'isStatic': 'false',
                 },
                 extra: onLocationSelected,

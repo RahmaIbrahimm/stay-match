@@ -35,7 +35,6 @@ class FilterCard extends StatelessWidget {
               titleText: AppStrings.where,
               prompt: _getWherePrompt(context),
               onTap: () {
-                // TODO: Implement WHERE filter
                 _showWhereFilterSheet(context);
               },
             ),
@@ -45,7 +44,6 @@ class FilterCard extends StatelessWidget {
               titleText: AppStrings.when,
               prompt: _getWhenPrompt(context),
               onTap: () {
-                // TODO: Implement WHEN filter
                 _showWhenFilterSheet(context);
               },
             ),
@@ -146,14 +144,16 @@ class FilterCard extends StatelessWidget {
       if (filters.allowsFamilies == true) preferences.add('Families');
       if (filters.allowsChildren == true) preferences.add('Children');
       // if (filters.allowsStudents == true) preferences.add('Students');
-      if (filters.allowsStudents == true)
+      if (filters.allowsStudents == true) {
         preferences.add(
           'Students: ${(filters.studentGender == null || filters.studentGender!.isEmpty) ? 'Male' : 'Female'}',
         );
-      if (filters.allowsWorkers == true)
+      }
+      if (filters.allowsWorkers == true) {
         preferences.add(
           'Worker: ${(filters.workerGender == null || filters.workerGender!.isEmpty) ? 'Male' : 'Female'}',
         );
+      }
     } else {
       final filters = cubit.currentRoomsFilters;
       if (filters.allowsFamilies == true) preferences.add('Families');
@@ -181,7 +181,7 @@ class FilterCard extends StatelessWidget {
           filters.allowsFamilies != null ||
           filters.allowsChildren != null ||
           filters.allowsStudents != null ||
-          filters.workerGender != null ||
+          filters.allowsWorkers != null ||
           filters.onlyAvailable == true;
     } else {
       final filters = cubit.currentRoomsFilters;
@@ -191,7 +191,7 @@ class FilterCard extends StatelessWidget {
           filters.allowsFamilies != null ||
           filters.allowsChildren != null ||
           filters.allowsStudents != null ||
-          filters.workerGender != null ||
+          filters.allowsWorkers != null ||
           filters.onlyAvailable == true;
     }
   }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:stay_match/Features/add_property/presentation/views/shared_apartment_info_view.dart';
 import 'package:stay_match/Features/auth/presentation/reset_password/presentation/views/reset_password_view.dart';
 import 'package:stay_match/Features/chat/presentation/views/chat_list_view.dart';
 import 'package:stay_match/Features/chat/presentation/views/messages_view.dart';
@@ -14,7 +15,6 @@ import 'package:stay_match/core/widgets/layout_scaffold.dart';
 
 import '../../Features/add_property/data/repos/add_property_repo_impl.dart';
 import '../../Features/add_property/presentation/manager/add_property_cubit.dart';
-import '../../Features/add_property/presentation/views/add_basic_info_view.dart';
 import '../../Features/add_property/presentation/views/add_property_success_view.dart';
 import '../../Features/add_property/presentation/views/add_property_view.dart';
 import '../../Features/add_property/presentation/views/amenities_and_services_view.dart';
@@ -31,9 +31,10 @@ import '../../Features/google_maps/presentation/widgets/maps_helper.dart';
 import '../../Features/my_properties/presentation/views/my_properties_view.dart';
 import '../../Features/rooms/presentation/views/find_room_view.dart';
 import '../../Features/rooms/presentation/views/room_details_view.dart';
+import '../../Features/saved/presentation/views/saved_view.dart';
 
 class AppRouting {
-  static final GlobalKey<NavigatorState> rootNavKey =
+  static final GlobalKey<NavigatorState> navigatorKey =
       GlobalKey<NavigatorState>();
   // ===========auth routes============
   static const loginView = '/';
@@ -68,14 +69,19 @@ class AppRouting {
 
   // add property
   static const addPropertyInfoPath = 'add-property-info';
-  static const addRoomPath = 'add-room';
+  static const addIndividualRoomsPath = 'add-room';
+  static const addSharedApartmentDetailsPath = 'add-shared-apartment-details';
   static const addAmenitiesPath = 'add-amenities';
   static const addLocationAndGalleryPath = 'add-location-and-gallery';
   static const addPropertySuccessPath = 'add-property-success';
   static const myPropertiesPath = '/my-properties';
+  static const listingSuccessPath = '/my-properties';
 
   // booking
   static const bookingRequestPath = '/booking-request';
+
+  // saved properties
+  static const savedPropertiesPath = '/saved-properties';
 
   //main app names
   static const homeViewName = 'home';
@@ -92,16 +98,21 @@ class AppRouting {
 
   // add property
   static const addPropertyInfoName = 'addPropertyInfo';
-  static const addRoomName = 'addRoom';
+  static const addSharedApartmentDetailsName = 'addSharedApartmentDetails';
+  static const addIndividualRoomsName = 'addRoom';
   static const addAmenitiesName = 'addAmenities';
   static const addLocationAndGalleryName = 'addLocationAndGallery';
   static const addPropertySuccessName = 'addPropertySuccess';
   static const myPropertiesName = 'myProperties';
+  static const listingSuccessName = 'listingSuccess';
+
+  // saved properties
+  static const savedPropertiesName = 'savedProperties';
 
   // booking
   static const bookingRequestName = 'bookingRequest';
   static final router = GoRouter(
-    navigatorKey: rootNavKey,
+    navigatorKey: navigatorKey,
     initialLocation: loginView,
     routes: [
       // AUTH ROUTES
@@ -130,6 +141,8 @@ class AppRouting {
         name: resetPasswordViewName,
         builder: (context, state) => const ResetPasswordView(),
       ),
+
+      // maps
       GoRoute(
         path: googleMapsView,
         name: googleMapsViewName,
@@ -159,11 +172,10 @@ class AppRouting {
           );
         },
       ),
-
       // property related routes
       // Nested route: /home/find-apartment/apartment-details/123
       GoRoute(
-        parentNavigatorKey: rootNavKey,
+        parentNavigatorKey: navigatorKey,
         path: findApartmentView,
         name: findApartmentViewName,
         builder: (context, state) => const FindApartmentView(),
@@ -184,14 +196,14 @@ class AppRouting {
       ),
       // Nested route: /home/find-room/room-details/123
       GoRoute(
-        parentNavigatorKey: rootNavKey,
+        parentNavigatorKey: navigatorKey,
         path: findRoomView,
         name: findRoomViewName,
         builder: (context, state) => const FindRoomView(),
         routes: [
           // Nested route: /home/find-room/room-details/123
           GoRoute(
-            parentNavigatorKey: rootNavKey,
+            parentNavigatorKey: navigatorKey,
             path: roomDetailsViewPath,
             name: roomDetailsViewName,
             builder: (context, state) {
@@ -213,7 +225,7 @@ class AppRouting {
           ),
         ],
       ),
-
+      // my properties
       GoRoute(
         path: myPropertiesPath,
         name: myPropertiesName,
@@ -265,6 +277,12 @@ class AppRouting {
             // joinYear: joinYear,
           );
         },),
+      // saved properties
+      GoRoute(
+        path: savedPropertiesPath,
+        name: savedPropertiesName,
+        builder: (context, state) => const SavedView(),
+      ),
 
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -310,12 +328,14 @@ class AppRouting {
                   GoRoute(
                     path: addPropertyPath, // '/add-property'
                     name: addPropertyName,
+                    // builder: (context, state) => const IndividualRoomDetailsView(),
                     builder: (context, state) => const AddPropertyView(),
                     routes: [
                       GoRoute(
                         path: addPropertyInfoPath, // 'add-property-info'
                         name: addPropertyInfoName,
-                        builder: (context, state) => const AddBasicInfoView(),
+                        builder: (context,
+                            state) => const SharedApartmentInfoView(),
                       ),
                       GoRoute(
                         path: addAmenitiesPath, // 'add-amenities'
@@ -330,16 +350,22 @@ class AppRouting {
                             const LocationAndGalleryView(),
                       ),
                       GoRoute(
-                        path: addPropertySuccessPath, // 'add-amenities'
+                        path: addPropertySuccessPath,
                         name: addPropertySuccessName,
                         builder: (context, state) =>
                             const AddPropertySuccessView(),
                       ),
                       GoRoute(
-                        path: addRoomPath, // 'add-amenities'
-                        name: addRoomName,
+                        path: addIndividualRoomsPath, // 'add-room'
+                        name: addIndividualRoomsName,
                         builder: (context, state) =>
                         const IndividualRoomDetailsView(),
+                      ),
+                      GoRoute(
+                        path: addSharedApartmentDetailsPath,
+                        name: addSharedApartmentDetailsName,
+                        builder: (context, state) =>
+                        const SharedApartmentInfoView(),
                       ),
                     ],
                   ),

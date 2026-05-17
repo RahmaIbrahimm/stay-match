@@ -26,7 +26,7 @@ class RoomCard extends StatelessWidget {
   final String? name;
   final String? street;
   final String? city;
-  final List<Rooms> rooms;
+  final List<AllRooms> rooms;
   final int id;
 
   @override
@@ -136,7 +136,7 @@ class RoomCard extends StatelessWidget {
             width: double.infinity,
             child: SmallCustomButton(
               text: AppStrings.viewDetails,
-              textStyle: AppStyles.semiBold16poppins,
+              textStyle: AppStyles.semiBold15poppins,
               onPressed: () {
                 context.pushNamed(
                   AppRouting.roomDetailsViewName,

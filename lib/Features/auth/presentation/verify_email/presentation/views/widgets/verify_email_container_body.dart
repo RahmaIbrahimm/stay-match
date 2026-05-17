@@ -92,7 +92,6 @@ class VerifyEmailContainerBody extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 16),
-              // todo: timer implementation
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: 5,

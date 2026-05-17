@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:stay_match/Features/add_property/data/models/upload_image_response.dart';
@@ -46,7 +48,7 @@ class AddPropertyRepoImpl extends AddPropertyRepo {
         data: request.toJson(),
       );
 
-      return Right(AddRoomResponse.fromJson(response.data));
+      return Right(AddRoomResponse.fromJson(response));
     } on DioException catch (e) {
       // Handle specific Dio/Server errors here
       return Left(ServerFailure.fromDioError(e));

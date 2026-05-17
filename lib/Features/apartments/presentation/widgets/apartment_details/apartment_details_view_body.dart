@@ -45,13 +45,11 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
   @override
   void initState() {
     super.initState();
-    // TODO: implement initState
     currentPic = ValueNotifier<int>(1);
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     currentPic.dispose();
     controller?.dispose();
@@ -397,8 +395,6 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                         children: [deposit(details), minimumStay(details)],
                       ),
                       SizedBox(height: 12.h),
-                      // todo : logic for choosing time
-                      // DurationSelector(),
                       DurationSelector(
                         minimumStay: details.minimumStay?.toInt() ?? 1,
                         selectedDate: moveInDate,

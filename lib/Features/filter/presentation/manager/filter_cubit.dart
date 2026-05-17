@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:stay_match/Features/apartments/data/repos/apartment_repo.dart';
 import 'package:stay_match/Features/rooms/data/models/get_all_rooms.dart';
 import 'package:stay_match/Features/rooms/data/repos/rooms_repo.dart';
@@ -384,7 +385,53 @@ class FilterCubit extends Cubit<FilterState> {
     _currentRoomsFilters = const RoomsFilterParams();
     await _getAllRoomsWithFilters(forceRefresh: true);
   }
+// --- ADDED FOR PAGINATION ---
+  Future<void> fetchRoomsPage(int pageKey, PagingController<int, Items> pagingController) async {
+    // Note: We use the current filters but override the page with pageKey
+    final response = await roomsRepo.getAllRooms(
+      start: _currentRoomsFilters.start,
+      monthsCount: _currentRoomsFilters.monthsCount,
+      government: _currentRoomsFilters.government,
+      allowsFamilies: _currentRoomsFilters.allowsFamilies,
+      allowsChildren: _currentRoomsFilters.allowsChildren,
+      allowsStudents: _currentRoomsFilters.allowsStudents,
+      allowsWorkers: _currentRoomsFilters.allowsWorkers,
+      workerGender: _currentRoomsFilters.workerGender,
+      studentGender: _currentRoomsFilters.studentGender,
+      userLat: _currentRoomsFilters.userLat,
+      userLng: _currentRoomsFilters.userLng,
+      orderByOldest: _currentRoomsFilters.orderByOldest,
+      onlyAvailable: _currentRoomsFilters.onlyAvailable,
+      page: pageKey, // The controller provides the current page index
+      pageSize: 10,
+    );
 
+    response.fold(
+          (fail) {
+        log('Pagination Error: ${fail.errMessage}');
+        pagingController.error = fail.errMessage;
+      },
+          (resp) {
+        if (resp.isSuccess == true) {
+          final items = resp.data?.items ?? [];
+          final isLastPage = items.length < 10;
+
+          if (isLastPage) {
+            pagingController.appendLastPage(items);
+          } else {
+            pagingController.appendPage(items, pageKey + 1);
+          }
+
+          // Optional: Sync the success state so other UI elements
+          // (like result counts) stay updated
+          _roomsCachedResponse = resp;
+          emit(RoomsFilterSuccess(response: resp));
+        } else {
+          pagingController.error = resp.message ?? 'Error fetching rooms';
+        }
+      },
+    );
+  }
   // Clear all caches
   void clearCache() {
     log('Clearing all caches');
@@ -392,5 +439,81 @@ class FilterCubit extends Cubit<FilterState> {
     _roomsCachedResponse = null;
     _lastAppliedApartmentFilters = null;
     _lastAppliedRoomsFilters = null;
+  }
+
+
+
+
+
+  // =========================================================================
+// 🏢 ADDED FOR ISOLATED APARTMENT PAGINATION (Leaves everything else untouched)
+// =========================================================================
+
+  // 1. Isolated controller bound to your AllApartmentsItems model type
+  final PagingController<int, AllApartmentsItems> apartmentPagingController =
+  PagingController(firstPageKey: 1);
+
+  // 2. Setup a helper function to link UI listeners to your cubit safely
+  void initApartmentPagination() {
+    // Clear previous listeners to avoid duplicate firing cycles if called again
+    apartmentPagingController.removePageRequestListener(_apartmentPageListener);
+    apartmentPagingController.addPageRequestListener(_apartmentPageListener);
+  }
+
+  void _apartmentPageListener(int pageKey) {
+    fetchApartmentsPage(pageKey);
+  }
+
+  // 3. Isolated paginated fetcher that respects your running filter variables
+  Future<void> fetchApartmentsPage(int pageKey) async {
+    log('🏢 Fetching paginated apartments page: $pageKey');
+
+    var response = await apartmentRepo.getAllApartments(
+      start: _currentApartmentFilters.start,
+      monthsCount: _currentApartmentFilters.monthsCount,
+      government: _currentApartmentFilters.government,
+      allowsFamilies: _currentApartmentFilters.allowsFamilies,
+      allowsChildren: _currentApartmentFilters.allowsChildren,
+      allowsStudents: _currentApartmentFilters.allowsStudents,
+      allowsWorkers: _currentApartmentFilters.allowsWorkers,
+      studentGender: _currentApartmentFilters.studentGender,
+      workerGender: _currentApartmentFilters.workerGender,
+      userLat: _currentApartmentFilters.userLat,
+      userLng: _currentApartmentFilters.userLng,
+      orderByOldest: _currentApartmentFilters.orderByOldest,
+      onlyAvailable: _currentApartmentFilters.onlyAvailable,
+      page: pageKey,
+      pageSize: 10, // Retaining your established page size configuration
+    );
+
+    response.fold(
+          (fail) {
+        log('🏢 Paginated Apartment Error: ${fail.errMessage}');
+        apartmentPagingController.error = fail.errMessage;
+      },
+          (resp) {
+        if (resp.isSuccess == true) {
+          final items = resp.data?.items ?? [];
+          final hasMore = resp.data?.hasNext ?? false;
+
+          if (!hasMore) {
+            apartmentPagingController.appendLastPage(items);
+          } else {
+            apartmentPagingController.appendPage(items, pageKey + 1);
+          }
+
+          // Keep your cache background variables synchronized cleanly
+          _apartmentCachedResponse = resp;
+          _lastAppliedApartmentFilters = _currentApartmentFilters;
+        } else {
+          apartmentPagingController.error = resp.message ?? 'Error fetching apartments';
+        }
+      },
+    );
+  }
+
+  // 4. Clean up addition inside your existing close() or clear functions if desired
+  void refreshApartmentPagination() {
+    apartmentPagingController.refresh();
   }
 }

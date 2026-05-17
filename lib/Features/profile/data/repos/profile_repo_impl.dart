@@ -32,15 +32,54 @@ class ProfileRepoImpl extends ProfileRepo {
     required UpdateProfileRequest request,
   }) async {
     try {
+      // 1. Create FormData to match 'multipart/form-data' requirement
+      // Use the exact PascalCase keys shown in image_8f60bc.png
+      Map<String, dynamic> dataMap = {
+        'FirstName': request.firstName,
+        'LastName': request.lastName,
+        'FullName': request.fullName,
+        'Email': request.email,
+        'PhoneNumber': request.phoneNumber,
+        'Gender': request.gender,
+        'BirthDate': request.birthDate,
+        'City': request.city,
+        'Governorate': request.governorate,
+        'University': request.university,
+        'FieldOfStudy': request.fieldOfStudy,
+        'JobTitle': request.jobTitle,
+        'AboutMe': request.aboutMe,
+      };
+
+      // 2. Remove null values to prevent server-side errors
+      dataMap.removeWhere((key, value) => value == null);
+
+      FormData formData = FormData.fromMap(dataMap);
+
+      // 3. Perform the PUT request using FormData
       var response = await apiService.put(
         Endpoints.updateProfile,
-        data: request.toJson(),
+        data: formData, // Dio will automatically set content-type to multipart/form-data
       );
+
       return right(UpdateProfileResponse.fromJson(response));
     } on DioException catch (e) {
       return left(ServerFailure.fromDioError(e));
     }
   }
+  // }  @override
+  // Future<Either<Failure, UpdateProfileResponse>> updateProfile({
+  //   required UpdateProfileRequest request,
+  // }) async {
+  //   try {
+  //     var response = await apiService.put(
+  //       Endpoints.updateProfile,
+  //       data: request.toJson(),
+  //     );
+  //     return right(UpdateProfileResponse.fromJson(response));
+  //   } on DioException catch (e) {
+  //     return left(ServerFailure.fromDioError(e));
+  //   }
+  // }
 
   @override
   Future<Either<Failure, UploadProfilePictureResponse>> uploadProfileImg({

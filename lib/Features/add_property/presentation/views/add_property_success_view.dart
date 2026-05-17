@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:stay_match/Features/add_property/presentation/manager/add_property_cubit.dart';
 import 'package:stay_match/core/constants/app_images.dart';
+import 'package:stay_match/core/constants/app_styles.dart';
+import 'package:stay_match/core/routing/app_routing.dart';
+import 'package:stay_match/core/widgets/custom_elevated_button.dart';
+
 import '../../../../core/constants/app_colors.dart';
 
 class AddPropertySuccessView extends StatelessWidget {
@@ -14,17 +21,14 @@ class AddPropertySuccessView extends StatelessWidget {
         backgroundColor: AppColors.containerColor,
         elevation: 0,
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.textColorPrimary),
-          onPressed: () => Navigator.pop(context),
-        ),
+        // leading: IconButton(
+        //   icon: const Icon(Icons.arrow_back, color: AppColors.textColorPrimary),
+        //   onPressed: (){
+        //   },
+        // ),
         title: Text(
           'Success',
-          style: TextStyle(
-            color: AppColors.textColorPrimary,
-            fontSize: 18.sp,
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppStyles.bold18poppins.copyWith(color: AppColors.textColorPrimary)
         ),
       ),
       body: SingleChildScrollView(
@@ -48,7 +52,7 @@ class AddPropertySuccessView extends StatelessWidget {
                     height: 120.h,
                   ),
 
-                  SizedBox(height: 32.h),
+                  SizedBox(height: 16.h),
 
                   Text(
                     'Listing Submitted\nSuccessfully!',
@@ -61,16 +65,12 @@ class AddPropertySuccessView extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 12.h),
 
                   Text(
                     'Your property is currently under review. This process typically takes a few hours for approval. We will notify you once it’s live.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: AppColors.textColorSecondary,
-                      height: 1.5,
-                    ),
+                    style: AppStyles.regular14poppins.copyWith(height: 1.5, color: AppColors.textColorSecondary),
                   ),
 
                   SizedBox(height: 32.h),
@@ -80,9 +80,15 @@ class AddPropertySuccessView extends StatelessWidget {
                     text: 'Go to Dashboard',
                     backgroundColor: AppColors.primary,
                     textColor: AppColors.textColorWhite,
-                    onTap: () {
-                      // Action for Dashboard
-                    },
+                    onPressed: () {
+                      context.read<AddPropertyCubit>().resetAll();
+                      // 1. Access the shell from the context
+                      final StatefulNavigationShellState shell = StatefulNavigationShell.of(context);
+                      shell.goBranch(
+                        0,
+                        initialLocation: true,
+                      );
+                      },
                   ),
 
                   SizedBox(height: 12.h),
@@ -92,15 +98,19 @@ class AddPropertySuccessView extends StatelessWidget {
                     text: 'View Preview',
                     backgroundColor: AppColors.darkerGrey,
                     textColor: AppColors.textColorPrimary,
-                    onTap: () {
-                      // Action for Preview
+                    onPressed: () {
+                      context.read<AddPropertyCubit>().resetAll();
+                      // todo: goes to property details
+                      // context.goNamed(AppRouting.apartmentDetailsViewName,pathParameters: {
+                      //   "id" :
+                      // });
                     },
                   ),
                 ],
               ),
             ),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: 20.h),
 
             // --- BOTTOM INFO ROW ---
             Row(
@@ -130,28 +140,17 @@ class AddPropertySuccessView extends StatelessWidget {
     required String text,
     required Color backgroundColor,
     required Color textColor,
-    required VoidCallback onTap,
+    required VoidCallback onPressed,
   }) {
     return SizedBox(
       width: double.infinity,
-      height: 52.h,
-      child: TextButton(
-        onPressed: onTap,
-        style: TextButton.styleFrom(
-          backgroundColor: backgroundColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
-          ),
-        ),
-        child: Text(
-          text,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
+      height: 50.h,
+      child: CustomElevatedButton(text: text,
+        borderRadius: 12,
+        backgroundColor: backgroundColor,
+        onPressed: onPressed,
+        textStyle: AppStyles.semiBold16poppins,
+        textColor: textColor,),
     );
   }
 

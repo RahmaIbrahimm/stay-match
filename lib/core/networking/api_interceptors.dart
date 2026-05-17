@@ -1,4 +1,5 @@
 
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -37,7 +38,10 @@ class ApiInterceptors extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     log('onError', name: 'ApiInterceptors');
-
+    if (err.response?.data != null) {
+      final errorDetail = const JsonEncoder.withIndent('  ').convert(err.response?.data);
+      log("🔴 ERROR SERVER RESPONSE:\n$errorDetail", name: 'DioError');
+    }
     // Only attempt refresh on 401 Unauthorized
     if (err.response?.statusCode == 401) {
       // If the error comes from the refresh token endpoint itself, don't retry (prevents infinite loops)

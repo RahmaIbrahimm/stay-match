@@ -1,11 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:stay_match/Features/home/presentation/widget/small_custom_button.dart';
+import 'package:stay_match/Features/saved/presentation/manager/saved_properties_cubit.dart';
 import 'package:stay_match/core/routing/app_routing.dart';
 
 import '../../../../../../../../core/constants/app_colors.dart';
@@ -38,6 +40,7 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
   final int? size;
   final int? numBathrooms;
   final int? numBedrooms;
+
   @override
   Widget build(BuildContext context) {
     log(
@@ -73,10 +76,10 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style:
-                  (scaleUp
-                          ? AppStyles.semiBold18poppins
-                          : AppStyles.semiBold12poppins)
-                      .copyWith(color: AppColors.textColorPrimary),
+              (scaleUp
+                  ? AppStyles.semiBold18poppins
+                  : AppStyles.semiBold12poppins)
+                  .copyWith(color: AppColors.textColorPrimary),
             ),
             SizedBox(height: 4.h),
             _buildLocation(),
@@ -116,34 +119,46 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
               TextSpan(
                 text: 'EGP ${monthlyRent ?? 0}',
                 style:
-                    (scaleUp
-                            ? AppStyles.bold20poppins
-                            : AppStyles.bold15poppins)
-                        .copyWith(color: AppColors.primary),
+                (scaleUp
+                    ? AppStyles.bold20poppins
+                    : AppStyles.bold15poppins)
+                    .copyWith(color: AppColors.primary),
               ),
               TextSpan(
                 text: ' / month',
                 style:
-                    (scaleUp
-                            ? AppStyles.medium12poppins
-                            : AppStyles.medium10poppins)
-                        .copyWith(color: AppColors.textColorSecondary),
+                (scaleUp
+                    ? AppStyles.medium12poppins
+                    : AppStyles.medium10poppins)
+                    .copyWith(color: AppColors.textColorSecondary),
               ),
             ],
           ),
         ),
-        GestureDetector(
-          onTap: () {},
-          child: Container(
-            width: scaleUp ? 40.w : 30.w,
-            height: scaleUp ? 40.h : 30.h,
-            alignment: Alignment.center,
-            child: Icon(
-              FontAwesome.heart,
-              size: scaleUp ? 20.sp : 14.sp,
-              color: Colors.grey,
-            ),
-          ),
+        BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
+          builder: (context, state) {
+            var cubit = context.read<SavedPropertiesCubit>();
+            // todo: check saved ? from properties i think so abanoub should add it??
+            // var saved =
+            //
+            return GestureDetector(
+              onTap: () async {
+                print(id);
+                await cubit.toggleSaved(itemType: SavedItemType.wholeApartment,
+                    propertyId: id);
+              },
+              child: Container(
+                width: scaleUp ? 40.w : 30.w,
+                height: scaleUp ? 40.h : 30.h,
+                alignment: Alignment.center,
+                child: Icon(
+                  FontAwesome.heart,
+                  size: scaleUp ? 20.sp : 14.sp,
+                  color: Colors.grey,
+                ),
+              ),
+            );
+          },
         ),
       ],
     );
@@ -181,12 +196,14 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
               size: scaleUp ? 20.sp : 12.sp,
             ),
             text:
-                '${numBedrooms ?? 0} ${(numBedrooms ?? 0) > 1 ? 'Beds' : 'Bed'}',
+            '${numBedrooms ?? 0} ${(numBedrooms ?? 0) > 1 ? 'Beds' : 'Bed'}',
           ),
           _buildFeature(
             icon: Icon(MdiIcons.bathtub, size: scaleUp ? 20.sp : 12.sp),
             text:
-                '${numBathrooms ?? 0} ${(numBathrooms ?? 0) > 1 ? 'Bathrooms' : 'Bathroom'}',
+            '${numBathrooms ?? 0} ${(numBathrooms ?? 0) > 1
+                ? 'Bathrooms'
+                : 'Bathroom'}',
           ),
           _buildFeature(
             icon: Icon(MdiIcons.floorPlan, size: scaleUp ? 20.r : 12.r),
@@ -212,10 +229,10 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style:
-                (scaleUp
-                        ? AppStyles.medium15poppins
-                        : AppStyles.medium10poppins)
-                    .copyWith(color: AppColors.textColorSecondary),
+            (scaleUp
+                ? AppStyles.medium15poppins
+                : AppStyles.medium10poppins)
+                .copyWith(color: AppColors.textColorSecondary),
           ),
         ),
       ],

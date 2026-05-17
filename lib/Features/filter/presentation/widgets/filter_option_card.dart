@@ -38,7 +38,7 @@ class _FilterOptionCardState extends State<FilterOptionCard> {
           widget.onChangeVoid();
         },
         child: AnimatedContainer(
-          duration: Duration(milliseconds: 0),
+          duration: Duration(milliseconds: 100),
           padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
           margin: EdgeInsets.only(left: 8.r, right: 8.r),
           decoration: BoxDecoration(

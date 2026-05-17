@@ -10,7 +10,7 @@ import '../../../data/models/my_chats.dart';
 import '../shared/chat_helper.dart';
 
 class ChatTile extends StatelessWidget {
-  final MyChatsData chatData;
+  final dynamic chatData;
   const ChatTile({super.key, required this.chatData});
 
   @override
@@ -20,7 +20,6 @@ class ChatTile extends StatelessWidget {
 
     return ListTile(
       onTap: () {
-        //todo: Navigate to actual chat room using chatData.chatId
         if(context.mounted) context.pushNamed(AppRouting.messagesName,pathParameters: {'otherUserId':chatData.otherUserId ?? '-1'});
       },
       contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),

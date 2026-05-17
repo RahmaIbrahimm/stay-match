@@ -18,7 +18,7 @@ class ChatListView extends StatelessWidget {
           ChatListCubit(getIt.get<ChatRepoImpl>(), getIt.get<ChatService>())
             ..getInbox(),
       child: Scaffold(
-        drawer: MainAppDrawer(),
+        endDrawer: MainAppDrawer(),
         body: RefreshIndicator(
           onRefresh: () async {
             BlocProvider.of<ChatListCubit>(context).getInbox();

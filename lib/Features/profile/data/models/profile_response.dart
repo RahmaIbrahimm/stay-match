@@ -69,8 +69,10 @@ class ProfileRespData {
       this.university, 
       this.fieldOfStudy, 
       this.jobTitle, 
-      this.profilePicture, 
-      this.isVerified, 
+      this.aboutMe,
+      this.status,
+      this.profilePicture,
+      this.idImage,
       this.isProfileComplete,});
 
   ProfileRespData.fromJson(dynamic json) {
@@ -86,7 +88,10 @@ class ProfileRespData {
     university = json['university'];
     fieldOfStudy = json['fieldOfStudy'];
     jobTitle = json['jobTitle'];
+    aboutMe = json['aboutMe'];
+    status = json['status'];
     profilePicture = json['profilePicture'];
+    idImage = json['idImage'];
     isVerified = json['isVerified'];
     isProfileComplete = json['isProfileComplete'];
   }
@@ -102,7 +107,10 @@ class ProfileRespData {
   String? university;
   String? fieldOfStudy;
   String? jobTitle;
+  String? aboutMe;
+  String? status;
   String? profilePicture;
+  String? idImage;
   bool? isVerified;
   bool? isProfileComplete;
 
@@ -120,7 +128,10 @@ class ProfileRespData {
     map['university'] = university;
     map['fieldOfStudy'] = fieldOfStudy;
     map['jobTitle'] = jobTitle;
+    map['aboutMe'] = aboutMe;
+    map['status'] = status;
     map['profilePicture'] = profilePicture;
+    map['idImage'] = idImage;
     map['isVerified'] = isVerified;
     map['isProfileComplete'] = isProfileComplete;
     return map;
@@ -138,7 +149,10 @@ class ProfileRespData {
     String? university,
     String? fieldOfStudy,
     String? jobTitle,
+    String? aboutMe,
+    String? status,
     String? profilePicture,
+    String? idImage,
     bool? isVerified,
     bool? isProfileComplete,
   }) {
@@ -155,8 +169,10 @@ class ProfileRespData {
       university: university ?? this.university,
       fieldOfStudy: fieldOfStudy ?? this.fieldOfStudy,
       jobTitle: jobTitle ?? this.jobTitle,
+      aboutMe: aboutMe ?? this.aboutMe,
+      status: status ?? this.status,
       profilePicture: profilePicture ?? this.profilePicture,
-      isVerified: isVerified ?? this.isVerified,
+      idImage: idImage ?? this.idImage,
       isProfileComplete: isProfileComplete ?? this.isProfileComplete,
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_strings.dart';
 import '../../../../../core/constants/app_styles.dart';
@@ -14,13 +15,16 @@ class AddressDetailsSection extends StatelessWidget {
   final City? selectedCity;
   final ValueChanged<Governorate?> onGovernorateChanged;
   final ValueChanged<City?> onCityChanged;
-
+  final Color? strokeColor;
+  final Color? fillColor;
   const AddressDetailsSection({
     super.key,
     this.selectedGovernorate,
     this.selectedCity,
     required this.onGovernorateChanged,
     required this.onCityChanged,
+    this.strokeColor,
+    this.fillColor,
   });
 
   @override
@@ -35,10 +39,12 @@ class AddressDetailsSection extends StatelessWidget {
         SliverToBoxAdapter(child: _label(AppStrings.governorate)),
         SliverToBoxAdapter(
           child: CustomDropDownMenu<Governorate>(
-            fillColor: AppColors.fieldFillColor,
-            hintStyle: AppStyles.medium14poppins,
+            fillColor: fillColor ?? AppColors.fieldFillColor,
             hasShadow: false,
-            strokeColor: AppColors.primary.withValues(alpha: 0.05),
+            strokeColor:
+                strokeColor ?? AppColors.primary.withValues(alpha: 0.05),
+            hintStyle: AppStyles.medium14poppins,
+
             menuItems: locationCubit.allGovernorates,
             hintText: AppStrings.selectGovernorate,
             selectedItem: selectedGovernorate,
@@ -50,9 +56,10 @@ class AddressDetailsSection extends StatelessWidget {
           SliverToBoxAdapter(child: _label(AppStrings.city)),
           SliverToBoxAdapter(
             child: CustomDropDownMenu<City>(
-              fillColor: AppColors.fieldFillColor,
+              fillColor: fillColor ?? AppColors.fieldFillColor,
               hasShadow: false,
-              strokeColor: AppColors.primary.withValues(alpha: 0.05),
+              strokeColor:
+                  strokeColor ?? AppColors.primary.withValues(alpha: 0.05),
               menuItems: selectedGovernorate!.citiesAndVillages,
               hintText: AppStrings.selectCity,
               hintStyle: AppStyles.medium14poppins,

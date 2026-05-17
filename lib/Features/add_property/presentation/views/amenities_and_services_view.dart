@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
+import 'package:stay_match/Features/filter/presentation/widgets/filter_helper.dart';
 import '../widgets/amenenities_and_services_widgets/amenities_and_services_body.dart';
 
 
 class AmenitiesAndServicesView extends StatelessWidget {
   const AmenitiesAndServicesView({super.key});
-
   @override
   Widget build(BuildContext context) {
     return AmenitiesAndServicesBody();

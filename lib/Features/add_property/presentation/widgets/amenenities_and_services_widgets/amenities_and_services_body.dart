@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/constants/amenity_constants.dart';
 import '../../../../../core/constants/app_strings.dart';
 import '../../../../../core/routing/app_routing.dart';
+import '../../../../filter/presentation/widgets/filter_helper.dart';
 import '../../manager/add_property_cubit.dart';
 import '../shared/add_property_app_bar.dart';
 import '../shared/add_property_buttons.dart';
@@ -13,13 +14,21 @@ import 'amenity_grid_section.dart';
 
 class AmenitiesAndServicesBody extends StatelessWidget {
   const AmenitiesAndServicesBody({super.key});
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddPropertyCubit, AddPropertyState>(
       builder: (context, state) {
         final cubit = context.read<AddPropertyCubit>();
-        final request = cubit.apartmentRequest;
+        Map<String, dynamic> currentAmenities;
+        Map<String, dynamic> currentServices;
+
+        if (cubit.selectedType == PropertyType.apartment) {
+          currentAmenities = cubit.apartmentRequest.amenities?.toJson() ?? {};
+          currentServices = cubit.apartmentRequest.nearbyServices?.toJson() ?? {};
+        } else {
+          currentAmenities = cubit.roomRequest.amenities?.toJson() ?? {};
+          currentServices = cubit.roomRequest.nearbyServices?.toJson() ?? {};
+        }
 
         return Scaffold(
           body: SafeArea(
@@ -41,7 +50,7 @@ class AmenitiesAndServicesBody extends StatelessWidget {
                     title: AppStrings.amenities,
                     icon: Icons.home_repair_service,
                     items: AmenityConstants.amenities,
-                    currentValues: request.amenities?.toJson() ?? {},
+                    currentValues: currentAmenities,
                     onTap: (key) => cubit.toggleAmenity(key),
                   ),
 
@@ -50,7 +59,8 @@ class AmenitiesAndServicesBody extends StatelessWidget {
                     title: AppStrings.nearbyServices,
                     icon: Icons.map,
                     items: AmenityConstants.nearbyServices,
-                    currentValues: request.nearbyServices?.toJson() ?? {},
+                    currentValues: currentServices,
+                    // currentValues: request.nearbyServices?.toJson() ?? {},
                     onTap: (key) => cubit.toggleNearbyServices(key),
                   ),
 
@@ -59,7 +69,7 @@ class AmenitiesAndServicesBody extends StatelessWidget {
                   SliverToBoxAdapter(
                     child: AddPropertyButtons(
                       cubit: cubit,
-                      nextPageRoute: AppRouting.addLocationAndGalleryName,
+                      nextPageRoute: cubit.selectedType == PropertyType.apartment ?AppRouting.addLocationAndGalleryName:AppRouting.addIndividualRoomsName,
                     ),
                   ),
                   SliverToBoxAdapter(child: SizedBox(height: 16.h)),

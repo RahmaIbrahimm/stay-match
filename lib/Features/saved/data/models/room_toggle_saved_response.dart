@@ -2,13 +2,13 @@
 /// message : "Request successful"
 /// data : {"saved":true,"message":"Room saved successfully","type":"room","propertyId":138,"roomId":221,"propertyName":"شقة سكنية للطالبات - غرف مشتركة","roomName":"الغرفة الأولى (الزهور)"}
 
-class RoomToggleSaved {
-  RoomToggleSaved({
+class RoomToggleSavedResponse {
+  RoomToggleSavedResponse({
       this.isSuccess, 
       this.message, 
       this.data,});
 
-  RoomToggleSaved.fromJson(dynamic json) {
+  RoomToggleSavedResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
@@ -16,10 +16,10 @@ class RoomToggleSaved {
   bool? isSuccess;
   String? message;
   Data? data;
-RoomToggleSaved copyWith({  bool? isSuccess,
+RoomToggleSavedResponse copyWith({  bool? isSuccess,
   String? message,
   Data? data,
-}) => RoomToggleSaved(  isSuccess: isSuccess ?? this.isSuccess,
+}) => RoomToggleSavedResponse(  isSuccess: isSuccess ?? this.isSuccess,
   message: message ?? this.message,
   data: data ?? this.data,
 );

@@ -1,605 +1,628 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stay_match/Features/add_property/presentation/widgets/shared/progress_bar.dart';
-import 'package:stay_match/core/constants/app_colors.dart';
-import 'package:stay_match/core/constants/app_strings.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stay_match/core/routing/app_routing.dart';
 
+import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_strings.dart';
+import '../../../../../core/constants/app_styles.dart';
+import '../../../../../core/widgets/custom_text_form_field.dart';
+import '../../../../../core/widgets/custom_toggle_switch.dart';
 import '../manager/add_property_cubit.dart';
-
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stay_match/core/constants/app_strings.dart';
-
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../widgets/location_and_gallery_widgets/property_gallery_widget.dart';
+import '../widgets/shared/add_property_app_bar.dart';
+import '../widgets/shared/add_property_buttons.dart';
+import '../widgets/shared/field_label.dart';
+import '../widgets/shared/progress_bar.dart';
 
-// Brand Colors from image_a8aeb9.png
-const Color kPrimaryNavy = Color(0xFF1A2E63);
-const Color kAccentBlue = Color(0xFFE8EEF9);
-const Color kTextGrey = Color(0xFF667085);
-const Color kBorderColor = Color(0xFFD0D5DD);
-
-class IndividualRoomDetailsView extends StatelessWidget {
+class IndividualRoomDetailsView extends StatefulWidget {
   const IndividualRoomDetailsView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<AddPropertyCubit, AddPropertyState>(
-      listener: (context, state) {
-        if (state is AddPropertySuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(state.message), backgroundColor: Colors.green),
-          );
-        } else if (state is AddPropertyFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(state.errMessage), backgroundColor: Colors.red),
-          );
-        }
-      },
-      builder: (context, state) {
-        final cubit = context.read<AddPropertyCubit>();
-        final rooms = cubit.roomRequest.rooms ?? [];
-
-        return Scaffold(
-          backgroundColor: AppColors.fieldFillColor,
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            leading: const BackButton(color: kPrimaryNavy),
-            title: const Text("Step 3 of 5",
-                style: TextStyle(color: kTextGrey, fontSize: 14)),
-            actions: [
-              Text(
-                "${((cubit.currentStep + 1) / 5 * 100).toInt()}% Complete",
-                style: const TextStyle(color: kTextGrey, fontSize: 12),
-              ),
-              const SizedBox(width: 16),
-            ],
-          ),
-          body: Column(
-            children: [
-              ProgressBar(stepNumber: BlocProvider
-                  .of<AddPropertyCubit>(context)
-                  .currentStep),
-              LinearProgressIndicator(
-                value: 3 / 5,
-                backgroundColor: kAccentBlue,
-                color: kPrimaryNavy,
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("Individual Room Details",
-                          style: TextStyle(fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: kPrimaryNavy)),
-                      const SizedBox(height: 4),
-                      const Text(
-                          "Provide specific information for each unit or room available in your property.",
-                          style: TextStyle(color: kTextGrey, fontSize: 13)),
-                      const SizedBox(height: 24),
-
-                      ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: rooms.length,
-                        separatorBuilder: (context, index) =>
-                        const SizedBox(height: 16),
-                        itemBuilder: (context, index) =>
-                            RoomDetailCard(index: index, room: rooms[index]),
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      _buildAddRoomButton(cubit),
-
-                      const SizedBox(height: 32),
-                      const Text("Property Images", style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: kPrimaryNavy)),
-                      const SizedBox(height: 12),
-                      // PropertyGalleryWidget(),
-                      const SizedBox(height: 40),
-                      _buildBottomButtons(cubit, state),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildAddRoomButton(AddPropertyCubit cubit) {
-    return InkWell(
-      onTap: () => cubit.addRoom(),
-      child: Container(
-        width: double.infinity,
-        height: 55,
-        decoration: BoxDecoration(
-          color: kAccentBlue.withValues(alpha: 0.4),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-              color: kPrimaryNavy.withValues(alpha: 0.2), style: BorderStyle.solid),
-        ),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.add_circle_outline, color: kPrimaryNavy),
-            SizedBox(width: 8),
-            Text("Add Another Room", style: TextStyle(
-                color: kPrimaryNavy, fontWeight: FontWeight.bold)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMainImagePicker(AddPropertyCubit cubit) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 40),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF9FAFB),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: kBorderColor, style: BorderStyle.none),
-      ),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: const BoxDecoration(
-                color: kAccentBlue, shape: BoxShape.circle),
-            child: const Icon(
-                Icons.apartment_outlined, color: kPrimaryNavy, size: 30),
-          ),
-          const SizedBox(height: 12),
-          const Text("Drag & drop or Click to upload",
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          const Text("PNG, JPG up to 10MB (Min 5 photos recommended)",
-              style: TextStyle(color: kTextGrey, fontSize: 11)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBottomButtons(AddPropertyCubit cubit, AddPropertyState state) {
-    return Row(
-      children: [
-        Expanded(
-          child: OutlinedButton(
-            onPressed: () => cubit.prevStep(),
-            style: OutlinedButton.styleFrom(
-              minimumSize: const Size(0, 52),
-              side: const BorderSide(color: kBorderColor),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-            ),
-            child: const Text(
-                "Previous", style: TextStyle(color: Colors.black)),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: ElevatedButton(
-            onPressed: state is AddPropertyLoading ? null : () =>
-                cubit.submit(),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: kPrimaryNavy,
-              minimumSize: const Size(0, 52),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-            ),
-            child: state is AddPropertyLoading
-                ? const SizedBox(height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                    color: Colors.white, strokeWidth: 2))
-                : const Text("Continue", style: TextStyle(color: Colors.white)),
-          ),
-        ),
-      ],
-    );
-  }
+  State<IndividualRoomDetailsView> createState() =>
+      _IndividualRoomDetailsViewState();
 }
 
-class RoomDetailCard extends StatelessWidget {
-  final int index;
-  final dynamic room;
+class _IndividualRoomDetailsViewState extends State<IndividualRoomDetailsView> {
+  final _formKey = GlobalKey<FormState>();
 
-  const RoomDetailCard({super.key, required this.index, required this.room});
+  @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<AddPropertyCubit>();
+    final targetCount = cubit.roomRequest.availableRooms ?? 1;
+    while ((cubit.roomRequest.rooms?.length ?? 0) < targetCount) {
+      cubit.addRoom();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AddPropertyCubit>();
-    final roomImages = cubit.localRoomImages[index] ?? [];
+    return BlocBuilder<AddPropertyCubit, AddPropertyState>(
+      builder: (context, state) {
+        final cubit = context.read<AddPropertyCubit>();
+        final rooms = cubit.roomRequest.rooms ?? [];
+        final maxAllowedRooms = cubit.roomRequest.availableRooms ?? 1;
 
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: kBorderColor),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: ExpansionTile(
-        initiallyExpanded: true,
-        tilePadding: const EdgeInsets.symmetric(horizontal: 16),
-        leading: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-              color: kAccentBlue, borderRadius: BorderRadius.circular(8)),
-          child: const Icon(Icons.bed_outlined, color: kPrimaryNavy),
-        ),
-        title: Text(room.roomName ?? "Room ${index + 1}: Master Suite",
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, color: kPrimaryNavy)),
-        subtitle: const Text("Fully Furnished • En-suite",
-            style: TextStyle(fontSize: 12, color: kTextGrey)),
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text("Room Photos", style: TextStyle(
-                    fontSize: 12, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                SizedBox(
-                  height: 90,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      _buildAddPhotoButton(() => cubit.pickRoomImages(index)),
-                      ...roomImages.map((file) => _buildImagePreview(file)),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-                _buildLabel("Room Name"),
-                TextField(
-                  decoration: const InputDecoration(hintText: "Master Bedroom"),
-                  onChanged: (v) => cubit.updateRoomBasicData(index, name: v),
-                ),
-
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(child: _buildTextField(
-                        "Monthly Rent", "1200", Icons.attach_money, (v) =>
-                        cubit.updateRoomBasicData(
-                            index, rent: int.tryParse(v)))),
-                    const SizedBox(width: 12),
-                    Expanded(child: _buildTextField(
-                        "Deposit", "1200", Icons.attach_money, (v) =>
-                        cubit.updateRoomBasicData(
-                            index, deposit: int.tryParse(v)))),
-                  ],
-                ),
-
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(child: _buildTextField(
-                        "Min. Stay (Months)", "6", null, (v) =>
-                        cubit.updateRoomBasicData(index))),
-                    const SizedBox(width: 12),
-                    Expanded(child: _buildTextField(
-                        "Available From", "05/11/2024",
-                        Icons.calendar_today_outlined, null, readOnly: true)),
-                  ],
-                ),
-
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(child: _buildStyledCounter(
-                        "Total Capacity", room.capacity ?? 1, (v) =>
-                        cubit.updateRoomCapacity(index, total: v))),
-                    const SizedBox(width: 12),
-                    Expanded(child: _buildStyledCounter(
-                        "Available Spots", room.capacityAvailable ?? 1, (v) =>
-                        cubit.updateRoomCapacity(index, available: v))),
-                  ],
-                ),
-
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Fully Furnished", style: TextStyle(
-                        fontWeight: FontWeight.bold, color: kPrimaryNavy)),
-                    Switch(
-                      value: room.furnished ?? true,
-                      activeColor: Colors.white,
-                      activeTrackColor: kPrimaryNavy,
-                      onChanged: (v) =>
-                          cubit.updateRoomBasicData(index, isEnSuite: v),
+        return Scaffold(
+          backgroundColor: const Color(0xFFF8FAFC),
+          body: SafeArea(
+            child: Form(
+              key: _formKey,
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  AddPropertyAppBar(
+                      cubit: cubit, title: AppStrings.addProperty),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 8.h),
+                          ProgressBar(stepNumber: cubit.currentStep + 1),
+                          SizedBox(height: 24.h),
+                          Text("Individual Room Details",
+                              style: AppStyles.bold20poppins),
+                          SizedBox(height: 4.h),
+                          Text(
+                            "Detail each room. (Max: $maxAllowedRooms rooms)",
+                            style: AppStyles.medium12poppins.copyWith(
+                                color: Colors.blueGrey),
+                          ),
+                          SizedBox(height: 20.h),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-
-                const SizedBox(height: 16),
-                _buildLabel("Bathroom Type"),
-                Row(
-                  children: [
-                    _buildChoiceBtn("En-suite", room.enSuiteBathroom, () =>
-                        cubit.updateRoomBasicData(index, isEnSuite: true)),
-                    const SizedBox(width: 12),
-                    _buildChoiceBtn("Shared", room.sharedBathroom, () =>
-                        cubit.updateRoomBasicData(index, isEnSuite: false)),
-                  ],
-                ),
-
-                const SizedBox(height: 20),
-                _buildLabel("Key Features"),
-                _buildKeyFeatures(cubit, index, room),
-
-                const SizedBox(height: 20),
-                _buildLabel("Room Amenities"),
-                _buildAmenities(cubit, index, room),
-
-                const SizedBox(height: 20),
-                _buildLabel("Allowed Tenants"),
-                _buildTenantChips(cubit, index, room),
-
-                const SizedBox(height: 20),
-                _buildGenderSection(cubit, index, room),
-              ],
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                            (context, index) =>
+                            _RoomBottomSheetCard(
+                              index: index,
+                              room: rooms[index],
+                              cubit: cubit,
+                              canDelete: rooms.length > 1,
+                            ),
+                        childCount: rooms.length,
+                      ),
+                    ),
+                  ),
+                  // SliverToBoxAdapter(
+                  //   child: Padding(
+                  //     padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  //     child: (rooms.length < maxAllowedRooms)
+                  //         ? _buildAddRoomButton(cubit)
+                  //         : const SizedBox.shrink(),
+                  //   ),
+                  // ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(16.w, 32.h, 16.w, 40.h),
+                      child: AddPropertyButtons(
+                        cubit: cubit,
+                        // submit: true,
+                        onNextPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            cubit.submitRoomProperty();
+                          }
+                        },
+                        nextPageRoute: AppRouting.listingSuccessName,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          )
-        ],
-      ),
-    );
-  }
-
-  // --- Helper Widget Builders ---
-
-  Widget _buildLabel(String text) =>
-      Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Text(text, style: const TextStyle(
-            fontSize: 13, fontWeight: FontWeight.bold, color: kPrimaryNavy)),
-      );
-
-  Widget _buildTextField(String label, String hint, IconData? icon,
-      Function(String)? onChanged, {bool readOnly = false}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildLabel(label),
-        TextField(
-          readOnly: readOnly,
-          onChanged: onChanged,
-          decoration: InputDecoration(
-            hintText: hint,
-            prefixIcon: icon != null ? Icon(icon, size: 18) : null,
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAddPhotoButton(VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 90,
-        margin: const EdgeInsets.only(right: 8),
-        decoration: BoxDecoration(
-          color: kAccentBlue.withValues(alpha: 0.3),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: kPrimaryNavy.withValues(alpha: 0.1)),
-        ),
-        child: const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.add_a_photo_outlined, color: kPrimaryNavy, size: 20),
-            Text("Add Photo",
-                style: TextStyle(fontSize: 10, color: kPrimaryNavy)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildImagePreview(File file) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Image.file(file, width: 90, height: 90, fit: BoxFit.cover),
-      ),
-    );
-  }
-
-  Widget _buildStyledCounter(String label, int value, Function(int) onChanged) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildLabel(label),
-        Container(
-          height: 48,
-          decoration: BoxDecoration(color: const Color(0xFFF9FAFB),
-              borderRadius: BorderRadius.circular(8)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(onPressed: () => onChanged(value > 1 ? value - 1 : 1),
-                  icon: const Icon(Icons.remove, size: 16)),
-              Text("$value",
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-              IconButton(onPressed: () => onChanged(value + 1),
-                  icon: const Icon(Icons.add, size: 16)),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildChoiceBtn(String text, bool isSelected, VoidCallback onTap) {
-    return Expanded(
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          height: 45,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: isSelected ? kAccentBlue : Colors.white,
-            border: Border.all(color: isSelected ? kPrimaryNavy : kBorderColor),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(text, style: TextStyle(
-              color: isSelected ? kPrimaryNavy : kTextGrey,
-              fontWeight: FontWeight.bold)),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildKeyFeatures(AddPropertyCubit cubit, int idx, dynamic room) {
-    return Wrap(
-      spacing: 8,
-      children: [
-        _buildFeatureChip("Balcony", Icons.balcony, room.balcony, () =>
-            cubit.toggleRoomKeyFeature(idx, 'Balcony')),
-        _buildFeatureChip("Window", Icons.window, room.window, () =>
-            cubit.toggleRoomKeyFeature(idx, 'Window')),
-        _buildFeatureChip("Pets Allowed", Icons.pets, room.petsAllowed, () =>
-            cubit.toggleRoomKeyFeature(idx, 'Pets')),
-      ],
-    );
-  }
-
-  Widget _buildFeatureChip(String label, IconData icon, bool selected,
-      VoidCallback onTap) {
-    return FilterChip(
-      avatar: Icon(icon, size: 14, color: selected ? kPrimaryNavy : kTextGrey),
-      label: Text(label, style: TextStyle(
-          color: selected ? kPrimaryNavy : kTextGrey, fontSize: 12)),
-      selected: selected,
-      onSelected: (_) => onTap(),
-      backgroundColor: Colors.white,
-      selectedColor: kAccentBlue,
-      checkmarkColor: kPrimaryNavy,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: selected ? kPrimaryNavy : kBorderColor)),
-    );
-  }
-
-  Widget _buildAmenities(AddPropertyCubit cubit, int idx, dynamic room) {
-    final amenities = [
-      {'key': 'airConditioning', 'label': 'Air conditioning'},
-      {'key': 'closet', 'label': 'Closet'},
-      {'key': 'mirror', 'label': 'Full Mirror'},
-      {'key': 'fan', 'label': 'Ceiling Fan'},
-    ];
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, childAspectRatio: 4),
-      itemCount: amenities.length,
-      itemBuilder: (context, i) {
-        final item = amenities[i];
-        final isSelected = room.roomAmenities?.toJson()[item['key']] ?? false;
-        return Row(
-          children: [
-            Checkbox(
-              value: isSelected,
-              activeColor: kPrimaryNavy,
-              onChanged: (_) => cubit.toggleRoomAmenity(idx, item['key']!),
-            ),
-            Text(item['label']!, style: const TextStyle(fontSize: 12)),
-          ],
         );
       },
     );
   }
 
-  Widget _buildTenantChips(AddPropertyCubit cubit, int idx, dynamic room) {
-    return Wrap(
-      spacing: 8,
-      children: [
-        _buildSimpleChip("Families", room.allowedTenants?.allowsFamilies, () =>
-            cubit.toggleRoomTenantType(idx, 'Families')),
-        _buildSimpleChip("Children", room.allowedTenants?.allowsChildren, () =>
-            cubit.toggleRoomTenantType(idx, 'Children')),
-        _buildSimpleChip("Students", room.allowedTenants?.allowsStudents, () =>
-            cubit.toggleRoomTenantType(idx, 'Students')),
-        _buildSimpleChip("Workers", room.allowedTenants?.allowsWorkers, () =>
-            cubit.toggleRoomTenantType(idx, 'Workers')),
-      ],
-    );
-  }
+// Widget _buildAddRoomButton(AddPropertyCubit cubit) {
+//   return InkWell(
+//     onTap: () => cubit.addRoom(),
+//     borderRadius: BorderRadius.circular(12.r),
+//     child: Container(
+//       padding: EdgeInsets.symmetric(vertical: 16.h),
+//       decoration: BoxDecoration(
+//         color: const Color(0xFFEFF6FF),
+//         borderRadius: BorderRadius.circular(12.r),
+//         border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+//       ),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           Icon(Icons.add_circle_outline, color: AppColors.primary,
+//               size: 20.sp),
+//           SizedBox(width: 8.w),
+//           Text("Add Another Room", style: AppStyles.bold14poppins.copyWith(
+//               color: AppColors.primary)),
+//         ],
+//       ),
+//     ),
+//   );
+// }
+}
 
-  Widget _buildSimpleChip(String label, bool? selected, VoidCallback onTap) {
-    bool isSel = selected ?? false;
-    return InkWell(
-      onTap: onTap,
-      child: Chip(
-        label: Text(label, style: TextStyle(color: isSel
-            ? kPrimaryNavy
-            : kTextGrey, fontSize: 12)),
-        backgroundColor: isSel ? kAccentBlue : const Color(0xFFF2F4F7),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),
-            side: BorderSide(color: isSel ? kPrimaryNavy : Colors.transparent)),
-      ),
-    );
-  }
+class _RoomBottomSheetCard extends StatelessWidget {
+  final int index;
+  final dynamic room;
+  final AddPropertyCubit cubit;
+  final bool canDelete;
 
-  Widget _buildGenderSection(AddPropertyCubit cubit, int idx, dynamic room) {
+  const _RoomBottomSheetCard({
+    required this.index,
+    required this.room,
+    required this.cubit,
+    required this.canDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    DateTime? displayDate;
+    if (room.availableFrom != null) {
+      displayDate = room.availableFrom is String
+          ? DateTime.tryParse(room.availableFrom)
+          : room.availableFrom;
+    }
+
     return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(color: const Color(0xFFF9FAFB),
-          borderRadius: BorderRadius.circular(12)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text("Gender preference:",
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-          Row(
-            children: [
-              _buildRadio(
-                  "Male", "Male", room, (v) => cubit.updateRoomGender(idx, v)),
-              _buildRadio("Female", "Female", room, (v) =>
-                  cubit.updateRoomGender(idx, v)),
-              _buildRadio(
-                  "Any", "any", room, (v) => cubit.updateRoomGender(idx, v)),
-            ],
-          )
+      margin: EdgeInsets.only(bottom: 20.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20.r),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 12,
+              offset: const Offset(0, 4))
         ],
       ),
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          initiallyExpanded: index == 0,
+          tilePadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          expandedCrossAxisAlignment: CrossAxisAlignment.start,
+          leading: Container(
+            padding: EdgeInsets.all(8.w),
+            decoration: const BoxDecoration(
+                color: Color(0xFFF1F5F9), shape: BoxShape.circle),
+            child: Icon(
+                Icons.king_bed_outlined, color: AppColors.primary, size: 20.sp),
+          ),
+          title: Text("Room ${index + 1}: ${room.roomName ?? 'Standard Room'}",
+              style: AppStyles.bold16poppins),
+          subtitle: Text(
+            room.furnished == true ? 'Furnished' : 'Unfurnished',
+            style: AppStyles.medium12poppins.copyWith(color: Colors.grey),
+          ),
+          childrenPadding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 20.h),
+          children: [
+            const Divider(color: Color(0xFFF1F5F9), thickness: 1.5),
+            SizedBox(height: 12.h),
+            FieldLabel(t: "Room Photos"),
+            PropertyGalleryWidget(roomIndex: index, hasCoverImage: false),
+            SizedBox(height: 20.h),
+            FieldLabel(t: "Room Name"),
+            CustomTextFormField(
+              hasShadow: false,
+              strokeColor: AppColors.stroke,
+              hintText: "e.g. Master Suite",
+              onChanged: (v) => cubit.updateRoomBasicData(index, name: v),
+              validator: (v) =>
+              (v == null || v.isEmpty)
+                  ? "Name required"
+                  : null,
+            ),
+            SizedBox(height: 20.h),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    FieldLabel(t: AppStrings.monthlyRent),
+                    CustomTextFormField(
+                      hasShadow: false,
+                      strokeColor: AppColors.stroke,
+                      hintText: "\$",
+                      keyboardType: TextInputType.number,
+                      onChanged: (v) =>
+                          cubit.updateRoomBasicData(
+                              index, rent: int.tryParse(v)),
+                      validator: (v) =>
+                      (v == null || v.isEmpty)
+                          ? "Required"
+                          : null,
+                    ),
+                  ]),
+                ),
+                SizedBox(width: 16.w),
+                Expanded(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    FieldLabel(t: "Deposit"),
+                    CustomTextFormField(
+                      hasShadow: false,
+                      strokeColor: AppColors.stroke,
+                      hintText: "\$",
+                      keyboardType: TextInputType.number,
+                      onChanged: (v) =>
+                          cubit.updateRoomBasicData(
+                              index, deposit: int.tryParse(v)),
+                      validator: (v) =>
+                      (v == null || v.isEmpty)
+                          ? "Required"
+                          : null,
+                    ),
+                  ]),
+                ),
+              ],
+            ),
+            SizedBox(height: 20.h),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    FieldLabel(t: "Min. Stay (Months)"),
+// Min Stay Field
+                    CustomTextFormField(
+                      hasShadow: false,
+                      strokeColor: AppColors.stroke,
+                      hintText: "1",
+                      keyboardType: TextInputType.number,
+                      onChanged: (v) =>
+                          cubit.updateRoomBasicData(
+                          index, minimumStay: int.tryParse(v)),
+                      // Add this!
+                      validator: (v) =>
+                      (v == null || v.isEmpty)
+                          ? "Required"
+                          : null,
+                    ),
+                  ]),
+                ),
+                SizedBox(width: 16.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FieldLabel(t: "Available From"),
+                      GestureDetector(
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: displayDate ?? DateTime.now(),
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime.now().add(
+                                const Duration(days: 5 * 365)),
+
+                          );
+                          if (pickedDate != null) {
+                            cubit.updateRoomBasicData(index,
+                                availableDate: pickedDate.toIso8601String());
+                          }
+                        },
+                        child: CustomTextFormField(
+                          hasShadow: false,
+                          strokeColor: AppColors.stroke,
+                          hintText: displayDate != null
+                              ? "${displayDate.day}/${displayDate
+                              .month}/${displayDate.year}"
+                              : "dd/mm/yyyy",
+                          enabled: false,
+                          suffixIcon: const Icon(
+                            Icons.calendar_today, size: 18, color: AppColors
+                              .textColorSecondary,),
+                          validator: (v) =>
+                          displayDate == null
+                              ? "Required"
+                              : null,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20.h),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildCounterField(
+                    "Total Capacity",
+                    room.capacity ?? 1,
+                    onIncrement: () =>
+                        cubit.updateRoomCapacity(
+                            index, total: (room.capacity ?? 1) + 1),
+                    onDecrement: () {
+                      if ((room.capacity ?? 1) > 1) {
+                        int newTotal = (room.capacity ?? 1) - 1;
+                        int currentAvail = room.capacityAvailable ?? 1;
+                        cubit.updateRoomCapacity(index, total: newTotal,
+                            available: currentAvail > newTotal
+                                ? newTotal
+                                : currentAvail);
+                      }
+                    },
+                  ),
+                ),
+                SizedBox(width: 16.w),
+                Expanded(
+                  child: _buildCounterField(
+                    "Available Spots",
+                    room.capacityAvailable ?? 1,
+                    onIncrement: () {
+                      if ((room.capacityAvailable ?? 1) <
+                          (room.capacity ?? 1)) {
+                        cubit.updateRoomCapacity(index, available: (room
+                            .capacityAvailable ?? 1) + 1);
+                      }
+                    },
+                    onDecrement: () {
+                      if ((room.capacityAvailable ?? 1) > 1) {
+                        cubit.updateRoomCapacity(index, available: (room
+                            .capacityAvailable ?? 1) - 1);
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Fully Furnished", style: AppStyles.medium14poppins),
+                CustomToggleSwitch(
+                  current: room.furnished ?? true,
+                  onTap: () =>
+                      cubit.toggleFurnished(
+                          index: index), // Updated named parameter
+                ),
+              ],
+            ),
+            SizedBox(height: 20.h),
+            FieldLabel(t: "Bathroom Type"),
+            Row(
+              children: [
+                _buildTab("En-suite", room.enSuiteBathroom ?? true, true),
+                SizedBox(width: 12.w),
+                _buildTab("Shared", !(room.enSuiteBathroom ?? true), false),
+              ],
+            ),
+            SizedBox(height: 24.h),
+            FieldLabel(t: "Key Features"),
+            Wrap(
+              spacing: 8.w,
+              children: [
+                _buildFeatureChip(
+                    Icons.balcony, "Balcony", room.balcony ?? false, () =>
+                    cubit.toggleRoomKeyFeature(index, 'Balcony')),
+                _buildFeatureChip(
+                    Icons.window, "Window", room.window ?? false, () =>
+                    cubit.toggleRoomKeyFeature(index, 'Window')),
+                _buildFeatureChip(
+                    Icons.pets, "Pets", room.petsAllowed ?? false, () =>
+                    cubit.toggleRoomKeyFeature(index, 'Pets')),
+              ],
+            ),
+            SizedBox(height: 24.h),
+            FieldLabel(t: "Room Amenities"),
+            _buildAmenitiesGrid(),
+            SizedBox(height: 24.h),
+            FieldLabel(t: "Allowed Tenants"),
+            _buildTenantGrid(),
+            SizedBox(height: 24.h),
+            _buildGenderPreference(),
+            // if (canDelete) ...[
+            //   SizedBox(height: 24.h),
+            //   Center(
+            //     child: TextButton.icon(
+            //       style: TextButton.styleFrom(
+            //           foregroundColor: Colors.redAccent),
+            //       onPressed: () => _showDeleteRoomDialog(context),
+            //       icon: const Icon(Icons.delete_outline_rounded),
+            //       label: const Text("Remove this room"),
+            //     ),
+            //   ),
+            // ]
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _buildRadio(String label, String value, dynamic room,
-      Function(String) onChanged) {
-    return Row(
+
+  Widget _buildCounterField(String label, int val,
+      {required VoidCallback onIncrement, required VoidCallback onDecrement}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Radio<String>(
-          value: value,
-          groupValue: room.allowedTenants?.workerGender ?? "any",
-          activeColor: kPrimaryNavy,
-          onChanged: (v) => onChanged(v!),
-        ),
-        Text(label, style: const TextStyle(fontSize: 12)),
+        FieldLabel(t: label),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF8FAFC),
+            borderRadius: BorderRadius.circular(8.r),
+            border: Border.all(color: Colors.grey.shade200),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(onPressed: onDecrement,
+                  icon: const Icon(Icons.remove, size: 18)),
+              Text("$val", style: AppStyles.bold14poppins),
+              IconButton(onPressed: onIncrement,
+                  icon: const Icon(Icons.add, size: 18)),
+            ],
+          ),
+        )
       ],
     );
   }
+
+  Widget _buildTab(String label, bool isSelected, bool value) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => cubit.updateRoomBasicData(index, isEnSuite: value),
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 12.h),
+          decoration: BoxDecoration(
+            color: isSelected ? const Color(0xFFF1F5F9) : Colors.white,
+            borderRadius: BorderRadius.circular(10.r),
+            border: Border.all(
+                color: isSelected ? AppColors.primary : Colors.grey.shade200,
+                width: 1.5),
+          ),
+          child: Center(child: Text(label, style: TextStyle(
+              color: isSelected ? AppColors.primary : Colors.grey))),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFeatureChip(IconData icon, String label, bool isSelected,
+      VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFFEFF6FF) : Colors.white,
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(
+              color: isSelected ? AppColors.primary : Colors.grey.shade300,
+              width: 2),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 16.sp,
+                color: isSelected ? AppColors.primary : Colors.black),
+            SizedBox(width: 6.w),
+            Text(label, style: TextStyle(fontSize: 12.sp,
+                color: isSelected ? AppColors.primary : Colors.black)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAmenitiesGrid() {
+    final Map<String, String> amenities = {
+      "airConditioning": "Air Conditioning",
+      "closet": "Closet",
+      "mirror": "Full Mirror",
+      "fan": "Ceiling Fan"
+    };
+    return GridView.count(
+      shrinkWrap: true,
+      crossAxisCount: 2,
+      childAspectRatio: 4,
+
+      physics: const NeverScrollableScrollPhysics(),
+      children: amenities.entries.map((entry) {
+        final isSelected = room.roomAmenities?.toJson()[entry.key] ?? false;
+        return Row(children: [
+          Checkbox(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4.r),
+              ),
+              value: isSelected,
+              activeColor: AppColors.primary,
+              onChanged: (v) => cubit.toggleRoomAmenity(index, entry.key)),
+          Text(entry.value, style: AppStyles.medium12poppins),
+        ]);
+      }).toList(),
+    );
+  }
+
+  Widget _buildTenantGrid() {
+    final types = ["Families", "Children", "Students", "Workers"];
+    return Wrap(
+      spacing: 10.w,
+      runSpacing: 10.h,
+      children: types.map((type) {
+        bool isSelected = false;
+        if (type == "Families")
+          isSelected = room.allowedTenants?.allowsFamilies ?? false;
+        if (type == "Children")
+          isSelected = room.allowedTenants?.allowsChildren ?? false;
+        if (type == "Students")
+          isSelected = room.allowedTenants?.allowsStudents ?? true;
+        if (type == "Workers")
+          isSelected = room.allowedTenants?.allowsWorkers ?? true;
+        return GestureDetector(
+          onTap: () => cubit.toggleRoomTenantType(index, type),
+          child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+              decoration: BoxDecoration(
+                color: const Color(0xffF1F5F9),
+                // color: !isSelected ? AppColors.containerColor : AppColors.bgGrey,
+                borderRadius: BorderRadius.circular(10.r),
+                border: Border.all(
+                    color: !isSelected ? AppColors.primary : Colors.transparent,
+                    width: 2),
+              ),
+              child: Text(type, style: AppStyles.medium12poppins.copyWith(
+                  color: !isSelected ? AppColors.primary : Colors.black),)
+            // child: Text(type, style: TextStyle(
+            //     color: !isSelected ? AppColors.primary :Colors.black)),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildGenderPreference() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Gender preference:",
+            style: TextStyle(fontSize: 12.sp, color: Colors.grey.shade600)),
+        Row(
+          children: ["Male","Female","Any"].map((g) {
+            return Row(children: [
+              Radio<String>(
+                value: g,
+                groupValue: room.allowedTenants?.studentGender ?? "Any",
+                activeColor: AppColors.primary,
+                onChanged: (v) => cubit.updateRoomGender(index, v!),
+              ),
+              Text(g, style: TextStyle(fontSize: 13.sp)),
+            ]);
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+// void _showDeleteRoomDialog(BuildContext context) {
+//   showDialog(
+//     context: context,
+//     builder: (context) =>
+//         AlertDialog(
+//           title: const Text('Delete Room'),
+//           content: const Text('Are you sure?'),
+//           actions: [
+//             TextButton(onPressed: () => context.pop(),
+//                 child: const Text('Cancel')),
+//             TextButton(
+//               onPressed: () {
+//                 cubit.removeRoom(index);
+//                 Navigator.pop(context);
+//               },
+//               child: const Text(
+//                   'Delete', style: TextStyle(color: Colors.red)),
+//             ),
+//           ],
+//         ),
+//   );
+// }
 }

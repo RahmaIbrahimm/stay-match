@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:stay_match/Features/chat/data/models/mark_read.dart';
 import 'package:stay_match/Features/chat/data/models/my_chats.dart';
+import 'package:stay_match/Features/chat/data/models/search_chats_response.dart';
 import 'package:stay_match/Features/chat/data/models/send_message_response.dart';
 import 'package:stay_match/Features/chat/data/models/start_chat_response.dart';
 import 'package:stay_match/core/errors/failures.dart';
@@ -86,6 +87,18 @@ class ChatRepoImpl extends ChatRepo {
       return left(ServerFailure.fromDioError(e));
     } catch (e) {
       return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SearchChatsResponse>> searchChats({required String search}) async{
+    try {
+      var response = await apiService.get(Endpoints.searchChats,queryParameters: {
+        "search":search
+      });
+      return right(SearchChatsResponse.fromJson(response));
+    } on DioException catch (e) {
+      return left(ServerFailure.fromDioError(e));
     }
   }
 }

@@ -70,7 +70,6 @@ class CustomElevatedButton extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   maxLines: maxLines,
-                  // todo:it was this maxLines: maxLines ?? 1,
                 ),
                 if (icon != null) icon!,
               ],
