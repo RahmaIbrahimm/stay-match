@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stay_match/Features/filter/presentation/widgets/filter_helper.dart';
 import 'package:stay_match/Features/home/presentation/widget/small_custom_button.dart';
 
 import '../../../../../core/constants/app_colors.dart';
@@ -18,7 +19,6 @@ class HomeHeader extends StatelessWidget {
   // todo: add validators and contoller better
   final Size size;
   final TabController _tabController;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -128,7 +128,10 @@ class HomeHeader extends StatelessWidget {
                   flex: 2,
                   child: SmallCustomButton(
                     text: AppStrings.search,
-                    onPressed: () {},
+                    onPressed: () {
+                      var type = _tabController.index == 0 ? PropertyType.apartment : PropertyType.room;
+
+                    },
                   ),
                 ),
               ],
