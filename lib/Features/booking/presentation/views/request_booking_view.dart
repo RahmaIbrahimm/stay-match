@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stay_match/Features/booking/data/repos/booking_repo_impl.dart';
+import 'package:stay_match/Features/booking/presentation/widgets/shared/booking_helper.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
 
@@ -11,8 +12,11 @@ import '../../../../core/utils/service_locator.dart';
 import '../../../../core/widgets/custom_elevated_button.dart';
 import '../../../filter/presentation/widgets/filter_helper.dart';
 import '../manager/booking_request_cubit.dart';
+import '../widgets/request_booking_widgets/host_card.dart';
+import '../widgets/request_booking_widgets/message_section.dart';
+import '../widgets/request_booking_widgets/time_line_step.dart';
 
-class BookingRequestView extends StatefulWidget {
+class RequestBookingView extends StatefulWidget {
   final int propertyId;
   final String startDate;
   final int duration;
@@ -29,7 +33,7 @@ class BookingRequestView extends StatefulWidget {
 
   // final String match;
 
-  const BookingRequestView({
+  const RequestBookingView({
     super.key,
     required this.propertyId,
     required this.startDate,
@@ -45,15 +49,14 @@ class BookingRequestView extends StatefulWidget {
   });
 
   @override
-  State<BookingRequestView> createState() => _BookingRequestViewState();
+  State<RequestBookingView> createState() => _RequestBookingViewState();
 }
 
-class _BookingRequestViewState extends State<BookingRequestView> {
+class _RequestBookingViewState extends State<RequestBookingView> {
   final TextEditingController _messageController = TextEditingController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -83,7 +86,10 @@ class _BookingRequestViewState extends State<BookingRequestView> {
           listener: (context, state) {
             if (state is BookingRequestSuccess) {
               // 1. Success: Professional Toast
-              _showSuccessDialog(context: context);
+              BookingHelper.showSuccessDialog(
+                context: context,
+                hostName: widget.hostName,
+              );
             } else if (state is BookingRequestFailure) {
               // 2. Error: Modern Floating SnackBar
               ScaffoldMessenger.of(context).showSnackBar(
@@ -140,9 +146,9 @@ class _BookingRequestViewState extends State<BookingRequestView> {
                         SizedBox(height: 20.h),
                         _buildTimeline(),
                         SizedBox(height: 30.h),
-                        _buildHostCard(),
+                        HostCard(hostName: widget.hostName),
                         SizedBox(height: 30.h),
-                        _buildMessageSection(),
+                        MessageSection(messageController: _messageController,),
                         SizedBox(height: 25.h),
                         _buildTotalRentBanner(),
                         SizedBox(height: 20.h),
@@ -165,19 +171,13 @@ class _BookingRequestViewState extends State<BookingRequestView> {
       elevation: 0,
       centerTitle: true,
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: Color(0xFF1A2E63)),
+        icon: const Icon(Icons.arrow_back, color: AppColors.primary),
         onPressed: () => context.pop(),
       ),
       title: Text(
         "Ready to Book?",
-        style: AppStyles.bold18poppins.copyWith(color: const Color(0xFF1A2E63)),
+        style: AppStyles.bold18poppins.copyWith(color: AppColors.primary),
       ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.menu, color: Color(0xFF1A2E63)),
-          onPressed: () {},
-        ),
-      ],
     );
   }
 
@@ -287,154 +287,24 @@ class _BookingRequestViewState extends State<BookingRequestView> {
   Widget _buildTimeline() {
     return Column(
       children: [
-        _timelineStep("1", "Send Request", "Current step", true),
-        _timelineStep(
-          "2",
-          "Host Approval",
-          "Usually respond within 24h",
-          false,
+        TimeLineStep(
+            num: "1", title: "Send Request", sub: "Current step", active: true),
+        TimeLineStep(
+          num: "2",
+          title: "Host Approval",
+          sub: "Usually respond within 24h",
+          active: false,
         ),
-        _timelineStep("3", "Chat & Pay", "After Approval", false, isLast: true),
+        TimeLineStep(num: "3",
+            title: "Chat & Pay",
+            sub: "After Approval",
+            active: false,
+            isLast: true),
       ],
     );
   }
 
-  Widget _timelineStep(
-    String num,
-    String title,
-    String sub,
-    bool active, {
-    bool isLast = false,
-  }) {
-    Color primary = active ? const Color(0xFF1A2E63) : const Color(0xFFD3E4FE);
-    Color textColor = active ? Colors.white : AppColors.textColorPrimary;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(999.r),
-                border: Border.all(color: Colors.white, width: 4),
-              ),
-              child: CircleAvatar(
-                radius: 12.r,
-                backgroundColor: primary,
-                child: Text(
-                  num,
-                  style: AppStyles.bold10poppins.copyWith(color: textColor),
-                ),
-              ),
-            ),
-            Container(
-              width: 1.5,
-              height: !isLast ? 35.h : 10.h,
-              color: const Color(0xFFD3E4FE),
-            ),
-          ],
-        ),
-        SizedBox(width: 15.w),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: AppStyles.regular16poppins.copyWith(
-                color: AppColors.primary,
-              ),
-            ),
-            Text(
-              sub,
-              style: AppStyles.regular16poppins.copyWith(
-                color: AppColors.textColorPrimary,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
 
-  Widget _buildHostCard() {
-    return Container(
-      padding: EdgeInsets.all(15.r),
-      decoration: BoxDecoration(
-        color: const Color(0xFFEEF2FF),
-        borderRadius: BorderRadius.circular(15.r),
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 22.r,
-            backgroundColor: const Color(0xFFEFF4FF),
-            child: const Icon(Icons.person, color: Colors.white),
-          ),
-          SizedBox(width: 15.w),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Hosted By ${widget.hostName}",
-                style: AppStyles.bold14poppins.copyWith(
-                  color: const Color(0xFF1A2E63),
-                ),
-              ),
-              // todo: come from backend
-              Text(
-                "Joined in 2027",
-                style: TextStyle(color: Colors.grey, fontSize: 12.sp),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMessageSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Message to Host (Optional)",
-          style: AppStyles.regular16poppins.copyWith(color: AppColors.primary),
-        ),
-        SizedBox(height: 10.h),
-        TextField(
-          controller: _messageController,
-          maxLines: 4,
-          maxLength: 600,
-          decoration: InputDecoration(
-            hintText: "Introduce yourself and your stay...",
-            hintStyle: TextStyle(
-              color: AppColors.textColorSecondary,
-              fontSize: 16.sp,
-            ),
-            filled: true,
-            fillColor: Colors.white,
-            counterStyle: TextStyle(
-              color: AppColors.textColorSecondary,
-              fontSize: 12.sp,
-            ),
-            contentPadding: EdgeInsets.all(16.r),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.r),
-              borderSide: const BorderSide(color: Color(0xFFD1D9E6)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15.r),
-              borderSide: const BorderSide(color: Color(0xFFD1D9E6)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15.r),
-              borderSide: const BorderSide(color: Color(0xFF1A2E63)),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget _buildTotalRentBanner() {
     return Container(
@@ -508,63 +378,4 @@ class _BookingRequestViewState extends State<BookingRequestView> {
     );
   }
 
-  void _showSuccessDialog({required BuildContext context}) {
-    showDialog(
-      context: context,
-      barrierDismissible: false, // User must tap the button to close
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.r),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(24.r),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: EdgeInsets.all(16.r),
-                  decoration: BoxDecoration(
-                    color: Color(0xFFE8F5E9), // Light green tint
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.check_circle_rounded,
-                    color: const Color(0xFF2E7D32),
-                    size: 60.sp,
-                  ),
-                ),
-                SizedBox(height: 20.h),
-                Text(
-                  "Request Sent!",
-                  style: AppStyles.bold18poppins.copyWith(
-                    color: const Color(0xFF1A2E63),
-                  ),
-                ),
-                SizedBox(height: 12.h),
-                Text(
-                  "Your booking request has been sent to ${widget.hostName}. You will be notified once they respond.",
-                  textAlign: TextAlign.center,
-                  style: AppStyles.regular14poppins.copyWith(
-                    color: Colors.grey[600],
-                  ),
-                ),
-                SizedBox(height: 24.h),
-                CustomElevatedButton(
-                  text: "Back to Home",
-                  backgroundColor: const Color(0xFF1A2E63),
-                  onPressed: () {
-                    // Close dialog
-                    context.pop();
-                    // Go back to the property details or home
-                    GoRouter.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
 }
