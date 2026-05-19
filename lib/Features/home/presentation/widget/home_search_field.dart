@@ -18,12 +18,12 @@ class HomeSearchField extends StatelessWidget {
         isDense: true,
         border: OutlineInputBorder(
           gapPadding: 4,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
           borderSide: BorderSide(color: AppColors.primary, width: 0.5),
         ),
         contentPadding: EdgeInsetsGeometry.symmetric(
-          vertical: 8,
-          horizontal: 8,
+          vertical: 8.r,
+          horizontal: 8.r,
         ),
         suffixIcon: Icon(
           Icons.search,
