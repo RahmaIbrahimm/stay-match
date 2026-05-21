@@ -4,7 +4,7 @@ import 'package:stay_match/core/errors/failures.dart';
 import 'package:stay_match/core/networking/api_service.dart';
 
 import '../../../../../../../core/networking/endpoints.dart';
-import '../models/all_apartments.dart';
+import '../models/all_apartments_response.dart';
 import '../models/apartment_details_response.dart';
 import 'apartment_repo.dart';
 

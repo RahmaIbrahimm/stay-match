@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:stay_match/core/errors/failures.dart';
 
-import '../models/all_apartments.dart';
+import '../models/all_apartments_response.dart';
 import '../models/apartment_details_response.dart';
 
 abstract class ApartmentRepo {

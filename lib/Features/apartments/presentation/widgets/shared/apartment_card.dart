@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../shared/widgets/card_cover_photo.dart';
-import '../../../data/models/all_apartments.dart';
+import '../../../data/models/all_apartments_response.dart';
 import 'apartment_brief_Info_container.dart';
 
 class ApartmentCard extends StatelessWidget {

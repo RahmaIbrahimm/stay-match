@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 
-import '../../../apartments/data/models/all_apartments.dart';
+import '../../../apartments/data/models/all_apartments_response.dart';
 import '../../../apartments/presentation/widgets/shared/apartment_card.dart';
 
 class ApartmentList extends StatelessWidget {

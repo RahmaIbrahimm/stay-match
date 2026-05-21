@@ -1,7 +1,7 @@
 // Create a dedicated filter model
 import 'dart:developer';
 
-import '../../../apartments/data/models/all_apartments.dart';
+import '../../../apartments/data/models/all_apartments_response.dart';
 import '../../../rooms/data/repos/rooms_repo.dart';
 import '../../presentation/manager/filter_cubit.dart';
 

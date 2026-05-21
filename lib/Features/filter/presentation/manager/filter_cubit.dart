@@ -10,7 +10,7 @@ import 'package:stay_match/core/utils/secure_storage_keys.dart';
 import 'package:stay_match/core/utils/service_locator.dart';
 
 import '../../../../core/utils/secure_storage_helper.dart';
-import '../../../apartments/data/models/all_apartments.dart';
+import '../../../apartments/data/models/all_apartments_response.dart';
 import '../../data/models/apartment_filter_params.dart';
 import '../../data/models/location_model.dart';
 import '../../data/models/rooms_filter_params.dart';

@@ -13,7 +13,7 @@ import 'package:stay_match/core/routing/app_routing.dart';
 import '../../../../../../../../core/constants/app_colors.dart';
 import '../../../../../../../../core/constants/app_strings.dart';
 import '../../../../../../../../core/constants/app_styles.dart';
-import '../../../data/models/all_apartments.dart';
+import '../../../data/models/all_apartments_response.dart';
 
 class ApartmentBriefInfoContainer extends StatelessWidget {
   const ApartmentBriefInfoContainer({

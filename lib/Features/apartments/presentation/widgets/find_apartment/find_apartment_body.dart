@@ -483,7 +483,7 @@ import '../../../../filter/presentation/widgets/filter_helper.dart';
 import '../../../../shared/widgets/no_properties_sliver.dart';
 import '../../../../shared/widgets/property_body_base.dart';
 import '../../../../shared/widgets/search_app_bar.dart';
-import '../../../data/models/all_apartments.dart';
+import '../../../data/models/all_apartments_response.dart';
 import '../shared/apartment_card.dart';
 
 class FindApartmentBody extends StatefulWidget {
