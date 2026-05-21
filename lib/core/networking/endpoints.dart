@@ -38,6 +38,7 @@ abstract class Endpoints {
   static const String  savedPropertiesCount= '/api/Saved/count';
   static const String  toggleSavedApartment= '/api/Saved/toggle';
   static const String  toggleSavedRoom= '/api/Saved/save-room';
+  static const String  myBookingRequests= '/api/Booking/my-bookings';
 
   // client ids uses for google login
   static const String webClientId =

@@ -26,7 +26,9 @@ import '../../Features/auth/presentation/forget_password/presentation/views/forg
 import '../../Features/auth/presentation/login/presentation/views/login_view.dart';
 import '../../Features/auth/presentation/signup/presentation/views/signup_view.dart';
 import '../../Features/auth/presentation/verify_email/presentation/views/verify_email_view.dart';
-import '../../Features/booking/presentation/views/booking_request_view.dart';
+import '../../Features/booking/presentation/views/my_booking_requests_view.dart';
+import '../../Features/booking/presentation/views/my_bookings_view.dart';
+import '../../Features/booking/presentation/views/request_booking_view.dart';
 import '../../Features/google_maps/presentation/widgets/maps_helper.dart';
 import '../../Features/my_properties/presentation/views/my_properties_view.dart';
 import '../../Features/rooms/presentation/views/find_room_view.dart';
@@ -264,7 +266,7 @@ class AppRouting {
           final propertyImg = extra['propertyImg'] as String? ?? '';
           // final hostImg = extra['hostImg'] as String? ?? ''; // Keep as String
 
-          return BookingRequestView(
+          return RequestBookingView(
             propertyId: propertyId,
             startDate: startDate,
             duration: duration,
@@ -305,7 +307,7 @@ class AppRouting {
               GoRoute(
                 path: chatListPath,
                 name: chatListName,
-                builder: (context, _) => const ChatListView(),
+                builder: (context, _) => const MyBookingsView(),
                 routes: [
                 ],
               ),
