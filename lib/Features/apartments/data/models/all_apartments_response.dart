@@ -109,6 +109,7 @@ class AllApartmentsItems {
     this.name,
     this.monthlyRent,
     this.furnished,
+    this.isSaved,
     this.availableFrom,
     this.numberOfBedrooms,
     this.numberOfLivingRooms,
@@ -133,6 +134,7 @@ class AllApartmentsItems {
     name = json['name'];
     monthlyRent = json['monthlyRent'];
     furnished = json['furnished'];
+    isSaved = json['isSaved'];
     availableFrom = json['availableFrom'];
     numberOfBedrooms = json['numberOfBedrooms'];
     numberOfLivingRooms = json['numberOfLivingRooms'];
@@ -157,6 +159,7 @@ class AllApartmentsItems {
   String? name;
   num? monthlyRent;
   bool? furnished;
+  bool? isSaved;
   String? availableFrom;
   num? numberOfBedrooms;
   num? numberOfLivingRooms;
@@ -181,6 +184,7 @@ class AllApartmentsItems {
     map['name'] = name;
     map['monthlyRent'] = monthlyRent;
     map['furnished'] = furnished;
+    map['isSaved'] = isSaved;
     map['availableFrom'] = availableFrom;
     map['numberOfBedrooms'] = numberOfBedrooms;
     map['numberOfLivingRooms'] = numberOfLivingRooms;
