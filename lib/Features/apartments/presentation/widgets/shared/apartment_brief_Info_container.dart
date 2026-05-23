@@ -13,10 +13,11 @@ import 'package:stay_match/core/routing/app_routing.dart';
 import '../../../../../../../../core/constants/app_colors.dart';
 import '../../../../../../../../core/constants/app_strings.dart';
 import '../../../../../../../../core/constants/app_styles.dart';
+import '../../../../../core/widgets/heart_favourite_button.dart';
 import '../../../data/models/all_apartments_response.dart';
 
 class ApartmentBriefInfoContainer extends StatelessWidget {
-  const ApartmentBriefInfoContainer({
+  ApartmentBriefInfoContainer({
     super.key,
     required this.name,
     required this.city,
@@ -40,6 +41,8 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
   final int? size;
   final int? numBathrooms;
   final int? numBedrooms;
+
+  late bool initialSavedStatus = property?.isSaved ?? false;
 
   @override
   Widget build(BuildContext context) {
@@ -135,31 +138,8 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
             ],
           ),
         ),
-        BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
-          builder: (context, state) {
-            var cubit = context.read<SavedPropertiesCubit>();
-            // todo: check saved ? from properties i think so abanoub should add it??
-            // var saved =
-            //
-            return GestureDetector(
-              onTap: () async {
-                print(id);
-                await cubit.toggleSaved(itemType: SavedItemType.wholeApartment,
-                    propertyId: id);
-              },
-              child: Container(
-                width: scaleUp ? 40.w : 30.w,
-                height: scaleUp ? 40.h : 30.h,
-                alignment: Alignment.center,
-                child: Icon(
-                  FontAwesome.heart,
-                  size: scaleUp ? 20.sp : 14.sp,
-                  color: Colors.grey,
-                ),
-              ),
-            );
-          },
-        ),
+        HeartFavoriteButton(
+            id: id, initialSavedStatus: initialSavedStatus, scaleUp: scaleUp)
       ],
     );
   }
@@ -254,5 +234,7 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
         ),
       );
     }
+    return null;
   }
+
 }
