@@ -6,8 +6,8 @@
 /// page : 1
 /// pageSize : 10
 
-class MyBookingsRequest {
-  MyBookingsRequest({
+class HostRequestsRequest {
+  HostRequestsRequest({
       this.status, 
       this.location, 
       this.year, 
@@ -16,7 +16,7 @@ class MyBookingsRequest {
       this.page, 
       this.pageSize,});
 
-  MyBookingsRequest.fromJson(dynamic json) {
+  HostRequestsRequest.fromJson(dynamic json) {
     status = json['status'];
     location = json['location'];
     year = json['year'];
@@ -32,14 +32,14 @@ class MyBookingsRequest {
   int? day;
   int? page;
   int? pageSize;
-MyBookingsRequest copyWith({  String? status,
+HostRequestsRequest copyWith({  String? status,
   String? location,
   int? year,
   int? month,
   int? day,
   int? page,
   int? pageSize,
-}) => MyBookingsRequest(  status: status ?? this.status,
+}) => HostRequestsRequest(  status: status ?? this.status,
   location: location ?? this.location,
   year: year ?? this.year,
   month: month ?? this.month,
