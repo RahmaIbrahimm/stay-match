@@ -45,16 +45,19 @@ class _HomeViewBodyState extends State<HomeViewBody>
   Widget build(BuildContext context) {
     super.build(context);
     var size = MediaQuery.of(context).size;
+    var apartmentCubit = context.read<ApartmentCubit>();
+    var roomsCubit = context.read<RoomsCubit>();
+    var myPropertiesCubit = context.read<MyPropertiesCubit>();
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
       child: RefreshIndicator(
-        backgroundColor: AppColors.containerColor,
         strokeWidth: 1,
         color: AppColors.primary,
+        backgroundColor: Colors.white.withValues(alpha: 0.9),
         onRefresh: ()async {
-          await context.read<ApartmentCubit>().refreshApartments();
-          await context.read<RoomsCubit>().refreshRooms();
-          await context.read<MyPropertiesCubit>().getMyProperties();
+          await apartmentCubit.refreshApartments();
+          await roomsCubit.refreshRooms();
+          await myPropertiesCubit.getMyProperties();
         },
         child: CustomScrollView(
           slivers: [
