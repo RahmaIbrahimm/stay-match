@@ -17,6 +17,7 @@ import '../../Features/filter/data/repos/location_repo_impl.dart';
 import '../../Features/filter/presentation/manager/location_cubit.dart';
 import '../../Features/home/data/repos/home_repo_impl.dart';
 import '../../Features/my_properties/data/repos/my_properties_repo.dart';
+import '../../Features/reviews/data/repos/reviews_repo_impl.dart';
 import '../../Features/rooms/data/repos/rooms_repo_impl.dart';
 import '../networking/chat_service.dart';
 import '../networking/dio_consumer.dart';
@@ -51,6 +52,8 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton<BookingRepoImpl>(() => BookingRepoImpl(getIt<DioConsumer>()));
   getIt.registerLazySingleton<SavedPropertiesRepoImpl>(() =>
       SavedPropertiesRepoImpl(apiService: getIt<DioConsumer>()));
+  getIt.registerLazySingleton<ReviewsRepoImpl>(() =>
+      ReviewsRepoImpl(apiService: getIt<DioConsumer>()));
 
   getIt.registerFactory<LocationCubit>(
         () => LocationCubit(locationRepository: getIt<LocationRepoImpl>()),
