@@ -38,7 +38,23 @@ abstract class Endpoints {
   static const String  savedPropertiesCount= '/api/Saved/count';
   static const String  toggleSavedApartment= '/api/Saved/toggle';
   static const String  toggleSavedRoom= '/api/Saved/save-room';
-  static const String  myBookingRequests= '/api/Booking/my-bookings';
+  static const String renterBookingRequests = '/api/Booking/my-bookings';
+  static const String hostBookingRequests = '/api/Booking/host-requests';
+  static String Function(int) approveBookingRequests = (int id) {
+    return "/api/Booking/$id/approve";
+  };
+  static String Function(int) declineBookingRequests = (int id) {
+    return "/api/Booking/$id/decline";
+  };
+  static String Function(int) renterCancelBookingRequests = (int id) {
+    return "/api/Booking/$id/cancel";
+  };
+  static String Function(int) deleteBookingRequests = (int id) {
+    return "/api/Booking/$id";
+  };
+  static String Function(int) getApartmentReviews = (int id) {
+    return "/api/Review/property/$id";
+  };
 
   // client ids uses for google login
   static const String webClientId =
