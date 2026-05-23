@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stay_match/Features/apartments/presentation/widgets/apartment_details/apartment_details_helper.dart';
+import 'package:stay_match/Features/saved/presentation/manager/saved_properties_cubit.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
@@ -57,7 +58,15 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ApartmentDetailsCubit, ApartmentDetailsState>(
+    return BlocConsumer<ApartmentDetailsCubit, ApartmentDetailsState>(
+      listener: (state, context) {
+        if (state is ToggleLoading) {
+
+        }
+        if (state is ToggleSuccess) {
+
+        }
+      },
       builder: (context, state) {
         if (state is GetApartmentDetailsLoading) {
           return Center(
@@ -97,6 +106,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
         // Helper method for animated dots
         if (state is GetApartmentDetailsSuccess) {
           final details = state.response.data;
+          bool initialSavedStatus = details?.isSaved ?? false;
           log('${details?.latitude!}');
           log('${details?.longitude!}');
           if (details?.allowedTenants?.allowsStudents ?? false) {
@@ -245,10 +255,13 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                     ),
                   ),
                 ),
-              PropertyNameSliver(name: details.name),
+              PropertyNameAndFavButtonSliver(name: details.name,
+                id: widget.id,
+                initialSavedStatus: initialSavedStatus,
+                scaleUp: true,),
               SliverToBoxAdapter(
                 child: RPadding(
-                  padding: EdgeInsets.only(left: 16, right: 16),
+                  padding: EdgeInsets.only(left: 16.r, right: 16.r),
                   child: Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     alignment: WrapAlignment.spaceBetween,
