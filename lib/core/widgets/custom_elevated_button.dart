@@ -54,6 +54,7 @@ class CustomElevatedButton extends StatelessWidget {
         minimumSize: (verticalPadding != null || horizontalPadding != null)
             ? Size(0, 0)
             : null,
+        elevation: 0
       ),
       onPressed: onPressed,
       child: isLoading
