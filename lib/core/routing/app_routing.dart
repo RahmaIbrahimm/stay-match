@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stay_match/Features/add_property/presentation/views/shared_apartment_info_view.dart';
 import 'package:stay_match/Features/auth/presentation/reset_password/presentation/views/reset_password_view.dart';
+import 'package:stay_match/Features/booking/presentation/views/host_bookings_view.dart';
 import 'package:stay_match/Features/chat/presentation/views/chat_list_view.dart';
 import 'package:stay_match/Features/chat/presentation/views/messages_view.dart';
 import 'package:stay_match/Features/google_maps/presentation/views/google_maps_view.dart';
@@ -26,11 +27,11 @@ import '../../Features/auth/presentation/forget_password/presentation/views/forg
 import '../../Features/auth/presentation/login/presentation/views/login_view.dart';
 import '../../Features/auth/presentation/signup/presentation/views/signup_view.dart';
 import '../../Features/auth/presentation/verify_email/presentation/views/verify_email_view.dart';
-import '../../Features/booking/presentation/views/my_booking_requests_view.dart';
-import '../../Features/booking/presentation/views/my_bookings_view.dart';
+import '../../Features/booking/presentation/views/renter_bookings_view.dart';
 import '../../Features/booking/presentation/views/request_booking_view.dart';
 import '../../Features/google_maps/presentation/widgets/maps_helper.dart';
 import '../../Features/my_properties/presentation/views/my_properties_view.dart';
+import '../../Features/reviews/presentation/views/apartment_reviews_view.dart';
 import '../../Features/rooms/presentation/views/find_room_view.dart';
 import '../../Features/rooms/presentation/views/room_details_view.dart';
 import '../../Features/saved/presentation/views/saved_view.dart';
@@ -80,10 +81,15 @@ class AppRouting {
   static const listingSuccessPath = '/my-properties';
 
   // booking
+  static const renterBookingsPath = '/renter-bookings';
+  static const hostBookingsPath = '/host-bookings';
   static const bookingRequestPath = '/booking-request';
 
   // saved properties
   static const savedPropertiesPath = '/saved-properties';
+
+  //reviews
+  static const apartmentReviewsPath = '/apartment-reviews';
 
   //main app names
   static const homeViewName = 'home';
@@ -112,7 +118,13 @@ class AppRouting {
   static const savedPropertiesName = 'savedProperties';
 
   // booking
+  static const renterBookingsName = 'renterBookings';
+  static const hostBookingsName = 'hostBookings';
   static const bookingRequestName = 'bookingRequest';
+
+  //reviews
+  static const apartmentReviewsName = 'apartmentReviews';
+
   static final router = GoRouter(
     navigatorKey: navigatorKey,
     initialLocation: loginView,
@@ -285,6 +297,17 @@ class AppRouting {
         name: savedPropertiesName,
         builder: (context, state) => const SavedView(),
       ),
+      // reviews
+      GoRoute(
+        path: apartmentReviewsPath,
+        name: apartmentReviewsName,
+        builder: (context, state) {
+          var propertyId  =
+              int.tryParse(state.pathParameters['propertyId'] ?? '-1');
+          return ApartmentReviewsView(propertyId : propertyId ?? -1 );
+        },
+        routes: [],
+      ),
 
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -307,7 +330,36 @@ class AppRouting {
               GoRoute(
                 path: chatListPath,
                 name: chatListName,
-                builder: (context, _) => const MyBookingsView(),
+                // builder: (context, _) => const ChatListView(),
+                builder: (context, state) {
+                  var propertyId  =
+                  int.tryParse(state.pathParameters['propertyId'] ?? '-1');
+                  return ApartmentReviewsView(propertyId : 161 );
+                  // return ApartmentReviewsView(propertyId : propertyId ?? -1 );
+                },
+
+                routes: [
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: hostBookingsPath,
+                name: hostBookingsName,
+                builder: (context, _) => const HostBookingsView(),
+                routes: [
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: renterBookingsPath,
+                name: renterBookingsName,
+                builder: (context, _) => const RenterBookingsView(),
                 routes: [
                 ],
               ),
