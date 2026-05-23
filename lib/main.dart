@@ -12,6 +12,7 @@ import 'package:stay_match/core/utils/service_locator.dart';
 import 'Features/auth/manager/auth_cubit.dart';
 import 'Features/saved/presentation/manager/saved_properties_cubit.dart';
 import 'core/routing/app_routing.dart';
+import 'core/utils/app_keys.dart';
 import 'core/utils/secure_storage_helper.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +33,7 @@ Future<void> main() async {
 }
 
 class StayMatch extends StatelessWidget {
-  const StayMatch({super.key, required this.isLoggedIn});
+   const StayMatch({super.key, required this.isLoggedIn});
   final bool isLoggedIn;
   @override
   Widget build(BuildContext context) {
@@ -42,6 +43,7 @@ class StayMatch extends StatelessWidget {
       child: DevicePreview(
         enabled: true,
         builder: (context) => MaterialApp.router(
+          scaffoldMessengerKey: AppKeys.rootScaffoldMessengerKey,
           useInheritedMediaQuery: true,
           builder: DevicePreview.appBuilder,
           debugShowCheckedModeBanner: false,
