@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stay_match/core/widgets/heart_favourite_button.dart';
 
 import '../../../../../core/constants/app_strings.dart';
 import '../../../../../core/constants/app_styles.dart';
 
-class PropertyNameSliver extends StatelessWidget {
-  const PropertyNameSliver({super.key, required this.name});
+class PropertyNameAndFavButtonSliver extends StatelessWidget {
+  const PropertyNameAndFavButtonSliver(
+      {super.key, required this.name, required this.id, required this.initialSavedStatus, required this.scaleUp});
 
   final String? name;
+  final int id;
+  final bool initialSavedStatus;
+  final bool scaleUp;
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -26,14 +31,17 @@ class PropertyNameSliver extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            Expanded(
-              flex: 1,
-              child: Icon(
-                Icons.favorite_outline_rounded,
-                size: 24.sp,
-                weight: 2,
-              ),
-            ),
+            Expanded(child: HeartFavoriteButton(id: id,
+                initialSavedStatus: initialSavedStatus,
+                scaleUp: scaleUp))
+            // Expanded(
+            //   flex: 1,
+            //   child: Icon(
+            //     Icons.favorite_outline_rounded,
+            //     size: 24.sp,
+            //     weight: 2,
+            //   ),
+            // ),
           ],
         ),
       ),
