@@ -65,6 +65,7 @@ class ApartmentDetailsData {
     this.monthlyRent,
     this.deposite,
     this.furnished,
+    this.isSaved,
     this.availableFrom,
     this.availableTo,
     this.numberOfBedrooms,
@@ -95,6 +96,7 @@ class ApartmentDetailsData {
     monthlyRent = json['monthlyRent'];
     deposite = json['deposite'];
     furnished = json['furnished'];
+    isSaved = json['isSaved'];
     availableFrom = json['availableFrom'];
     availableTo = json['availableTo'];
     numberOfBedrooms = json['numberOfBedrooms'];
@@ -139,6 +141,7 @@ class ApartmentDetailsData {
   num? monthlyRent;
   num? deposite;
   bool? furnished;
+  bool? isSaved;
   String? availableFrom;
   dynamic availableTo;
   num? numberOfBedrooms;
@@ -169,6 +172,7 @@ class ApartmentDetailsData {
     map['monthlyRent'] = monthlyRent;
     map['deposite'] = deposite;
     map['furnished'] = furnished;
+    map['isSaved'] = isSaved;
     map['availableFrom'] = availableFrom;
     map['availableTo'] = availableTo;
     map['numberOfBedrooms'] = numberOfBedrooms;
