@@ -390,7 +390,7 @@ class SavedViewBody extends StatelessWidget {
                                       itemType: item.itemType == 'room'
                                           ? SavedItemType.room
                                           : SavedItemType.wholeApartment,
-                                      propertyId: item.propertyId,
+                                      propertyId: item.propertyId ?? 0,
                                       roomId: item.roomId,
                                     );
                               },

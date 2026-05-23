@@ -12,6 +12,7 @@ import '../../../../core/utils/service_locator.dart';
 import '../../../../core/widgets/custom_elevated_button.dart';
 import '../../../filter/presentation/widgets/filter_helper.dart';
 import '../manager/booking_request_cubit.dart';
+import '../manager/booking_request_state.dart';
 import '../widgets/request_booking_widgets/host_card.dart';
 import '../widgets/request_booking_widgets/message_section.dart';
 import '../widgets/request_booking_widgets/time_line_step.dart';
@@ -71,7 +72,7 @@ class _RequestBookingViewState extends State<RequestBookingView> {
     return BlocProvider(
       create: (context) =>
           BookingRequestCubit(
-            getIt.get<BookingRepoImpl>(),
+            bookingRepo: getIt.get<BookingRepoImpl>(),
             propertyType:
                 PropertyType.apartment, // Adjust if your Cubit requires this
           )..updateBookingData(

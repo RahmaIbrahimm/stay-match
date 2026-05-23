@@ -31,15 +31,19 @@ final class SavedPropertiesFailure extends SavedPropertiesState {
   @override
   List<Object> get props => [errMessage];
 }
-
 final class ToggleLoading extends SavedPropertiesState {
-  @override
-  List<Object> get props => [];
-}
+  final int propertyId;
+  const ToggleLoading({required this.propertyId});
 
-final class ToggleSuccess extends SavedPropertiesState {
   @override
-  List<Object> get props => [];
+  List<Object> get props => [propertyId];
+}
+final class ToggleSuccess extends SavedPropertiesState {
+  final int propertyId; // <-- Add this
+  const ToggleSuccess({required this.propertyId});
+
+  @override
+  List<Object> get props => [propertyId];
 }
 final class ToggleFailure extends SavedPropertiesState {
   final String errMessage;

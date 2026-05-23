@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:stay_match/Features/saved/data/models/my_saved_response.dart';
+import 'package:stay_match/Features/saved/data/models/toggle_saved_response.dart';
 import 'package:stay_match/Features/saved/data/repos/saved_properties_repo_impl.dart';
 
 part 'saved_properties_state.dart';
@@ -67,7 +68,7 @@ class SavedPropertiesCubit extends Cubit<SavedPropertiesState> {
     required int? propertyId,
     int? roomId,
   }) async {
-    emit(ToggleLoading());
+    emit(ToggleLoading(propertyId: propertyId!));
     final result = itemType == SavedItemType.room
         ? await repo.toggleSavedRoom(propertyId: propertyId!, roomId: roomId!)
         : await repo.toggleSavedApartment(propertyId: propertyId!);
@@ -75,7 +76,7 @@ class SavedPropertiesCubit extends Cubit<SavedPropertiesState> {
     result.fold(
       (failure) => emit(ToggleFailure(errMessage: failure.errMessage)),
       (success) {
-        emit(ToggleSuccess());
+        emit(ToggleSuccess(propertyId: propertyId));
       },
     );
   }
