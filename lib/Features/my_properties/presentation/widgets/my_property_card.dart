@@ -26,12 +26,6 @@ class MyPropertyCard extends StatelessWidget {
           color: AppColors.containerColor,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(color: AppColors.stroke, width: 1),
-          // border: Border(
-          //   top: BorderSide.none, // Removes the top border
-          //   left: BorderSide(color: AppColors.primary),
-          //   right: BorderSide(color: AppColors.primary),
-          //   bottom: BorderSide(color: AppColors.primary),
-          // ),
             boxShadow: AppColors.elevationShadow
         ),
         child: Container(
@@ -118,11 +112,6 @@ class MyPropertyCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // Icon(
-                    //   Icons.favorite_border_rounded,
-                    //   size: 16.sp,
-                    //   color: AppColors.textColorSecondary,
-                    // ),
                   ],
                 ),
               ),
