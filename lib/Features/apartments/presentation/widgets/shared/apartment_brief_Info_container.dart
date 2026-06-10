@@ -23,37 +23,27 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
     required this.city,
     required this.streetName,
     required this.monthlyRent,
-    this.property,
     required this.id,
     this.scaleUp = false,
     required this.size,
     required this.numBathrooms,
-    required this.numBedrooms,
+    required this.numBedrooms, required this.initialSavedStatus,
   });
 
   final String? name;
   final String? city;
   final String? streetName;
   final num? monthlyRent;
-  final AllApartmentsItems? property;
   final int? id;
   final bool scaleUp;
   final int? size;
   final int? numBathrooms;
   final int? numBedrooms;
 
-  late bool initialSavedStatus = property?.isSaved ?? false;
+  final bool initialSavedStatus;
 
   @override
   Widget build(BuildContext context) {
-    log(
-      property?.name ?? 'wth no name sent for some reason',
-      name: 'apartment brief name',
-    );
-    log(
-      name ?? 'wth no name sent for some reason',
-      name: 'apartment brief name',
-    );
     return Container(
       decoration: BoxDecoration(
         color: AppColors.containerColor,
