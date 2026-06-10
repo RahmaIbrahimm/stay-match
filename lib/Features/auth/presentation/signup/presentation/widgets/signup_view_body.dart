@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart%20';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
-import '../../../../widgets/auth_header.dart';
-import '../../../../widgets/custom_bottom_sheet.dart';
+import '../../../widgets/auth_header.dart';
+import '../../../widgets/custom_bottom_sheet.dart';
 import 'bottom_sheet_body.dart';
 
 class SignUpViewBody extends StatelessWidget {
