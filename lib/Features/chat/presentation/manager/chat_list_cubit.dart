@@ -22,7 +22,7 @@ class ChatListCubit extends Cubit<ChatListState> {
 // Inside ChatListCubit
   Future<void> getInbox({String? query}) async {
     final searchQuery = query ?? '';
-
+    emit(ChatLoading());
     // Logic: If search is active, call search API, otherwise call normal API
     final result = searchQuery.isEmpty
         ? await _chatRepo.getMyChats()
