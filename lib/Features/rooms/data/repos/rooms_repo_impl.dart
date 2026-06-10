@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:stay_match/Features/shared/models/property_details_response.dart';
 import 'package:stay_match/core/errors/failures.dart';
 import 'package:stay_match/core/networking/api_service.dart';
 import 'package:stay_match/core/networking/endpoints.dart';
@@ -52,6 +53,19 @@ class RoomsRepoImpl extends RoomsRepo {
         },
       );
       return right(GetAllRooms.fromJson(response));
+    } on DioException catch (e) {
+      return left(ServerFailure.fromDioError(e));
+    }
+  }
+  @override
+  Future<Either<Failure, PropertyDetailsResponse>> getRoomDetails({
+    required int id,
+  }) async {
+    try {
+      var response = await apiService.get(
+        '${Endpoints.getPropertyDetails}$id',
+      );
+      return right(PropertyDetailsResponse.fromJson(response));
     } on DioException catch (e) {
       return left(ServerFailure.fromDioError(e));
     }

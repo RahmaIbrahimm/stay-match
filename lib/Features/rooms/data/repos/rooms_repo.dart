@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:stay_match/Features/shared/models/property_details_response.dart';
 import 'package:stay_match/core/errors/failures.dart';
 
 import '../models/get_all_rooms.dart';
@@ -20,5 +21,8 @@ abstract class RoomsRepo {
     bool onlyAvailable = false,
     num? page,
     num? pageSize,
+  });
+  Future<Either<Failure, PropertyDetailsResponse>> getRoomDetails({
+    required int id,
   });
 }
