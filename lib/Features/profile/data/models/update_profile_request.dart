@@ -29,7 +29,9 @@ class UpdateProfileRequest {
     this.jobTitle,
     this.aboutMe,
     this.password,
-    this.passwordConfirmation,});
+    this.passwordConfirmation,
+    this.idImage,
+  });
 
   UpdateProfileRequest.fromJson(dynamic json) {
     firstName = json['FirstName'];
@@ -47,6 +49,7 @@ class UpdateProfileRequest {
     aboutMe = json['AboutMe'];
     password = json['Password'];
     passwordConfirmation = json['PasswordConfirmation'];
+    idImage = json['idImage'];
   }
 
   String? firstName;
@@ -64,6 +67,7 @@ class UpdateProfileRequest {
   String? aboutMe;
   String? password;
   String? passwordConfirmation;
+  String? idImage;
 
   UpdateProfileRequest copyWith({ String? firstName,
     String? lastName,
@@ -80,6 +84,7 @@ class UpdateProfileRequest {
     String? aboutMe,
     String? password,
     String? passwordConfirmation,
+    String? idImage,
   }) =>
       UpdateProfileRequest(
         firstName: firstName ?? this.firstName,
@@ -97,6 +102,7 @@ class UpdateProfileRequest {
         aboutMe: aboutMe ?? this.aboutMe,
         password: password ?? this.password,
         passwordConfirmation: passwordConfirmation ?? this.passwordConfirmation,
+        idImage: idImage ?? this.idImage,
       );
 
   Map<String, dynamic> toJson() {
@@ -116,6 +122,7 @@ class UpdateProfileRequest {
     map['AboutMe'] = aboutMe;
     map['Password'] = password;
     map['PasswordConfirmation'] = passwordConfirmation;
+    map['idImage'] = idImage;
     return map;
   }
 }
