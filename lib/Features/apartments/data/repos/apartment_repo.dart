@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:stay_match/core/errors/failures.dart';
 
 import '../models/all_apartments_response.dart';
-import '../models/apartment_details_response.dart';
+import '../../../shared/models/property_details_response.dart';
 
 abstract class ApartmentRepo {
   Future<Either<Failure, AllApartmentsResponse>> getAllApartments({
@@ -22,7 +22,7 @@ abstract class ApartmentRepo {
     num? page = 1,
     num? pageSize = 5,
   });
-  Future<Either<Failure, ApartmentDetailsResponse>> getApartmentDetail({
+  Future<Either<Failure, PropertyDetailsResponse>> getApartmentDetail({
     required int id,
   });
 }

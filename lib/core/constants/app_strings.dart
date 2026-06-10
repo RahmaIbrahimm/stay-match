@@ -80,7 +80,7 @@ abstract class AppStrings {
   // BROWSE / SEARCH / FILTER
   // ==========================================
   static const search = 'Search';
-  static const searchHome = 'Search by Area / Person';
+  static const searchHome = 'Search by Area';
   static const searchConvo = 'Search conversations';
   static const where = 'Where';
   static const when = 'When';

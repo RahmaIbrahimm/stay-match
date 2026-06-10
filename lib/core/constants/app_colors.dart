@@ -21,6 +21,7 @@ abstract class AppColors {
   static const blueGrey = Color.fromRGBO(30, 58, 138, 0.1);
   static const stroke = Color(0xffE5E7EB);
   static const fieldFillColor = Color(0xFFF7F9FC);
+  static const secondaryScaffBg = Color(0xFFF4F3FA);
 
   static const boxShadow = [
     BoxShadow(

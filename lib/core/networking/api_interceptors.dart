@@ -44,12 +44,20 @@ class ApiInterceptors extends Interceptor {
     }
     // Only attempt refresh on 401 Unauthorized
     if (err.response?.statusCode == 401) {
-      // If the error comes from the refresh token endpoint itself, don't retry (prevents infinite loops)
       if (err.requestOptions.path == Endpoints.refreshToken) {
-        log('refresh token failed', name: 'ApiInterceptors');
         await _forceLogout();
         return handler.reject(err);
       }
+
+      // ← ADD THIS: if it's an invalid credentials error, don't refresh
+      final data = err.response?.data;
+      if (data is Map && data['errors'] != null) {
+        final errors = data['errors'] as Map;
+        if (errors.containsKey('InvalidCredentials')) {
+          return handler.next(err); // pass through as normal error
+        }
+      }
+
       log('error not 401 1', name: 'ApiInterceptors');
       await _refreshToken(err, handler);
     } else {
@@ -95,7 +103,9 @@ class ApiInterceptors extends Interceptor {
       if (response.statusCode == 200) {
         final newToken = response.data['token'];
         final newRefreshToken = response.data['refreshToken'];
-
+        await secureStorage.addToSecureStorage(
+            key: SecureStorageKeys.tokenKey,        // ← was missing
+            value: newToken);
         await secureStorage.addToSecureStorage(
             key: SecureStorageKeys.refreshTokenKey,
             value: newRefreshToken); // 1. Retry the original request that triggered the refresh

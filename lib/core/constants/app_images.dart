@@ -18,5 +18,8 @@ abstract class AppImages {
   static const listingSuccess = '$path/listing_success.png';
   // error
   static const errorImg =  '$path/error_img.png';
+  // reviews
+  static const reviewSuccessImg =  '$path/review_success_img.png';
+
 
 }

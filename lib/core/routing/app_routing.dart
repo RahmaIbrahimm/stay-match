@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:stay_match/Features/add_property/presentation/views/add_basic_info_view.dart';
 import 'package:stay_match/Features/add_property/presentation/views/shared_apartment_info_view.dart';
 import 'package:stay_match/Features/auth/presentation/reset_password/presentation/views/reset_password_view.dart';
 import 'package:stay_match/Features/booking/presentation/views/host_bookings_view.dart';
-import 'package:stay_match/Features/chat/presentation/views/chat_list_view.dart';
 import 'package:stay_match/Features/chat/presentation/views/messages_view.dart';
+import 'package:stay_match/Features/filter/presentation/manager/location_cubit.dart';
 import 'package:stay_match/Features/google_maps/presentation/views/google_maps_view.dart';
 import 'package:stay_match/Features/home/presentation/views/home_view.dart';
 import 'package:stay_match/Features/profile/presentation/manager/profile_cubit.dart';
@@ -29,9 +30,11 @@ import '../../Features/auth/presentation/signup/presentation/views/signup_view.d
 import '../../Features/auth/presentation/verify_email/presentation/views/verify_email_view.dart';
 import '../../Features/booking/presentation/views/renter_bookings_view.dart';
 import '../../Features/booking/presentation/views/request_booking_view.dart';
+import '../../Features/chat/presentation/views/chat_list_view.dart';
 import '../../Features/google_maps/presentation/widgets/maps_helper.dart';
 import '../../Features/my_properties/presentation/views/my_properties_view.dart';
 import '../../Features/reviews/presentation/views/apartment_reviews_view.dart';
+import '../../Features/reviews/presentation/views/review_submitted_view.dart';
 import '../../Features/rooms/presentation/views/find_room_view.dart';
 import '../../Features/rooms/presentation/views/room_details_view.dart';
 import '../../Features/saved/presentation/views/saved_view.dart';
@@ -62,7 +65,7 @@ class AppRouting {
   static const profilePath = '/profile';
   // Nested routes (no leading slash)
   static const findRoomView = '/find-room';
-  static const roomDetailsViewPath = 'room-details/:id';
+  static const roomDetailsViewPath = 'room-details/:propertyId';
   static const findApartmentView = '/find-apartment';
   static const apartmentDetailsViewPath = 'apartment-details/:id';
   static const mapBodyPath = '/mapBody';
@@ -76,7 +79,7 @@ class AppRouting {
   static const addSharedApartmentDetailsPath = 'add-shared-apartment-details';
   static const addAmenitiesPath = 'add-amenities';
   static const addLocationAndGalleryPath = 'add-location-and-gallery';
-  static const addPropertySuccessPath = 'add-property-success';
+  static const addPropertySuccessPath = '/add-property-success/:id';
   static const myPropertiesPath = '/my-properties';
   static const listingSuccessPath = '/my-properties';
 
@@ -89,7 +92,8 @@ class AppRouting {
   static const savedPropertiesPath = '/saved-properties';
 
   //reviews
-  static const apartmentReviewsPath = '/apartment-reviews';
+  static const apartmentReviewsPath = '/apartment-reviews/:propertyId';
+  static const reviewSubmittedPath = '/review-submitted';
 
   //main app names
   static const homeViewName = 'home';
@@ -124,6 +128,7 @@ class AppRouting {
 
   //reviews
   static const apartmentReviewsName = 'apartmentReviews';
+  static const reviewSubmittedName = 'reviewSubmitted';
 
   static final router = GoRouter(
     navigatorKey: navigatorKey,
@@ -291,6 +296,14 @@ class AppRouting {
             // joinYear: joinYear,
           );
         },),
+      // host booking
+      GoRoute(
+        path: hostBookingsPath,
+        name: hostBookingsName,
+        builder: (context, _) => const HostBookingsView(),
+        routes: [
+        ],
+      ),
       // saved properties
       GoRoute(
         path: savedPropertiesPath,
@@ -308,12 +321,19 @@ class AppRouting {
         },
         routes: [],
       ),
+      GoRoute(
+        path: reviewSubmittedPath,
+        name: reviewSubmittedName,
+        builder: (context, state) => ReviewSubmittedView(),
+        routes: [],
+      ),
 
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return LayoutScaffold(navigationShell: navigationShell);
         },
         branches: [
+          // home
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -325,35 +345,7 @@ class AppRouting {
               ),
             ],
           ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: chatListPath,
-                name: chatListName,
-                // builder: (context, _) => const ChatListView(),
-                builder: (context, state) {
-                  var propertyId  =
-                  int.tryParse(state.pathParameters['propertyId'] ?? '-1');
-                  return ApartmentReviewsView(propertyId : 161 );
-                  // return ApartmentReviewsView(propertyId : propertyId ?? -1 );
-                },
-
-                routes: [
-                ],
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: hostBookingsPath,
-                name: hostBookingsName,
-                builder: (context, _) => const HostBookingsView(),
-                routes: [
-                ],
-              ),
-            ],
-          ),
+          // my bookings
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -365,7 +357,7 @@ class AppRouting {
               ),
             ],
           ),
-
+          // add property
           StatefulShellBranch(
             routes: [
               ShellRoute(
@@ -389,7 +381,7 @@ class AppRouting {
                         path: addPropertyInfoPath, // 'add-property-info'
                         name: addPropertyInfoName,
                         builder: (context,
-                            state) => const SharedApartmentInfoView(),
+                            state) => const AddBasicInfoView(),
                       ),
                       GoRoute(
                         path: addAmenitiesPath, // 'add-amenities'
@@ -406,11 +398,14 @@ class AppRouting {
                       GoRoute(
                         path: addPropertySuccessPath,
                         name: addPropertySuccessName,
-                        builder: (context, state) =>
-                            const AddPropertySuccessView(),
+                        builder: (context, state) {
+                          String pathId = state.pathParameters['id'] ?? '';
+                          int id = int.tryParse(pathId) ?? -1;
+                          return AddPropertySuccessView(id: id,);
+                        },
                       ),
                       GoRoute(
-                        path: addIndividualRoomsPath, // 'add-room'
+                        path: addIndividualRoomsPath,
                         name: addIndividualRoomsName,
                         builder: (context, state) =>
                         const IndividualRoomDetailsView(),
@@ -427,12 +422,32 @@ class AppRouting {
               ),
             ],
           ),
+          // chat
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: chatListPath,
+                name: chatListName,
+                builder: (context, _) => const ChatListView(),
+                routes: [
+                ],
+              ),
+            ],
+          ),
+          // profile
           StatefulShellBranch(
             routes: [
               ShellRoute(
                 builder: (context, state, child) {
-                  return BlocProvider(
-                    create: (context) => getIt.get<ProfileCubit>(),
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) => getIt.get<ProfileCubit>(),
+                      ),
+                      BlocProvider(
+                        create: (context) => getIt.get<LocationCubit>(),
+                      ),
+                    ],
                     child: child,
                   );
                 },
