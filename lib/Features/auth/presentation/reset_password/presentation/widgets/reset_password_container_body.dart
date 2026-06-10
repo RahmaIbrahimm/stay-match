@@ -8,7 +8,7 @@ import 'package:stay_match/core/widgets/custom_elevated_button.dart';
 import 'package:stay_match/core/widgets/form_section.dart';
 
 import '../../../../../../../core/constants/app_styles.dart';
-import '../../../../../manager/auth_cubit.dart';
+import '../../../../manager/auth_cubit.dart';
 
 class ResetPasswordContainerBody extends StatelessWidget {
   const ResetPasswordContainerBody({super.key});
