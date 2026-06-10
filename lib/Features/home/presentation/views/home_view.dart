@@ -27,12 +27,15 @@ class HomeView extends StatelessWidget {
             create: (context) => RoomsCubit(getIt.get<RoomsRepoImpl>()),
           ),
           BlocProvider(
-            create: (context) => HomeCubit(getIt.get<HomeRepoImpl>()),
+            create: (context) => HomeCubit(homeRepo: getIt.get<HomeRepoImpl>()),
           ),
           BlocProvider(
             create: (context) => MyPropertiesCubit(
               myPropertiesRepo: getIt.get<MyPropertiesRepo>(),
             ),
+          ),
+          BlocProvider(
+            create: (context) => HomeCubit(homeRepo: getIt.get<HomeRepoImpl>()),
           ),
         ],
         // add home cubit
