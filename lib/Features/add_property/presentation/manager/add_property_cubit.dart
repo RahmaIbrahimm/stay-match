@@ -2,12 +2,14 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stay_match/Features/add_property/data/models/add_apartment_request.dart';
+import 'package:stay_match/Features/add_property/data/models/add_apartment_response.dart';
 import 'package:stay_match/Features/add_property/data/models/add_room_request.dart';
+import 'package:stay_match/Features/add_property/data/models/add_room_response.dart';
 import 'package:stay_match/Features/add_property/data/repos/add_property_repo.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 
@@ -21,9 +23,12 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
   late AddApartmentRequest _apartmentRequest;
   late AddRoomRequest _roomRequest;
   int _currentStep = 0;
+  int? id = -1;
   PropertyType _selectedType = PropertyType.none;
   List<File> localImages = [];
-
+  // EDIT PROPERTY stuff
+  bool isEditMode = false;
+  int? editPropertyId;
   // Room Specific
   Map<int, List<File>> localRoomImages = {};
 
@@ -61,12 +66,12 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
       minimumStay: 1,
       isDraft: false,
       propertyImages: [],
-      amenities: AddApartmentAmenities(
+      amenities: AddApartmentRequestAmenities(
         wifi: false, tv: false, cooktop: false, oven: false, kettle: false,
         dishwasher: false, refrigerator: false, microwave: false, washer: false,
         freeParking: false, airConditioning: false, smokeAlarm: false, fireExtinguisher: false,
       ),
-      nearbyServices: AddApartmentNearbyServices(
+      nearbyServices: AddApartmentRequestNearbyServices(
         hasGroceryStore: false, hasPharmacy: false, hasHospital: false,
         hasSchool: false, hasUniversity: false, hasPublicTransport: false,
         hasParking: false, hasMall: false, hasRestaurants: false,
@@ -74,7 +79,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
         hasPoliceStation: false, isQuietArea: false,
         hasChurchNearby: false, hasMosqueNearby: false,
       ),
-      allowedTenants: AddApartmentAllowedTenants(
+      allowedTenants: AddApartmentRequestAllowedTenants(
         allowsFamilies: false, allowsChildren: false, allowsStudents: false,
         studentGender: "any", allowsWorkers: false, workerGender: "any", petsAllowed: false,
       ),
@@ -85,12 +90,12 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
       name: "", size: 0, description: "", totalRooms: 1, availableRooms: 1,
       street: "", city: "", government: "Cairo", latitude: 0, longitude: 0,
       isDraft: false, propertyImages: [],
-      amenities: Amenities(
+      amenities: AddRoomRequestPropertyAmenities(
         wifi: false, tv: false, cooktop: false, oven: false, kettle: false,
         dishwasher: false, refrigerator: false, microwave: false, washer: false,
         freeParking: false, airConditioning: false, smokeAlarm: false, fireExtinguisher: false,
       ),
-      nearbyServices: AddRoomNearbyServices(
+      nearbyServices: AddRoomRequestNearbyServices(
         hasGroceryStore: false, hasPharmacy: false, hasHospital: false,
         hasSchool: false, hasUniversity: false, hasPublicTransport: false,
         hasParking: false, hasMall: false, hasRestaurants: false,
@@ -104,14 +109,14 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
     log('📦 Request Models: Initialized with default values');
   }
 
-  Rooms _createNewRoom(int index) {
-    return Rooms(
+  AddRoomRequestRooms _createNewRoom(int index) {
+    return AddRoomRequestRooms(
       roomName: "Room $index", minimumStay: 1, monthRent: 0, deposit: 0,
       furnished: true, availableFrom: DateTime.now().toIso8601String(),
       capacity: 1, capacityAvailable: 1, enSuiteBathroom: false, sharedBathroom: true,
       balcony: false, window: true, petsAllowed: false, propertyImages: [],
-      roomAmenities: RoomAmenities(airConditioning: false, closet: false, mirror: false, fan: false),
-      allowedTenants: AllowedTenants(
+      roomAmenities: AddRoomRequestRoomAmenities(airConditioning: false, closet: false, mirror: false, fan: false),
+      allowedTenants: AddRoomRequestAllowedTenants(
         allowsFamilies: false, allowsChildren: false, allowsStudents: false,
         studentGender: "any", allowsWorkers: false, workerGender: "Male", petsAllowed: false,
       ),
@@ -138,7 +143,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
     log('🚀 Starting Sequential Submission...');
     emit(AddPropertyLoading());
 
-    List<PropertyImages> uploadedImages = [];
+    List<AddApartmentRequestPropertyImages> uploadedImages = [];
     String? errorMessage;
 
     for (int i = 0; i < localImages.length; i++) {
@@ -157,7 +162,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
         },
             (uploadModel) {
           if (uploadModel.isSuccess == true && uploadModel.data?.imageUrl != null) {
-            uploadedImages.add(PropertyImages(
+            uploadedImages.add(AddApartmentRequestPropertyImages(
               id: i,
               imageUrl: uploadModel.data!.imageUrl,
               isCover: uploadModel.data!.isCover ?? isCover,
@@ -185,13 +190,20 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
         },
             (success) {
           log('🎉 SUCCESS!');
-          emit(AddPropertySuccess(message: "Property published successfully!"));
+          emit(AddPropertySuccess(message: "Property published successfully!",
+              addApartmentResponse: success));
+          id = success.data?.propertyId?? -1;
         },
       );
     } else {
       emit(AddPropertyFailure(errMessage: errorMessage!));
     }
   }
+
+
+  // ======================= EDITING METHODS ===============================
+
+
 
 
   // --- ROOM UI METHODS ---
@@ -231,7 +243,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
     final json = room.roomAmenities?.toJson() ?? {};
     if (json.containsKey(key)) {
       json[key] = !(json[key] as bool);
-      room.roomAmenities = RoomAmenities.fromJson(json);
+      room.roomAmenities = AddRoomRequestRoomAmenities.fromJson(json);
       _refreshUI();
     }
   }
@@ -293,13 +305,13 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
       final json = _apartmentRequest.amenities?.toJson() ?? {};
       if (json.containsKey(key)) {
         json[key] = !(json[key] as bool);
-        _apartmentRequest.amenities = AddApartmentAmenities.fromJson(json);
+        _apartmentRequest.amenities = AddApartmentRequestAmenities.fromJson(json);
       }
     } else {
       final json = _roomRequest.amenities?.toJson() ?? {};
       if (json.containsKey(key)) {
         json[key] = !(json[key] as bool);
-        _roomRequest.amenities = Amenities.fromJson(json);
+        _roomRequest.amenities = AddRoomRequestPropertyAmenities.fromJson(json);
       }
     }
     log('✨ Amenity Toggled: $key');
@@ -312,13 +324,13 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
       if (json.containsKey(key)) {
         json[key] = !(json[key] as bool);
         _apartmentRequest.nearbyServices =
-            AddApartmentNearbyServices.fromJson(json);
+            AddApartmentRequestNearbyServices.fromJson(json);
       }
     } else {
       final json = _roomRequest.nearbyServices?.toJson() ?? {};
       if (json.containsKey(key)) {
         json[key] = !(json[key] as bool);
-        _roomRequest.nearbyServices = AddRoomNearbyServices.fromJson(json);
+        _roomRequest.nearbyServices = AddRoomRequestNearbyServices.fromJson(json);
       }
     }
     log('✨ Nearby Service Toggled: $key');
@@ -397,9 +409,9 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
     _refreshUI();
   }
 
-  Future<List<SharedPropertyImages>> _uploadSharedImages(
+  Future<List<AddRoomRequestSharedPropertyImages>> _uploadSharedImages(
       List<File> files) async {
-    List<SharedPropertyImages> results = [];
+    List<AddRoomRequestSharedPropertyImages> results = [];
     for (int i = 0; i < files.length; i++) {
       final file = files[i];
       if (!await file.exists()) {
@@ -414,7 +426,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
         },
             (r) {
           if (r.data?.imageUrl != null) {
-            results.add(SharedPropertyImages(
+            results.add(AddRoomRequestSharedPropertyImages(
                 id: i, imageUrl: r.data!.imageUrl, isCover: i == 0));
             log('✅ Uploaded: ${r.data!.imageUrl}');
           }
@@ -427,8 +439,11 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
   Future<void> pickCoverImage() async {
     final XFile? picked = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (picked != null) {
-      if (localImages.isEmpty) localImages.add(File(picked.path));
-      else localImages[0] = File(picked.path);
+      if (localImages.isEmpty) {
+        localImages.add(File(picked.path));
+      } else {
+        localImages[0] = File(picked.path);
+      }
       _refreshUI();
     }
   }
@@ -454,14 +469,14 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
 
   void _refreshUI() {
     _apartmentRequest.propertyImages = localImages.asMap().entries.map((entry) {
-      return PropertyImages(imageUrl: entry.value.path, isCover: entry.key == 0);
+      return AddApartmentRequestPropertyImages(imageUrl: entry.value.path, isCover: entry.key == 0);
     }).toList();
 
-    _roomRequest.propertyImages = localImages.map((f) => SharedPropertyImages(imageUrl: f.path)).toList();
+    _roomRequest.propertyImages = localImages.map((f) => AddRoomRequestSharedPropertyImages(imageUrl: f.path)).toList();
 
     localRoomImages.forEach((index, files) {
       if (index < (_roomRequest.rooms?.length ?? 0)) {
-        _roomRequest.rooms![index].propertyImages = files.map((f) => SharedPropertyImages(imageUrl: f.path)).toList();
+        _roomRequest.rooms![index].propertyImages = files.map((f) => AddRoomRequestSharedPropertyImages(imageUrl: f.path)).toList();
       }
     });
 
@@ -481,38 +496,6 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
 
   // --- SHARED PROPERTY (STEP 1) METHODS ---
 
-  // void updateSharedPropertyBasicInfo({
-  //   String? name,
-  //   int? totalRooms,
-  //   int? availableRooms,
-  //   int? size,
-  //   String? description,
-  // }) {
-  //   if (name != null) _roomRequest.name = name;
-  //   if (totalRooms != null) _roomRequest.totalRooms = totalRooms;
-  //   if (size != null) _roomRequest.size = size;
-  //   if (description != null) _roomRequest.description = description;
-  //
-  //   // SYNC Logic: Adjust room list length to match AvailableRooms
-  //   if (availableRooms != null) {
-  //     _roomRequest.availableRooms = availableRooms;
-  //     int currentLength = _roomRequest.rooms?.length ?? 0;
-  //
-  //     if (availableRooms > currentLength) {
-  //       while ((_roomRequest.rooms?.length ?? 0) < availableRooms) {
-  //         addRoom();
-  //       }
-  //     } else if (availableRooms < currentLength) {
-  //       while ((_roomRequest.rooms?.length ?? 0) > availableRooms) {
-  //         _roomRequest.rooms?.removeLast();
-  //         localRoomImages.remove(_roomRequest.rooms!.length);
-  //       }
-  //     }
-  //   }
-  //
-  //   log('🏢 Updated Model -> Name: ${_roomRequest.name}, Avail: ${_roomRequest.availableRooms}, List Size: ${_roomRequest.rooms?.length}');
-  //   _refreshUI();
-  // }
   void updateSharedPropertyBasicInfo({
     String? name,
     int? totalRooms,
@@ -586,7 +569,10 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
               (failure) =>
               emit(AddPropertyFailure(errMessage: failure.errMessage)),
               (success) {
-            emit(AddPropertySuccess(message: "Shared Apartment Published!"));
+                emit(AddPropertySuccess(
+                    message: "Property published successfully!",
+                    addRoomResponse: success));
+                id = success.data?.propertyId;
             log(_roomRequest.toJson().toString(), name: "room request final");
           }
       );

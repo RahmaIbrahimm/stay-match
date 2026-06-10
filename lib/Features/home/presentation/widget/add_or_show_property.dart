@@ -61,7 +61,7 @@ class AddOrShowMyProperties extends StatelessWidget {
               }
 
               if (state is MyPropertiesSuccess) {
-                final properties = state.response.data?.properties;
+                final properties = state.response?.data?.properties;
 
                 if (properties == null || properties.isEmpty) {
                   return Column(

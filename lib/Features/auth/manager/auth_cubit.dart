@@ -80,9 +80,6 @@ class AuthCubit extends Cubit<AuthState> {
   );
 
   //=========== verify email code ===========
-  final GlobalKey<FormState> verifyCodeFormKey = GlobalKey<FormState>(
-    debugLabel: 'verify code form key',
-  );
   final TextEditingController otpController = TextEditingController();
 
   //=========== reset password ===========
@@ -318,30 +315,53 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   // -------- forget password ----------
-  Future<void> sendCode() async {
+  // Future<void> sendCode() async {
+  //   emit(SendCodeStateLoading());
+  //   var response = await authRepo.sendVerificationCode(
+  //     email: forgetEmailController.text,
+  //   );
+  //   response.fold(
+  //     (fail) {
+  //       emit(SendCodeStateFailure(errMessage: fail.errMessage));
+  //     },
+  //     (resp) {
+  //       if (resp.isSuccess == true) {
+  //         emit(
+  //           SendCodeStateSuccess(
+  //             response: resp,
+  //             email: forgetEmailController.text,
+  //           ),
+  //         );
+  //       } else {
+  //         emit(SendCodeStateFailure(errMessage: 'Invalid Email Address'));
+  //       }
+  //     },
+  //   );
+  // }
+// Add a boolean flag or separate method to differentiate a resend action
+  Future<void> sendCode({bool isResend = false}) async {
     emit(SendCodeStateLoading());
     var response = await authRepo.sendVerificationCode(
       email: forgetEmailController.text,
     );
     response.fold(
-      (fail) {
+          (fail) {
         emit(SendCodeStateFailure(errMessage: fail.errMessage));
       },
-      (resp) {
+          (resp) {
         if (resp.isSuccess == true) {
-          emit(
-            SendCodeStateSuccess(
-              response: resp,
-              email: forgetEmailController.text,
-            ),
-          );
+          if (isResend) {
+            // Emit a dedicated resend state that your outer router ignores!
+            emit(ResendCodeStateSuccess(response: resp));
+          } else {
+            emit(SendCodeStateSuccess(response: resp, email: forgetEmailController.text));
+          }
         } else {
           emit(SendCodeStateFailure(errMessage: 'Invalid Email Address'));
         }
       },
     );
   }
-
   // -------- confirm password ----------
   Future<void> verifyOTP() async {
     emit(VerifyCodeStateLoading());

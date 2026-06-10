@@ -71,6 +71,12 @@ class SendCodeStateSuccess extends AuthState {
   @override
   List<Object> get props => [response];
 }
+class ResendCodeStateSuccess extends AuthState {
+  final ForgetPasswordResponse response;
+  const ResendCodeStateSuccess({required this.response});
+  @override
+  List<Object> get props => [response];
+}
 
 class SendCodeStateFailure extends AuthState {
   final String errMessage;
