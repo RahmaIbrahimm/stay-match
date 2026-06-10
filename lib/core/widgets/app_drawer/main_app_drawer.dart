@@ -175,16 +175,14 @@ class MainAppDrawer extends StatelessWidget {
                   DrawerItem(
                     icon: Icons.person_outline,
                     label: 'Personal Info',
-                    // Logic: highlight if the URL contains 'profile'
-                    isSelected: currentRoute.contains('profile'),
+                    isSelected: currentRoute.contains(AppRouting.profilePath),
                     onTap: () => _onItemTapped(context, AppRouting.profileName),
                   ),
                   DrawerItem(
                     icon: Icons.history_outlined,
-                    label: 'My Booking',
-                    isSelected: currentRoute.contains('bookings'),
-                    // onTap: () => _onItemTapped(context, AppRouting.myBookingsName),
-                  onTap: (){},
+                    label: 'Booking Requests',
+                    isSelected: currentRoute.contains(AppRouting.hostBookingsPath),
+                    onTap: () => _onItemTapped(context, AppRouting.hostBookingsName),
                   ),
                   DrawerItem(
                     icon: Icons.favorite_border,
@@ -195,15 +193,8 @@ class MainAppDrawer extends StatelessWidget {
                   DrawerItem(
                     icon: Icons.grid_view_outlined,
                     label: AppStrings.myProperties,
-                    isSelected: currentRoute.contains('my-properties'),
+                    isSelected: currentRoute.contains(AppRouting.myPropertiesPath),
                     onTap: () => _onItemTapped(context, AppRouting.myPropertiesName),
-                  ),
-                  DrawerItem(
-                    icon: Icons.settings_outlined,
-                    label: 'Settings',
-                    isSelected: currentRoute.contains('settings'),
-                    // onTap: () => _onItemTapped(context, AppRouting.settingsName),
-                    onTap: (){},
                   ),
                 ],
               ),
