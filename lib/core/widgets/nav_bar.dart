@@ -27,6 +27,44 @@ class NavBar extends StatelessWidget {
       ),
       label: '',
     ),
+    // file exchange
+    NavigationDestination(
+      icon: CustomBottomNavButton(
+        icon: ImageIcon(
+          AssetImage(AppIcons.folderExchangeIcon),
+          size: 24.sp,
+          color: AppColors.primary,
+        ),
+      ),
+      selectedIcon: CustomBottomNavButton(
+        selected: true,
+        icon: ImageIcon(
+          AssetImage(AppIcons.folderExchangeIcon),
+          color: AppColors.containerColor,
+          size: 24.sp,
+        ),
+      ),
+      label: '',
+    ),
+    // add circle
+    NavigationDestination(
+      icon: CustomBottomNavButton(
+        icon: ImageIcon(
+          AssetImage(AppIcons.addCircleIcon),
+          size: 24.sp,
+          color: AppColors.primary,
+        ),
+      ),
+      selectedIcon: CustomBottomNavButton(
+        selected: true,
+        icon: ImageIcon(
+          AssetImage(AppIcons.addCircleIcon),
+          color: AppColors.containerColor,
+          size: 24.sp,
+        ),
+      ),
+      label: '',
+    ),
     // chat bubble
     NavigationDestination(
       icon: CustomBottomNavButton(
@@ -65,25 +103,6 @@ class NavBar extends StatelessWidget {
       ),
       label: '',
     ),
-    // file exchange
-    NavigationDestination(
-      icon: CustomBottomNavButton(
-        icon: ImageIcon(
-          AssetImage(AppIcons.folderExchangeIcon),
-          size: 24.sp,
-          color: AppColors.primary,
-        ),
-      ),
-      selectedIcon: CustomBottomNavButton(
-        selected: true,
-        icon: ImageIcon(
-          AssetImage(AppIcons.folderExchangeIcon),
-          color: AppColors.containerColor,
-          size: 24.sp,
-        ),
-      ),
-      label: '',
-    ),
     // grid
     NavigationDestination(
       icon: CustomBottomNavButton(
@@ -103,26 +122,6 @@ class NavBar extends StatelessWidget {
       ),
       label: '',
     ),
-    // add circle
-    NavigationDestination(
-      icon: CustomBottomNavButton(
-        icon: ImageIcon(
-          AssetImage(AppIcons.addCircleIcon),
-          size: 24.sp,
-          color: AppColors.primary,
-        ),
-      ),
-      selectedIcon: CustomBottomNavButton(
-        selected: true,
-        icon: ImageIcon(
-          AssetImage(AppIcons.addCircleIcon),
-          color: AppColors.containerColor,
-          size: 24.sp,
-        ),
-      ),
-      label: '',
-    ),
-
   ];
   final StatefulNavigationShell navigationShell;
 
