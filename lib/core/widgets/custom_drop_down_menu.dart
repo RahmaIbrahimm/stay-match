@@ -91,25 +91,40 @@ class _CustomDropDownMenuState<T> extends State<CustomDropDownMenu<T>> {
 
   @override
   Widget build(BuildContext context) {
+    // T? currentValue;
+    //
+    // if (widget.selectedItem != null) {
+    //   // Find the matching object in filteredItems by comparing display strings
+    //   final selectedDisplayString = _getDisplayString(widget.selectedItem as T);
+    //   currentValue = filteredItems.cast<T>().firstWhere(
+    //         (item) => _getDisplayString(item) == selectedDisplayString,
+    //     orElse: () => null as T,
+    //   );
+    // } else if (widget.selectedValue != null &&
+    //     widget.selectedValue!.text.isNotEmpty) {
+    //   // For string backward compatibility
+    //   final selectedText = widget.selectedValue?.text;
+    //   currentValue = filteredItems.cast<T>().firstWhere(
+    //         (item) => _getDisplayString(item) == selectedText,
+    //     orElse: () => null as T,
+    //   );
+    // }
     T? currentValue;
 
     if (widget.selectedItem != null) {
-      // Find the matching object in filteredItems by comparing display strings
       final selectedDisplayString = _getDisplayString(widget.selectedItem as T);
-      currentValue = filteredItems.cast<T>().firstWhere(
-            (item) => _getDisplayString(item) == selectedDisplayString,
-        orElse: () => null as T,
-      );
+      currentValue = filteredItems.cast<T?>().firstWhere(
+            (item) => _getDisplayString(item as T) == selectedDisplayString,
+        orElse: () => null,
+      ) as T?;
     } else if (widget.selectedValue != null &&
         widget.selectedValue!.text.isNotEmpty) {
-      // For string backward compatibility
       final selectedText = widget.selectedValue?.text;
-      currentValue = filteredItems.cast<T>().firstWhere(
-            (item) => _getDisplayString(item) == selectedText,
-        orElse: () => null as T,
-      );
+      currentValue = filteredItems.cast<T?>().firstWhere(
+            (item) => _getDisplayString(item as T) == selectedText,
+        orElse: () => null,
+      ) as T?;
     }
-
     return AnimatedContainer(
       padding: EdgeInsets.zero,
       duration: const Duration(milliseconds: 150),
