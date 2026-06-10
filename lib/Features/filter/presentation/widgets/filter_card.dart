@@ -12,6 +12,7 @@ import 'filter_helper.dart';
 import 'filter_sheet_when.dart';
 import 'filter_sheet_where.dart';
 import 'filter_sheet_who.dart';
+
 class FilterCard extends StatelessWidget {
   final PropertyType filterType;
 
@@ -20,65 +21,69 @@ class FilterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Container(
-        padding: EdgeInsets.all(16.r),
-        margin: EdgeInsets.only(top: 16.h),
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.grey),
-          borderRadius: BorderRadius.circular(16.r),
-        ),
-        child: Column(
-          spacing: 8.h,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Apartmenthelper.buildFilterPrompt(
-              titleText: AppStrings.where,
-              prompt: _getWherePrompt(context),
-              onTap: () {
-                _showWhereFilterSheet(context);
-              },
+      child: BlocBuilder<FilterCubit, FilterState>(
+        builder: (context, state) {
+          return Container(
+            padding: EdgeInsets.all(16.r),
+            margin: EdgeInsets.only(top: 16.h),
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.grey),
+              borderRadius: BorderRadius.circular(16.r),
             ),
-            Divider(color: AppColors.grey),
+            child: Column(
+              spacing: 8.h,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Apartmenthelper.buildFilterPrompt(
+                  titleText: AppStrings.where,
+                  prompt: _getWherePrompt(context),
+                  onTap: () {
+                    _showWhereFilterSheet(context);
+                  },
+                ),
+                Divider(color: AppColors.grey),
 
-            Apartmenthelper.buildFilterPrompt(
-              titleText: AppStrings.when,
-              prompt: _getWhenPrompt(context),
-              onTap: () {
-                _showWhenFilterSheet(context);
-              },
-            ),
-            Divider(color: AppColors.grey),
+                Apartmenthelper.buildFilterPrompt(
+                  titleText: AppStrings.when,
+                  prompt: _getWhenPrompt(context),
+                  onTap: () {
+                    _showWhenFilterSheet(context);
+                  },
+                ),
+                Divider(color: AppColors.grey),
 
-            // WHO search (fully implemented)
-            Apartmenthelper.buildFilterPrompt(
-              titleText: AppStrings.who,
-              prompt: _getWhoPrompt(context),
-              onTap: () {
-                _showWhoFilterSheet(context);
-              },
-            ),
+                // WHO search (fully implemented)
+                Apartmenthelper.buildFilterPrompt(
+                  titleText: AppStrings.who,
+                  prompt: _getWhoPrompt(context),
+                  onTap: () {
+                    _showWhoFilterSheet(context);
+                  },
+                ),
 
-            // Sort by
-            SortedByOldest(
-              isApartmentFilter: filterType == PropertyType.apartment,
-            ),
+                // Sort by
+                SortedByOldest(
+                  isApartmentFilter: filterType == PropertyType.apartment,
+                ),
 
-            // Reset filters button (only show if filters are active)
-            if (_hasActiveFilters(context))
-              Padding(
-                padding: EdgeInsets.only(top: 8.h),
-                child: TextButton(
-                  onPressed: () => _resetFilters(context),
-                  child: Text(
-                    'Reset all filters',
-                    style: AppStyles.medium14poppins.copyWith(
-                      color: AppColors.textColorError,
+                // Reset filters button (only show if filters are active)
+                if (_hasActiveFilters(context))
+                  Padding(
+                    padding: EdgeInsets.only(top: 8.h),
+                    child: TextButton(
+                      onPressed: () => _resetFilters(context),
+                      child: Text(
+                        'Reset all filters',
+                        style: AppStyles.medium14poppins.copyWith(
+                          color: AppColors.textColorError,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-          ],
-        ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -146,12 +151,14 @@ class FilterCard extends StatelessWidget {
       // if (filters.allowsStudents == true) preferences.add('Students');
       if (filters.allowsStudents == true) {
         preferences.add(
-          'Students: ${(filters.studentGender == null || filters.studentGender!.isEmpty) ? 'Male' : 'Female'}',
+          'Students: ${(filters.studentGender == null ||
+              filters.studentGender!.isEmpty) ? 'Male' : 'Female'}',
         );
       }
       if (filters.allowsWorkers == true) {
         preferences.add(
-          'Worker: ${(filters.workerGender == null || filters.workerGender!.isEmpty) ? 'Male' : 'Female'}',
+          'Worker: ${(filters.workerGender == null ||
+              filters.workerGender!.isEmpty) ? 'Male' : 'Female'}',
         );
       }
     } else {

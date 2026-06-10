@@ -22,10 +22,7 @@ class FilterTabs extends StatelessWidget {
           child: BlocBuilder<BookingRequestCubit, BookingRequestState>(
             builder: (context, state) {
               var cubit = context.read<BookingRequestCubit>();
-              final apiTabs = cubit.renterLatestResponseData?.data?.tabs ?? [];
-              final List<dynamic> activeTabs = apiTabs.isNotEmpty
-                  ? apiTabs
-                  : [
+              final List<dynamic> activeTabs =  [
                       TabItem(key: 'all', label: 'All Requests'),
                       TabItem(key: 'pending', label: 'Pending'),
                       TabItem(key: 'approved', label: 'Approved'),
