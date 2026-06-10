@@ -7,12 +7,11 @@ class ForgetPasswordViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Stack(
       alignment: Alignment.center,
       children: [
         GradientBackground(),
-        ForgetPasswordContainer(size: size),
+        ForgetPasswordContainer(),
       ],
     );
   }

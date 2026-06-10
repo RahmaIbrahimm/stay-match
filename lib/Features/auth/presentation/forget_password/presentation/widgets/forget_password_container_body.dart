@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
@@ -26,28 +27,27 @@ class ForgetPasswordContainerBody extends StatelessWidget {
           );
         }
         if (state is SendCodeStateSuccess) {
-          context.go(AppRouting.verifyEmailView);
+          context.pushNamed(AppRouting.verifyEmailViewName);
         }
       },
       builder: (context, state) {
         return Form(
           key: authCubit.forgetFormKey,
-          child: ListView(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 AppStrings.forgetPassword,
                 style: AppStyles.bold28poppins,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 16),
+               SizedBox(height: 16.h),
               Text(
                 AppStrings.forgetPasswordInstructions,
                 style: AppStyles.regular16poppins,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               FormSection(
                 validator: (val) => authCubit.emailValidator(email: val),
                 hintText: AppStrings.enterYourEmail,
@@ -55,7 +55,7 @@ class ForgetPasswordContainerBody extends StatelessWidget {
                 stroke: false,
                 controller: authCubit.forgetEmailController,
               ),
-              const SizedBox(height: 36),
+              SizedBox(height: 36.h),
               CustomElevatedButton(
                 text: AppStrings.confirmEmail,
                 onPressed: () {
