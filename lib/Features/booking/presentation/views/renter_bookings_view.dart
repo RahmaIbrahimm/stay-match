@@ -23,14 +23,6 @@ class RenterBookingsView extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios_new,
-              color: const Color(0xFF111827),
-              size: 20.r,
-            ),
-            onPressed: () => context.pop(),
-          ),
           title: Text(
             'My Booking',
             style: AppStyles.bold18poppins.copyWith(

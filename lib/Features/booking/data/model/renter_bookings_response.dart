@@ -251,12 +251,13 @@ class RenterBookings {
     this.status,
     this.host,
     this.createdAt,
-    this.endDate,});
+    this.endDate,this.stringLocation});
 
   RenterBookings.fromJson(dynamic json) {
     id = json['id'];
     coverImage = json['coverImage'];
     title = json['title'];
+    stringLocation = json['stringLocation'];
     propertyType = json['propertyType'];
     location = json['location'] != null ? Location.fromJson(json['location']) : null;
     moveInDate = json['moveInDate'];
@@ -273,6 +274,7 @@ class RenterBookings {
   String? title;
   String? propertyType;
   Location? location;
+  String? stringLocation;
   String? moveInDate;
   int? duration;
   num? monthlyPrice;
@@ -293,12 +295,14 @@ class RenterBookings {
     String? status,
     HostForRenter? host,
     String? createdAt,
+    String? stringLocation,
     String? endDate,
   }) => RenterBookings(  id: id ?? this.id,
     coverImage: coverImage ?? this.coverImage,
     title: title ?? this.title,
     propertyType: propertyType ?? this.propertyType,
     location: location ?? this.location,
+    stringLocation: stringLocation ?? this.stringLocation,
     moveInDate: moveInDate ?? this.moveInDate,
     duration: duration ?? this.duration,
     monthlyPrice: monthlyPrice ?? this.monthlyPrice,
@@ -313,6 +317,7 @@ class RenterBookings {
     map['id'] = id;
     map['coverImage'] = coverImage;
     map['title'] = title;
+    map['location'] = stringLocation;
     map['propertyType'] = propertyType;
     if (location != null) {
       map['location'] = location?.toJson();
@@ -377,10 +382,33 @@ class Location {
     this.city,
     this.street,});
 
+  // Location.fromJson(dynamic json) {
+  //   fullAddress = json['fullAddress'];
+  //   city = json['city'];
+  //   street = json['street'];
+  // }
   Location.fromJson(dynamic json) {
-    fullAddress = json['fullAddress'];
-    city = json['city'];
-    street = json['street'];
+    // 1. If unfiltered, json is a Map: {"fullAddress": "...", "city": "..."}
+    if (json is Map<String, dynamic>) {
+      fullAddress = json['fullAddress'];
+      city = json['city'];
+      street = json['street'];
+    }
+
+    // 2. If filtered, json is a raw String: "شارع النيل, Amiriyyah"
+    else if (json is String) {
+      // We catch the string here, assign it to fullAddress, and prevent the crash!
+      fullAddress = json;
+
+      // Optional: We parse the string to populate the other fields manually
+      final parts = json.split(',');
+      if (parts.length >= 2) {
+        street = parts[0].trim();
+        city = parts[1].trim();
+      } else {
+        street = json;
+      }
+    }
   }
   String? fullAddress;
   String? city;
