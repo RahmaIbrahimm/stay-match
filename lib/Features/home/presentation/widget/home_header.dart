@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:stay_match/Features/filter/presentation/widgets/filter_helper.dart';
+import 'package:stay_match/Features/home/presentation/manager/home_cubit.dart';
 import 'package:stay_match/Features/home/presentation/widget/small_custom_button.dart';
 
 import '../../../../../core/constants/app_colors.dart';
@@ -10,7 +11,7 @@ import '../../../../../core/constants/app_styles.dart';
 import 'home_search_field.dart';
 
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({
+  HomeHeader({
     super.key,
     required this.size,
     required TabController tabController,
@@ -19,6 +20,8 @@ class HomeHeader extends StatelessWidget {
   // todo: add validators and contoller better
   final Size size;
   final TabController _tabController;
+  final _searchController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -122,15 +125,24 @@ class HomeHeader extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(flex: 3, child: HomeSearchField()),
+                Expanded(
+                  flex: 4,
+                  child: Form(key: _formKey,
+                      child: HomeSearchField(controller: _searchController)),
+                ),
                 SizedBox(width: 8.w),
                 Expanded(
                   flex: 2,
                   child: SmallCustomButton(
                     text: AppStrings.search,
                     onPressed: () {
-                      var type = _tabController.index == 0 ? PropertyType.apartment : PropertyType.room;
-
+                      var homeCubit = context.read<HomeCubit>();
+                      homeCubit.selectedProperty = _tabController.index == 0
+                          ? HomeSearchFilter.entire
+                          : HomeSearchFilter.shared;
+                      if(_formKey.currentState!.validate()){
+                        homeCubit.searchProperties(q: _searchController.text);
+                      }
                     },
                   ),
                 ),
