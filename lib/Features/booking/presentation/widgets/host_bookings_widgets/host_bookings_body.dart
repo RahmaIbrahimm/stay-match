@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:stay_match/Features/booking/data/model/host_requests_response.dart';
 import 'package:stay_match/Features/booking/presentation/manager/booking_request_state.dart';
@@ -9,6 +10,7 @@ import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/widgets/app_drawer/main_app_drawer.dart';
 
 import '../../../../../core/constants/app_styles.dart';
+import '../../../../../core/routing/app_routing.dart';
 import '../../../../../core/utils/app_keys.dart';
 import '../../manager/booking_request_cubit.dart';
 import '../../views/filter_pill.dart';
@@ -32,6 +34,11 @@ class HostBookingsBody extends StatelessWidget {
             fontWeight: FontWeight.bold,
             fontSize: 20.sp,
           ),
+        ),
+        leading: BackButton(
+          onPressed: () {
+            context.goNamed(AppRouting.homeViewName);
+          },
         ),
       ),
       endDrawer: MainAppDrawer(),
