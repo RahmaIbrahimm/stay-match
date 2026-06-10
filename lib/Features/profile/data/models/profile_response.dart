@@ -73,7 +73,8 @@ class ProfileRespData {
       this.status,
       this.profilePicture,
       this.idImage,
-      this.isProfileComplete,});
+      this.isProfileComplete,
+  });
 
   ProfileRespData.fromJson(dynamic json) {
     fullName = json['fullName'];

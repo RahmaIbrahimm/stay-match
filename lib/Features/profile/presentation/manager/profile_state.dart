@@ -17,7 +17,6 @@ final class ProfileFailure extends ProfileState {
 }
 final class ProfileSuccess extends ProfileState {
   final ProfileResponse response;
-
   ProfileSuccess(
       {required this.response});
 

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:stay_match/Features/profile/data/models/delete_account_response.dart';
+import 'package:stay_match/Features/profile/data/models/delete_profile_picture_response.dart';
 import 'package:stay_match/Features/profile/data/models/profile_response.dart';
 import 'package:stay_match/Features/profile/data/models/update_profile_request.dart';
 import 'package:stay_match/Features/profile/data/models/upload_profile_picture_response.dart';
@@ -20,4 +21,5 @@ abstract class ProfileRepo {
     required String imageFile,
   });
   Future<Either<Failure,DeleteAccountResponse>> deleteAccount();
+  Future<Either<Failure,DeleteProfilePictureResponse>> deleteProfilePic();
 }

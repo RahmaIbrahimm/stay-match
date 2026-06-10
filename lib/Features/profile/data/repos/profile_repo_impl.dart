@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart'; // Add this package
 import 'package:stay_match/Features/profile/data/models/delete_account_response.dart';
+import 'package:stay_match/Features/profile/data/models/delete_profile_picture_response.dart';
 import 'package:stay_match/Features/profile/data/models/profile_response.dart';
 import 'package:stay_match/Features/profile/data/models/update_profile_request.dart';
 import 'package:stay_match/Features/profile/data/models/update_profile_response.dart';
@@ -32,8 +33,6 @@ class ProfileRepoImpl extends ProfileRepo {
     required UpdateProfileRequest request,
   }) async {
     try {
-      // 1. Create FormData to match 'multipart/form-data' requirement
-      // Use the exact PascalCase keys shown in image_8f60bc.png
       Map<String, dynamic> dataMap = {
         'FirstName': request.firstName,
         'LastName': request.lastName,
@@ -47,18 +46,24 @@ class ProfileRepoImpl extends ProfileRepo {
         'University': request.university,
         'FieldOfStudy': request.fieldOfStudy,
         'JobTitle': request.jobTitle,
-        'AboutMe': request.aboutMe,
+        'Password': request.password,
+        'PasswordConfirmation': request.passwordConfirmation,
       };
-
-      // 2. Remove null values to prevent server-side errors
       dataMap.removeWhere((key, value) => value == null);
-
+      if (request.idImage != null && request.idImage!.isNotEmpty) {
+        if (!request.idImage!.startsWith('http')) {
+          dataMap['idImage'] = await MultipartFile.fromFile(
+            request.idImage!,
+            filename: request.idImage!.split('/').last,
+          );
+        } else {
+          dataMap['idImage'] = request.idImage;
+        }
+      }
       FormData formData = FormData.fromMap(dataMap);
-
-      // 3. Perform the PUT request using FormData
       var response = await apiService.put(
         Endpoints.updateProfile,
-        data: formData, // Dio will automatically set content-type to multipart/form-data
+        data: formData,
       );
 
       return right(UpdateProfileResponse.fromJson(response));
@@ -66,21 +71,6 @@ class ProfileRepoImpl extends ProfileRepo {
       return left(ServerFailure.fromDioError(e));
     }
   }
-  // }  @override
-  // Future<Either<Failure, UpdateProfileResponse>> updateProfile({
-  //   required UpdateProfileRequest request,
-  // }) async {
-  //   try {
-  //     var response = await apiService.put(
-  //       Endpoints.updateProfile,
-  //       data: request.toJson(),
-  //     );
-  //     return right(UpdateProfileResponse.fromJson(response));
-  //   } on DioException catch (e) {
-  //     return left(ServerFailure.fromDioError(e));
-  //   }
-  // }
-
   @override
   Future<Either<Failure, UploadProfilePictureResponse>> uploadProfileImg({
     required String imageFile,
@@ -134,6 +124,15 @@ class ProfileRepoImpl extends ProfileRepo {
     try {
       var response = await apiService.delete(Endpoints.deleteAccount);
       return right(DeleteAccountResponse.fromJson(response));
+    } on DioException catch (e) {
+      return left(ServerFailure.fromDioError(e));
+    }
+  }
+  @override
+  Future<Either<Failure, DeleteProfilePictureResponse>> deleteProfilePic() async {
+    try {
+      var response = await apiService.delete(Endpoints.deleteProfilePic);
+      return right(DeleteProfilePictureResponse.fromJson(response));
     } on DioException catch (e) {
       return left(ServerFailure.fromDioError(e));
     }

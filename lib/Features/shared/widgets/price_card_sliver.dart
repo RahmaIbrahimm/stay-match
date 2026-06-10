@@ -4,7 +4,7 @@ import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
 
-import 'apartment_details_helper.dart';
+import '../../apartments/presentation/widgets/apartment_details/apartment_details_helper.dart';
 
 class PriceCardSliver extends SliverToBoxAdapter {
   PriceCardSliver({
