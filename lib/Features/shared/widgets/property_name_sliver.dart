@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/core/widgets/heart_favourite_button.dart';
 
-import '../../../../../core/constants/app_strings.dart';
-import '../../../../../core/constants/app_styles.dart';
+import '../../../core/constants/app_strings.dart';
+import '../../../core/constants/app_styles.dart';
 
 class PropertyNameAndFavButtonSliver extends StatelessWidget {
   const PropertyNameAndFavButtonSliver(

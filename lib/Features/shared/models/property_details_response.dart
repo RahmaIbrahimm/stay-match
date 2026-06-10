@@ -2,19 +2,19 @@
 /// message : "Request successful"
 /// data : {"id":88,"hostId":"1121c342-dd7a-4a29-bc66-c94f6aa43212","hostName":"Abanoub Yousry","name":"شقة فاخرة للإيجار بالمعادي","description":"شقة واسعة ومفروشة بالكامل تقع في منطقة هادئة قريبة من المترو والخدمات.","monthlyRent":8500,"deposite":5000,"furnished":true,"availableFrom":"2026-03-15T00:00:00","availableTo":null,"numberOfBedrooms":3,"numberOfLivingRooms":1,"numberOfEnSuiteBathrooms":1,"numberOfGuestBathrooms":1,"allowedTenants":{"allowsFamilies":false,"allowsChildren":false,"allowsStudents":true,"studentGender":"male","allowsWorkers":true,"workerGender":"male","petsAllowed":false},"amenities":{"wifi":true,"tv":true,"cooktop":true,"oven":true,"kettle":true,"dishwasher":false,"refrigerator":true,"microwave":true,"washer":true,"freeParking":true,"airConditioning":true,"smokeAlarm":true,"fireExtinguisher":false},"nearbyServices":{"hasGroceryStore":true,"hasPharmacy":true,"hasHospital":true,"hasSchool":false,"hasUniversity":true,"hasPublicTransport":true,"hasParking":true,"hasMall":true,"hasRestaurants":true,"hasPark":true,"hasGym":true,"isSafeArea":true,"hasPoliceStation":true,"isQuietArea":true,"hasChurchNearby":true,"hasMosqueNearby":true},"street":"شارع 9","city":"المعادي","government":"القاهرة","latitude":29.9602,"longitude":31.2569,"size":120,"propertyImages":[{"id":400,"imageUrl":null,"isCover":true},{"id":401,"imageUrl":null,"isCover":false}],"minimumStay":6,"distanceInKm":0,"blockedPeriods":[]}
 
-class ApartmentDetailsResponse {
-  ApartmentDetailsResponse({this.isSuccess, this.message, this.data});
+class PropertyDetailsResponse {
+  PropertyDetailsResponse({this.isSuccess, this.message, this.data});
 
-  ApartmentDetailsResponse.fromJson(dynamic json) {
+  PropertyDetailsResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
     data = json['data'] != null
-        ? ApartmentDetailsData.fromJson(json['data'])
+        ? PropertyDetailsData.fromJson(json['data'])
         : null;
   }
   bool? isSuccess;
   String? message;
-  ApartmentDetailsData? data;
+  PropertyDetailsData? data;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -55,8 +55,8 @@ class ApartmentDetailsResponse {
 /// distanceInKm : 0
 /// blockedPeriods : []
 
-class ApartmentDetailsData {
-  ApartmentDetailsData({
+class PropertyDetailsData {
+  PropertyDetailsData({
     this.id,
     this.hostId,
     this.hostName,
@@ -87,7 +87,7 @@ class ApartmentDetailsData {
     this.blockedPeriods,
   });
 
-  ApartmentDetailsData.fromJson(dynamic json) {
+  PropertyDetailsData.fromJson(dynamic json) {
     id = json['id'];
     hostId = json['hostId'];
     hostName = json['hostName'];
@@ -104,13 +104,13 @@ class ApartmentDetailsData {
     numberOfEnSuiteBathrooms = json['numberOfEnSuiteBathrooms'];
     numberOfGuestBathrooms = json['numberOfGuestBathrooms'];
     allowedTenants = json['allowedTenants'] != null
-        ? AllowedTenants.fromJson(json['allowedTenants'])
+        ? PropertyDetailsAllowedTenants.fromJson(json['allowedTenants'])
         : null;
     amenities = json['amenities'] != null
-        ? ApartmentAmenities.fromJson(json['amenities'])
+        ? PropertyAmenities.fromJson(json['amenities'])
         : null;
     nearbyServices = json['nearbyServices'] != null
-        ? NearbyServices.fromJson(json['nearbyServices'])
+        ? PropertyDetailsNearbyServices.fromJson(json['nearbyServices'])
         : null;
     street = json['street'];
     city = json['city'];
@@ -121,7 +121,7 @@ class ApartmentDetailsData {
     if (json['propertyImages'] != null) {
       propertyImages = [];
       json['propertyImages'].forEach((v) {
-        propertyImages?.add(PropertyImages.fromJson(v));
+        propertyImages?.add(PropertyDetailsResponsePropertyImages.fromJson(v));
       });
     }
     minimumStay = json['minimumStay'];
@@ -148,16 +148,16 @@ class ApartmentDetailsData {
   num? numberOfLivingRooms;
   num? numberOfEnSuiteBathrooms;
   num? numberOfGuestBathrooms;
-  AllowedTenants? allowedTenants;
-  ApartmentAmenities? amenities;
-  NearbyServices? nearbyServices;
+  PropertyDetailsAllowedTenants? allowedTenants;
+  PropertyAmenities? amenities;
+  PropertyDetailsNearbyServices? nearbyServices;
   String? street;
   String? city;
   String? government;
   double? latitude;
   double? longitude;
   num? size;
-  List<PropertyImages>? propertyImages;
+  List<PropertyDetailsResponsePropertyImages>? propertyImages;
   num? minimumStay;
   num? distanceInKm;
   List<BlockedPeriods>? blockedPeriods;
@@ -227,10 +227,10 @@ class BlockedPeriods {
   }
 }
 
-class PropertyImages {
-  PropertyImages({this.id, this.imageUrl, this.isCover});
+class PropertyDetailsResponsePropertyImages {
+  PropertyDetailsResponsePropertyImages({this.id, this.imageUrl, this.isCover});
 
-  PropertyImages.fromJson(dynamic json) {
+  PropertyDetailsResponsePropertyImages.fromJson(dynamic json) {
     id = json['id'];
     imageUrl = json['imageUrl'];
     isCover = json['isCover'];
@@ -265,8 +265,8 @@ class PropertyImages {
 /// hasChurchNearby : true
 /// hasMosqueNearby : true
 
-class NearbyServices {
-  NearbyServices({
+class PropertyDetailsNearbyServices {
+  PropertyDetailsNearbyServices({
     this.hasGroceryStore,
     this.hasPharmacy,
     this.hasHospital,
@@ -285,7 +285,7 @@ class NearbyServices {
     this.hasMosqueNearby,
   });
 
-  NearbyServices.fromJson(dynamic json) {
+  PropertyDetailsNearbyServices.fromJson(dynamic json) {
     hasGroceryStore = json['hasGroceryStore'];
     hasPharmacy = json['hasPharmacy'];
     hasHospital = json['hasHospital'];
@@ -356,8 +356,8 @@ class NearbyServices {
 /// smokeAlarm : true
 /// fireExtinguisher : false
 
-class ApartmentAmenities {
-  ApartmentAmenities({
+class PropertyAmenities {
+  PropertyAmenities({
     this.wifi,
     this.tv,
     this.cooktop,
@@ -373,7 +373,7 @@ class ApartmentAmenities {
     this.fireExtinguisher,
   });
 
-  ApartmentAmenities.fromJson(dynamic json) {
+  PropertyAmenities.fromJson(dynamic json) {
     wifi = json['wifi'];
     tv = json['tv'];
     cooktop = json['cooktop'];
@@ -429,8 +429,8 @@ class ApartmentAmenities {
 /// workerGender : "male"
 /// petsAllowed : false
 
-class AllowedTenants {
-  AllowedTenants({
+class PropertyDetailsAllowedTenants {
+  PropertyDetailsAllowedTenants({
     this.allowsFamilies,
     this.allowsChildren,
     this.allowsStudents,
@@ -440,7 +440,7 @@ class AllowedTenants {
     this.petsAllowed,
   });
 
-  AllowedTenants.fromJson(dynamic json) {
+  PropertyDetailsAllowedTenants.fromJson(dynamic json) {
     allowsFamilies = json['allowsFamilies'];
     allowsChildren = json['allowsChildren'];
     allowsStudents = json['allowsStudents'];
