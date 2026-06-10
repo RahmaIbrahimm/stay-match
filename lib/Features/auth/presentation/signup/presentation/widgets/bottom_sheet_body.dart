@@ -13,7 +13,7 @@ import '../../../../../../../core/widgets/custom_date_selector.dart';
 import '../../../../../../../core/widgets/custom_elevated_button.dart';
 import '../../../../../../../core/widgets/custom_text_button.dart';
 import '../../../../../../../core/widgets/form_section.dart';
-import '../../../../../manager/auth_cubit.dart';
+import '../../../../manager/auth_cubit.dart';
 
 class BottomSheetBody extends StatelessWidget {
   BottomSheetBody({super.key});
