@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-import '../../../../../core/constants/app_colors.dart';
-import '../../../../../core/widgets/build_feature.dart';
-import '../../../data/models/apartment_details_response.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/widgets/build_feature.dart';
+import '../models/property_details_response.dart';
 
 class BasicFeaturesSliver extends StatelessWidget {
   const BasicFeaturesSliver({
@@ -14,7 +14,7 @@ class BasicFeaturesSliver extends StatelessWidget {
     required this.numBathrooms,
   });
 
-  final ApartmentDetailsData? details;
+  final PropertyDetailsData? details;
   final num numBeds;
   final int numBathrooms;
 
