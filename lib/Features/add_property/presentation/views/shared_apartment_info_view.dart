@@ -443,7 +443,7 @@ class _SharedApartmentInfoViewState extends State<SharedApartmentInfoView> {
     return BlocProvider(
       create: (context) =>
       LocationCubit(locationRepository: getIt.get<LocationRepoImpl>())
-        ..loadGovernorates(),
+        ..loadLocations(),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: BlocBuilder<AddPropertyCubit, AddPropertyState>(
