@@ -296,7 +296,10 @@ class RenterBookingRequestCard extends StatelessWidget {
               text: 'Details',
               bgColor: AppColors.primary,
               textColor: Colors.white,
-              onPressed: () {},
+              onPressed: () {
+                // todo: details according to property type
+                // if(bookings.propertyType == '')
+              },
             ),
           ),
           SizedBox(width: 12.w),
