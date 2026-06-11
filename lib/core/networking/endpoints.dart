@@ -54,19 +54,22 @@ abstract class Endpoints {
   static String Function(int) deleteBookingRequests = (int id) {
     return "/api/Booking/$id";
   };
-  static String Function(int) getApartmentReviews = (int id) {
-    return "/api/Review/property/$id";
-  };
   static String Function(int) updateEntireProperty = (int id) {
     return "/api/Property/UpdateEntireProperty/$id";
-  };static String Function(int) updateSharedProperty = (int id) {
+  };
+  static String Function(int) updateSharedProperty = (int id) {
     return "/api/Property/UpdateSharedProperty/$id";
-  };static String Function(int) deleteProperty = (int id) {
+  };
+  static String Function(int) deleteProperty = (int id) {
     return "/api/Property/properties/$id";
   };
   // home search
   static const String homeSearch = '/api/Property/search';
-
+  // reviews
+  static String Function(int) getApartmentReviews = (int id) {
+    return "/api/Review/property/$id";
+  };
+  static String addReview = '/api/Review/AddReview';
   // client ids uses for google login
   static const String webClientId =
       '936135595361-tkjd357n4h18pd6pc4pfoch6rto0vlh5.apps.googleusercontent.com';
