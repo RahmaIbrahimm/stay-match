@@ -60,7 +60,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
           bool isLoading = state is LoginStateLoading;
           return ListView(
             children: [
-               SizedBox(height: 33.h),
+               SizedBox(height: 35.h),
               FormSection(
                 validator: (val) => authCubit.emailValidator(email: val),
                 hintText: AppStrings.enterYourEmail,
@@ -68,7 +68,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                 suffixIcon: ImageIcon(AssetImage(AppIcons.emailIcon)),
                 controller: authCubit.loginEmailController,
               ),
-              SizedBox(height: 37.h),
+              SizedBox(height: 30.h),
               ValueListenableBuilder<bool>(
                 valueListenable: _isObscureNotifier,
                 builder: (context, isObscure, child) {
@@ -97,12 +97,12 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: CustomTextButton(
                   onPressed: () {
-                    context.go(AppRouting.forgetPasswordView);
+                    context.pushNamed(AppRouting.forgetPasswordViewName);
                   },
                   text: AppStrings.forgetPasswordQuestion,
                 ),
               ),
-              SizedBox(height: 50.h),
+              SizedBox(height: 30.h),
               SizedBox(
                 width: double.infinity,
                 child: CustomElevatedButton(
@@ -118,9 +118,9 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                   isLoading: isLoading,
                 ),
               ),
-               SizedBox(height: 15.h),
+               SizedBox(height: 12.h),
               DividerBetweenLoginButtons(size: size),
-               SizedBox(height: 15.h),
+               SizedBox(height: 12.h),
               // google login button
               SizedBox(
                 width: double.infinity,
