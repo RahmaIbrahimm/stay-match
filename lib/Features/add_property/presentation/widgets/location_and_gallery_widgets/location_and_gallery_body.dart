@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_strings.dart';
 import '../../../../../core/constants/app_styles.dart';
+import '../../../../../core/routing/app_routing.dart';
 import '../../../../../core/widgets/custom_text_form_field.dart';
 import '../../../../filter/data/models/location_model.dart';
 import '../../../../filter/presentation/manager/location_cubit.dart';
@@ -39,7 +41,7 @@ class _LocationAndGalleryBodyState extends State<LocationAndGalleryBody> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        context.read<LocationCubit>().loadGovernorates();
+        context.read<LocationCubit>().loadLocations();
       }
     });
   }
@@ -67,6 +69,7 @@ class _LocationAndGalleryBodyState extends State<LocationAndGalleryBody> {
                 SliverToBoxAdapter(
                   child: ProgressBar(stepNumber: cubit.currentStep + 1),
                 ),
+                SliverToBoxAdapter(child: SizedBox(height: 16.h,),),
                 BlocBuilder<LocationCubit, LocationState>(
                   builder: (context, locationState) {
                     final locationCubit = context.read<LocationCubit>();
@@ -170,7 +173,7 @@ class _LocationAndGalleryBodyState extends State<LocationAndGalleryBody> {
   }
 // Inside _LocationAndGalleryBodyState
 
-  void _handleFinalValidation() {
+  void _handleFinalValidation() async{
     final cubit = context.read<AddPropertyCubit>();
     final req = cubit.apartmentRequest;
 
@@ -184,13 +187,16 @@ class _LocationAndGalleryBodyState extends State<LocationAndGalleryBody> {
     // 3. Check the helper
     if (ValidationHelper.isLocationAndGalleryValid(req)) {
       debugPrint('🚀 VALIDATION PASSED - Calling Submit');
-      // cubit.nextStep();
-      cubit.submitApartment();
+      await cubit.submitApartment();
+      context.pushNamed(AppRouting.addPropertySuccessName,pathParameters: {
+        'id': cubit.id.toString(),
+      });
     } else {
       debugPrint('❌ VALIDATION FAILED on Helper check');
       _showError("Please check location and gallery details");
     }
-  }  void _showError(String msg) {
+  }
+  void _showError(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
