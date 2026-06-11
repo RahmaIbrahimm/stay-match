@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 
-import '../../../../../core/constants/app_colors.dart';
-import '../../../../../core/constants/app_styles.dart';
-import '../../manager/apartment_details_cubit.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_styles.dart';
+import '../../apartments/presentation/manager/apartment_details_cubit.dart';
 
 class FailureState extends StatelessWidget {
   const FailureState({super.key, required this.errMessage, required this.id});
@@ -63,7 +63,7 @@ class FailureState extends StatelessWidget {
               height: 48.h,
               child: ElevatedButton(
                 onPressed: () {
-                  context.read<ApartmentDetailsCubit>().getApartmentDetails(
+                  context.read<ApartmentDetailsCubit>().getPropertyDetails(
                     id: id,
                   );
                 },
