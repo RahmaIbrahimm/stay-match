@@ -4,13 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stay_match/Features/booking/presentation/manager/booking_request_cubit.dart';
+import 'package:stay_match/Features/reviews/presentation/views/add_review_view.dart';
 import 'package:stay_match/core/routing/app_routing.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_styles.dart';
 import '../../../../../core/utils/app_keys.dart';
 import '../../../data/model/renter_bookings_response.dart';
-
+import 'package:intl/intl.dart';
 class RenterBookingRequestCard extends StatelessWidget {
   final RenterBookings? bookings;
 
@@ -115,7 +116,7 @@ class RenterBookingRequestCard extends StatelessWidget {
                     SizedBox(width: 4.w),
                     Expanded(
                       child: Text(
-                       cubit.isFiltered ? bookings?.stringLocation?? '': bookings?.location?.fullAddress ?? '',
+                       cubit.isFiltered ? bookings?.stringLocation?? 'Cairo,Egypt': bookings?.location?.fullAddress ?? '',
                         style: AppStyles.regular12poppins.copyWith(
                           color: const Color(0xFF6B7280),
                         ),
@@ -220,7 +221,7 @@ class RenterBookingRequestCard extends StatelessWidget {
       child: Icon(Icons.image, size: 40.r, color: const Color(0xFF9CA3AF)),
     );
   }
-
+// todo: build correct view for completed card
   Widget _buildActionButtons(String status, BuildContext context) {
     if (status == 'approved') {
       return Row(
@@ -268,6 +269,61 @@ class RenterBookingRequestCard extends StatelessWidget {
               bgColor: AppColors.secondary,
               textColor: Colors.white,
               onPressed: () {},
+            ),
+          ),
+        ],
+      );
+    }
+    if (status == 'completed') {
+      return Row(
+        children: [
+          Expanded(
+            child: _createButton(
+              text: 'Chat with host',
+              bgColor: AppColors.primary,
+              textColor: Colors.white,
+              icon: Icons.chat_bubble_outline,
+              onPressed: () {
+                if (bookings?.host != null) {
+                  if (context.mounted) {
+                    context.pushNamed(
+                      AppRouting.messagesName,
+                      pathParameters: {
+                        'otherUserId': bookings?.host!.id.toString() ?? '-1',
+                      },
+                    );
+                  } else {
+                    AppKeys.rootScaffoldMessengerKey.currentState
+                        ?.removeCurrentSnackBar();
+                    AppKeys.rootScaffoldMessengerKey.currentState?.showSnackBar(
+                      SnackBar(
+                        content: const Text(
+                          "Chat is unavailable for this booking.",
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
+                        margin: EdgeInsets.all(16.w),
+                        backgroundColor: AppColors.primary,
+                      ),
+                    );
+                  }
+                }
+              },
+            ),
+          ),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: _createButton(
+              text: 'Add Review',
+              bgColor: AppColors.secondary,
+              textColor: Colors.white,
+              onPressed: () {
+                context.pushNamed(
+                  AppRouting.addReviewName,
+                extra: AddReviewArgs(bookingId: bookings?.id ?? -1, propertyName: bookings?.title ?? "property name", stayDates: getBookingRangeString(bookings), hostName: bookings?.host?.name?? "Host Name"));
+              },
             ),
           ),
         ],
@@ -382,6 +438,8 @@ class RenterBookingRequestCard extends StatelessWidget {
         return const Color(0xFFF59E0B);
       case 'cancelled':
         return const Color(0xFF6B7280); // Muted gray for cancelled
+      case 'completed':
+        return const Color(0xFF10B981);
       default:
         return const Color(0xFFF59E0B);
     }
@@ -398,6 +456,8 @@ class RenterBookingRequestCard extends StatelessWidget {
         return const Color(0xFFFEF3C7);
       case 'cancelled':
         return const Color(0xFFF3F4F6);
+        case 'completed':
+          return const Color(0xFFD1FAE5);
       default:
         return const Color(0xFFFEF3C7);
     }
@@ -424,6 +484,34 @@ class RenterBookingRequestCard extends StatelessWidget {
       return '${parsed.day} ${months[parsed.month - 1]} ${parsed.year}';
     } catch (_) {
       return isoString.split('T').first;
+    }
+  }
+
+  String getBookingRangeString(RenterBookings? booking) {
+    // 1. Guard against null bookings or missing dates
+    if (booking?.moveInDate == null || booking?.endDate == null) {
+      return 'No dates selected';
+    }
+
+    try {
+      // 2. Parse your model strings into actual DateTime objects
+      // (If moveInDate is already a DateTime object, you can skip DateTime.parse)
+      DateTime moveIn = DateTime.parse(booking!.moveInDate!);
+      DateTime end = DateTime.parse(booking.endDate!);
+
+      // 3. Define your date formatters
+      DateFormat monthDayFormat = DateFormat('MMM d'); // e.g., "Oct 12"
+      DateFormat yearFormat = DateFormat('yyyy');     // e.g., "2023"
+
+      // 4. Combine them into your target design spec layout
+      String formattedMoveIn = monthDayFormat.format(moveIn);
+      String formattedEnd = monthDayFormat.format(end);
+      String year = yearFormat.format(end); // Uses the final checkout year
+
+      return '$formattedMoveIn - $formattedEnd, $year';
+    } catch (e) {
+      // Fallback if the date string format coming from backend is corrupted
+      return 'Invalid dates';
     }
   }
 }
