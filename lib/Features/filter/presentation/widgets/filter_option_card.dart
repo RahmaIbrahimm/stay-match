@@ -45,6 +45,7 @@ class _FilterOptionCardState extends State<FilterOptionCard> {
             color: AppColors.containerColor,
             border: Border.all(
               color: widget.isSelected ? AppColors.primary : AppColors.blueGrey,
+              width: 2
             ),
             borderRadius: BorderRadius.circular(10.r),
           ),
