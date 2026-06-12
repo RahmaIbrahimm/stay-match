@@ -116,7 +116,7 @@ class Reviews {
   int? reviewId;
   String? reviewerName;
   String? reviewerImage;
-  int? rating;
+  double? rating;
   String? comment;
   String? createdAt;
   dynamic hostResponse;
@@ -127,7 +127,7 @@ class Reviews {
     int? reviewId,
     String? reviewerName,
     String? reviewerImage,
-    int? rating,
+    double? rating,
     String? comment,
     String? createdAt,
     dynamic hostResponse,
@@ -197,25 +197,25 @@ class Summary {
         : null;
   }
 
-  int? averageRating;
-  int? totalReviews;
-  int? accuracy;
-  int? cleanliness;
-  int? location;
-  int? checkIn;
-  int? value;
-  int? communication;
+  num? averageRating;
+  num? totalReviews;
+  num? accuracy;
+  num? cleanliness;
+  num? location;
+  num? checkIn;
+  num? value;
+  num? communication;
   Distribution? distribution;
 
   Summary copyWith({
-    int? averageRating,
-    int? totalReviews,
-    int? accuracy,
-    int? cleanliness,
-    int? location,
-    int? checkIn,
-    int? value,
-    int? communication,
+    num? averageRating,
+    num? totalReviews,
+    num? accuracy,
+    num? cleanliness,
+    num? location,
+    num? checkIn,
+    num? value,
+    num? communication,
     Distribution? distribution,
   }) => Summary(
     averageRating: averageRating ?? this.averageRating,
