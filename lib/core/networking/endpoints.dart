@@ -70,6 +70,7 @@ abstract class Endpoints {
     return "/api/Review/property/$id";
   };
   static String addReview = '/api/Review/AddReview';
+  static String reviewRecommendations = '/api/Review/recommendations';
   // client ids uses for google login
   static const String webClientId =
       '936135595361-tkjd357n4h18pd6pc4pfoch6rto0vlh5.apps.googleusercontent.com';
