@@ -120,7 +120,7 @@ class _AddReviewViewState extends State<AddReviewView> {
           );
         } else if (state is WriteReviewSuccess) {
           // Navigate to your review success screen — replace route name as needed
-          context.pushNamed(AppRouting.reviewSubmittedName);
+          context.pushReplacement(AppRouting.reviewSubmittedName);
         }
       },
       child: Scaffold(
