@@ -36,7 +36,7 @@ class _MyPropertiesViewState extends State<MyPropertiesView> {
         // ),
       ],
       child: Scaffold(
-        backgroundColor: AppColors.fieldFillColor,
+        backgroundColor: AppColors.secondaryScaffBg,
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
