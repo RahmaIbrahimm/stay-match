@@ -12,6 +12,7 @@ import 'package:stay_match/Features/google_maps/presentation/views/google_maps_v
 import 'package:stay_match/Features/home/presentation/views/home_view.dart';
 import 'package:stay_match/Features/profile/presentation/manager/profile_cubit.dart';
 import 'package:stay_match/Features/profile/presentation/views/profile_view.dart';
+import 'package:stay_match/Features/reviews/presentation/views/add_review_view.dart';
 import 'package:stay_match/core/utils/service_locator.dart';
 import 'package:stay_match/core/widgets/layout_scaffold.dart';
 
@@ -33,6 +34,8 @@ import '../../Features/booking/presentation/views/request_booking_view.dart';
 import '../../Features/chat/presentation/views/chat_list_view.dart';
 import '../../Features/google_maps/presentation/widgets/maps_helper.dart';
 import '../../Features/my_properties/presentation/views/my_properties_view.dart';
+import '../../Features/reviews/data/repos/reviews_repo_impl.dart';
+import '../../Features/reviews/presentation/manager/write_review_cubit.dart';
 import '../../Features/reviews/presentation/views/apartment_reviews_view.dart';
 import '../../Features/reviews/presentation/views/review_submitted_view.dart';
 import '../../Features/rooms/presentation/views/find_room_view.dart';
@@ -94,6 +97,7 @@ class AppRouting {
   //reviews
   static const apartmentReviewsPath = '/apartment-reviews/:propertyId';
   static const reviewSubmittedPath = '/review-submitted';
+  static const addReviewPath = '/add-review';
 
   //main app names
   static const homeViewName = 'home';
@@ -129,6 +133,7 @@ class AppRouting {
   //reviews
   static const apartmentReviewsName = 'apartmentReviews';
   static const reviewSubmittedName = 'reviewSubmitted';
+  static const addReviewName = 'addReview';
 
   static final router = GoRouter(
     navigatorKey: navigatorKey,
@@ -321,10 +326,26 @@ class AppRouting {
         },
         routes: [],
       ),
+      // add reviews
+      GoRoute(
+        path: addReviewPath,
+        name: addReviewName,
+        builder: (context, state) {
+          var args = state.extra as AddReviewArgs;
+          return BlocProvider(
+            create: (context) =>
+                WriteReviewCubit(reviewsRepo: getIt.get<ReviewsRepoImpl>()),
+            child: AddReviewView(args: args,),
+          );
+        },
+        routes: [],
+      ),
+      // review success
       GoRoute(
         path: reviewSubmittedPath,
         name: reviewSubmittedName,
-        builder: (context, state) => ReviewSubmittedView(),
+        builder: (context, state) =>
+            ReviewSubmittedView(),
         routes: [],
       ),
 
