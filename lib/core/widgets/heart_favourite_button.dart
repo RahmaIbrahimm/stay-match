@@ -43,11 +43,9 @@ class _HeartFavoriteButtonState extends State<HeartFavoriteButton> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SavedPropertiesCubit, SavedPropertiesState>(
-      // 1. Only listen if THIS card is the one waiting for a response
       listenWhen: (previous, current) => isToggling,
       listener: (context, state) {
         if (state is ToggleSuccess) {
-          // Flip the local visual state smoothly now that server operation confirmed success
           setState(() {
             isSaved = !isSaved;
             isToggling = false;
