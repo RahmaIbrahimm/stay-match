@@ -211,6 +211,27 @@ class GlobalErrorWidget extends StatelessWidget {
               ),
 
             SizedBox(height: 32.h),
+            Divider(color: AppColors.blueGrey,),
+            Container(
+              width: double.infinity,
+              height: 121.h,
+              decoration: BoxDecoration(
+                color: AppColors.containerColor,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text('Privacy Policy',style: AppStyles.medium14poppins.copyWith(color: AppColors.textColorSecondary),),
+                      Container(width: 4.w,height: 20.h,decoration: BoxDecoration(color: AppColors.blueGrey),),
+                      Text('Terms of Service',style: AppStyles.medium14poppins.copyWith(color: AppColors.textColorSecondary),),
+                    ],
+                  ),
+                  Text("© 2024 Sakan Platform. All rights reserved.",style: AppStyles.regular12poppins.copyWith(color: AppColors.textColorSecondary),)
+                ],
+              ),
+            ),
+            Divider(color: AppColors.blueGrey,)
           ],
         ),
       ),
