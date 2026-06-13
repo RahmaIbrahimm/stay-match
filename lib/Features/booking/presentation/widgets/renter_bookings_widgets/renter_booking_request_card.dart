@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:stay_match/Features/booking/presentation/manager/booking_request_cubit.dart';
 import 'package:stay_match/Features/reviews/presentation/views/add_review_view.dart';
 import 'package:stay_match/core/routing/app_routing.dart';
@@ -11,7 +12,6 @@ import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_styles.dart';
 import '../../../../../core/utils/app_keys.dart';
 import '../../../data/model/renter_bookings_response.dart';
-import 'package:intl/intl.dart';
 class RenterBookingRequestCard extends StatelessWidget {
   final RenterBookings? bookings;
 
@@ -225,7 +225,8 @@ class RenterBookingRequestCard extends StatelessWidget {
   Widget _buildActionButtons(String status, BuildContext context) {
     if (status == 'approved') {
       return Row(
-        children: [
+        children:
+        [
           Expanded(
             child: _createButton(
               text: 'Chat with host',
@@ -265,16 +266,20 @@ class RenterBookingRequestCard extends StatelessWidget {
           SizedBox(width: 12.w),
           Expanded(
             child: _createButton(
-              text: 'Add Review',
-              bgColor: AppColors.secondary,
+              text: 'Details',
+              bgColor: AppColors.primary,
               textColor: Colors.white,
-              onPressed: () {},
+              onPressed: () {
+                // todo: details according to property type
+                // if(bookings.propertyType == '')
+              },
             ),
           ),
         ],
       );
     }
     if (status == 'completed') {
+      bool hasReviewed = bookings?.hasReviewed ?? false;
       return Row(
         children: [
           Expanded(
@@ -314,7 +319,15 @@ class RenterBookingRequestCard extends StatelessWidget {
             ),
           ),
           SizedBox(width: 12.w),
-          Expanded(
+          if(hasReviewed) Expanded(
+            child: _createButton(
+              text: 'Review Added',
+              bgColor: Colors.grey,
+              textColor: Colors.white,
+              onPressed: null,
+            ),
+          ),
+          if(!hasReviewed) Expanded(
             child: _createButton(
               text: 'Add Review',
               bgColor: AppColors.secondary,
@@ -397,7 +410,7 @@ class RenterBookingRequestCard extends StatelessWidget {
     required Color textColor,
     IconData? icon,
     double? width,
-    required VoidCallback onPressed,
+    required VoidCallback? onPressed,
   }) {
     return SizedBox(
       width: width,
