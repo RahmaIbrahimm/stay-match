@@ -251,7 +251,7 @@ class RenterBookings {
     this.status,
     this.host,
     this.createdAt,
-    this.endDate,this.stringLocation});
+    this.endDate,this.stringLocation,this.hasReviewed});
 
   RenterBookings.fromJson(dynamic json) {
     id = json['id'];
@@ -268,6 +268,7 @@ class RenterBookings {
     host = json['host'] != null ? HostForRenter.fromJson(json['host']) : null;
     createdAt = json['createdAt'];
     endDate = json['endDate'];
+    hasReviewed = json['hasReviewed'];
   }
   int? id;
   String? coverImage;
@@ -283,6 +284,7 @@ class RenterBookings {
   HostForRenter? host;
   String? createdAt;
   String? endDate;
+  bool? hasReviewed;
   RenterBookings copyWith({  int? id,
     String? coverImage,
     String? title,
@@ -297,6 +299,7 @@ class RenterBookings {
     String? createdAt,
     String? stringLocation,
     String? endDate,
+    bool? hasReviewed
   }) => RenterBookings(  id: id ?? this.id,
     coverImage: coverImage ?? this.coverImage,
     title: title ?? this.title,
@@ -311,6 +314,7 @@ class RenterBookings {
     host: host ?? this.host,
     createdAt: createdAt ?? this.createdAt,
     endDate: endDate ?? this.endDate,
+    hasReviewed: hasReviewed ?? this.hasReviewed,
   );
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -319,6 +323,7 @@ class RenterBookings {
     map['title'] = title;
     map['location'] = stringLocation;
     map['propertyType'] = propertyType;
+    map['hasReviewed'] = hasReviewed;
     if (location != null) {
       map['location'] = location?.toJson();
     }
