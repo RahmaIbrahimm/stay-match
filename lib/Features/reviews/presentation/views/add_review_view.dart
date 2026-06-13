@@ -64,39 +64,6 @@ class _AddReviewViewState extends State<AddReviewView> {
     super.dispose();
   }
 
-  void _onSubmit() {
-    if (!_isFormValid) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Please fill in all ratings and your comment.',
-            style: AppStyles.regular14poppins.copyWith(
-              color: AppColors.textColorWhite,
-            ),
-          ),
-          backgroundColor: AppColors.primary,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.r),
-          ),
-        ),
-      );
-      return;
-    }
-
-    context.read<WriteReviewCubit>().submitReview(
-      request: WriteReviewRequest(
-        bookingId: widget.args.bookingId,
-        accuracy: _accuracy,
-        cleanliness: _cleanliness,
-        location: _location,
-        checkIn: _checkIn,
-        value: _value,
-        communication: _communication,
-        comment: _commentController.text.trim(),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +87,7 @@ class _AddReviewViewState extends State<AddReviewView> {
           );
         } else if (state is WriteReviewSuccess) {
           // Navigate to your review success screen — replace route name as needed
-          context.pushReplacement(AppRouting.reviewSubmittedName);
+          context.pushReplacementNamed(AppRouting.reviewSubmittedName);
         }
       },
       child: Scaffold(
@@ -188,6 +155,39 @@ class _AddReviewViewState extends State<AddReviewView> {
             SubmitBar(onSubmit: _onSubmit),
           ],
         ),
+      ),
+    );
+  }
+  void _onSubmit() {
+    if (!_isFormValid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Please fill in all ratings and your comment.',
+            style: AppStyles.regular14poppins.copyWith(
+              color: AppColors.textColorWhite,
+            ),
+          ),
+          backgroundColor: AppColors.primary,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.r),
+          ),
+        ),
+      );
+      return;
+    }
+
+    context.read<WriteReviewCubit>().submitReview(
+      request: WriteReviewRequest(
+        bookingId: widget.args.bookingId,
+        accuracy: _accuracy,
+        cleanliness: _cleanliness,
+        location: _location,
+        checkIn: _checkIn,
+        value: _value,
+        communication: _communication,
+        comment: _commentController.text.trim(),
       ),
     );
   }
