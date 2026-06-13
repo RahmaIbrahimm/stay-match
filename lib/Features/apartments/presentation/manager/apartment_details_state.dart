@@ -16,7 +16,7 @@ final class GetApartmentDetailsLoading extends ApartmentDetailsState {
 }
 
 final class GetApartmentDetailsSuccess extends ApartmentDetailsState {
-  final ApartmentDetailsResponse response;
+  final PropertyDetailsResponse response;
 
   const GetApartmentDetailsSuccess({required this.response});
 

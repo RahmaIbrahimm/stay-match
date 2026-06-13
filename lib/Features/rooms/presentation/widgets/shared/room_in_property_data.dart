@@ -6,10 +6,10 @@ import 'package:stay_match/core/constants/app_styles.dart';
 import '../../../data/models/get_all_rooms.dart';
 
 class RoomInPropertyData extends StatelessWidget {
-  const RoomInPropertyData({super.key, required this.rooms});
+  const RoomInPropertyData({super.key, required this.rooms,  this.scaleUp = false});
 
   final List<AllRooms> rooms;
-
+  final bool scaleUp;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,9 +35,10 @@ class RoomInPropertyData extends StatelessWidget {
                   ),
                   SizedBox(width: 6.w),
                   Flexible(
+                    flex: 2,
                     child: Text(
                       rooms[roomIdx].roomName ?? 'room name',
-                      style: AppStyles.semiBold8poppins,
+                      style: (scaleUp?AppStyles.semiBold12poppins:AppStyles.semiBold8poppins),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -45,13 +46,15 @@ class RoomInPropertyData extends StatelessWidget {
                   const Spacer(),
                   rooms[roomIdx].isAvailable ?? false
                       ? Flexible(
+                    flex: 1,
                           child: Text(
                             '${rooms[roomIdx].monthRent} EGP',
-                            style: AppStyles.semiBold8poppins.copyWith(
+                            style: (scaleUp?AppStyles.semiBold12poppins:AppStyles.semiBold8poppins).copyWith(
                               color: AppColors.secondaryLight,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
                           ),
                         )
                       : Container(
@@ -62,7 +65,7 @@ class RoomInPropertyData extends StatelessWidget {
                           ),
                           child: Text(
                             'Occupied',
-                            style: AppStyles.regular8poppins.copyWith(
+                            style: (scaleUp?AppStyles.semiBold12poppins:AppStyles.regular8poppins).copyWith(
                               color: AppColors.textColorSecondary,
                             ),
                           ),

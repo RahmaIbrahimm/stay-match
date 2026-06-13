@@ -387,7 +387,7 @@ class _FloatingDropDownState extends State<FloatingDropDown> {
                   borderRadius: BorderRadius.circular(12.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 10,
                       spreadRadius: 2,
                     ),
@@ -398,20 +398,28 @@ class _FloatingDropDownState extends State<FloatingDropDown> {
                   children: ['All Properties', 'Apartments', 'Rooms'].map((option) {
                     bool isSelected = cubit.selectedFilter == option;
                     return InkWell(
-                      onTap: () async {
+                      // onTap: () async {
+                      //   cubit.selectedFilter = option;
+                      //   _closeMenu();
+                      //   var filterOption = cubit.selectedFilter == 'All Properties'
+                      //       ? 'all'
+                      //       : cubit.selectedFilter.toLowerCase();
+                      //
+                      //   await cubit.getMyProperties(filter: filterOption);
+                      //
+                      //   // THIS TRIGGERS THE PARENT REFRESH
+                      //   widget.onChanged?.call();
+                      //
+                      //   log(filterOption);
+                      //   log('cubit ${cubit.selectedFilter}');
+                      // },
+                      onTap: () {
+                        log('🎯 onTap - setting selectedFilter to: $option');
                         cubit.selectedFilter = option;
+                        log('🎯 after set - cubit.selectedFilter: ${cubit.selectedFilter}');
                         _closeMenu();
-                        var filterOption = cubit.selectedFilter == 'All Properties'
-                            ? 'all'
-                            : cubit.selectedFilter.toLowerCase();
-
-                        await cubit.getMyProperties(filter: filterOption);
-
-                        // THIS TRIGGERS THE PARENT REFRESH
                         widget.onChanged?.call();
-
-                        log(filterOption);
-                        log('cubit ${cubit.selectedFilter}');
+                        log('🎯 onChanged called');
                       },
                       child: Container(
                         width: double.infinity,

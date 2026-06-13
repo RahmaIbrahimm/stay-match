@@ -18,7 +18,7 @@ class CustomElevatedButton extends StatelessWidget {
     this.borderRadius,
     this.suffixIcon,
     this.borderColor,
-    this.maxLines, this.mainAxisAlignment,
+    this.maxLines, this.mainAxisAlignment,  this.elevation = 0,
   });
 
   final Color? backgroundColor;
@@ -35,6 +35,7 @@ class CustomElevatedButton extends StatelessWidget {
   final Color? borderColor;
   final int? maxLines;
   final MainAxisAlignment? mainAxisAlignment;
+  final double elevation;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -54,7 +55,7 @@ class CustomElevatedButton extends StatelessWidget {
         minimumSize: (verticalPadding != null || horizontalPadding != null)
             ? Size(0, 0)
             : null,
-        elevation: 0
+        elevation: elevation,
       ),
       onPressed: onPressed,
       child: isLoading

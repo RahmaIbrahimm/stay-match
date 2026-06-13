@@ -29,6 +29,7 @@ class SmallCustomButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(15.r),
         ),
       ),
+
       child: Text(
         text,
         style: (textStyle ?? AppStyles.semiBold12poppins).copyWith(

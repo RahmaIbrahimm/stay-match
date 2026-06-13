@@ -38,8 +38,8 @@ class AddRoomRequest {
     description = json['description'];
     totalRooms = json['totalRooms'];
     availableRooms = json['availableRooms'];
-    amenities = json['amenities'] != null ? Amenities.fromJson(json['amenities']) : null;
-    nearbyServices = json['nearbyServices'] != null ? AddRoomNearbyServices.fromJson(json['nearbyServices']) : null;
+    amenities = json['amenities'] != null ? AddRoomRequestPropertyAmenities.fromJson(json['amenities']) : null;
+    nearbyServices = json['nearbyServices'] != null ? AddRoomRequestNearbyServices.fromJson(json['nearbyServices']) : null;
     street = json['street'];
     city = json['city'];
     government = json['government'];
@@ -48,13 +48,13 @@ class AddRoomRequest {
     if (json['propertyImages'] != null) {
       propertyImages = [];
       json['propertyImages'].forEach((v) {
-        propertyImages?.add(SharedPropertyImages.fromJson(v));
+        propertyImages?.add(AddRoomRequestSharedPropertyImages.fromJson(v));
       });
     }
     if (json['rooms'] != null) {
       rooms = [];
       json['rooms'].forEach((v) {
-        rooms?.add(Rooms.fromJson(v));
+        rooms?.add(AddRoomRequestRooms.fromJson(v));
       });
     }
     isDraft = json['isDraft'];
@@ -64,15 +64,15 @@ class AddRoomRequest {
   String? description;
   int? totalRooms;
   int? availableRooms;
-  Amenities? amenities;
-  AddRoomNearbyServices? nearbyServices;
+  AddRoomRequestPropertyAmenities? amenities;
+  AddRoomRequestNearbyServices? nearbyServices;
   String? street;
   String? city;
   String? government;
   double? latitude;
   double? longitude;
-  List<SharedPropertyImages>? propertyImages;
-  List<Rooms>? rooms;
+  List<AddRoomRequestSharedPropertyImages>? propertyImages;
+  List<AddRoomRequestRooms>? rooms;
   bool? isDraft;
 
   Map<String, dynamic> toJson() {
@@ -122,8 +122,8 @@ class AddRoomRequest {
 /// amenities : {"airConditioning":true,"closet":true,"mirror":true,"fan":true}
 /// allowedTenants : {"allowsFamilies":true,"allowsChildren":true,"allowsStudents":true,"studentGender":"any","allowsWorkers":true,"workerGender":"Male","petsAllowed":true}
 
-class Rooms {
-  Rooms({
+class AddRoomRequestRooms {
+  AddRoomRequestRooms({
       this.roomName, 
       this.minimumStay, 
       this.monthRent, 
@@ -141,7 +141,7 @@ class Rooms {
       this.roomAmenities,
       this.allowedTenants,});
 
-  Rooms.fromJson(dynamic json) {
+  AddRoomRequestRooms.fromJson(dynamic json) {
     roomName = json['roomName'];
     minimumStay = json['minimumStay'];
     monthRent = json['month_rent'];
@@ -158,11 +158,11 @@ class Rooms {
     if (json['propertyImages'] != null) {
       propertyImages = [];
       json['propertyImages'].forEach((v) {
-        propertyImages?.add(SharedPropertyImages.fromJson(v));
+        propertyImages?.add(AddRoomRequestSharedPropertyImages.fromJson(v));
       });
     }
-    roomAmenities = json['amenities'] != null ? RoomAmenities.fromJson(json['amenities']) : null;
-    allowedTenants = json['allowedTenants'] != null ? AllowedTenants.fromJson(json['allowedTenants']) : null;
+    roomAmenities = json['amenities'] != null ? AddRoomRequestRoomAmenities.fromJson(json['amenities']) : null;
+    allowedTenants = json['allowedTenants'] != null ? AddRoomRequestAllowedTenants.fromJson(json['allowedTenants']) : null;
   }
   String? roomName;
   int? minimumStay;
@@ -177,9 +177,9 @@ class Rooms {
   bool? balcony;
   bool? window;
   bool? petsAllowed;
-  List<SharedPropertyImages>? propertyImages;
-  RoomAmenities? roomAmenities;
-  AllowedTenants? allowedTenants;
+  List<AddRoomRequestSharedPropertyImages>? propertyImages;
+  AddRoomRequestRoomAmenities? roomAmenities;
+  AddRoomRequestAllowedTenants? allowedTenants;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -218,8 +218,8 @@ class Rooms {
 /// workerGender : "Male"
 /// petsAllowed : true
 
-class AllowedTenants {
-  AllowedTenants({
+class AddRoomRequestAllowedTenants {
+  AddRoomRequestAllowedTenants({
       this.allowsFamilies, 
       this.allowsChildren, 
       this.allowsStudents, 
@@ -228,7 +228,7 @@ class AllowedTenants {
       this.workerGender, 
       this.petsAllowed,});
 
-  AllowedTenants.fromJson(dynamic json) {
+  AddRoomRequestAllowedTenants.fromJson(dynamic json) {
     allowsFamilies = json['allowsFamilies'];
     allowsChildren = json['allowsChildren'];
     allowsStudents = json['allowsStudents'];
@@ -264,14 +264,14 @@ class AllowedTenants {
 /// mirror : true
 /// fan : true
 
-class RoomAmenities {
-  RoomAmenities({
+class AddRoomRequestRoomAmenities {
+  AddRoomRequestRoomAmenities({
       this.airConditioning, 
       this.closet, 
       this.mirror, 
       this.fan,});
 
-  RoomAmenities.fromJson(dynamic json) {
+  AddRoomRequestRoomAmenities.fromJson(dynamic json) {
     airConditioning = json['airConditioning'];
     closet = json['closet'];
     mirror = json['mirror'];
@@ -297,13 +297,13 @@ class RoomAmenities {
 /// imageUrl : "string"
 /// isCover : true
 
-class SharedPropertyImages {
-  SharedPropertyImages({
+class AddRoomRequestSharedPropertyImages {
+  AddRoomRequestSharedPropertyImages({
       this.id, 
       this.imageUrl, 
       this.isCover,});
 
-  SharedPropertyImages.fromJson(dynamic json) {
+  AddRoomRequestSharedPropertyImages.fromJson(dynamic json) {
     id = json['id'];
     imageUrl = json['imageUrl'];
     isCover = json['isCover'];
@@ -326,13 +326,13 @@ class SharedPropertyImages {
 /// imageUrl : "string"
 /// isCover : true
 
-class RoomImages {
-  RoomImages({
+class AddRoomRequestRoomImages {
+  AddRoomRequestRoomImages({
       this.id,
       this.imageUrl,
       this.isCover,});
 
-  RoomImages.fromJson(dynamic json) {
+  AddRoomRequestRoomImages.fromJson(dynamic json) {
     id = json['id'];
     imageUrl = json['imageUrl'];
     isCover = json['isCover'];
@@ -368,8 +368,8 @@ class RoomImages {
 /// hasChurchNearby : true
 /// hasMosqueNearby : true
 
-class AddRoomNearbyServices {
-  AddRoomNearbyServices({
+class AddRoomRequestNearbyServices {
+  AddRoomRequestNearbyServices({
       this.hasGroceryStore, 
       this.hasPharmacy, 
       this.hasHospital, 
@@ -387,7 +387,7 @@ class AddRoomNearbyServices {
       this.hasChurchNearby, 
       this.hasMosqueNearby,});
 
-  AddRoomNearbyServices.fromJson(dynamic json) {
+  AddRoomRequestNearbyServices.fromJson(dynamic json) {
     hasGroceryStore = json['hasGroceryStore'];
     hasPharmacy = json['hasPharmacy'];
     hasHospital = json['hasHospital'];
@@ -459,8 +459,8 @@ class AddRoomNearbyServices {
 /// smokeAlarm : true
 /// fireExtinguisher : true
 
-class Amenities {
-  Amenities({
+class AddRoomRequestPropertyAmenities {
+  AddRoomRequestPropertyAmenities({
       this.wifi,
       this.tv,
       this.cooktop,
@@ -475,7 +475,7 @@ class Amenities {
       this.smokeAlarm,
       this.fireExtinguisher,});
 
-  Amenities.fromJson(dynamic json) {
+  AddRoomRequestPropertyAmenities.fromJson(dynamic json) {
     wifi = json['wifi'];
     tv = json['tv'];
     cooktop = json['cooktop'];

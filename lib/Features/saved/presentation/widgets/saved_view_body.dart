@@ -1,3 +1,307 @@
+// // import 'package:flutter/material.dart';
+// // import 'package:flutter_bloc/flutter_bloc.dart';
+// // import 'package:flutter_screenutil/flutter_screenutil.dart';
+// // import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+// // import 'package:stay_match/Features/saved/data/models/my_saved_response.dart';
+// // import 'package:stay_match/Features/saved/presentation/widgets/recommended_section.dart';
+// // import 'package:stay_match/Features/saved/presentation/widgets/saved_header_section.dart';
+// // import 'package:stay_match/Features/saved/presentation/widgets/saved_property_card.dart';
+// // import 'package:stay_match/core/constants/app_styles.dart';
+// //
+// // import '../../../../core/constants/app_strings.dart';
+// // import '../manager/recommended_cubit.dart';
+// // import '../manager/saved_properties_cubit.dart';
+// // import 'filter_chips_row.dart';
+// //
+// // class SavedViewBody extends StatelessWidget {
+// //   const SavedViewBody({super.key});
+// //
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return RefreshIndicator(
+// //       onRefresh: () async {
+// //         var savedCubit = context.read<SavedPropertiesCubit>();
+// //         var recCubit = context.read<RecommendedCubit>();
+// //         savedCubit.pagingController.refresh();
+// //         await recCubit.fetchRecommendations();
+// //       },
+// //       child: CustomScrollView(
+// //         slivers: [
+// //           // ── Header ──────────────────────────────────────────────────────────
+// //           SliverToBoxAdapter(
+// //             child: Padding(
+// //               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+// //               child: BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
+// //                 builder: (context, state) {
+// //                   int totalCount = 0;
+// //                   if (state is SavedPropertiesSuccess) {
+// //                     totalCount =
+// //                         state.response.data?.pagination?.totalCount ?? 0;
+// //                   }
+// //                   return SavedHeaderSection(totalCount: totalCount,);
+// //                 },
+// //               ),
+// //             ),
+// //           ),
+// //
+// //           // ── Filter chips ─────────────────────────────────────────────────────
+// //           SliverToBoxAdapter(
+// //             child: Padding(
+// //               padding: EdgeInsets.symmetric(horizontal: 20.w),
+// //               child: BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
+// //                 builder: (context, state) {
+// //                   final cubit = context.read<SavedPropertiesCubit>();
+// //
+// //                   // read currentType from state when available, fallback to cubit field
+// //                   final currentType = state is FilterChanged
+// //                       ? state.currentType
+// //                       : cubit.currentType;
+// //
+// //                   return FilterChipsRow(
+// //                     currentFilter: currentType,
+// //                     onFilterChanged: cubit.changeFilter,
+// //                     stats: state is SavedPropertiesSuccess
+// //                         ? state.response.data?.stats
+// //                         : null,
+// //                   );
+// //                 },
+// //               ),
+// //             ),
+// //           ),
+// //           SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+// //
+// //           // ── Paged saved property list ────────────────────────────────────────
+// //           // ── Paged saved property list ────────────────────────────────────────
+// //           BlocListener<SavedPropertiesCubit, SavedPropertiesState>(
+// //             listener: (context, state) {
+// //               if (state is SavedPropertiesFailure) {
+// //                 ScaffoldMessenger.of(
+// //                   context,
+// //                 ).showSnackBar(SnackBar(content: Text(state.errMessage)));
+// //               }
+// //               if (state is ToggleSuccess) {
+// //                 context.read<SavedPropertiesCubit>().pagingController.refresh();
+// //                 ScaffoldMessenger.of(context).showSnackBar(
+// //                   const SnackBar(content: Text(AppStrings.savedListUpdated)),
+// //                 );
+// //               }
+// //             },
+// //             child: PagedSliverList<int, SavedItems>(
+// //               pagingController: context
+// //                   .read<SavedPropertiesCubit>()
+// //                   .pagingController,
+// //               builderDelegate: PagedChildBuilderDelegate<SavedItems>(
+// //                 itemBuilder: (context, item, index) {
+// //                   return Padding(
+// //                     padding: EdgeInsets.symmetric(
+// //                       horizontal: 20.w,
+// //                       vertical: 10.h,
+// //                     ),
+// //                     child:
+// //                         BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
+// //                           builder: (context, state) {
+// //                             final isToggling = state is ToggleLoading;
+// //                             return SavedPropertyCard(
+// //                               item: item,
+// //                               isToggling: isToggling,
+// //                               onUnsave: () {
+// //                                 context
+// //                                     .read<SavedPropertiesCubit>()
+// //                                     .toggleSaved(
+// //                                       itemType: item.itemType == 'room'
+// //                                           ? SavedItemType.room
+// //                                           : SavedItemType.wholeApartment,
+// //                                       propertyId: item.propertyId ?? 0,
+// //                                       roomId: item.roomId,
+// //                                     );
+// //                               },
+// //                             );
+// //                           },
+// //                         ),
+// //                   );
+// //                 },
+// //                 firstPageProgressIndicatorBuilder: (_) => Padding(
+// //                   padding: EdgeInsets.all(40.r),
+// //                   child: const Center(child: CircularProgressIndicator()),
+// //                 ),
+// //                 newPageProgressIndicatorBuilder: (_) => Padding(
+// //                   padding: EdgeInsets.all(20.r),
+// //                   child: const Center(child: CircularProgressIndicator()),
+// //                 ),
+// //
+// //                 // FIXED: Return the _ErrorWidget directly without SliverFillRemaining
+// //                 firstPageErrorIndicatorBuilder: (context) => _ErrorWidget(
+// //                   onRetry: () => context
+// //                       .read<SavedPropertiesCubit>()
+// //                       .pagingController
+// //                       .refresh(),
+// //                 ),
+// //
+// //                 // FIXED: Return the _EmptyWidget directly without SliverFillRemaining
+// //                 noItemsFoundIndicatorBuilder: (_) => const _EmptyWidget(),
+// //               ),
+// //             ),
+// //           ),
+// //
+// //           // ── Show more properties button ───────────────────────────────────────
+// //           // SliverToBoxAdapter(
+// //           //   child: BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
+// //           //     builder: (context, state) {
+// //           //       final hasMore = state is SavedPropertiesSuccess &&
+// //           //           (state.response.data?.pagination?.hasMore ?? false);
+// //           //       if (!hasMore) return const SizedBox.shrink();
+// //           //       return Padding(
+// //           //         padding: EdgeInsets.symmetric(
+// //           //             horizontal: 20.w, vertical: 8.h),
+// //           //         child: _ShowMoreButton(
+// //           //           label: AppStrings.showMoreProperties,
+// //           //           onTap: () {},
+// //           //         ),
+// //           //       );
+// //           //     },
+// //           //   ),
+// //           // ),
+// //           SliverToBoxAdapter(child: SizedBox(height: 24.h)),
+// //
+// //           // ── Recommended section ──────────────────────────────────────────────
+// //           SliverToBoxAdapter(
+// //             child: BlocBuilder<RecommendedCubit, RecommendedState>(
+// //               builder: (context, state) {
+// //                 if (state is RecommendedLoading) {
+// //                   return Padding(
+// //                     padding: EdgeInsets.all(20.r),
+// //                     child: const Center(child: CircularProgressIndicator()),
+// //                   );
+// //                 }
+// //                 if (state is RecommendedFailure) {
+// //                   return Padding(
+// //                     padding: EdgeInsets.all(20.r),
+// //                     child: Center(
+// //                       child: Text(
+// //                         state.errMessage,
+// //                         style: AppStyles.regular14poppins.copyWith(
+// //                           color: Colors.red,
+// //                         ),
+// //                       ),
+// //                     ),
+// //                   );
+// //                 }
+// //                 if (state is RecommendedSuccess) {
+// //                   return RecommendedSection(
+// //                     response: state.response,
+// //                     onShowMore: () =>
+// //                         context.read<RecommendedCubit>().fetchRecommendations(),
+// //                   );
+// //                 }
+// //                 return const SizedBox.shrink();
+// //               },
+// //             ),
+// //           ),
+// //
+// //           SliverToBoxAdapter(child: SizedBox(height: 40.h)),
+// //         ],
+// //       ),
+// //     );
+// //   }
+// // }
+// //
+// // // ── Error widget ──────────────────────────────────────────────────────────────
+// //
+// // class _ErrorWidget extends StatelessWidget {
+// //   final VoidCallback onRetry;
+// //
+// //   const _ErrorWidget({required this.onRetry});
+// //
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return Center(
+// //       child: Padding(
+// //         padding: EdgeInsets.all(32.r),
+// //         child: Column(
+// //           mainAxisAlignment: MainAxisAlignment.center,
+// //           // Aligns content correctly inside viewport limits
+// //           mainAxisSize: MainAxisSize.min,
+// //           children: [
+// //             Icon(Icons.error_outline, size: 48.r, color: Colors.red),
+// //             SizedBox(height: 12.h),
+// //             Text(
+// //               AppStrings.somethingWentWrong,
+// //               style: AppStyles.medium14poppins.copyWith(color: Colors.black87),
+// //             ),
+// //             SizedBox(height: 12.h),
+// //             ElevatedButton(
+// //               onPressed: onRetry,
+// //               child: Text(
+// //                 AppStrings.retry,
+// //                 style: AppStyles.medium14poppins.copyWith(color: Colors.white),
+// //               ),
+// //             ),
+// //           ],
+// //         ),
+// //       ),
+// //     );
+// //   }
+// // }
+// //
+// // // ── Empty widget ──────────────────────────────────────────────────────────────
+// //
+// // class _EmptyWidget extends StatelessWidget {
+// //   const _EmptyWidget();
+// //
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return Center(
+// //       child: Padding(
+// //         padding: EdgeInsets.all(48.r),
+// //         child: Column(
+// //           mainAxisAlignment: MainAxisAlignment.center,
+// //           // Aligns content correctly inside viewport limits
+// //           mainAxisSize: MainAxisSize.min,
+// //           children: [
+// //             Icon(Icons.bookmark_border, size: 64.r, color: Colors.grey),
+// //             SizedBox(height: 16.h),
+// //             Text(
+// //               AppStrings.noSavedProperties,
+// //               style: AppStyles.medium16poppins.copyWith(color: Colors.grey),
+// //             ),
+// //           ],
+// //         ),
+// //       ),
+// //     );
+// //   }
+// // }
+// //
+// // // ── Show more button ──────────────────────────────────────────────────────────
+// //
+// // class _ShowMoreButton extends StatelessWidget {
+// //   final String label;
+// //   final VoidCallback onTap;
+// //
+// //   const _ShowMoreButton({required this.label, required this.onTap});
+// //
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return GestureDetector(
+// //       onTap: onTap,
+// //       child: Container(
+// //         padding: EdgeInsets.symmetric(vertical: 16.h),
+// //         decoration: BoxDecoration(
+// //           color: Colors.grey.shade100,
+// //           borderRadius: BorderRadius.circular(12.r),
+// //         ),
+// //         child: Row(
+// //           mainAxisAlignment: MainAxisAlignment.center,
+// //           children: [
+// //             Text(label, style: AppStyles.medium14poppins),
+// //             SizedBox(width: 6.w),
+// //             Icon(Icons.keyboard_arrow_down, size: 18.r),
+// //           ],
+// //         ),
+// //       ),
+// //     );
+// //   }
+// // }
+//
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +311,7 @@
 // import 'package:stay_match/Features/saved/presentation/widgets/saved_header_section.dart';
 // import 'package:stay_match/Features/saved/presentation/widgets/saved_property_card.dart';
 // import 'package:stay_match/core/constants/app_styles.dart';
+//
 // import '../../../../core/constants/app_strings.dart';
 // import '../manager/recommended_cubit.dart';
 // import '../manager/saved_properties_cubit.dart';
@@ -17,178 +322,194 @@
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     return CustomScrollView(
-//       slivers: [
-//         // ── Header ──────────────────────────────────────────────────────────
-//         SliverToBoxAdapter(
-//           child: Padding(
-//             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-//             child: BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
-//               builder: (context, state) {
-//                 int totalCount = 0;
-//                 if (state is SavedPropertiesSuccess) {
-//                   totalCount =
-//                       state.response.data?.pagination?.totalCount ?? 0;
+//     final savedCubit = context.read<SavedPropertiesCubit>();
+//
+//     return RefreshIndicator(
+//       onRefresh: () async {
+//         var recCubit = context.read<RecommendedCubit>();
+//         savedCubit.pagingController.refresh();
+//         await recCubit.fetchRecommendations();
+//       },
+//       child: CustomScrollView(
+//         slivers: [
+//           // ── Header ──────────────────────────────────────────────────────────
+//           SliverToBoxAdapter(
+//             child: Padding(
+//               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+//               child: BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
+//                 builder: (context, state) {
+//                   // FIX 1: Bulletproof count fallback calculation logic
+//                   int totalCount = 0;
+//                   if (state is SavedPropertiesSuccess) {
+//                     final apiCount = state.response.data?.pagination?.totalCount ?? 0;
+//                     // If backend sends 0 for 'all' but we actually have items in the list, count them!
+//                     if (apiCount == 0 && savedCubit.pagingController.itemList != null) {
+//                       totalCount = savedCubit.pagingController.itemList!.length;
+//                     } else {
+//                       totalCount = apiCount;
+//                     }
+//                   } else if (savedCubit.pagingController.itemList != null) {
+//                     totalCount = savedCubit.pagingController.itemList!.length;
+//                   }
+//
+//                   return SavedHeaderSection(totalCount: totalCount);
+//                 },
+//               ),
+//             ),
+//           ),
+//
+//           // ── Filter chips ─────────────────────────────────────────────────────
+//           SliverToBoxAdapter(
+//             child: Padding(
+//               padding: EdgeInsets.symmetric(horizontal: 20.w),
+//               child: BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
+//                 builder: (context, state) {
+//                   // Read currentType from state when available, fallback to cubit field
+//                   final currentType = state is FilterChanged
+//                       ? state.currentType
+//                       : savedCubit.currentType;
+//
+//                   return FilterChipsRow(
+//                     currentFilter: currentType,
+//                     onFilterChanged: savedCubit.changeFilter,
+//                     stats: state is SavedPropertiesSuccess
+//                         ? state.response.data?.stats
+//                         : null,
+//                   );
+//                 },
+//               ),
+//             ),
+//           ),
+//           SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+//
+//           // ── Paged saved property list ────────────────────────────────────────
+//           BlocListener<SavedPropertiesCubit, SavedPropertiesState>(
+//             listener: (context, state) {
+//               if (state is SavedPropertiesFailure) {
+//                 ScaffoldMessenger.of(context).showSnackBar(
+//                   SnackBar(content: Text(state.errMessage)),
+//                 );
+//               }
+//               // FIX 2: Silent local removal manipulation without breaking current scroll positions
+//               if (state is ToggleSuccess) {
+//                 final targetId = state.propertyId; // Make sure your ToggleSuccess state exposes the propertyId/roomId altered!
+//                 final currentItems = savedCubit.pagingController.itemList;
+//
+//                 if (currentItems != null) {
+//                   // Filter out the unsaved card item locally instantly
+//                   final updatedList = currentItems.where((item) {
+//                     if (item.itemType == 'room') {
+//                       return item.roomId != targetId && item.propertyId != targetId;
+//                     }
+//                     return item.propertyId != targetId;
+//                   }).toList();
+//
+//                   // Re-assign items back seamlessly without calling full refresh full reload cycle
+//                   savedCubit.pagingController.value = PagingState<int, SavedItems>(
+//                     nextPageKey: savedCubit.pagingController.nextPageKey,
+//                     error: savedCubit.pagingController.error,
+//                     itemList: updatedList,
+//                   );
+//                 } else {
+//                   // Safe fallback if list was empty or uninitialized
+//                   savedCubit.pagingController.refresh();
 //                 }
-//                 return SavedHeaderSection(totalCount: totalCount);
-//               },
-//             ),
-//           ),
-//         ),
 //
-//         // ── Filter chips ─────────────────────────────────────────────────────
-//         SliverToBoxAdapter(
-//           child: Padding(
-//             padding: EdgeInsets.symmetric(horizontal: 20.w),
-//             child: BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
-//               builder: (context, state) {
-//                 final cubit = context.read<SavedPropertiesCubit>();
-//
-//                 // read currentType from state when available, fallback to cubit field
-//                 final currentType = state is FilterChanged
-//                     ? state.currentType
-//                     : cubit.currentType;
-//
-//                 return FilterChipsRow(
-//                   currentFilter: currentType,
-//                   onFilterChanged: cubit.changeFilter,
-//                   stats: state is SavedPropertiesSuccess
-//                       ? state.response.data?.stats
-//                       : null,
+//                 ScaffoldMessenger.of(context).showSnackBar(
+//                   const SnackBar(content: Text(AppStrings.savedListUpdated)),
 //                 );
-//               },
-//             ),
-//           ),
-//         ),
-//         SliverToBoxAdapter(child: SizedBox(height: 20.h)),
-//
-//         // ── Paged saved property list ────────────────────────────────────────
-//         BlocListener<SavedPropertiesCubit, SavedPropertiesState>(
-//           listener: (context, state) {
-//             if (state is SavedPropertiesFailure) {
-//               ScaffoldMessenger.of(context).showSnackBar(
-//                 SnackBar(content: Text(state.errMessage)),
-//               );
-//             }
-//             if (state is ToggleSuccess) {
-//               context.read<SavedPropertiesCubit>().pagingController.refresh();
-//               ScaffoldMessenger.of(context).showSnackBar(
-//                 const SnackBar(content: Text(AppStrings.savedListUpdated)),
-//               );
-//             }
-//           },
-//           child: PagedSliverList<int, SavedItems>(
-//             pagingController:
-//             context.read<SavedPropertiesCubit>().pagingController,
-//             builderDelegate: PagedChildBuilderDelegate<SavedItems>(
-//               itemBuilder: (context, item, index) {
-//                 return Padding(
-//                   padding: EdgeInsets.symmetric(
-//                       horizontal: 20.w, vertical: 10.h),
-//                   child: BlocBuilder<SavedPropertiesCubit,
-//                       SavedPropertiesState>(
-//                     builder: (context, state) {
-//                       final isToggling = state is ToggleLoading;
-//                       return SavedPropertyCard(
-//                         item: item,
-//                         isToggling: isToggling,
-//                         onUnsave: () {
-//                           context.read<SavedPropertiesCubit>().toggleSaved(
-//                             itemType: item.itemType == 'room'
-//                                 ? SavedItemType.room
-//                                 : SavedItemType.wholeApartment,
-//                             propertyId: item.propertyId,
-//                             roomId: item.roomId,
-//                           );
-//                         },
-//                       );
-//                     },
-//                   ),
-//                 );
-//               },
-//               firstPageProgressIndicatorBuilder: (_) => Padding(
-//                 padding: EdgeInsets.all(40.r),
-//                 child: const Center(child: CircularProgressIndicator()),
-//               ),
-//               newPageProgressIndicatorBuilder: (_) => Padding(
-//                 padding: EdgeInsets.all(20.r),
-//                 child: const Center(child: CircularProgressIndicator()),
-//               ),
-//               firstPageErrorIndicatorBuilder: (context) => _ErrorWidget(
-//                 onRetry: () => context
-//                     .read<SavedPropertiesCubit>()
-//                     .pagingController
-//                     .refresh(),
-//               ),
-//               noItemsFoundIndicatorBuilder: (_) => const _EmptyWidget(),
-//             ),
-//           ),
-//         ),
-//
-//         // ── Show more properties button ───────────────────────────────────────
-//         SliverToBoxAdapter(
-//           child: BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
-//             builder: (context, state) {
-//               final hasMore = state is SavedPropertiesSuccess &&
-//                   (state.response.data?.pagination?.hasMore ?? false);
-//               if (!hasMore) return const SizedBox.shrink();
-//               return Padding(
-//                 padding: EdgeInsets.symmetric(
-//                     horizontal: 20.w, vertical: 8.h),
-//                 child: _ShowMoreButton(
-//                   label: AppStrings.showMoreProperties,
-//                   onTap: () {},
-//                 ),
-//               );
+//               }
 //             },
-//           ),
-//         ),
-//
-//         SliverToBoxAdapter(child: SizedBox(height: 24.h)),
-//
-//         // ── Recommended section ──────────────────────────────────────────────
-//         SliverToBoxAdapter(
-//           child: BlocBuilder<RecommendedCubit, RecommendedState>(
-//             builder: (context, state) {
-//               if (state is RecommendedLoading) {
-//                 return Padding(
+//             child: PagedSliverList<int, SavedItems>(
+//               pagingController: savedCubit.pagingController,
+//               builderDelegate: PagedChildBuilderDelegate<SavedItems>(
+//                 itemBuilder: (context, item, index) {
+//                   return Padding(
+//                     padding: EdgeInsets.symmetric(
+//                       horizontal: 20.w,
+//                       vertical: 10.h,
+//                     ),
+//                     child: BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
+//                       builder: (context, state) {
+//                         final isToggling = state is ToggleLoading;
+//                         return SavedPropertyCard(
+//                           item: item,
+//                           isToggling: isToggling,
+//                           onUnsave: () {
+//                             savedCubit.toggleSaved(
+//                               itemType: item.itemType == 'room'
+//                                   ? SavedItemType.room
+//                                   : SavedItemType.wholeApartment,
+//                               propertyId: item.propertyId ?? 0,
+//                               roomId: item.roomId,
+//                             );
+//                           },
+//                         );
+//                       },
+//                     ),
+//                   );
+//                 },
+//                 firstPageProgressIndicatorBuilder: (_) => Padding(
+//                   padding: EdgeInsets.all(40.r),
+//                   child: const Center(child: CircularProgressIndicator()),
+//                 ),
+//                 newPageProgressIndicatorBuilder: (_) => Padding(
 //                   padding: EdgeInsets.all(20.r),
 //                   child: const Center(child: CircularProgressIndicator()),
-//                 );
-//               }
-//               if (state is RecommendedFailure) {
-//                 return Padding(
-//                   padding: EdgeInsets.all(20.r),
-//                   child: Center(
-//                     child: Text(
-//                       state.errMessage,
-//                       style: AppStyles.regular14poppins
-//                           .copyWith(color: Colors.red),
-//                     ),
-//                   ),
-//                 );
-//               }
-//               if (state is RecommendedSuccess) {
-//                 return RecommendedSection(
-//                   response: state.response,
-//                   onShowMore: () => context
-//                       .read<RecommendedCubit>()
-//                       .fetchRecommendations(),
-//                 );
-//               }
-//               return const SizedBox.shrink();
-//             },
+//                 ),
+//                 firstPageErrorIndicatorBuilder: (context) => _ErrorWidget(
+//                   onRetry: () => savedCubit.pagingController.refresh(),
+//                 ),
+//                 noItemsFoundIndicatorBuilder: (_) => const _EmptyWidget(),
+//               ),
+//             ),
 //           ),
-//         ),
 //
-//         SliverToBoxAdapter(child: SizedBox(height: 40.h)),
-//       ],
+//           SliverToBoxAdapter(child: SizedBox(height: 24.h)),
+//
+//           // ── Recommended section ──────────────────────────────────────────────
+//           SliverToBoxAdapter(
+//             child: BlocBuilder<RecommendedCubit, RecommendedState>(
+//               builder: (context, state) {
+//                 if (state is RecommendedLoading) {
+//                   return Padding(
+//                     padding: EdgeInsets.all(20.r),
+//                     child: const Center(child: CircularProgressIndicator()),
+//                   );
+//                 }
+//                 if (state is RecommendedFailure) {
+//                   return Padding(
+//                     padding: EdgeInsets.all(20.r),
+//                     child: Center(
+//                       child: Text(
+//                         state.errMessage,
+//                         style: AppStyles.regular14poppins.copyWith(
+//                           color: Colors.red,
+//                         ),
+//                       ),
+//                     ),
+//                   );
+//                 }
+//                 if (state is RecommendedSuccess) {
+//                   return RecommendedSection(
+//                     response: state.response,
+//                     onShowMore: () =>
+//                         context.read<RecommendedCubit>().fetchRecommendations(),
+//                   );
+//                 }
+//                 return const SizedBox.shrink();
+//               },
+//             ),
+//           ),
+//
+//           SliverToBoxAdapter(child: SizedBox(height: 40.h)),
+//         ],
+//       ),
 //     );
 //   }
 // }
 //
 // // ── Error widget ──────────────────────────────────────────────────────────────
-//
 // class _ErrorWidget extends StatelessWidget {
 //   final VoidCallback onRetry;
 //   const _ErrorWidget({required this.onRetry});
@@ -199,6 +520,8 @@
 //       child: Padding(
 //         padding: EdgeInsets.all(32.r),
 //         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           mainAxisSize: MainAxisSize.min,
 //           children: [
 //             Icon(Icons.error_outline, size: 48.r, color: Colors.red),
 //             SizedBox(height: 12.h),
@@ -222,7 +545,6 @@
 // }
 //
 // // ── Empty widget ──────────────────────────────────────────────────────────────
-//
 // class _EmptyWidget extends StatelessWidget {
 //   const _EmptyWidget();
 //
@@ -232,13 +554,14 @@
 //       child: Padding(
 //         padding: EdgeInsets.all(48.r),
 //         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           mainAxisSize: MainAxisSize.min,
 //           children: [
 //             Icon(Icons.bookmark_border, size: 64.r, color: Colors.grey),
 //             SizedBox(height: 16.h),
 //             Text(
 //               AppStrings.noSavedProperties,
-//               style:
-//               AppStyles.medium16poppins.copyWith(color: Colors.grey),
+//               style: AppStyles.medium16poppins.copyWith(color: Colors.grey),
 //             ),
 //           ],
 //         ),
@@ -246,37 +569,6 @@
 //     );
 //   }
 // }
-//
-// // ── Show more button ──────────────────────────────────────────────────────────
-//
-// class _ShowMoreButton extends StatelessWidget {
-//   final String label;
-//   final VoidCallback onTap;
-//   const _ShowMoreButton({required this.label, required this.onTap});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onTap: onTap,
-//       child: Container(
-//         padding: EdgeInsets.symmetric(vertical: 16.h),
-//         decoration: BoxDecoration(
-//           color: Colors.grey.shade100,
-//           borderRadius: BorderRadius.circular(12.r),
-//         ),
-//         child: Row(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Text(label, style: AppStyles.medium14poppins),
-//             SizedBox(width: 6.w),
-//             Icon(Icons.keyboard_arrow_down, size: 18.r),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -292,14 +584,51 @@ import '../manager/recommended_cubit.dart';
 import '../manager/saved_properties_cubit.dart';
 import 'filter_chips_row.dart';
 
-class SavedViewBody extends StatelessWidget {
+class SavedViewBody extends StatefulWidget {
   const SavedViewBody({super.key});
 
   @override
+  State<SavedViewBody> createState() => _SavedViewBodyState();
+}
+
+class _SavedViewBodyState extends State<SavedViewBody> {
+  int _totalCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Listen directly to pagingController updates to calculate exact live list lengths
+    final pagingController = context.read<SavedPropertiesCubit>().pagingController;
+    pagingController.addListener(_updateCountListener);
+
+    // Initial assignment if items are already present in cache
+    if (pagingController.itemList != null) {
+      _totalCount = pagingController.itemList!.length;
+    }
+  }
+
+  void _updateCountListener() {
+    if (mounted) {
+      final currentItems = context.read<SavedPropertiesCubit>().pagingController.itemList;
+      setState(() {
+        _totalCount = currentItems?.length ?? 0;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    // Clean up our controller listener reference
+    context.read<SavedPropertiesCubit>().pagingController.removeListener(_updateCountListener);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final savedCubit = context.read<SavedPropertiesCubit>();
+
     return RefreshIndicator(
       onRefresh: () async {
-        var savedCubit = context.read<SavedPropertiesCubit>();
         var recCubit = context.read<RecommendedCubit>();
         savedCubit.pagingController.refresh();
         await recCubit.fetchRecommendations();
@@ -310,16 +639,7 @@ class SavedViewBody extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-              child: BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
-                builder: (context, state) {
-                  int totalCount = 0;
-                  if (state is SavedPropertiesSuccess) {
-                    totalCount =
-                        state.response.data?.pagination?.totalCount ?? 0;
-                  }
-                  return SavedHeaderSection(totalCount: totalCount);
-                },
-              ),
+              child: SavedHeaderSection(totalCount: _totalCount),
             ),
           ),
 
@@ -329,16 +649,13 @@ class SavedViewBody extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
                 builder: (context, state) {
-                  final cubit = context.read<SavedPropertiesCubit>();
-
-                  // read currentType from state when available, fallback to cubit field
                   final currentType = state is FilterChanged
                       ? state.currentType
-                      : cubit.currentType;
+                      : savedCubit.currentType;
 
                   return FilterChipsRow(
                     currentFilter: currentType,
-                    onFilterChanged: cubit.changeFilter,
+                    onFilterChanged: savedCubit.changeFilter,
                     stats: state is SavedPropertiesSuccess
                         ? state.response.data?.stats
                         : null,
@@ -350,25 +667,45 @@ class SavedViewBody extends StatelessWidget {
           SliverToBoxAdapter(child: SizedBox(height: 20.h)),
 
           // ── Paged saved property list ────────────────────────────────────────
-          // ── Paged saved property list ────────────────────────────────────────
           BlocListener<SavedPropertiesCubit, SavedPropertiesState>(
             listener: (context, state) {
               if (state is SavedPropertiesFailure) {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(state.errMessage)));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.errMessage)),
+                );
               }
+
               if (state is ToggleSuccess) {
-                context.read<SavedPropertiesCubit>().pagingController.refresh();
+                final targetId = state.propertyId;
+                final currentItems = savedCubit.pagingController.itemList;
+
+                if (currentItems != null) {
+                  final updatedList = currentItems.where((item) {
+                    if (item.itemType == 'room') {
+                      return item.roomId != targetId && item.propertyId != targetId;
+                    }
+                    return item.propertyId != targetId;
+                  }).toList();
+
+                  savedCubit.pagingController.value = PagingState<int, SavedItems>(
+                    nextPageKey: savedCubit.pagingController.nextPageKey,
+                    error: savedCubit.pagingController.error,
+                    itemList: updatedList,
+                  );
+
+                  // Force immediate update to layout header count
+                  _updateCountListener();
+                } else {
+                  savedCubit.pagingController.refresh();
+                }
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text(AppStrings.savedListUpdated)),
                 );
               }
             },
             child: PagedSliverList<int, SavedItems>(
-              pagingController: context
-                  .read<SavedPropertiesCubit>()
-                  .pagingController,
+              pagingController: savedCubit.pagingController,
               builderDelegate: PagedChildBuilderDelegate<SavedItems>(
                 itemBuilder: (context, item, index) {
                   return Padding(
@@ -376,27 +713,35 @@ class SavedViewBody extends StatelessWidget {
                       horizontal: 20.w,
                       vertical: 10.h,
                     ),
-                    child:
-                        BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
-                          builder: (context, state) {
-                            final isToggling = state is ToggleLoading;
-                            return SavedPropertyCard(
-                              item: item,
-                              isToggling: isToggling,
-                              onUnsave: () {
-                                context
-                                    .read<SavedPropertiesCubit>()
-                                    .toggleSaved(
-                                      itemType: item.itemType == 'room'
-                                          ? SavedItemType.room
-                                          : SavedItemType.wholeApartment,
-                                      propertyId: item.propertyId ?? 0,
-                                      roomId: item.roomId,
-                                    );
-                              },
+                    child: BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
+                      builder: (context, state) {
+                        bool isToggling = false;
+                        if (state is ToggleLoading) {
+                          if (item.itemType == 'room') {
+                            final currentRoomId = item.roomId ?? item.propertyId ?? 0;
+                            isToggling = state.propertyId == currentRoomId;
+                          } else {
+                            isToggling = state.propertyId == item.propertyId;
+                          }
+                        }
+
+                        return SavedPropertyCard(
+                          item: item,
+                          isToggling: isToggling,
+                          onUnsave: () {
+                            savedCubit.toggleSaved(
+                              itemType: item.itemType == 'room'
+                                  ? SavedItemType.room
+                                  : SavedItemType.wholeApartment,
+                              propertyId: item.itemType == 'room'
+                                  ? (item.roomId ?? item.propertyId ?? 0)
+                                  : (item.propertyId ?? 0),
+                              roomId: item.roomId,
                             );
                           },
-                        ),
+                        );
+                      },
+                    ),
                   );
                 },
                 firstPageProgressIndicatorBuilder: (_) => Padding(
@@ -407,39 +752,14 @@ class SavedViewBody extends StatelessWidget {
                   padding: EdgeInsets.all(20.r),
                   child: const Center(child: CircularProgressIndicator()),
                 ),
-
-                // FIXED: Return the _ErrorWidget directly without SliverFillRemaining
                 firstPageErrorIndicatorBuilder: (context) => _ErrorWidget(
-                  onRetry: () => context
-                      .read<SavedPropertiesCubit>()
-                      .pagingController
-                      .refresh(),
+                  onRetry: () => savedCubit.pagingController.refresh(),
                 ),
-
-                // FIXED: Return the _EmptyWidget directly without SliverFillRemaining
                 noItemsFoundIndicatorBuilder: (_) => const _EmptyWidget(),
               ),
             ),
           ),
 
-          // ── Show more properties button ───────────────────────────────────────
-          // SliverToBoxAdapter(
-          //   child: BlocBuilder<SavedPropertiesCubit, SavedPropertiesState>(
-          //     builder: (context, state) {
-          //       final hasMore = state is SavedPropertiesSuccess &&
-          //           (state.response.data?.pagination?.hasMore ?? false);
-          //       if (!hasMore) return const SizedBox.shrink();
-          //       return Padding(
-          //         padding: EdgeInsets.symmetric(
-          //             horizontal: 20.w, vertical: 8.h),
-          //         child: _ShowMoreButton(
-          //           label: AppStrings.showMoreProperties,
-          //           onTap: () {},
-          //         ),
-          //       );
-          //     },
-          //   ),
-          // ),
           SliverToBoxAdapter(child: SizedBox(height: 24.h)),
 
           // ── Recommended section ──────────────────────────────────────────────
@@ -484,11 +804,8 @@ class SavedViewBody extends StatelessWidget {
   }
 }
 
-// ── Error widget ──────────────────────────────────────────────────────────────
-
 class _ErrorWidget extends StatelessWidget {
   final VoidCallback onRetry;
-
   const _ErrorWidget({required this.onRetry});
 
   @override
@@ -498,7 +815,6 @@ class _ErrorWidget extends StatelessWidget {
         padding: EdgeInsets.all(32.r),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          // Aligns content correctly inside viewport limits
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.error_outline, size: 48.r, color: Colors.red),
@@ -522,8 +838,6 @@ class _ErrorWidget extends StatelessWidget {
   }
 }
 
-// ── Empty widget ──────────────────────────────────────────────────────────────
-
 class _EmptyWidget extends StatelessWidget {
   const _EmptyWidget();
 
@@ -534,7 +848,6 @@ class _EmptyWidget extends StatelessWidget {
         padding: EdgeInsets.all(48.r),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          // Aligns content correctly inside viewport limits
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.bookmark_border, size: 64.r, color: Colors.grey),
@@ -543,37 +856,6 @@ class _EmptyWidget extends StatelessWidget {
               AppStrings.noSavedProperties,
               style: AppStyles.medium16poppins.copyWith(color: Colors.grey),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ── Show more button ──────────────────────────────────────────────────────────
-
-class _ShowMoreButton extends StatelessWidget {
-  final String label;
-  final VoidCallback onTap;
-
-  const _ShowMoreButton({required this.label, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 16.h),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade100,
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(label, style: AppStyles.medium14poppins),
-            SizedBox(width: 6.w),
-            Icon(Icons.keyboard_arrow_down, size: 18.r),
           ],
         ),
       ),

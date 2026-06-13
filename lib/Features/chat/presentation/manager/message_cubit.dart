@@ -177,7 +177,6 @@
 //   }
 // }
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
@@ -195,6 +194,7 @@ class MessageCubit extends Cubit<MessageState> {
   final ChatRepo chatRepo;
   final ChatService chatService;
   final String otherUserId;
+   String? myUserId;
 
   bool _isServiceStarted = false;
   int? _chatId;
@@ -206,12 +206,12 @@ class MessageCubit extends Cubit<MessageState> {
     required this.chatRepo,
     required this.chatService,
     required this.otherUserId,
+    this.myUserId,
   }) : super(MessageInitial()) {
     log("🛠️ [MessageCubit] Initialized for: $otherUserId");
   }
 
   // --- 1. START CHAT & REFRESH LOGIC ---
-  // isRefresh: If true, fetches data without emitting MessageLoading()
   Future<void> startChat({required String otherUserId, bool isRefresh = false}) async {
     if (state is! MessageSuccess && !isRefresh) {
       emit(MessageLoading());
@@ -231,9 +231,15 @@ class MessageCubit extends Cubit<MessageState> {
 
         if (!isClosed) {
           if (isRefresh && state is MessageSuccess) {
-            // Update only the message list to keep staged files/previews intact
             final currentState = state as MessageSuccess;
-            emit(currentState.copyWith(messages: messagesList));
+            // On refresh, replace only real messages — keep any still-pending
+            // optimistic ones (id == -1) that haven't been confirmed yet
+            final pendingOptimistic = currentState.messages
+                .where((m) => m.id == -1)
+                .toList();
+            emit(currentState.copyWith(
+              messages: [...messagesList, ...pendingOptimistic],
+            ));
           } else {
             emit(MessageSuccess(
               messages: messagesList,
@@ -244,7 +250,6 @@ class MessageCubit extends Cubit<MessageState> {
           }
         }
 
-        // Initialize SignalR only once
         if (!_isServiceStarted) {
           _isServiceStarted = true;
           log("📡 [SignalR] Initializing Hub Connection...");
@@ -265,8 +270,8 @@ class MessageCubit extends Cubit<MessageState> {
       log("🎙️ [Voice] Checking microphone permissions...");
       if (await _audioRecorder.hasPermission()) {
         final directory = await getApplicationDocumentsDirectory();
-        final String filePath = '${directory.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
-
+        final String filePath =
+            '${directory.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
         log("🎙️ [Voice] Recording started: $filePath");
         await _audioRecorder.start(const RecordConfig(), path: filePath);
       } else {
@@ -276,16 +281,16 @@ class MessageCubit extends Cubit<MessageState> {
       log("❌ [Voice] Start Error: $e");
     }
   }
-// Add this inside your MessageCubit class
+
   Future<void> discardRecording() async {
     try {
-      // This stops the recorder but we ignore the returned path
       await _audioRecorder.stop();
       log("🗑️ [Voice] Recording discarded locally.");
     } catch (e) {
       log("❌ [Voice] Discard Error: $e");
     }
   }
+
   Future<void> stopAndSendRecording() async {
     try {
       final String? path = await _audioRecorder.stop();
@@ -321,7 +326,7 @@ class MessageCubit extends Cubit<MessageState> {
         if (state is MessageSuccess) {
           emit((state as MessageSuccess).copyWith(
             stagedFileName: fileName,
-            stagedFileBase64: filePath, // Storing the path for Multipart
+            stagedFileBase64: filePath,
           ));
           log("✅ [FilePicker] Staged: $fileName");
         }
@@ -339,39 +344,134 @@ class MessageCubit extends Cubit<MessageState> {
     final String? path = currentState.stagedFileBase64;
     final String? fileName = currentState.stagedFileName;
 
-    // Logic to determine API type
+    final bool hasText = text != null && text.trim().isNotEmpty;
+    final bool hasFile = path != null;
+    if (!hasText && !hasFile) return;
+
+    // Determine type
     String apiType = "Text";
-    if (path != null) {
+    if (hasFile) {
       apiType = _isImage(fileName) ? "Image" : "File";
     }
+
+    // Build optimistic message — shown immediately before API responds
+    final optimisticMessage = Messages(
+      id: -1,
+      content: hasText ? text : fileName,
+      senderId: myUserId ?? '',
+      sentAt: DateTime.now().toIso8601String(),
+      type: apiType,
+      fileUrl: path,
+    );
+
+    // Insert optimistic message and clear staged file right away
+    emit(currentState.copyWith(
+      messages: [...currentState.messages, optimisticMessage],
+      clearFile: true,
+    ));
 
     log("🚀 [SendMessage] Sending $apiType...");
 
     var result = await chatRepo.sendMessage(
       chatId: _chatId!,
-      content: text,
+      content: hasText ? text : null,
       filePath: path,
       type: apiType,
     );
 
+    // State may have changed while awaiting — grab the latest
+    if (state is! MessageSuccess) return;
+    final afterSendState = state as MessageSuccess;
+
     result.fold(
-          (failure) => log("❌ [SendMessage] Error: ${failure.errMessage}"),
+          (failure) {
+        log("❌ [SendMessage] Error: ${failure.errMessage}");
+        // Mark the optimistic message as failed by moving id -1 to failedMessageIds.
+        // We use the content as key since we have no real ID yet.
+        final failKey = hasText ? (text ?? 'file') : (fileName ?? 'file');
+        emit(afterSendState.copyWith(
+          failedMessageIds: {...afterSendState.failedMessageIds, failKey},
+        ));
+      },
           (success) {
         log("✨ [SendMessage] Success");
-        // Reset staged files after successful send
-        emit(currentState.copyWith(
-          stagedFileName: null,
-          stagedFileBase64: null,
-        ));
+        // Remove the optimistic message — SignalR refresh will bring the real one
+        final withoutOptimistic = afterSendState.messages
+            .where((m) => m.id != -1)
+            .toList();
+        emit(afterSendState.copyWith(messages: withoutOptimistic));
       },
     );
   }
+  Future<void> retrySendMessage(Messages failedMessage) async {
+    if (state is! MessageSuccess || _chatId == null) return;
+    final currentState = state as MessageSuccess;
 
+    final failKey = failedMessage.content ?? 'file';
+
+    // Remove from failed, mark as pending again
+    emit(currentState.copyWith(
+      failedMessageIds: currentState.failedMessageIds
+          .where((id) => id != failKey)
+          .toSet(),
+    ));
+
+    final String? path = failedMessage.fileUrl;
+    String apiType = failedMessage.type ?? "Text";
+
+    var result = await chatRepo.sendMessage(
+      chatId: _chatId!,
+      content: failedMessage.content,
+      filePath: path,
+      type: apiType,
+    );
+
+    if (state is! MessageSuccess) return;
+    final afterState = state as MessageSuccess;
+
+    result.fold(
+          (failure) {
+        log("❌ [Retry] Failed again: ${failure.errMessage}");
+        // Put it back in failed
+        emit(afterState.copyWith(
+          failedMessageIds: {...afterState.failedMessageIds, failKey},
+        ));
+      },
+          (success) {
+        log("✨ [Retry] Success");
+        // Remove the optimistic message — SignalR will bring the real one
+        final withoutOptimistic = afterState.messages
+            .where((m) => m.id != -1)
+            .toList();
+        emit(afterState.copyWith(messages: withoutOptimistic));
+      },
+    );
+  }
+  void deleteFailedMessage(Messages failedMessage) {
+    if (state is! MessageSuccess) return;
+    final currentState = state as MessageSuccess;
+    final failKey = failedMessage.content ?? 'file';
+
+    emit(currentState.copyWith(
+      messages: currentState.messages
+          .where((m) => !(m.id == -1 && m.content == failedMessage.content))
+          .toList(),
+      failedMessageIds: currentState.failedMessageIds
+          .where((id) => id != failKey)
+          .toSet(),
+    ));
+  }
   // --- HELPERS ---
   bool _isImage(String? fileName) {
     if (fileName == null) return false;
     final imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
     return imageExtensions.any((ext) => fileName.toLowerCase().endsWith(ext));
+  }
+
+  void clearStagedFile() {
+    if (state is MessageSuccess) {
+      emit((state as MessageSuccess).copyWith(clearFile: true));
+    }
   }
 
   @override

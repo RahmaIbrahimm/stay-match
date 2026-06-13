@@ -69,7 +69,7 @@ class ReviewsBody extends StatelessWidget {
 
               // ⑤ Count + sort — sort uses Overlay dropdown
               ReviewsHeader(
-                totalReviews: summary?.totalReviews ?? 0,
+                totalReviews: summary?.totalReviews?.toInt()?? 0,
                 currentSort: currentSort,
                 onSortChanged: onSortChanged,
               ),

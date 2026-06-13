@@ -1,12 +1,17 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:stay_match/Features/my_properties/data/models/my_properties_response.dart';
 import 'package:stay_match/Features/shared/widgets/card_cover_photo.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
+import 'package:stay_match/core/routing/app_routing.dart';
 import 'package:stay_match/core/widgets/custom_elevated_button.dart';
-import 'package:flutter/material.dart';
+
 import '../../../../core/constants/app_styles.dart';
+import '../manager/my_properties_cubit.dart';
 
 
 class PropertyCard extends StatelessWidget {
@@ -221,17 +226,25 @@ class PropertyCard extends StatelessWidget {
                     ),
                     const Spacer(),
                     // Trash Icon
-                    GestureDetector(
-                      onTap: () {},
-                      child: Icon(
-                        MdiIcons.trashCanOutline,
-                        color: const Color(0xff565B66),
-                        size: 20.sp,
+                    if(property.status?.toLowerCase() !=
+                        'rejected') GestureDetector(
+                      onTap: () {
+                        // todo : implement deleting it ?? is it implemented in back ?
+                        _showDeleteConfirmationDialog(context);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(4.r), // Padding makes it easier to tap on mobile
+                        child: Icon(
+                          MdiIcons.trashCanOutline,
+                          color: const Color(0xff565B66),
+                          size: 20.sp,
+                        ),
                       ),
                     ),
                     SizedBox(width: 8.w),
                     // Edit Button
-                    _buildActionButton(
+                    if(property.status?.toLowerCase() !=
+                        'rejected') _buildActionButton(
                       label: 'Edit',
                       icon: Icons.edit_outlined,
                       onPressed: () {},
@@ -244,7 +257,24 @@ class PropertyCard extends StatelessWidget {
                       property.status?.toLowerCase() == 'pending_approval'
                           ? 'Preview'
                           : 'Details',
-                      onPressed: () {},
+                      onPressed: () {
+                        // todo: implement for room too
+                        if (property.type?.toLowerCase() != null &&
+                            property.type!.isNotEmpty) {
+                          property.type?.toLowerCase() == 'shared'
+                              ? context.pushNamed(
+                            AppRouting.roomDetailsViewName,
+                            pathParameters: {
+                              'roomId': property.id.toString(),
+                              'propertyId': property.id.toString()
+                            },
+                          )
+                              : context.pushNamed(
+                            AppRouting.apartmentDetailsViewName,
+                            pathParameters: {'id': property.id.toString()},
+                          );
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -255,8 +285,175 @@ class PropertyCard extends StatelessWidget {
       ),
     );
   }
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        elevation: 24,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24.r), // The main outer boundary
+        ),
+        contentPadding: EdgeInsets.zero,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // 1. Premium Minimal Header
+            Padding(
+              padding: EdgeInsets.fromLTRB(24.w, 24.h, 24.w, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Remove Listing',
+                    style: AppStyles.bold16poppins.copyWith(
+                      color: AppColors.primary,
+                      letterSpacing: -0.3,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(dialogContext),
+                    child: Container(
+                      padding: EdgeInsets.all(6.r),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFF5F6F7),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.close, size: 16.sp, color: const Color(0xff565B66)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
-  Widget _buildActionButton({
+            // 2. Focused Context Message
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+              child: Text(
+                'Are you sure you want to permanently delete this listing from your dashboard?',
+                style: AppStyles.regular12manrope.copyWith(
+                  color: AppColors.textColorSecondary,
+                  height: 1.4,
+                ),
+              ),
+            ),
+
+            // 3. Mini Property Summary Card
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+              padding: EdgeInsets.all(10.r),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF8F9FA),
+                borderRadius: BorderRadius.circular(16.r),
+                border: Border.all(color: AppColors.stroke, width: 1),
+              ),
+              child: Row(
+                children: [
+                  // Mini Thumbnail
+                  Container(
+                    width: 50.r,
+                    height: 50.r,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.r),
+                      image: DecorationImage(
+                        image: NetworkImage(property.coverImageUrl ?? ''),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 12.w),
+                  // Text Context
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          property.name ?? 'Property Name',
+                          style: AppStyles.bold12poppins.copyWith(
+                            color: AppColors.primary,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 2.h),
+                        Text(
+                          '${property.city}, ${property.government}',
+                          style: AppStyles.regular12manrope.copyWith(
+                            color: AppColors.textColorSecondary,
+                          ).copyWith(fontSize: 10.sp),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 16.h),
+            const Divider(color: AppColors.stroke, height: 1),
+
+            // 4. Clean, Fully Rounded Action Strip
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFFFAFAFA),
+                // FIX: This rounds the bottom corners to match the main card perfectly!
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(24.r),
+                ),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+              child: Row(
+                children: [
+                  // Dismiss Action
+                  Expanded(
+                    child: SizedBox(
+                      height: 38.h,
+                      child: TextButton(
+                        onPressed: () => Navigator.pop(dialogContext),
+                        style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                        ),
+                        child: Text(
+                          'Cancel',
+                          style: AppStyles.bold12poppins.copyWith(
+                            color: AppColors.textColorSecondary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 16.w),
+                  // Destructive Action
+                  Expanded(
+                    child: SizedBox(
+                      height: 38.h,
+                      child: CustomElevatedButton(
+                        text: 'Delete Listing',
+                        onPressed: () {
+                          Navigator.pop(dialogContext);
+                          if (property.id != null) {
+                            context.read<MyPropertiesCubit>().deleteProperty(property.id!);
+                          }
+                        },
+                        backgroundColor: AppColors.textColorError,
+                        textColor: Colors.white,
+                        borderRadius: 12,
+                        textStyle: AppStyles.bold12poppins,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }  Widget _buildActionButton({
     required String label,
     IconData? icon,
     required VoidCallback onPressed,
@@ -266,7 +463,7 @@ class PropertyCard extends StatelessWidget {
       height: 30.h,
       child: CustomElevatedButton(
         text: label,
-        onPressed: () {},
+        onPressed: onPressed,
         verticalPadding: 8,
         backgroundColor: AppColors.containerColor,
         suffixIcon: icon != null ? Icon(icon, size: 12.sp, color: color) : null,

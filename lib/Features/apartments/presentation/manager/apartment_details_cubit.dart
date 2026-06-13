@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../data/models/apartment_details_response.dart';
+import '../../../shared/models/property_details_response.dart';
 import '../../data/repos/apartment_repo.dart';
 
 part 'apartment_details_state.dart';
@@ -15,17 +15,17 @@ class ApartmentDetailsCubit extends Cubit<ApartmentDetailsState> {
     _loadInitialData();
   }
 
-  ApartmentDetailsResponse? _cachedResponse;
+  PropertyDetailsResponse? _cachedResponse;
 
   Future<void> _loadInitialData() async {
     if (_cachedResponse != null) {
       emit(GetApartmentDetailsSuccess(response: _cachedResponse!));
     } else {
-      await getApartmentDetails(id: id);
+      await getPropertyDetails(id: id);
     }
   }
 
-  Future<void> getApartmentDetails({required int id}) async {
+  Future<void> getPropertyDetails({required int id}) async {
     emit(GetApartmentDetailsLoading());
 
     try {

@@ -1,11 +1,14 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:stay_match/Features/reviews/data/models/get_apartment_reviews.dart';
+import 'package:stay_match/Features/reviews/data/models/review_recommendations.dart';
+import 'package:stay_match/Features/reviews/data/models/write_review_response.dart';
 import 'package:stay_match/Features/reviews/data/repos/reviews_repo.dart';
 import 'package:stay_match/core/errors/failures.dart';
 import 'package:stay_match/core/networking/api_service.dart';
 
 import '../../../../core/networking/endpoints.dart';
+import '../models/write_review_request.dart';
 
 class ReviewsRepoImpl extends ReviewsRepo {
   final ApiService apiService;
@@ -44,6 +47,31 @@ class ReviewsRepoImpl extends ReviewsRepo {
       );
 
       return Right(GetApartmentReviews.fromJson(response));
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDioError(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, WriteReviewResponse>> writeReview({required WriteReviewRequest request})async {
+    try {
+      final response = await apiService.post(
+        Endpoints.addReview,
+        data: request.toJson(),
+      );
+      return Right(WriteReviewResponse.fromJson(response));
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDioError(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ReviewRecommendations>> getRecommendations() async{
+    try {
+      final response = await apiService.get(
+        Endpoints.reviewRecommendations,
+      );
+      return Right(ReviewRecommendations.fromJson(response));
     } on DioException catch (e) {
       return Left(ServerFailure.fromDioError(e));
     }

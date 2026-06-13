@@ -20,6 +20,7 @@ class RoomCard extends StatelessWidget {
     required this.city,
     required this.id,
     required this.rooms,
+    this.scaleUp = false,
   });
 
   final String? coverImageUrl;
@@ -28,7 +29,7 @@ class RoomCard extends StatelessWidget {
   final String? city;
   final List<AllRooms> rooms;
   final int id;
-
+  final bool scaleUp;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -92,7 +93,7 @@ class RoomCard extends StatelessWidget {
             name ?? 'No name',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: AppStyles.semiBold12poppins.copyWith(
+            style: (scaleUp?AppStyles.semiBold16poppins:AppStyles.semiBold12poppins).copyWith(
               color: AppColors.textColorPrimary,
             ),
           ),
@@ -112,7 +113,7 @@ class RoomCard extends StatelessWidget {
                   '${street ?? 'No street'}, ${city ?? 'No city'}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: AppStyles.medium10poppins.copyWith(
+                  style: (scaleUp?AppStyles.semiBold12poppins:AppStyles.medium10poppins).copyWith(
                     color: AppColors.textColorSecondary,
                   ),
                 ),
@@ -122,8 +123,8 @@ class RoomCard extends StatelessWidget {
         ),
         Divider(color: AppColors.textColorSecondary, thickness: 1.r),
         SizedBox(
-          height: 50.h,
-          child: RoomInPropertyData(rooms: rooms),
+          height:scaleUp?68.h: 50.h,
+          child: RoomInPropertyData(rooms: rooms,scaleUp: scaleUp,),
         ),
         Padding(
           padding: EdgeInsets.only(
@@ -136,11 +137,11 @@ class RoomCard extends StatelessWidget {
             width: double.infinity,
             child: SmallCustomButton(
               text: AppStrings.viewDetails,
-              textStyle: AppStyles.semiBold15poppins,
+              textStyle: scaleUp?AppStyles.semiBold16poppins:AppStyles.semiBold15poppins,
               onPressed: () {
                 context.pushNamed(
                   AppRouting.roomDetailsViewName,
-                  pathParameters: {'id': id.toString()},
+                  pathParameters: {'propertyId': id.toString()},
                 );
               },
             ),

@@ -20,13 +20,12 @@ class LocationCubit extends Cubit<LocationState> {
 
   LocationCubit({required this.locationRepository}) : super(LocationInitial());
 
-  Future<void> loadGovernorates() async {
+  Future<void> loadLocations() async {
     print('loadGovernorates called');
     emit(LocationLoading());
 
     var response = await locationRepository.getGovernorates();
     print('Response received: $response');
-
     response.fold(
       (fail) {
         print('Error: ${fail.errMessage}');
@@ -65,5 +64,8 @@ class LocationCubit extends Cubit<LocationState> {
     selectedCity = null;
     filteredCities = [];
     // Don't emit anything
+  }
+  void refreshCities(){
+    emit(GovernoratesLoadedState(allGovernorates));
   }
 }

@@ -1,3 +1,6 @@
+
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -34,7 +37,7 @@ class BookingRequestCubit extends Cubit<BookingRequestState> {
   String currentFilterKey = 'all';
   int deletedBookingId = -1;
   int canceledBookingId = -1;
-  String currentViewType = 'booking';
+  bool isFiltered = false;
   int? lastProcessedId;
   // ─── ORIGINAL FIELDS ───
   ApartmentBookingRequestRequest _apartmentRequest = ApartmentBookingRequestRequest(
@@ -204,8 +207,8 @@ class BookingRequestCubit extends Cubit<BookingRequestState> {
     renterSelectedYear = year;
     renterSelectedMonth = month;
     renterSelectedDay = day;
-    currentViewType =
-    (year != null || month != null || day != null) ? 'event' : 'booking';
+    isFiltered = (year != null || month != null || day != null) ? true : false ;
+    log("isFiltered: $isFiltered",name: "Filtered?");
     renterPagingController.refresh();
   }
 

@@ -38,7 +38,7 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
     super.initState();
     // Load data when widget is created
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<LocationCubit>().loadGovernorates();
+      context.read<LocationCubit>().loadLocations();
     });
   }
 
@@ -77,7 +77,7 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
                 SizedBox(height: 16.h),
                 ElevatedButton(
                   onPressed: () {
-                    context.read<LocationCubit>().loadGovernorates();
+                    context.read<LocationCubit>().loadLocations();
                   },
                   child: const Text('Retry'),
                 ),

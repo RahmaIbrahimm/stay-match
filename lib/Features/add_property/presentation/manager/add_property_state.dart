@@ -22,9 +22,11 @@ final class AddPropertyFormUpdated extends AddPropertyState {
 
 final class AddPropertySuccess extends AddPropertyState {
   final String message;
-  AddPropertySuccess({required this.message});
+  AddApartmentResponse? addApartmentResponse;
+  AddRoomResponse? addRoomResponse;
+  AddPropertySuccess({required this.message,this.addApartmentResponse,this.addRoomResponse});
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [message,addApartmentResponse,addRoomResponse];
 }
 
 final class AddPropertyFailure extends AddPropertyState {

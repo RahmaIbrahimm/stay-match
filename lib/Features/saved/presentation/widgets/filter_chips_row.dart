@@ -20,9 +20,12 @@ class FilterChipsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int totalProperties = (stats?.rooms ?? 0) +
+        (stats?.wholeApartments?? 0) +
+        (stats?.sharedHouses ?? 0);
     final filters = [
       _FilterItem(
-        label: 'All (${stats?.rooms ?? 0})',
+        label: 'All ($totalProperties)',
         value: 'all',
       ),      _FilterItem(
         label: '${AppStrings.rooms} (${stats?.rooms ?? 0})',

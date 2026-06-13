@@ -21,6 +21,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   UpdateProfileRequest? _request;
   File? pickedImageFile;
+  File? pickedIdImageFile;
   late bool hasProfilePic;
   ProfileCubit({required this.profileRepo}) : super(ProfileInitial()) {
     getProfileData();
@@ -30,25 +31,28 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (state is! ProfileSuccess || _request == null) return false;
     final original = (state as ProfileSuccess).response.data;
 
-    final originalRequest = UpdateProfileRequest(
-      firstName: original?.firstName,
-      lastName: original?.lastName,
-      fullName: original?.fullName,
-      phoneNumber: original?.phoneNumber,
-      gender: original?.gender,
-      governorate: original?.governorate,
-      city: original?.city,
-      university: original?.university,
-      fieldOfStudy: original?.fieldOfStudy,
-      jobTitle: original?.jobTitle,
-      aboutMe: original?.aboutMe,
-    );
+    final hasTextChanges =
+        _request?.fullName != original?.fullName ||
+            _request?.phoneNumber != original?.phoneNumber ||
+            _request?.gender != original?.gender ||
+            _request?.governorate != original?.governorate ||
+            _request?.city != original?.city ||
+            _request?.fieldOfStudy != original?.fieldOfStudy ||
+            _request?.jobTitle != original?.jobTitle ||
+            _request?.aboutMe != original?.aboutMe ||
+            _request?.birthDate != original?.birthDate ||
+            _request?.idImage != original?.idImage;
 
-    final dirty = _request != originalRequest || pickedImageFile != null;
-    log('🔍 Checking isDirty: $dirty (Request changed: ${_request != originalRequest}, Image picked: ${pickedImageFile != null})');
+    final hasPasswordChange = _request?.password != null &&
+        _request!.password!.isNotEmpty;
+
+    final dirty = hasTextChanges || hasPasswordChange ||
+        pickedImageFile != null || pickedIdImageFile != null;
+    log(
+        '🔍 isDirty: $dirty (text: $hasTextChanges, pass: $hasPasswordChange, img: ${pickedImageFile !=
+            null})');
     return dirty;
   }
-
   UpdateProfileRequest? get request => _request;
 
   Future<void> getProfileData() async {
@@ -79,13 +83,16 @@ class ProfileCubit extends Cubit<ProfileState> {
             fieldOfStudy: data?.fieldOfStudy,
             jobTitle: data?.jobTitle,
             aboutMe: data?.aboutMe,
+            birthDate: data?.birthDate,
+            idImage: data?.idImage,
           );
           hasProfilePic = profileResponse.data?.profilePicture != null;
           emit(ProfileSuccess(response: profileResponse));
           final cacheHelper = getIt.get<CacheService>();
           await cacheHelper.setData(key: cacheHelper.userProfilePicKey, value:profileResponse.data?.profilePicture);
           await cacheHelper.setData(key: cacheHelper.userNameKey,value:  profileResponse.data?.fullName);
-        } else {
+        }
+        else {
           log('⚠️ Profile Fetch Error: ${profileResponse.message}');
           emit(ProfileFailure(errMessage: profileResponse.message ?? 'Error'));
         }
@@ -111,6 +118,20 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
+  Future<void> pickIdImage() async {
+    log('📸 Opening Gallery for National ID Image...');
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      pickedIdImageFile = File(image.path);
+      log('🖼️ ID Image Selected: ${image.path}');
+
+      // Update request structure with local file path string directly
+      updateRequest(UpdateProfileRequest(idImage: image.path));
+    }
+  }
+
   void updateRequest(UpdateProfileRequest update) {
     if (_request == null || state is! ProfileSuccess) return;
 
@@ -130,6 +151,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       aboutMe: update.aboutMe ?? _request?.aboutMe,
       password: update.password ?? _request?.password,
       passwordConfirmation: update.passwordConfirmation ?? _request?.passwordConfirmation,
+      idImage: update.idImage ?? _request?.idImage,
     );
 
     if (newRequest != _request) {
@@ -142,57 +164,46 @@ class ProfileCubit extends Cubit<ProfileState> {
       log('📝 Draft Updated: ${_request?.fullName}');
     }
   }
-
   Future<void> saveProfileChanges() async {
-    if (_request == null || state is! ProfileSuccess) {
-      log('🛑 Save cancelled: Request is null or state is not Success');
-      return;
-    }
+    if (_request == null || state is! ProfileSuccess) return;
     final original = (state as ProfileSuccess).response.data;
 
-    final originalRequest = UpdateProfileRequest(
-      firstName: original?.firstName,
-      lastName: original?.lastName,
-      fullName: original?.fullName,
-      phoneNumber: original?.phoneNumber,
-      gender: original?.gender,
-      governorate: original?.governorate,
-      city: original?.city,
-      university: original?.university,
-      fieldOfStudy: original?.fieldOfStudy,
-      jobTitle: original?.jobTitle,
-      aboutMe: original?.aboutMe,
-    );
-    log('💾 Saving Profile Changes...');
+    final hasTextChanges =
+        _request?.fullName != original?.fullName ||
+            _request?.phoneNumber != original?.phoneNumber ||
+            _request?.gender != original?.gender ||
+            _request?.governorate != original?.governorate ||
+            _request?.city != original?.city ||
+            _request?.fieldOfStudy != original?.fieldOfStudy ||
+            _request?.jobTitle != original?.jobTitle ||
+            _request?.aboutMe != original?.aboutMe ||
+            _request?.birthDate != original?.birthDate ||
+            _request?.idImage != original?.idImage ||
+            pickedIdImageFile != null;
+
+    final hasPasswordChange = _request?.password != null &&
+        _request!.password!.isNotEmpty;
+
     emit(ProfileLoading());
 
-
-    if (originalRequest != _request) {
+    if (hasTextChanges || hasPasswordChange) {
       log('📤 Updating Text Info...');
       var result = await profileRepo.updateProfile(request: _request!);
       result.fold(
             (fail) {
-          log('❌ Profile Update Failed: ${fail.errMessage}');
           emit(ProfileFailure(errMessage: fail.errMessage));
+          return;
         },
-            (success) async {
-          log('✅ Profile Info Saved');
-          await getProfileData();
-        },
+            (success) => log('✅ Profile Info Saved'),
       );
     }
 
     if (pickedImageFile != null) {
-      log('📤 Image changed, starting upload...');
       hasProfilePic ? await updateProfileImg() : await uploadProfileImg();
     }
 
-    if (isDirty) {
-      log('🔄 Re-syncing Profile Data...');
-      await getProfileData();
-    }
+    await getProfileData();
   }
-
   Future<void> uploadProfileImg() async {
     if (pickedImageFile == null) return;
 
@@ -213,8 +224,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
   }
   Future<void> updateProfileImg() async {
-    if (pickedImageFile == null) return;
-
     log('🚀 Uploading Profile Image...');
     emit(ProfileLoading());
 
@@ -228,6 +237,35 @@ class ProfileCubit extends Cubit<ProfileState> {
         log('✅ Profile Image Upload Success');
         pickedImageFile = null; // Clear after success
         await getProfileData();
+      },
+    );
+  }
+
+  Future<void> deleteProfilePic() async {
+    // Guard check against the cubit's tracking flag instead of the local file
+    if (!hasProfilePic && pickedImageFile == null) {
+      log('🛑 No picture exists to delete.');
+      return;
+    }
+
+    log('🚀 Starting profile picture removal sequence...');
+    emit(ProfileLoading());
+
+    var res = await profileRepo.deleteProfilePic();
+
+    res.fold(
+          (fail) {
+        log('❌ Repository delete request failed: ${fail.errMessage}');
+        emit(ProfileFailure(errMessage: fail.errMessage));
+      },
+          (resp) async {
+        if (resp.success == true) {
+          log('✅ Server picture deleted successfully.');
+          pickedImageFile = null;
+          await getProfileData();
+        } else {
+          emit(ProfileFailure(errMessage: "Error Deleting Profile Picture"));
+        }
       },
     );
   }

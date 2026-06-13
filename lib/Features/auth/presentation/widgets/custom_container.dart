@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/constants/app_colors.dart';
 
@@ -8,12 +9,12 @@ class CustomContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 16),
+      margin:  EdgeInsets.symmetric(horizontal: 16.w),
+      padding:  EdgeInsets.symmetric(vertical: 50.h, horizontal: 16.w),
       width: double.infinity,
       decoration: BoxDecoration(
         color: AppColors.containerColor,
-        borderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(50.r),
         border: Border.all(color: Colors.black),
       ),
       child: containerBody,

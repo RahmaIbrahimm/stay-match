@@ -1,10 +1,14 @@
 
-import 'dart:developer';
-
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:stay_match/Features/add_property/data/models/upload_image_response.dart';
 import 'package:http_parser/http_parser.dart'; // Add this package
+import 'package:stay_match/Features/add_property/data/models/update_entire_property_request.dart';
+import 'package:stay_match/Features/add_property/data/models/update_entire_property_response.dart';
+import 'package:stay_match/Features/add_property/data/models/update_shared_property_request.dart';
+import 'package:stay_match/Features/add_property/data/models/update_shared_space_response.dart';
+import 'package:stay_match/Features/add_property/data/models/upload_image_response.dart';
+import 'package:stay_match/Features/shared/models/property_details_response.dart';
+
 import '../../../../core/errors/failures.dart';
 import '../../../../core/networking/api_service.dart';
 import '../../../../core/networking/endpoints.dart';
@@ -30,7 +34,8 @@ class AddPropertyRepoImpl extends AddPropertyRepo {
         data: request.toJson(),
       );
 
-      return Right(AddApartmentResponse.fromJson(response.data));
+      return Right(AddApartmentResponse.fromJson(response));
+      // return Right(AddApartmentResponse.fromJson(response.data));
     } on DioException catch (e) {
       // Handle specific Dio/Server errors here
       return Left(ServerFailure.fromDioError(e));
@@ -83,6 +88,47 @@ class AddPropertyRepoImpl extends AddPropertyRepo {
     }
   }
 
+  @override
+  Future<Either<Failure, UpdateEntirePropertyResponse>> updateApartment(
+      {required UpdateEntirePropertyRequest request, required int id}) async {
+    try {
+      final response = await apiService.post(
+        Endpoints.updateEntireProperty(id),
+        data: request.toJson(),
+      );
 
+      return Right(UpdateEntirePropertyResponse.fromJson(response));
+    } on DioException catch (e) {
+      // Handle specific Dio/Server errors here
+      return Left(ServerFailure.fromDioError(e));
+    }
+  }
 
+  @override
+  Future<Either<Failure, UpdateSharedSpaceResponse>> updateRoom(
+      {required UpdateSharedPropertyRequest request, required int id}) async {
+    try {
+      final response = await apiService.put(
+        Endpoints.updateSharedProperty(id),
+        data: request.toJson(),
+      );
+
+      return Right(UpdateSharedSpaceResponse.fromJson(response));
+    } on DioException catch (e) {
+      // Handle specific Dio/Server errors here
+      return Left(ServerFailure.fromDioError(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, PropertyDetailsResponse>> getPropertyDetails({required int id}) async {
+    try {
+      final response = await apiService.get(
+        '${Endpoints.getPropertyDetails}$id',
+      );
+      return Right(PropertyDetailsResponse.fromJson(response));
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDioError(e));
+    }
+  }
 }

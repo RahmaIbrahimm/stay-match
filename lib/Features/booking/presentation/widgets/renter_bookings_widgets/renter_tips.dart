@@ -7,8 +7,8 @@ import 'package:stay_match/Features/booking/presentation/manager/booking_request
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_styles.dart';
 
-class RenterTips extends StatelessWidget {
-  const RenterTips({super.key});
+class FilterByLocationAndCalendar extends StatelessWidget {
+  const FilterByLocationAndCalendar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -81,10 +81,10 @@ class RenterTips extends StatelessWidget {
 
   void _showFlexibleDateFilterBottomSheet(BuildContext context,
       BookingRequestCubit cubit) {
-    int? selectedYear;
-    int? selectedMonth;
-    int? selectedDay;
-    String? errorMessage; // Added for internal validation state
+    int? selectedYear = cubit.renterSelectedYear;
+    int? selectedMonth = cubit.renterSelectedMonth;
+    int? selectedDay = cubit.renterSelectedDay;
+    String? errorMessage;
 
     showModalBottomSheet(
       context: context,
@@ -97,7 +97,6 @@ class RenterTips extends StatelessWidget {
         var start = DateTime.now().subtract(Duration(days: 10*365));
         List<int?> years = List.generate(15, (i) => start.year + i);
         years.insert(0, null);
-        print(years);
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
             return Padding(

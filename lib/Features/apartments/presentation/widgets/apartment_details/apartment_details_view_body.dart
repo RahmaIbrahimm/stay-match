@@ -18,14 +18,14 @@ import 'package:stay_match/core/widgets/location_row.dart';
 import '../../../../google_maps/presentation/views/google_maps_view.dart';
 import '../../../../google_maps/presentation/widgets/maps_helper.dart';
 import '../../../../shared/widgets/amenities_widget.dart';
-import '../../../data/models/apartment_details_response.dart';
+import '../../../../shared/models/property_details_response.dart';
 import '../../manager/apartment_details_cubit.dart';
 import 'apartment_about_sliver.dart';
-import 'basic_features_sliver.dart';
+import '../../../../shared/widgets/basic_features_sliver.dart';
 import 'duration_selector.dart';
-import 'failure_state_widget.dart';
-import 'host_name_sliver.dart';
-import 'property_name_sliver.dart';
+import '../../../../shared/widgets/failure_state_widget.dart';
+import '../../../../shared/widgets/host_name_sliver.dart';
+import '../../../../shared/widgets/property_name_sliver.dart';
 
 class ApartmentDetailsViewBody extends StatefulWidget {
   const ApartmentDetailsViewBody({super.key, required this.id});
@@ -270,12 +270,20 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                       LocationRow(city: details.city, street: details.street),
                       // todo: implement view reviews
                       SizedBox(
-                        width: 160,
+                        width: 155.w,
                         child: CustomElevatedButton(
                           verticalPadding: 4.r,
                           horizontalPadding: 16.r,
                           text: AppStrings.viewReviews,
-                          onPressed: () {},
+                          onPressed: () {
+                            if (context.mounted) {
+                              context.pushNamed(
+                                AppRouting.apartmentReviewsName,
+                                pathParameters: {
+                                  "propertyId": details.id.toString()
+                                });
+                            }
+                          },
                           backgroundColor: AppColors.bgGrey,
                           borderColor: AppColors.primary,
                           borderRadius: 10.r,
@@ -427,7 +435,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                 numBathrooms: numBathrooms,
               ),
               SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-              ApartmentAboutSliver(details: details),
+              PropertyAboutSliver(details: details),
               SliverToBoxAdapter(child: SizedBox(height: 16.h)),
               // amenities  title
               SliverToBoxAdapter(
@@ -546,7 +554,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
   }
 
   RPadding _buildButtons(
-      {required String hostId, required String? startDate, required ApartmentDetailsData?
+      {required String hostId, required String? startDate, required PropertyDetailsData?
       details, required int? duration, required int? propertyId}) {
     return RPadding(
       padding: const EdgeInsets.all(16),
@@ -592,7 +600,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
     );
   }
 
-  void _onBookNowPressed({required ApartmentDetailsData?
+  void _onBookNowPressed({required PropertyDetailsData?
   details}) {
     // 1. Check for nulls
     if (moveInDate == null || duration == null) {
@@ -627,7 +635,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
       );
     }
   }
-  RichText deposit(ApartmentDetailsData details) {
+  RichText deposit(PropertyDetailsData details) {
     return RichText(
       text: TextSpan(
         children: [
@@ -648,7 +656,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
     );
   }
 
-  RichText minimumStay(ApartmentDetailsData details) {
+  RichText minimumStay(PropertyDetailsData details) {
     return RichText(
       text: TextSpan(
         children: [

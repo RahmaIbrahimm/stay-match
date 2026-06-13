@@ -19,7 +19,7 @@ class ApartmentDetailsView extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           ApartmentDetailsCubit(getIt.get<ApartmentRepoImpl>(), id)
-            ..getApartmentDetails(id: id),
+            ..getPropertyDetails(id: id),
       child: Scaffold(
         backgroundColor: AppColors.darkerGrey,
         extendBodyBehindAppBar: true,

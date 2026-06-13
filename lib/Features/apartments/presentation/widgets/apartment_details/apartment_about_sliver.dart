@@ -4,12 +4,12 @@ import 'package:readmore/readmore.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_styles.dart';
-import '../../../data/models/apartment_details_response.dart';
+import '../../../../shared/models/property_details_response.dart';
 
-class ApartmentAboutSliver extends StatelessWidget {
-  const ApartmentAboutSliver({super.key, required this.details});
+class PropertyAboutSliver extends StatelessWidget {
+  const PropertyAboutSliver({super.key, required this.details});
 
-  final ApartmentDetailsData details;
+  final PropertyDetailsData details;
 
   @override
   Widget build(BuildContext context) {

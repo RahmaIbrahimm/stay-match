@@ -40,6 +40,7 @@ class ApartmentCard extends StatelessWidget {
               size: property?.size?.toInt(),
               id: property?.id,
               scaleUp: scaleUp,
+                initialSavedStatus:property?.isSaved ?? false
             ),
           ),
         ],

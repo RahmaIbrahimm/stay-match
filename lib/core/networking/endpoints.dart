@@ -10,7 +10,7 @@ abstract class Endpoints {
   // home
   static const String getAllRooms = '/api/Property/GetAllWithRooms';
   static const String getAllApartments = '/api/Property';
-  static const String getApartmentDetails = '/api/Property/';
+  static const String getPropertyDetails = '/api/Property/';
   static const String refreshToken = '/api/Account/refresh-token';
   static const String logout = '/api/Account/logout-all';
   // chat
@@ -25,11 +25,13 @@ abstract class Endpoints {
   static const String addRoom = '/api/Property/AddSharedProperty';
   static const String uploadImage = '/api/Property/upload-image';
   static const String myProperties = '/api/Property/MyProperty';
+  // profile
   static const String profileData = '/api/UserProfile';
   static const String updateProfile = '/api/UserProfile';
   static const String updateProfilePic = '/api/UserProfile/UpdateProfilePicture';
   static const String uploadProfilePic = '/api/UserProfile/UploadProfilePicture';
   static const String deleteAccount = '/api/UserProfile/delete-account';
+  static const String deleteProfilePic = '/api/UserProfile/DeleteProfilePicture';
   // booking
   static const String  requestApartmentBooking= '/api/Booking/entire-apartment';
   static const String  requestRoomBooking= '/api/Booking/room';
@@ -52,8 +54,31 @@ abstract class Endpoints {
   static String Function(int) deleteBookingRequests = (int id) {
     return "/api/Booking/$id";
   };
+  static String Function(int) updateEntireProperty = (int id) {
+    return "/api/Property/UpdateEntireProperty/$id";
+  };
+  static String Function(int) updateSharedProperty = (int id) {
+    return "/api/Property/UpdateSharedProperty/$id";
+  };
+  static String Function(int) deleteProperty = (int id) {
+    return "/api/Property/properties/$id";
+  };
+  // home search
+  static const String homeSearch = '/api/Property/search';
+  // reviews
   static String Function(int) getApartmentReviews = (int id) {
     return "/api/Review/property/$id";
+  };
+  static String addReview = '/api/Review/AddReview';
+  static String reviewRecommendations = '/api/Review/recommendations';
+  // other user profile
+  static String Function(String)  otherUserProfile= (String id) {
+    return "/api/ViewUserProfile/$id";
+  };
+  // payment
+  static const String paymentRedirectLink = '/api/Payment/create-payment-token?';
+  static String Function(int) bookingDetails = (int id) {
+    return "/api/Booking/$id";
   };
 
   // client ids uses for google login

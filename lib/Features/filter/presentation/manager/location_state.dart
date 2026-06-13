@@ -31,3 +31,10 @@ class LocationErrorState extends LocationState {
   @override
   List<Object?> get props => [message, details];
 }
+class GovernorateChangedState extends LocationState {
+  final bool refresh;
+  const GovernorateChangedState({required this.refresh});
+
+  @override
+  List<Object?> get props => [];
+}

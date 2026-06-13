@@ -53,12 +53,72 @@ abstract class AppStyles {
     );
   }
 
+  static TextStyle _inter({
+    required double fontSize,
+    required FontWeight fontWeight,
+    Color? color,
+  }) {
+    return GoogleFonts.inter(
+      fontSize: fontSize.sp, // Make font size responsive
+      fontWeight: fontWeight,
+      color: color,
+    );
+  }
+  // Helper method for plus jakarta sans font
+  static TextStyle _plusJakartaSans({
+    required double fontSize,
+    required FontWeight fontWeight,
+    Color? color,
+  }) {
+    return GoogleFonts.plusJakartaSans(
+      fontSize: fontSize.sp, // Make font size responsive
+      fontWeight: fontWeight,
+      color: color,
+    );
+  }
+
+  // ---------------- Inter -----------------------
+  static TextStyle get bold16inter =>
+      _inter(fontSize: 16, fontWeight: FontWeight.bold);
+
+  static TextStyle get semiBold16inter =>
+      _inter(fontSize: 16, fontWeight: FontWeight.w600);
+
+  static TextStyle get medium16inter =>
+      _inter(fontSize: 16, fontWeight: FontWeight.w500);
+
+  static TextStyle get medium12inter =>
+      _inter(fontSize: 12, fontWeight: FontWeight.w500);
+
+  static TextStyle get regular16inter =>
+      _inter(fontSize: 16, fontWeight: FontWeight.normal);
+
+  static TextStyle get regular14inter =>
+      _inter(fontSize: 14, fontWeight: FontWeight.normal);
+
+  static TextStyle get bold10inter =>
+      _inter(fontSize: 10, fontWeight: FontWeight.bold);
+
+  static TextStyle get bold12inter =>
+      _inter(fontSize: 12, fontWeight: FontWeight.bold);
   // ---------------- PROTEST RIOT ----------------
   static TextStyle get regular15protestRiot =>
       _protestRiot(fontSize: 15, fontWeight: FontWeight.normal);
 
   static TextStyle get regular20protestRiot =>
       _protestRiot(fontSize: 20, fontWeight: FontWeight.normal);
+  // ---------------- Manrope ----------------
+  static TextStyle get bold14manrope =>
+      _manrope(fontSize: 16, fontWeight: FontWeight.bold);
+  static TextStyle get semiBold16manrope =>
+      _manrope(fontSize: 16, fontWeight: FontWeight.w600);
+  static TextStyle get bold12manrope =>
+      _manrope(fontSize: 12, fontWeight: FontWeight.bold);
+  // ---------------- Plus Jakarta Sans ----------------
+  static TextStyle get bold24plusJakartaSans =>
+      _plusJakartaSans(fontSize: 24, fontWeight: FontWeight.bold);
+  static TextStyle get semiBold24plusJakartaSans =>
+      _plusJakartaSans(fontSize: 24, fontWeight: FontWeight.w600);
 
   // ---------------- POPPINS - 28 ----------------
   static TextStyle get bold28poppins =>
@@ -189,13 +249,6 @@ abstract class AppStyles {
 
   static TextStyle get regular8poppins =>
       _poppins(fontSize: 8, fontWeight: FontWeight.normal);
-
-  // ---------------- Manrope ----------------
-
-  // ---------------- POPPINS - 16 ----------------
-  static TextStyle get bold14manrope =>
-      _manrope(fontSize: 16, fontWeight: FontWeight.bold);  static TextStyle get semiBold16manrope =>
-      _manrope(fontSize: 16, fontWeight: FontWeight.w600);
 
   // ---------------- POPPINS - 14 ----------------
   static TextStyle get semiBold14manrope =>

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stay_match/Features/apartments/data/models/apartment_details_response.dart';
+import 'package:stay_match/Features/shared/models/property_details_response.dart';
 
 class Apartmentdetailshelper {
   static String getMonth(int month) {
@@ -19,7 +19,7 @@ class Apartmentdetailshelper {
     ];
     return months[month - 1];
   }
-  static List<Map<String, dynamic>> getAllAvailableAmenities(ApartmentAmenities amenities) {
+  static List<Map<String, dynamic>> getAllAvailableAmenities(PropertyAmenities amenities) {
     return [
       if(amenities.wifi ?? false){'name': 'WiFi', 'icon': Icons.wifi, 'available': amenities.wifi, 'key': 'wifi'},
       if(amenities.tv ?? false){'name': 'TV', 'icon': Icons.tv, 'available': amenities.tv, 'key': 'tv'},
@@ -38,7 +38,7 @@ class Apartmentdetailshelper {
   }
 
   // 2. This is what you use for the "Apartment Details" view (only shows what exists).
-  static List<Map<String, dynamic>> getAmenitiesWithIcons(ApartmentAmenities? amenities) {
+  static List<Map<String, dynamic>> getAmenitiesWithIcons(PropertyAmenities? amenities) {
     if (amenities == null) return [];
     return getAllAvailableAmenities(amenities)
         .where((a) => a['available'] == true)

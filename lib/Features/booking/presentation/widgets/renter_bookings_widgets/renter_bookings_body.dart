@@ -23,12 +23,11 @@ class RenterBookingsBody extends StatelessWidget {
     return BlocListener<BookingRequestCubit, BookingRequestState>(
       listener: (context, state) {
         if (state is BookingRequestSuccess && state.deleteBooking != null) {
-        // if (state is BookingRequestSuccess && state.deleteBooking != null) {
           AppKeys.rootScaffoldMessengerKey.currentState
               ?.removeCurrentSnackBar();
           AppKeys.rootScaffoldMessengerKey.currentState?.showSnackBar(
             SnackBar(
-              content:  Text(state.successMessage ?? "Success!"),
+              content:  Text(state.successMessage ?? "Success!",style: AppStyles.semiBold14poppins.copyWith(color: Colors.white),),
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16.r),
@@ -44,14 +43,6 @@ class RenterBookingsBody extends StatelessWidget {
             currentState.itemList ?? [],
           )..removeWhere((item) => item.id == cubit.deletedBookingId);
           controller.itemList = updatedItems;
-          // if(cubit.deletedBookingId != -1){
-          //
-          // }
-          // else if(cubit.canceledBookingId != -1){
-          //   // final updatedItems = List<RenterBookings>.from(
-          //   //   currentState.itemList ?? [],
-          //   // )..removeWhere((item) => item.id == cubit.canceledBookingId);
-          // }
           cubit.deletedBookingId = -1;
           cubit.canceledBookingId = -1;
         }
@@ -86,7 +77,7 @@ class RenterBookingsBody extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(height: 12.h),
-                    const RenterTips(),
+                    const FilterByLocationAndCalendar(),
                     SizedBox(height: 16.h),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -126,9 +117,7 @@ class RenterBookingsBody extends StatelessWidget {
               const FilterTabs(),
               BlocBuilder<BookingRequestCubit, BookingRequestState>(
                 builder: (context, state) {
-                  var type = cubit.currentViewType;
                   // todo: add events to card
-                  bool isBooking = type == 'booking';
                   return PagedSliverList<int, dynamic>(
                     pagingController: cubit.renterPagingController,
                     builderDelegate: PagedChildBuilderDelegate<dynamic>(
@@ -138,7 +127,7 @@ class RenterBookingsBody extends StatelessWidget {
                             horizontal: 24.w,
                             vertical: 4.h,
                           ),
-                          child: RenterBookingRequestCard(booking:  booking),
+                          child: RenterBookingRequestCard(bookings:  booking),
                         );
                       },
                       noItemsFoundIndicatorBuilder: (context) => Center(
@@ -170,7 +159,6 @@ class RenterBookingsBody extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // ─── OPTIONAL: Add a loading indicator for the initial fetch ───
                       firstPageProgressIndicatorBuilder: (context) =>
                           const Center(child: CircularProgressIndicator(color: AppColors.primary,)),
                     ),

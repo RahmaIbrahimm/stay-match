@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -24,7 +25,6 @@ class GoogleMapsView extends StatefulWidget {
   final double? initialLatitude;
   final double? initialLongitude;
   final MapViewType mapView; // New parameter to control AppBar
-  // Callback when a location is picked (only for MapContext.picker)
   final void Function(LatLng)? onLocationSelected;
 
   // Is this map for picking a location or just viewing?
@@ -147,7 +147,7 @@ class _GoogleMapsViewState extends State<GoogleMapsView> {
       backgroundColor: isStatic ? Colors.transparent : Colors.white,
 
       // 1. App Bar (Only in Picker Mode)
-      appBar: isPartial ? null : _buildPickerAppBar(),
+      appBar: isPartial ? null : _buildPickerAppBar(isStatic: isStatic),
       // 2. Google Map Body
       body: GoogleMap(
         onMapCreated: _onMapCreated,
@@ -159,12 +159,6 @@ class _GoogleMapsViewState extends State<GoogleMapsView> {
 
         // --- THIS LOCKS THE MAP DOWN (Static Controls) ---
         onTap: isStatic ? null : _onMapTap,
-        // scrollGesturesEnabled: !isStatic,
-        // zoomGesturesEnabled: !isStatic,
-        // rotateGesturesEnabled: !isStatic,
-        // tiltGesturesEnabled: !isStatic,
-
-        // Hide UI elements in static mode for a clean preview
         myLocationEnabled: !isStatic,
         myLocationButtonEnabled: !isStatic,
         // zoomControlsEnabled: !isStatic,
@@ -173,7 +167,7 @@ class _GoogleMapsViewState extends State<GoogleMapsView> {
     );
   }
 
-  PreferredSizeWidget _buildPickerAppBar() {
+  PreferredSizeWidget _buildPickerAppBar({required bool isStatic}) {
     return AppBar(
       backgroundColor: AppColors.containerColor,
       elevation: 1,
@@ -181,11 +175,12 @@ class _GoogleMapsViewState extends State<GoogleMapsView> {
         icon: const Icon(Icons.arrow_back, color: Colors.black),
         onPressed: () => context.pop(), // GoRouter context.pop
       ),
+      centerTitle: true,
       title: Text(
-        'Select Location',
-        style: AppStyles.semiBold18poppins.copyWith(color: Colors.black),
+        !isStatic ? 'Select Location' : 'Location',
+        style: AppStyles.semiBold20poppins.copyWith(color: Colors.black),
       ),
-      actions: [
+      actions: isStatic ? null : [
         CustomTextButton(
           onPressed: () {
             // Returns selected LatLng to the previous screen
