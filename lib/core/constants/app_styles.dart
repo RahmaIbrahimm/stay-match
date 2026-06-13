@@ -52,6 +52,18 @@ abstract class AppStyles {
       color: color,
     );
   }
+
+  static TextStyle _inter({
+    required double fontSize,
+    required FontWeight fontWeight,
+    Color? color,
+  }) {
+    return GoogleFonts.inter(
+      fontSize: fontSize.sp, // Make font size responsive
+      fontWeight: fontWeight,
+      color: color,
+    );
+  }
   // Helper method for plus jakarta sans font
   static TextStyle _plusJakartaSans({
     required double fontSize,
@@ -65,6 +77,30 @@ abstract class AppStyles {
     );
   }
 
+  // ---------------- Inter -----------------------
+  static TextStyle get bold16inter =>
+      _inter(fontSize: 16, fontWeight: FontWeight.bold);
+
+  static TextStyle get semiBold16inter =>
+      _inter(fontSize: 16, fontWeight: FontWeight.w600);
+
+  static TextStyle get medium16inter =>
+      _inter(fontSize: 16, fontWeight: FontWeight.w500);
+
+  static TextStyle get medium12inter =>
+      _inter(fontSize: 12, fontWeight: FontWeight.w500);
+
+  static TextStyle get regular16inter =>
+      _inter(fontSize: 16, fontWeight: FontWeight.normal);
+
+  static TextStyle get regular14inter =>
+      _inter(fontSize: 14, fontWeight: FontWeight.normal);
+
+  static TextStyle get bold10inter =>
+      _inter(fontSize: 10, fontWeight: FontWeight.bold);
+
+  static TextStyle get bold12inter =>
+      _inter(fontSize: 12, fontWeight: FontWeight.bold);
   // ---------------- PROTEST RIOT ----------------
   static TextStyle get regular15protestRiot =>
       _protestRiot(fontSize: 15, fontWeight: FontWeight.normal);
