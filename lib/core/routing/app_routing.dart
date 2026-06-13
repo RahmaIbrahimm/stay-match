@@ -10,6 +10,8 @@ import 'package:stay_match/Features/chat/presentation/views/messages_view.dart';
 import 'package:stay_match/Features/filter/presentation/manager/location_cubit.dart';
 import 'package:stay_match/Features/google_maps/presentation/views/google_maps_view.dart';
 import 'package:stay_match/Features/home/presentation/views/home_view.dart';
+import 'package:stay_match/Features/other_user_profile/presentation/views/other_user_profile_view.dart';
+import 'package:stay_match/Features/payment/presentation/views/pay_credit_view.dart';
 import 'package:stay_match/Features/profile/presentation/manager/profile_cubit.dart';
 import 'package:stay_match/Features/profile/presentation/views/profile_view.dart';
 import 'package:stay_match/Features/reviews/presentation/views/add_review_view.dart';
@@ -99,6 +101,10 @@ class AppRouting {
   static const reviewSubmittedPath = '/review-submitted';
   static const addReviewPath = '/add-review';
 
+  // other user profile
+  static const otherUserProfilePath = '/other-user-profile';
+  // payment
+  static const payCardPath = '/pay-card';
   //main app names
   static const homeViewName = 'home';
   static const addPropertyName = 'addProperty';
@@ -134,6 +140,11 @@ class AppRouting {
   static const apartmentReviewsName = 'apartmentReviews';
   static const reviewSubmittedName = 'reviewSubmitted';
   static const addReviewName = 'addReview';
+
+  // other user profile
+  static const otherUserProfileName = 'otherUserProfile';
+  // payment
+  static const payCardName = 'payCard';
 
   static final router = GoRouter(
     navigatorKey: navigatorKey,
@@ -348,7 +359,27 @@ class AppRouting {
             ReviewSubmittedView(),
         routes: [],
       ),
-
+      // other user profile view
+      GoRoute(
+        path: otherUserProfilePath,
+        name: otherUserProfileName,
+        builder: (context, state) {
+          String userId = state.extra as String;
+          return OtherUserProfileView(userId: userId);
+        },
+        routes: [],
+      ),
+      // pay by card
+      GoRoute(
+        path: payCardPath,
+        name: payCardName,
+        builder: (context, state) {
+          int bookingId = state.extra as int;
+          // todo: un - static it
+          return PayCreditView(bookingId:bookingId ,);
+        },
+        routes: [],
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return LayoutScaffold(navigationShell: navigationShell);
