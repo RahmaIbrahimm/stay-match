@@ -1,10 +1,30 @@
 part of 'other_user_profile_cubit.dart';
 
-sealed class OtherUserProfileState extends Equatable {
+abstract class OtherUserProfileState extends Equatable {
   const OtherUserProfileState();
+
+  @override
+  List<Object?> get props => [];
 }
 
-final class OtherUserProfileInitial extends OtherUserProfileState {
+class OtherUserProfileInitial extends OtherUserProfileState {}
+
+class OtherUserProfileLoading extends OtherUserProfileState {}
+
+class OtherUserProfileSuccess extends OtherUserProfileState {
+  final OtherUserProfileResponse profile;
+
+  const OtherUserProfileSuccess({required this.profile});
+
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [profile];
+}
+
+class OtherUserProfileFailure extends OtherUserProfileState {
+  final String errMessage;
+
+  const OtherUserProfileFailure({required this.errMessage});
+
+  @override
+  List<Object?> get props => [errMessage];
 }
