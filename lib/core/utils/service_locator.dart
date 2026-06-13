@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stay_match/Features/booking/data/repos/booking_repo_impl.dart';
 import 'package:stay_match/Features/chat/data/repos/chat_repo_impl.dart';
 import 'package:stay_match/Features/my_properties/data/repos/my_properties_repo_impl.dart';
+import 'package:stay_match/Features/other_user_profile/data/models/other_user_profile_response.dart';
+import 'package:stay_match/Features/other_user_profile/data/repos/other_user_profile_repo_impl.dart';
 import 'package:stay_match/Features/profile/data/repos/profile_repo_impl.dart';
 import 'package:stay_match/Features/profile/presentation/manager/profile_cubit.dart';
 import 'package:stay_match/Features/saved/data/repos/saved_properties_repo_impl.dart';
@@ -17,6 +19,7 @@ import '../../Features/filter/data/repos/location_repo_impl.dart';
 import '../../Features/filter/presentation/manager/location_cubit.dart';
 import '../../Features/home/data/repos/home_repo_impl.dart';
 import '../../Features/my_properties/data/repos/my_properties_repo.dart';
+import '../../Features/payment/data/repos/payment_repo_impl.dart';
 import '../../Features/reviews/data/repos/reviews_repo_impl.dart';
 import '../../Features/rooms/data/repos/rooms_repo_impl.dart';
 import '../networking/chat_service.dart';
@@ -35,11 +38,11 @@ Future<void> setupServiceLocator() async {
 
   getIt.registerLazySingleton<SecureStorageHelper>(() => SecureStorageHelper());
 
-  // 2. الشبكة (Networking)
+  // 2. (Networking)
   getIt.registerLazySingleton<Dio>(() => Dio()); // تسجيل Dio نفسه
   getIt.registerLazySingleton<DioConsumer>(() => DioConsumer(getIt<Dio>()));
 
-  // 3. المستودعات (Repositories - Singleton is fine here)
+  // 3.(Repositories - Singleton is fine here)
   getIt.registerLazySingleton<AuthRepoImpl>(() => AuthRepoImpl(getIt<DioConsumer>()));
   getIt.registerLazySingleton<ApartmentRepoImpl>(() => ApartmentRepoImpl(apiService: getIt<DioConsumer>()));
   getIt.registerLazySingleton<RoomsRepoImpl>(() => RoomsRepoImpl(apiService: getIt<DioConsumer>()));
@@ -54,7 +57,10 @@ Future<void> setupServiceLocator() async {
       SavedPropertiesRepoImpl(apiService: getIt<DioConsumer>()));
   getIt.registerLazySingleton<ReviewsRepoImpl>(() =>
       ReviewsRepoImpl(apiService: getIt<DioConsumer>()));
-
+  getIt.registerLazySingleton<OtherUserProfileRepoImpl>(() =>
+      OtherUserProfileRepoImpl(apiService: getIt<DioConsumer>()));
+  getIt.registerLazySingleton<PaymentRepoImpl>(() =>
+      PaymentRepoImpl(apiService: getIt<DioConsumer>()));
   getIt.registerFactory<LocationCubit>(
         () => LocationCubit(locationRepository: getIt<LocationRepoImpl>()),
   );
