@@ -23,6 +23,14 @@ class ReviewRecommendationPropertyCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(
             24.r,
           ), // High radius matching the design
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 12.r,
+              offset: const Offset(0, 6),
+            ),
+          ],
+
         ),
         clipBehavior: Clip.antiAlias,
         width: 280.w,
@@ -61,7 +69,7 @@ class ReviewRecommendationPropertyCard extends StatelessWidget {
                     ),
                     child: HeartFavoriteButton(
                       id: property.id,
-                      initialSavedStatus: true,
+                      initialSavedStatus: property.isSaved ?? false,
                       scaleUp: true,
                     ),
                   ),
@@ -121,6 +129,35 @@ class ReviewRecommendationPropertyCard extends StatelessWidget {
                           ),
                         ),
                       ],
+                      if (property.rating == null || property.rating! <= 0)...[
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.w,
+                            vertical: 4.h,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: const Color(0xFFE2F5ED)),
+                            borderRadius: BorderRadius.circular(100.r),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.star_rounded,
+                                size: 16.r,
+                                color: Colors.amber,
+                              ),
+                              SizedBox(width: 4.w),
+                              Text(
+                                "No Rating",
+                                style: AppStyles.semiBold12poppins.copyWith(
+                                  color: AppColors.textColorPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]
                     ],
                   ),
                   SizedBox(height: 4.h),

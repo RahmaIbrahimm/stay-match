@@ -114,7 +114,7 @@ class RecommendedProperties {
       this.mainImage, 
       this.monthlyRent, 
       this.rating, 
-      this.city,});
+      this.city,this.isSaved});
 
   RecommendedProperties.fromJson(dynamic json) {
     id = json['id'];
@@ -123,6 +123,7 @@ class RecommendedProperties {
     monthlyRent = json['monthlyRent'];
     rating = json['rating'];
     city = json['city'];
+    isSaved = json['isSaved'];
   }
   int? id;
   String? name;
@@ -130,12 +131,15 @@ class RecommendedProperties {
   num? monthlyRent;
   num? rating;
   String? city;
-RecommendedProperties copyWith({  int? id,
+  bool? isSaved;
+
+  RecommendedProperties copyWith({ int? id,
   String? name,
   String? mainImage,
   num? monthlyRent,
   num? rating,
   String? city,
+    bool? isSaved,
 }) => RecommendedProperties(  id: id ?? this.id,
   name: name ?? this.name,
   mainImage: mainImage ?? this.mainImage,
@@ -151,6 +155,7 @@ RecommendedProperties copyWith({  int? id,
     map['monthlyRent'] = monthlyRent;
     map['rating'] = rating;
     map['city'] = city;
+    map['isSaved'] = isSaved;
     return map;
   }
 
