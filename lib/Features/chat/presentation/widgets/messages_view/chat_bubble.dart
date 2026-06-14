@@ -21,7 +21,6 @@ class ChatBubble extends StatelessWidget {
   final String? fullName;
   final bool isPending;
   final bool isFailed;
-
   const ChatBubble({
     super.key,
     required this.message,
@@ -249,7 +248,7 @@ class ChatBubble extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            message.sentAt?.substring(11, 16) ?? "",
+            _formatTime(message.sentAt),
             style: TextStyle(
                 fontSize: 10.sp, color: AppColors.textColorSecondary),
           ),
@@ -282,7 +281,38 @@ class ChatBubble extends StatelessWidget {
       ),
     );
   }
+  /// Formats an ISO 8601 timestamp (e.g. "2026-06-12T16:07:38...") as
+  /// "h:mm AM/PM" (e.g. "4:07 PM"). Returns "" if [isoDate] is null/invalid.
+  // String _formatTime(String? isoDate) {
+  //   if (isoDate == null) return "";
+  //   try {
+  //     final date = DateTime.parse(isoDate);
+  //     final hour24 = date.hour;
+  //     final hour12 = hour24 % 12 == 0 ? 12 : hour24 % 12;
+  //     final minute = date.minute.toString().padLeft(2, '0');
+  //     final period = hour24 >= 12 ? 'PM' : 'AM';
+  //     return '$hour12:$minute $period';
+  //   } catch (_) {
+  //     return "";
+  //   }
+  // }
+  String _formatTime(String? isoDate) {
+    if (isoDate == null) return "";
 
+    try {
+      final dateUtc = DateTime.parse('${isoDate}Z');
+      final egyptTime = dateUtc.toLocal();
+
+      final hour24 = egyptTime.hour;
+      final hour12 = hour24 % 12 == 0 ? 12 : hour24 % 12;
+      final minute = egyptTime.minute.toString().padLeft(2, '0');
+      final period = hour24 >= 12 ? 'PM' : 'AM';
+
+      return '$hour12:$minute $period';
+    } catch (_) {
+      return "";
+    }
+  }
   // ---------------- RETRY MENU ----------------
 
   void _showRetryMenu(BuildContext context) {

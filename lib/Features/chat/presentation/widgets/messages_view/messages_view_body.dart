@@ -94,6 +94,7 @@ class _MessagesViewBodyState extends State<MessagesViewBody> {
           }
 
           return CustomScrollView(
+
             controller: _scrollController,
             physics: const BouncingScrollPhysics(),
             slivers: [
