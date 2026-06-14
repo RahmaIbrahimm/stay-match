@@ -46,37 +46,37 @@ class ChatHelper {
       ),
     );
   }
-
+  static DateTime parseServerDate(String date) {
+    return DateTime.parse('${date}Z').toLocal();
+  }
   static String formatChatTime(String? timeString) {
     if (timeString == null || timeString.isEmpty) return "";
 
     try {
-      // 1. تحويل النص لـ DateTime بالتوقيت المحلي
-      DateTime messageDate = DateTime.parse(timeString).toLocal();
+      // DateTime messageDate = DateTime.parse(timeString).toLocal();
+      DateTime messageDate = parseServerDate(timeString);
       DateTime now = DateTime.now();
 
-      // 2. حساب الفرق بالأيام (بدقة الأيام وليس الساعات)
       DateTime today = DateTime(now.year, now.month, now.day);
       DateTime dateToCompare = DateTime(messageDate.year, messageDate.month, messageDate.day);
 
       final int differenceInDays = today.difference(dateToCompare).inDays;
 
-      // الحالة الأولى: لو النهاردة (Today) -> الوقت فقط 10:30 AM
+      // ا 10:30 AM
       if (differenceInDays == 0) {
         return DateFormat('h:mm a').format(messageDate);
       }
 
-      // الحالة الثانية: لو إمبارح (Yesterday)
+      // ا (Yesterday)
       if (differenceInDays == 1) {
         return "Yesterday";
       }
 
-      // الحالة الثالثة: لو خلال الأسبوع الماضي (أقل من 7 أيام) -> اسم اليوم (Monday)
+      // ا(Monday)
       if (differenceInDays < 7) {
-        return DateFormat('EEEE').format(messageDate); // EEEE بتطلع اسم اليوم كامل
+        return DateFormat('EEEE').format(messageDate); // EEEE
       }
 
-      // الحالة الأخيرة: أقدم من أسبوع -> التاريخ الفعلي 13/4/2024
       return DateFormat('d/M/yyyy').format(messageDate);
 
     } catch (e) {
@@ -104,17 +104,19 @@ class ChatHelper {
       return DateFormat('dd MMM yyyy').format(date).toUpperCase();
     }
   }
-
   static Map<String, List<Messages>> groupMessagesByDate(
       List<Messages> messages) {
     Map<String, List<Messages>> groups = {};
+
     for (var message in messages) {
-      String dateKey = getGroupDate(DateTime.parse(message.sentAt!));
-      if (!groups.containsKey(dateKey)) {
-        groups[dateKey] = [];
-      }
+      final localDate = parseServerDate(message.sentAt!);
+
+      final dateKey = getGroupDate(localDate);
+
+      groups.putIfAbsent(dateKey, () => []);
       groups[dateKey]!.add(message);
     }
+
     return groups;
   }
 }
