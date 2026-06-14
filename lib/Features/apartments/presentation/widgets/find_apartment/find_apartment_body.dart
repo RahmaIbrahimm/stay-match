@@ -1,0 +1,683 @@
+// // import 'dart:developer';
+// //
+// // import 'package:flutter/material.dart';
+// // import 'package:flutter_bloc/flutter_bloc.dart';
+// // import 'package:flutter_screenutil/flutter_screenutil.dart';
+// // import 'package:go_router/go_router.dart';
+// // import 'package:stay_match/Features/filter/presentation/manager/filter_cubit.dart';
+// // import 'package:stay_match/core/constants/app_colors.dart';
+// //
+// // import '../../../../../../../../core/constants/app_strings.dart';
+// // import '../../../../../../../../core/constants/app_styles.dart';
+// // import '../../../../filter/presentation/widgets/filter_card.dart';
+// // import '../../../../filter/presentation/widgets/filter_helper.dart';
+// // import '../../../../shared/widgets/no_properties_sliver.dart';
+// // import '../../../../shared/widgets/search_app_bar.dart';
+// // import '../shared/apartment_card.dart';
+// //
+// // class FindApartmentBody extends StatelessWidget {
+// //   const FindApartmentBody({super.key});
+// //
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     // Load apartments when widget first appears
+// //     WidgetsBinding.instance.addPostFrameCallback((_) {
+// //       final cubit = context.read<FilterCubit>();
+// //       if (cubit.state is FilterInitial) {
+// //         log('Initial load of apartments');
+// //         cubit.getAllApartments();
+// //       }
+// //     });
+// //
+// //     return BlocBuilder<FilterCubit, FilterState>(
+// //       builder: (context, state) {
+// //         if (state is FilterInitial) {
+// //           _buildLoadingStateInitial();
+// //         }
+// //         if (state is ApartmentFilterSuccess) {
+// //           var propertiesData = state.response.data?.items ?? [];
+// //           log('Displaying ${propertiesData
+// //               .length} apartments, sortOrder: ${context
+// //               .read<FilterCubit>()
+// //               .currentApartmentFilters
+// //               .orderByOldest}');
+// //
+// //           return RPadding(
+// //             padding: const EdgeInsets.all(16.0),
+// //             child: CustomScrollView(
+// //               slivers: [
+// //                 SliverToBoxAdapter(
+// //                   child: Row(
+// //                     children: [
+// //                       IconButton(
+// //                         onPressed: () {
+// //                           context.pop();
+// //                         },
+// //                         icon: Icon(
+// //                           Icons.arrow_back,
+// //                           size: 20.sp,
+// //                           color: AppColors.primary,
+// //                         ),
+// //                       ),
+// //                       Text(
+// //                         AppStrings.stayMatch,
+// //                         style: AppStyles.regular20protestRiot.copyWith(
+// //                           color: AppColors.primary,
+// //                         ),
+// //                       ),
+// //                     ],
+// //                   ),
+// //                 ),
+// //                 const SearchAppBar(),
+// //                 _buildFilterHeader(),
+// //                 FilterCard(filterType: PropertyType.apartment,),
+// //                 SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+// //                 propertiesData.isEmpty
+// //                     ? const NoPropertiesSliver()
+// //                     : SliverList.separated(
+// //                   itemCount: propertiesData.length,
+// //                   itemBuilder: (context, index) {
+// //                     return ApartmentCard(
+// //                       scaleUp: true,
+// //                       property: propertiesData[index],
+// //                     );
+// //                   },
+// //                   separatorBuilder: (BuildContext context, int index) {
+// //                     return SizedBox(height: 16.h);
+// //                   },
+// //                 ),
+// //               ],
+// //             ),
+// //           );
+// //         }
+// //         else if (state is ApartmentFilterFailure) {
+// //           log(state.errMessage);
+// //           return _buildErrorState(context, state.errMessage);
+// //         }
+// //         else if (state is ApartmentFilterLoading) {
+// //           return _buildLoadingState(context);
+// //         }
+// //
+// //         return _buildInitialState(context);
+// //       },
+// //     );
+// //   }
+// //
+// //   SliverToBoxAdapter _buildFilterHeader() {
+// //     return SliverToBoxAdapter(
+// //       child: RichText(
+// //         text: TextSpan(
+// //           children: [
+// //             TextSpan(
+// //               text: 'Find your Apartment',
+// //               style: AppStyles.bold24poppins.copyWith(
+// //                 color: AppColors.textColorPrimary,
+// //               ),
+// //             ),
+// //             TextSpan(
+// //               text: '\n${AppStrings.browseApartment}',
+// //               style: AppStyles.regular14poppins.copyWith(
+// //                 color: AppColors.textColorSecondary,
+// //               ),
+// //             ),
+// //           ],
+// //         ),
+// //       ),
+// //     );
+// //   }
+// //   GestureDetector _searchPrompt({
+// //     required String titleText,
+// //     required String prompt,
+// //     required VoidCallback onTap,
+// //   }) {
+// //     return GestureDetector(
+// //       onTap: onTap,
+// //       child: RichText(
+// //
+// //         textAlign: TextAlign.start,
+// //         text: TextSpan(
+// //           children: [
+// //             TextSpan(
+// //               text: titleText,
+// //               style: AppStyles.semiBold16poppins.copyWith(
+// //                 color: AppColors.primary,
+// //               ),
+// //             ),
+// //             TextSpan(
+// //               text: prompt,
+// //               style: AppStyles.regular18poppins.copyWith(
+// //                 color: AppColors.textColorSecondary,
+// //               ),
+// //             ),
+// //           ],
+// //         ),
+// //       ),
+// //     );
+// //   }
+// //
+// //   Widget _buildErrorState(BuildContext context, String errorMessage) {
+// //     return Center(
+// //       child: Padding(
+// //         padding: EdgeInsets.all(24.r),
+// //         child: Column(
+// //           mainAxisAlignment: MainAxisAlignment.center,
+// //           children: [
+// //             Container(
+// //               width: 100.w,
+// //               height: 100.w,
+// //               decoration: BoxDecoration(
+// //                 color: AppColors.textColorError.withValues(alpha: 0.1),
+// //                 shape: BoxShape.circle,
+// //               ),
+// //               child: Icon(
+// //                 Icons.error_outline_rounded,
+// //                 size: 50.sp,
+// //                 color: AppColors.textColorError,
+// //               ),
+// //             ),
+// //             SizedBox(height: 24.h),
+// //             Text(
+// //               'Oops! Something went wrong',
+// //               style: AppStyles.bold20poppins,
+// //               textAlign: TextAlign.center,
+// //             ),
+// //             SizedBox(height: 8.h),
+// //             Text(
+// //               errorMessage,
+// //               style: AppStyles.medium14poppins.copyWith(
+// //                 color: AppColors.textColorSecondary,
+// //               ),
+// //               textAlign: TextAlign.center,
+// //             ),
+// //             SizedBox(height: 24.h),
+// //             Row(
+// //               mainAxisAlignment: MainAxisAlignment.center,
+// //               children: [
+// //                 Expanded(
+// //                   child: ElevatedButton(
+// //                     onPressed: () {
+// //                       context.read<FilterCubit>().getAllApartments(
+// //                         forceRefresh: true,
+// //                       );
+// //                     },
+// //                     style: ElevatedButton.styleFrom(
+// //                       backgroundColor: AppColors.primary,
+// //                       padding: EdgeInsets.symmetric(
+// //                         // horizontal: 32.w,
+// //                         vertical: 12.h,
+// //                       ),
+// //                       shape: RoundedRectangleBorder(
+// //                         borderRadius: BorderRadius.circular(12.r),
+// //                       ),
+// //                     ),
+// //                     child: Text(
+// //                       'Try Again',
+// //                       style: AppStyles.semiBold16poppins.copyWith(
+// //                         color: Colors.white,
+// //                       ),
+// //                     ),
+// //                   ),
+// //                 ),
+// //                 SizedBox(width: 12.w),
+// //                 Expanded(
+// //                   child: OutlinedButton(
+// //                     onPressed: () {
+// //                       if(context.canPop()) context.pop();
+// //                     },
+// //                     style: OutlinedButton.styleFrom(
+// //                       padding: EdgeInsets.symmetric(
+// //                         horizontal: 32.w,
+// //                         vertical: 12.h,
+// //                       ),
+// //                       shape: RoundedRectangleBorder(
+// //                         borderRadius: BorderRadius.circular(12.r),
+// //                       ),
+// //                     ),
+// //                     child: Text(
+// //                       'Back',
+// //                       style: AppStyles.semiBold16poppins.copyWith(
+// //                         color: AppColors.textColorSecondary,
+// //                       ),
+// //                     ),
+// //                   ),
+// //                 ),
+// //               ],
+// //             ),
+// //           ],
+// //         ),
+// //       ),
+// //     );
+// //   }
+// //
+// //   Widget _buildLoadingStateInitial() {
+// //     return Center(
+// //       child: Column(
+// //         mainAxisAlignment: MainAxisAlignment.center,
+// //         children: [
+// //           Container(
+// //             padding: EdgeInsets.all(50.r),
+// //             width: 60.w,
+// //             height: 60.w,
+// //             child: CircularProgressIndicator(
+// //               strokeWidth: 3.w,
+// //               color: AppColors.primary,
+// //             ),
+// //           ),
+// //           SizedBox(height: 16.h),
+// //           Text(
+// //             'Finding apartments for you...',
+// //             style: AppStyles.medium16poppins.copyWith(
+// //               color: AppColors.textColorSecondary,
+// //             ),
+// //           ),
+// //         ],
+// //       ),
+// //     );
+// //   }
+// //
+// //   Widget _buildLoadingState(BuildContext context) {
+// //     return RPadding(
+// //       padding: const EdgeInsets.all(16.0),
+// //       child: CustomScrollView(
+// //         slivers: [
+// //           SliverToBoxAdapter(
+// //             child: Row(
+// //               children: [
+// //                 IconButton(
+// //                   onPressed: () {
+// //                     context.pop();
+// //                   },
+// //                   icon: Icon(
+// //                     Icons.arrow_back,
+// //                     size: 20.sp,
+// //                     color: AppColors.primary,
+// //                   ),
+// //                 ),
+// //                 Text(
+// //                   AppStrings.stayMatch,
+// //                   style: AppStyles.regular20protestRiot.copyWith(
+// //                     color: AppColors.primary,
+// //                   ),
+// //                 ),
+// //               ],
+// //             ),
+// //           ),
+// //           const SearchAppBar(),
+// //           _buildFilterHeader(),
+// //           FilterCard(filterType: PropertyType.apartment,),
+// //           SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+// //           SliverToBoxAdapter(child: _buildLoadingStateInitial()
+// //             ,)
+// //         ],
+// //       ),
+// //     );
+// //   }
+// //
+// //   Widget _buildInitialState(BuildContext context) {
+// //     return Center(
+// //       child: Column(
+// //         mainAxisAlignment: MainAxisAlignment.center,
+// //         children: [
+// //           Icon(
+// //             Icons.apartment_rounded,
+// //             size: 80.sp,
+// //             color: AppColors.primary.withValues(alpha: 0.3),
+// //           ),
+// //           SizedBox(height: 16.h),
+// //           Text(
+// //             'Ready to find your perfect stay?',
+// //             style: AppStyles.medium16poppins.copyWith(
+// //               color: AppColors.textColorSecondary,
+// //             ),
+// //             textAlign: TextAlign.center,
+// //           ),
+// //           SizedBox(height: 24.h),
+// //           ElevatedButton(
+// //             onPressed: () {
+// //               context.read<FilterCubit>().getAllApartments();
+// //             },
+// //             style: ElevatedButton.styleFrom(
+// //               backgroundColor: AppColors.primary,
+// //               padding: EdgeInsets.symmetric(
+// //                 horizontal: 32.w,
+// //                 vertical: 12.h,
+// //               ),
+// //               shape: RoundedRectangleBorder(
+// //                 borderRadius: BorderRadius.circular(12.r),
+// //               ),
+// //             ),
+// //             child: Text(
+// //               'Start Searching',
+// //               style: AppStyles.semiBold16poppins.copyWith(
+// //                 color: Colors.white,
+// //               ),
+// //             ),
+// //           ),
+// //         ],
+// //       ),
+// //     );
+// //   }
+// // }
+//
+//
+//
+//
+// // import 'dart:developer';
+// //
+// // import 'package:flutter/material.dart';
+// // import 'package:flutter_bloc/flutter_bloc.dart';
+// // import 'package:flutter_screenutil/flutter_screenutil.dart';
+// // import 'package:stay_match/Features/filter/presentation/manager/filter_cubit.dart';
+// // import 'package:stay_match/core/constants/app_colors.dart';
+// // import 'package:stay_match/core/constants/app_strings.dart';
+// //
+// // import '../../../../filter/presentation/widgets/filter_card.dart';
+// // import '../../../../filter/presentation/widgets/filter_helper.dart';
+// // import '../../../../shared/widgets/no_properties_sliver.dart';
+// // import '../../../../shared/widgets/property_body_base.dart';
+// // import '../../../../shared/widgets/search_app_bar.dart';
+// // import '../shared/apartment_card.dart';
+// //
+// // class FindApartmentBody extends StatelessWidget {
+// //   const FindApartmentBody({super.key});
+// //
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     // Load apartments when widget first appears
+// //     WidgetsBinding.instance.addPostFrameCallback((_) {
+// //       final cubit = context.read<FilterCubit>();
+// //       if (cubit.state is FilterInitial) {
+// //         log('Initial load of apartments');
+// //         cubit.getAllApartments();
+// //       }
+// //     });
+// //
+// //     return BlocBuilder<FilterCubit, FilterState>(
+// //       builder: (context, state) {
+// //         if (state is FilterInitial) {
+// //           return PropertyBodyBase.buildLoadingStateInitial(
+// //             loadingMessage: 'Finding apartments for you...',
+// //           );
+// //         }
+// //
+// //         if (state is ApartmentFilterSuccess) {
+// //           var propertiesData = state.response.data?.items ?? [];
+// //           log(
+// //             'Displaying ${propertiesData.length} apartments, sortOrder: ${context.read<FilterCubit>().currentApartmentFilters.orderByOldest}',
+// //           );
+// //
+// //           return RPadding(
+// //             padding: const EdgeInsets.all(16.0),
+// //             child: CustomScrollView(
+// //               slivers: [
+// //                 PropertyBodyBase.buildHeader(context),
+// //                 const SearchAppBar(),
+// //                 PropertyBodyBase.buildFilterHeader(
+// //                   title: AppStrings.findYourApartment,
+// //                   subtitle: AppStrings.browseApartment,
+// //                 ),
+// //                 FilterCard(filterType: PropertyType.apartment),
+// //                 SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+// //                 propertiesData.isEmpty
+// //                     ? const NoPropertiesSliver()
+// //                     : SliverList.separated(
+// //                         itemCount: propertiesData.length,
+// //                         itemBuilder: (context, index) {
+// //                           return ApartmentCard(
+// //                             scaleUp: true,
+// //                             property: propertiesData[index],
+// //                           );
+// //                         },
+// //                         separatorBuilder: (BuildContext context, int index) {
+// //                           return SizedBox(height: 16.h);
+// //                         },
+// //                       ),
+// //               ],
+// //             ),
+// //           );
+// //         } else if (state is ApartmentFilterFailure) {
+// //           log(state.errMessage);
+// //           return PropertyBodyBase.buildErrorState(
+// //             context: context,
+// //             errorMessage: state.errMessage,
+// //             onTryAgain: () {
+// //               context.read<FilterCubit>().getAllApartments(forceRefresh: true);
+// //             },
+// //           );
+// //         } else if (state is ApartmentFilterLoading) {
+// //           return PropertyBodyBase.buildLoadingState(
+// //             context: context,
+// //             filterHeader: PropertyBodyBase.buildFilterHeader(
+// //               title: AppStrings.findYourApartment,
+// //               subtitle: AppStrings.browseApartment,
+// //             ),
+// //             filterCard: FilterCard(filterType: PropertyType.apartment),
+// //             loadingMessage: 'Finding apartments for you...',
+// //           );
+// //         }
+// //
+// //         return PropertyBodyBase.buildInitialState(
+// //           context: context,
+// //           icon: Icons.apartment_rounded,
+// //           message: 'Ready to find your perfect stay?',
+// //           onStartSearching: () {
+// //             context.read<FilterCubit>().getAllApartments();
+// //           },
+// //         );
+// //       },
+// //     );
+// //   }
+// // }
+//
+// import 'dart:developer';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+// import 'package:stay_match/Features/filter/presentation/manager/filter_cubit.dart';
+// import 'package:stay_match/core/constants/app_colors.dart';
+// import 'package:stay_match/core/constants/app_strings.dart';
+//
+// import '../../../../filter/presentation/widgets/filter_card.dart';
+// import '../../../../filter/presentation/widgets/filter_helper.dart';
+// import '../../../../shared/widgets/no_properties_sliver.dart';
+// import '../../../../shared/widgets/property_body_base.dart';
+// import '../../../../shared/widgets/search_app_bar.dart';
+// import '../../../data/models/all_apartments_response.dart';
+// import '../shared/apartment_card.dart';
+//
+// class FindApartmentBody extends StatefulWidget {
+//   const FindApartmentBody({super.key});
+//
+//   @override
+//   State<FindApartmentBody> createState() => _FindApartmentBodyState();
+// }
+//
+// class _FindApartmentBodyState extends State<FindApartmentBody> {
+//   @override
+//   void initState() {
+//     super.initState();
+//     // Safely binds the page request listener on initial layout load
+//     context.read<FilterCubit>().initApartmentPagination();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final cubit = context.read<FilterCubit>();
+//
+//     return RPadding(
+//       padding: const EdgeInsets.all(16.0),
+//       child: CustomScrollView(
+//         slivers: [
+//           // ── Persistent Layout Elements ─────────────────────────────────────
+//           PropertyBodyBase.buildHeader(context),
+//           const SearchAppBar(),
+//           PropertyBodyBase.buildFilterHeader(
+//             title: AppStrings.findYourApartment,
+//             subtitle: AppStrings.browseApartment,
+//           ),
+//           FilterCard(filterType: PropertyType.apartment),
+//           SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+//
+//           // ── Infinite Scrolling Dynamic List ────────────────────────────────
+//           PagedSliverList<int, AllApartmentsItems>.separated(
+//             pagingController: cubit.apartmentPagingController,
+//             separatorBuilder: (BuildContext context, int index) {
+//               return SizedBox(height: 16.h);
+//             },
+//             builderDelegate: PagedChildBuilderDelegate<AllApartmentsItems>(
+//               itemBuilder: (context, item, index) {
+//                 return ApartmentCard(
+//                   scaleUp: true,
+//                   property: item,
+//                 );
+//               },
+//
+//               firstPageProgressIndicatorBuilder: (_) => const Padding(
+//                 padding: EdgeInsets.all(32.0),
+//                 child: Center(child: CircularProgressIndicator()),
+//               ),
+//               newPageProgressIndicatorBuilder: (_) => const Padding(
+//                 padding: EdgeInsets.symmetric(vertical: 24.0),
+//                 child: Center(child: CircularProgressIndicator()),
+//               ),
+//               firstPageErrorIndicatorBuilder: (_) => Padding(
+//                 padding: const EdgeInsets.all(24.0),
+//                 child: Center(
+//                   child: Column(
+//                     mainAxisSize: MainAxisSize.min,
+//                     children: [
+//                       Text(
+//                         cubit.apartmentPagingController.error?.toString() ?? 'Failed to load apartments',
+//                         textAlign: TextAlign.center,
+//                       ),
+//                       SizedBox(height: 12.h),
+//                       ElevatedButton(
+//                         onPressed: () => cubit.refreshApartmentPagination(),
+//                         child: const Text('Retry'),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//               noItemsFoundIndicatorBuilder: (_) => const NoPropertiesSliver(),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+import 'dart:developer';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:stay_match/Features/filter/presentation/manager/filter_cubit.dart';
+import 'package:stay_match/core/constants/app_colors.dart';
+import 'package:stay_match/core/constants/app_strings.dart';
+
+import '../../../../filter/presentation/widgets/filter_card.dart';
+import '../../../../filter/presentation/widgets/filter_helper.dart';
+import '../../../../shared/widgets/no_properties_sliver.dart';
+import '../../../../shared/widgets/property_body_base.dart';
+import '../../../../shared/widgets/search_app_bar.dart';
+import '../../../data/models/all_apartments_response.dart';
+import '../shared/apartment_card.dart';
+
+class FindApartmentBody extends StatefulWidget {
+  const FindApartmentBody({super.key});
+
+  @override
+  State<FindApartmentBody> createState() => _FindApartmentBodyState();
+}
+
+class _FindApartmentBodyState extends State<FindApartmentBody> {
+  @override
+  void initState() {
+    super.initState();
+    // Safely binds the page request listener on initial layout load
+    context.read<FilterCubit>().initApartmentPagination();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<FilterCubit>();
+
+    // Wrap with BlocListener to handle side-effects when filters mutate
+    return BlocListener<FilterCubit, FilterState>(
+      listener: (context, state) {
+        // If your Cubit emits a specific state on filter changes, capture it here.
+        // If it simply re-emits a success state, we force refresh the controller.
+        if (state is ApartmentFilterSuccess || state is FilterInitial) {
+          log('Filters changed or reset! Refreshing pagination controller...');
+          cubit.refreshApartmentPagination();
+        }
+      },
+      child: RPadding(
+        padding: const EdgeInsets.all(16.0),
+        child: CustomScrollView(
+          slivers: [
+            // ── Persistent Layout Elements ─────────────────────────────────────
+            PropertyBodyBase.buildHeader(context),
+            const SearchAppBar(),
+            PropertyBodyBase.buildFilterHeader(
+              title: AppStrings.findYourApartment,
+              subtitle: AppStrings.browseApartment,
+            ),
+
+            // This modifies Cubit states/variables, which triggers our BlocListener above
+            FilterCard(filterType: PropertyType.apartment),
+            SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+
+            // ── Infinite Scrolling Dynamic List ────────────────────────────────
+            PagedSliverList<int, AllApartmentsItems>.separated(
+              pagingController: cubit.apartmentPagingController,
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(height: 16.h);
+              },
+              builderDelegate: PagedChildBuilderDelegate<AllApartmentsItems>(
+                itemBuilder: (context, item, index) {
+                  return ApartmentCard(
+                    scaleUp: true,
+                    property: item,
+                  );
+                },
+
+                firstPageProgressIndicatorBuilder: (_) => const Padding(
+                  padding: EdgeInsets.all(32.0),
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+                newPageProgressIndicatorBuilder: (_) => const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 24.0),
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+                firstPageErrorIndicatorBuilder: (_) => Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          cubit.apartmentPagingController.error?.toString() ?? 'Failed to load apartments',
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 12.h),
+                        ElevatedButton(
+                          onPressed: () => cubit.refreshApartmentPagination(),
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                noItemsFoundIndicatorBuilder: (_) => const NoPropertiesSliver(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
