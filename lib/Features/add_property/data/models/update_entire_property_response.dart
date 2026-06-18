@@ -11,14 +11,14 @@ class UpdateEntirePropertyResponse {
   UpdateEntirePropertyResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? UpdateEntirePropertyResponseData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
   String? message;
-  Data? data;
+  UpdateEntirePropertyResponseData? data;
 UpdateEntirePropertyResponse copyWith({  bool? isSuccess,
   String? message,
-  Data? data,
+  UpdateEntirePropertyResponseData? data,
 }) => UpdateEntirePropertyResponse(  isSuccess: isSuccess ?? this.isSuccess,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -38,20 +38,20 @@ UpdateEntirePropertyResponse copyWith({  bool? isSuccess,
 /// propertyId : 183
 /// message : "Property updated successfully!"
 
-class Data {
-  Data({
+class UpdateEntirePropertyResponseData {
+  UpdateEntirePropertyResponseData({
       this.propertyId, 
       this.message,});
 
-  Data.fromJson(dynamic json) {
+  UpdateEntirePropertyResponseData.fromJson(dynamic json) {
     propertyId = json['propertyId'];
     message = json['message'];
   }
   int? propertyId;
   String? message;
-Data copyWith({  int? propertyId,
+UpdateEntirePropertyResponseData copyWith({  int? propertyId,
   String? message,
-}) => Data(  propertyId: propertyId ?? this.propertyId,
+}) => UpdateEntirePropertyResponseData(  propertyId: propertyId ?? this.propertyId,
   message: message ?? this.message,
 );
   Map<String, dynamic> toJson() {
