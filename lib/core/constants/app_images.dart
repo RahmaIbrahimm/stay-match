@@ -20,6 +20,7 @@ abstract class AppImages {
   static const errorImg =  '$path/error_img.png';
   // reviews
   static const reviewSuccessImg =  '$path/review_success_img.png';
+  static const startMatchingPic =  '$path/start_matching_pic.png';
 
 
 }

@@ -254,4 +254,6 @@ abstract class AppStrings {
   static const studio = 'Studio';
   static const bed = 'Bed';
   static const perMonth = '/month';
+  static const chatbot = 'Chat Bot';
+
 }
