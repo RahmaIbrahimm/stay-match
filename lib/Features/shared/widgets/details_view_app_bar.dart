@@ -33,7 +33,6 @@ class DetailsViewAppBar extends StatelessWidget implements PreferredSizeWidget {
           letterSpacing: -0.45.r,
         ),
       ),
-      actions: [Icon(Icons.share, color: AppColors.primary)],
       centerTitle: true,
       backgroundColor: Colors.transparent,
       flexibleSpace: ClipRect(
