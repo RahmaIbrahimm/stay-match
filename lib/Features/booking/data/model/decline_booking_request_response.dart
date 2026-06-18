@@ -11,14 +11,14 @@ class DeclineBookingRequestResponse {
   DeclineBookingRequestResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? DeclineBookingRequestResponseData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
   String? message;
-  Data? data;
+  DeclineBookingRequestResponseData? data;
 DeclineBookingRequestResponse copyWith({  bool? isSuccess,
   String? message,
-  Data? data,
+  DeclineBookingRequestResponseData? data,
 }) => DeclineBookingRequestResponse(  isSuccess: isSuccess ?? this.isSuccess,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -39,13 +39,13 @@ DeclineBookingRequestResponse copyWith({  bool? isSuccess,
 /// id : 87
 /// status : "Declined"
 
-class Data {
-  Data({
+class DeclineBookingRequestResponseData {
+  DeclineBookingRequestResponseData({
       this.message, 
       this.id, 
       this.status,});
 
-  Data.fromJson(dynamic json) {
+  DeclineBookingRequestResponseData.fromJson(dynamic json) {
     message = json['message'];
     id = json['id'];
     status = json['status'];
@@ -53,10 +53,10 @@ class Data {
   String? message;
   int? id;
   String? status;
-Data copyWith({  String? message,
+DeclineBookingRequestResponseData copyWith({  String? message,
   int? id,
   String? status,
-}) => Data(  message: message ?? this.message,
+}) => DeclineBookingRequestResponseData(  message: message ?? this.message,
   id: id ?? this.id,
   status: status ?? this.status,
 );
