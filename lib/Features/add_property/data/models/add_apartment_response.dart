@@ -13,12 +13,12 @@ class AddApartmentResponse {
   AddApartmentResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? AddApartmentResposneData.fromJson(json['data']) : null;
     errors = json['errors'] != null ? Errors.fromJson(json['errors']) : null;
   }
   bool? isSuccess;
   String? message;
-  Data? data;
+  AddApartmentResposneData? data;
   Errors? errors;
 
   Map<String, dynamic> toJson() {
@@ -68,12 +68,12 @@ class Errors {
 /// propertyId : 139
 /// message : "Entire property added successfully!"
 
-class Data {
-  Data({
+class AddApartmentResposneData {
+  AddApartmentResposneData({
       this.propertyId, 
       this.message,});
 
-  Data.fromJson(dynamic json) {
+  AddApartmentResposneData.fromJson(dynamic json) {
     propertyId = json['propertyId'];
     message = json['message'];
   }
