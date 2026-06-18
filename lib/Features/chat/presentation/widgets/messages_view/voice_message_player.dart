@@ -32,11 +32,12 @@ class _VoiceMessagePlayerState extends State<VoiceMessagePlayer> {
       if (mounted) setState(() => duration = d);
     });
     _player.onPlayerComplete.listen((_) {
-      if (mounted)
+      if (mounted) {
         setState(() {
           isPlaying = false;
           position = Duration.zero;
         });
+      }
     });
   }
 
@@ -54,10 +55,11 @@ class _VoiceMessagePlayerState extends State<VoiceMessagePlayer> {
       children: [
         GestureDetector(
           onTap: () async {
-            if (isPlaying)
+            if (isPlaying) {
               await _player.pause();
-            else
+            } else {
               await _player.play(UrlSource(widget.url));
+            }
             if (mounted) setState(() => isPlaying = !isPlaying);
           },
           child: Icon(
