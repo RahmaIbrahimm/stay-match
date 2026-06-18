@@ -31,7 +31,6 @@ class ApiInterceptors extends Interceptor {
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
     }
-
     super.onRequest(options, handler);
   }
 
