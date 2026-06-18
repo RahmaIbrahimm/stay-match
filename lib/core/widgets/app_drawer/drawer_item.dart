@@ -8,17 +8,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 
 class DrawerItem extends StatelessWidget {
-  final IconData icon;
+  final IconData? icon;
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
-
+  final Widget? widgetIcon;
   const DrawerItem({
     super.key,
-    required this.icon,
+    this.icon,
     required this.label,
     required this.isSelected,
-    required this.onTap,
+    required this.onTap,  this.widgetIcon,
   });
 
   @override
@@ -52,11 +52,11 @@ class DrawerItem extends StatelessWidget {
           ListTile(
             onTap: onTap,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
-            leading: Icon(
+            leading: icon!= null ?  Icon(
               icon,
               size: 22.sp,
               color: isSelected ? primaryBlue : const Color(0xFF2E3E5C),
-            ),
+            ):widgetIcon,
             title: Text(
               label,
               style: TextStyle(
