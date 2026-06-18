@@ -11,14 +11,14 @@ class RoomToggleSavedResponse {
   RoomToggleSavedResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? RoomToggleSavedResponseData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
   String? message;
-  Data? data;
+  RoomToggleSavedResponseData? data;
 RoomToggleSavedResponse copyWith({  bool? isSuccess,
   String? message,
-  Data? data,
+  RoomToggleSavedResponseData? data,
 }) => RoomToggleSavedResponse(  isSuccess: isSuccess ?? this.isSuccess,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -43,8 +43,8 @@ RoomToggleSavedResponse copyWith({  bool? isSuccess,
 /// propertyName : "شقة سكنية للطالبات - غرف مشتركة"
 /// roomName : "الغرفة الأولى (الزهور)"
 
-class Data {
-  Data({
+class RoomToggleSavedResponseData {
+  RoomToggleSavedResponseData({
       this.saved, 
       this.message, 
       this.type, 
@@ -53,7 +53,7 @@ class Data {
       this.propertyName, 
       this.roomName,});
 
-  Data.fromJson(dynamic json) {
+  RoomToggleSavedResponseData.fromJson(dynamic json) {
     saved = json['saved'];
     message = json['message'];
     type = json['type'];
@@ -69,14 +69,14 @@ class Data {
   int? roomId;
   String? propertyName;
   String? roomName;
-Data copyWith({  bool? saved,
+RoomToggleSavedResponseData copyWith({  bool? saved,
   String? message,
   String? type,
   int? propertyId,
   int? roomId,
   String? propertyName,
   String? roomName,
-}) => Data(  saved: saved ?? this.saved,
+}) => RoomToggleSavedResponseData(  saved: saved ?? this.saved,
   message: message ?? this.message,
   type: type ?? this.type,
   propertyId: propertyId ?? this.propertyId,

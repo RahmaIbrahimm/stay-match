@@ -29,7 +29,7 @@ class RenterBookingResponse {
     viewType = json['viewType'];
     month = json['month'];
     stats = json['stats'] != null ? Stats.fromJson(json['stats']) : null;
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? RenterBookingResponseData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
   String? message;
@@ -39,7 +39,7 @@ class RenterBookingResponse {
   String? viewType;
   int? month;
   Stats? stats;
-  Data? data;
+  RenterBookingResponseData? data;
   RenterBookingResponse copyWith({  bool? isSuccess,
     String? message,
     int? year,
@@ -48,7 +48,7 @@ class RenterBookingResponse {
     String? viewType,
     int? month,
     Stats? stats,
-    Data? data,
+    RenterBookingResponseData? data,
   }) => RenterBookingResponse(  isSuccess: isSuccess ?? this.isSuccess,
     message: message ?? this.message,
     year: year ?? this.year,
@@ -87,8 +87,8 @@ class RenterBookingResponse {
 /// bookings : [{"id":103,"coverImage":"https://graduationproject1.runasp.net/images/properties/fd9d2666-a48e-4e1d-8722-e5f843e7db33_38.png","title":"asdfasdasdf","propertyType":"Entire Apartment","location":{"fullAddress":"wsredfgadsf, Abou Simbel, Aswan","city":"Abou Simbel","street":"wsredfgadsf"},"moveInDate":"2026-05-01T00:00:00","duration":1,"monthlyPrice":234,"totalPrice":234,"status":"Approved","host":{"id":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","name":"Rahma Ibrahimm","image":"https://graduationproject1.runasp.net/images/9f8001f0-41dc-4546-8227-dbf2776466cc.png"},"createdAt":"2026-04-30T00:20:05.8471269","endDate":"2026-05-31T00:00:00"},{"id":98,"coverImage":"https://graduationproject1.runasp.net/images/properties/fd9d2666-a48e-4e1d-8722-e5f843e7db33_38.png","title":"asdfasdasdf","propertyType":"Entire Apartment","location":{"fullAddress":"wsredfgadsf, Abou Simbel, Aswan","city":"Abou Simbel","street":"wsredfgadsf"},"moveInDate":"2026-05-01T00:00:00","duration":1,"monthlyPrice":234,"totalPrice":234,"status":"Declined","host":{"id":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","name":"Rahma Ibrahimm","image":"https://graduationproject1.runasp.net/images/9f8001f0-41dc-4546-8227-dbf2776466cc.png"},"createdAt":"2026-04-30T00:16:27.8347761","endDate":"2026-05-31T00:00:00"},{"id":97,"coverImage":"https://graduationproject1.runasp.net/images/properties/fd9d2666-a48e-4e1d-8722-e5f843e7db33_38.png","title":"asdfasdasdf","propertyType":"Entire Apartment","location":{"fullAddress":"wsredfgadsf, Abou Simbel, Aswan","city":"Abou Simbel","street":"wsredfgadsf"},"moveInDate":"2026-05-01T00:00:00","duration":1,"monthlyPrice":234,"totalPrice":234,"status":"Declined","host":{"id":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","name":"Rahma Ibrahimm","image":"https://graduationproject1.runasp.net/images/9f8001f0-41dc-4546-8227-dbf2776466cc.png"},"createdAt":"2026-04-30T00:14:41.2080172","endDate":"2026-05-31T00:00:00"},{"id":96,"coverImage":"https://graduationproject1.runasp.net/images/properties/fd9d2666-a48e-4e1d-8722-e5f843e7db33_38.png","title":"asdfasdasdf","propertyType":"Entire Apartment","location":{"fullAddress":"wsredfgadsf, Abou Simbel, Aswan","city":"Abou Simbel","street":"wsredfgadsf"},"moveInDate":"2026-05-01T00:00:00","duration":1,"monthlyPrice":234,"totalPrice":234,"status":"Declined","host":{"id":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","name":"Rahma Ibrahimm","image":"https://graduationproject1.runasp.net/images/9f8001f0-41dc-4546-8227-dbf2776466cc.png"},"createdAt":"2026-04-30T00:12:28.1695585","endDate":"2026-05-31T00:00:00"},{"id":94,"coverImage":"https://graduationproject1.runasp.net/images/properties/fd9d2666-a48e-4e1d-8722-e5f843e7db33_38.png","title":"asdfasdasdf","propertyType":"Entire Apartment","location":{"fullAddress":"wsredfgadsf, Abou Simbel, Aswan","city":"Abou Simbel","street":"wsredfgadsf"},"moveInDate":"2026-05-01T00:00:00","duration":1,"monthlyPrice":234,"totalPrice":234,"status":"Declined","host":{"id":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","name":"Rahma Ibrahimm","image":"https://graduationproject1.runasp.net/images/9f8001f0-41dc-4546-8227-dbf2776466cc.png"},"createdAt":"2026-04-30T00:11:51.0802777","endDate":"2026-05-31T00:00:00"},{"id":93,"coverImage":"https://graduationproject1.runasp.net/images/properties/2f50dc01-5dbc-409a-bc86-de7efabd336f_OIP.jpg","title":"Luxury Cozy Apartment near City Center","propertyType":"Entire Apartment","location":{"fullAddress":"90th Street, Basateen, Cairo","city":"Basateen","street":"90th Street"},"moveInDate":"2026-05-01T00:00:00","duration":7,"monthlyPrice":8500,"totalPrice":59500,"status":"Pending","host":{"id":"1121c342-dd7a-4a29-bc66-c94f6aa43212","name":"Abanoub Yousry","image":"https://graduationproject1.runasp.net/images/ac9bf66b-fa35-4b6a-b148-2faf0d01a1b3.jpg"},"createdAt":"2026-04-30T00:11:25.75544","endDate":"2026-11-30T00:00:00"},{"id":92,"coverImage":"https://graduationproject1.runasp.net/images/properties/2f50dc01-5dbc-409a-bc86-de7efabd336f_OIP.jpg","title":"Luxury Cozy Apartment near City Center","propertyType":"Entire Apartment","location":{"fullAddress":"90th Street, Basateen, Cairo","city":"Basateen","street":"90th Street"},"moveInDate":"2026-05-01T00:00:00","duration":7,"monthlyPrice":8500,"totalPrice":59500,"status":"Pending","host":{"id":"1121c342-dd7a-4a29-bc66-c94f6aa43212","name":"Abanoub Yousry","image":"https://graduationproject1.runasp.net/images/ac9bf66b-fa35-4b6a-b148-2faf0d01a1b3.jpg"},"createdAt":"2026-04-30T00:08:16.8434128","endDate":"2026-11-30T00:00:00"},{"id":91,"coverImage":"https://graduationproject1.runasp.net/images/properties/2f50dc01-5dbc-409a-bc86-de7efabd336f_OIP.jpg","title":"Luxury Cozy Apartment near City Center","propertyType":"Entire Apartment","location":{"fullAddress":"90th Street, Basateen, Cairo","city":"Basateen","street":"90th Street"},"moveInDate":"2026-05-01T00:00:00","duration":7,"monthlyPrice":8500,"totalPrice":59500,"status":"Cancelled","host":{"id":"1121c342-dd7a-4a29-bc66-c94f6aa43212","name":"Abanoub Yousry","image":"https://graduationproject1.runasp.net/images/ac9bf66b-fa35-4b6a-b148-2faf0d01a1b3.jpg"},"createdAt":"2026-04-30T00:05:22.7311544","endDate":"2026-11-30T00:00:00"},{"id":90,"coverImage":"https://graduationproject1.runasp.net/images/properties/2f50dc01-5dbc-409a-bc86-de7efabd336f_OIP.jpg","title":"Luxury Cozy Apartment near City Center","propertyType":"Entire Apartment","location":{"fullAddress":"90th Street, Basateen, Cairo","city":"Basateen","street":"90th Street"},"moveInDate":"2026-05-01T00:00:00","duration":7,"monthlyPrice":8500,"totalPrice":59500,"status":"Pending","host":{"id":"1121c342-dd7a-4a29-bc66-c94f6aa43212","name":"Abanoub Yousry","image":"https://graduationproject1.runasp.net/images/ac9bf66b-fa35-4b6a-b148-2faf0d01a1b3.jpg"},"createdAt":"2026-04-30T00:00:06.6390895","endDate":"2026-11-30T00:00:00"},{"id":89,"coverImage":"https://graduationproject1.runasp.net/images/properties/2f50dc01-5dbc-409a-bc86-de7efabd336f_OIP.jpg","title":"Luxury Cozy Apartment near City Center","propertyType":"Entire Apartment","location":{"fullAddress":"90th Street, Basateen, Cairo","city":"Basateen","street":"90th Street"},"moveInDate":"2026-05-01T00:00:00","duration":53,"monthlyPrice":8500,"totalPrice":450500,"status":"Pending","host":{"id":"1121c342-dd7a-4a29-bc66-c94f6aa43212","name":"Abanoub Yousry","image":"https://graduationproject1.runasp.net/images/ac9bf66b-fa35-4b6a-b148-2faf0d01a1b3.jpg"},"createdAt":"2026-04-29T23:58:20.1744122","endDate":"2030-09-30T00:00:00"}]
 /// pagination : {"currentPage":1,"pageSize":10,"totalCount":13,"totalPages":2,"hasNext":true,"hasPrevious":false}
 
-class Data {
-  Data({
+class RenterBookingResponseData {
+  RenterBookingResponseData({
     this.viewType,
     this.pageInfo,
     this.tabs,
@@ -97,7 +97,7 @@ class Data {
     this.bookings,
     this.pagination,});
 
-  Data.fromJson(dynamic json) {
+  RenterBookingResponseData.fromJson(dynamic json) {
     viewType = json['viewType'];
     pageInfo = json['pageInfo'] != null ? PageInfo.fromJson(json['pageInfo']) : null;
     if (json['tabs'] != null) {
@@ -128,14 +128,14 @@ class Data {
   List<Events>? events;
   List<RenterBookings>? bookings;
   Pagination? pagination;
-  Data copyWith({  String? viewType,
+  RenterBookingResponseData copyWith({  String? viewType,
     PageInfo? pageInfo,
     List<Tabs>? tabs,
     String? currentFilter,
     List<Events>? events,
     List<RenterBookings>? bookings,
     Pagination? pagination,
-  }) => Data(  viewType: viewType ?? this.viewType,
+  }) => RenterBookingResponseData(  viewType: viewType ?? this.viewType,
     pageInfo: pageInfo ?? this.pageInfo,
     tabs: tabs ?? this.tabs,
     currentFilter: currentFilter ?? this.currentFilter,

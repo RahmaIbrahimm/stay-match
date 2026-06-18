@@ -11,14 +11,14 @@ class RoomBookingRequestResponse {
   RoomBookingRequestResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? RoomBookingRequestResponseData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
   String? message;
-  Data? data;
+  RoomBookingRequestResponseData? data;
 RoomBookingRequestResponse copyWith({  bool? isSuccess,
   String? message,
-  Data? data,
+  RoomBookingRequestResponseData? data,
 }) => RoomBookingRequestResponse(  isSuccess: isSuccess ?? this.isSuccess,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -45,8 +45,8 @@ RoomBookingRequestResponse copyWith({  bool? isSuccess,
 /// propertyName : "شقة سكنية للطالبات - غرف مشتركة"
 /// message : "Room booking request sent successfully"
 
-class Data {
-  Data({
+class RoomBookingRequestResponseData {
+  RoomBookingRequestResponseData({
       this.id, 
       this.startDate, 
       this.endDate, 
@@ -57,7 +57,7 @@ class Data {
       this.propertyName, 
       this.message,});
 
-  Data.fromJson(dynamic json) {
+  RoomBookingRequestResponseData.fromJson(dynamic json) {
     id = json['id'];
     startDate = json['startDate'];
     endDate = json['endDate'];
@@ -77,7 +77,7 @@ class Data {
   String? roomName;
   String? propertyName;
   String? message;
-Data copyWith({  int? id,
+RoomBookingRequestResponseData copyWith({  int? id,
   String? startDate,
   String? endDate,
   int? duration,
@@ -86,7 +86,7 @@ Data copyWith({  int? id,
   String? roomName,
   String? propertyName,
   String? message,
-}) => Data(  id: id ?? this.id,
+}) => RoomBookingRequestResponseData(  id: id ?? this.id,
   startDate: startDate ?? this.startDate,
   endDate: endDate ?? this.endDate,
   duration: duration ?? this.duration,

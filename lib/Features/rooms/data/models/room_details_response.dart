@@ -1,376 +1,267 @@
-// To parse this JSON data, do
-//
-//     final roomDetailsResponse = roomDetailsResponseFromJson(jsonString);
-
-import 'dart:convert';
-
-RoomDetailsResponse roomDetailsResponseFromJson(String str) =>
-    RoomDetailsResponse.fromJson(json.decode(str));
-
-String roomDetailsResponseToJson(RoomDetailsResponse data) =>
-    json.encode(data.toJson());
+/// isSuccess : true
+/// message : "Request successful"
+/// data : {"id":245,"hostId":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","hostName":"Rahma Ibrahim ","roomName":"master suiteeeee","month_rent":10000,"deposit":100,"furnished":true,"availableFrom":"2026-06-10T22:14:26.550775","allowedTenants":{"allowsFamilies":false,"allowsChildren":false,"allowsStudents":false,"studentGender":"female","allowsWorkers":true,"workerGender":"female","petsAllowed":false},"amenities":{"airConditioning":true,"closet":true,"mirror":false,"fan":true},"street":"gshshjajaj","city":"Kantara West","government":"Ismailia","isSaved":false,"isPaid":false,"propertyImages":[{"id":666,"imageUrl":"https://graduationproject1.runasp.net/images/properties/f012d8dc-73b3-4666-b10e-9a73c78c5383_1000136238.jpg","isCover":true},{"id":667,"imageUrl":"https://graduationproject1.runasp.net/images/properties/9e79ec03-913f-4360-9f76-d4adf8d5d35a_1000137401.jpg","isCover":false}],"minimumStay":1,"capacity":3,"capacityAvailable":2,"enSuiteBathroom":false,"sharedBathroom":true,"balcony":false,"window":true,"profilePicture":"https://graduationproject1.runasp.net/images/87fc98bc-09fa-4dc7-abe4-a60753c14308.png","petsAllowed":true,"blockedPeriods":[],"beds":[{"bedNumber":1,"blockedPeriods":[]},{"bedNumber":2,"blockedPeriods":[]},{"bedNumber":3,"blockedPeriods":[]}]}
 
 class RoomDetailsResponse {
-  final bool? isSuccess;
-  final String? message;
-  final RoomData? data;
+  RoomDetailsResponse({
+      this.isSuccess,
+      this.message,
+      this.data,});
 
-  RoomDetailsResponse({this.isSuccess, this.message, this.data});
+  RoomDetailsResponse.fromJson(dynamic json) {
+    isSuccess = json['isSuccess'];
+    message = json['message'];
+    data = json['data'] != null ? RoomDetailsResponseData.fromJson(json['data']) : null;
+  }
+  bool? isSuccess;
+  String? message;
+  RoomDetailsResponseData? data;
+RoomDetailsResponse copyWith({  bool? isSuccess,
+  String? message,
+  RoomDetailsResponseData? data,
+}) => RoomDetailsResponse(  isSuccess: isSuccess ?? this.isSuccess,
+  message: message ?? this.message,
+  data: data ?? this.data,
+);
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['isSuccess'] = isSuccess;
+    map['message'] = message;
+    if (data != null) {
+      map['data'] = data?.toJson();
+    }
+    return map;
+  }
 
-  factory RoomDetailsResponse.fromJson(Map<String, dynamic> json) =>
-      RoomDetailsResponse(
-        isSuccess: json["isSuccess"],
-        message: json["message"],
-        data: json["data"] == null ? null : RoomData.fromJson(json["data"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-    "isSuccess": isSuccess,
-    "message": message,
-    "data": data?.toJson(),
-  };
 }
 
-class RoomData {
-  final int? id;
-  final String? hostId;
-  final String? hostName;
-  final String? roomName;
-  final int? monthRent;
-  final int? deposit;
-  final bool? furnished;
-  final String? availableFrom;
-  final AllowedTenants? allowedTenants;
-  final RoomAmenities? amenities;
-  final NearbyServices? nearbyServices;
-  final String? street;
-  final String? city;
-  final String? government;
-  final double? latitude;
-  final double? longitude;
-  final int? size;
-  final List<PropertyImage>? propertyImages;
-  final int? minimumStay;
-  final int? capacity;
-  final int? capacityAvailable;
-  final bool? enSuiteBathroom;
-  final bool? sharedBathroom;
-  final bool? balcony;
-  final bool? window;
-  final bool? petsAllowed;
-  final List<BlockedPeriod>? blockedPeriods;
-  final List<Bed>? beds;
+/// id : 245
+/// hostId : "9b1d8f47-3129-4753-ac61-7bd7ab4c600e"
+/// hostName : "Rahma Ibrahim "
+/// roomName : "master suiteeeee"
+/// month_rent : 10000
+/// deposit : 100
+/// furnished : true
+/// availableFrom : "2026-06-10T22:14:26.550775"
+/// allowedTenants : {"allowsFamilies":false,"allowsChildren":false,"allowsStudents":false,"studentGender":"female","allowsWorkers":true,"workerGender":"female","petsAllowed":false}
+/// amenities : {"airConditioning":true,"closet":true,"mirror":false,"fan":true}
+/// street : "gshshjajaj"
+/// city : "Kantara West"
+/// government : "Ismailia"
+/// isSaved : false
+/// isPaid : false
+/// propertyImages : [{"id":666,"imageUrl":"https://graduationproject1.runasp.net/images/properties/f012d8dc-73b3-4666-b10e-9a73c78c5383_1000136238.jpg","isCover":true},{"id":667,"imageUrl":"https://graduationproject1.runasp.net/images/properties/9e79ec03-913f-4360-9f76-d4adf8d5d35a_1000137401.jpg","isCover":false}]
+/// minimumStay : 1
+/// capacity : 3
+/// capacityAvailable : 2
+/// enSuiteBathroom : false
+/// sharedBathroom : true
+/// balcony : false
+/// window : true
+/// profilePicture : "https://graduationproject1.runasp.net/images/87fc98bc-09fa-4dc7-abe4-a60753c14308.png"
+/// petsAllowed : true
+/// blockedPeriods : []
+/// beds : [{"bedNumber":1,"blockedPeriods":[]},{"bedNumber":2,"blockedPeriods":[]},{"bedNumber":3,"blockedPeriods":[]}]
 
-  RoomData({
-    this.id,
-    this.hostId,
-    this.hostName,
-    this.roomName,
-    this.monthRent,
-    this.deposit,
-    this.furnished,
-    this.availableFrom,
-    this.allowedTenants,
-    this.amenities,
-    this.nearbyServices,
-    this.street,
-    this.city,
-    this.government,
-    this.latitude,
-    this.longitude,
-    this.size,
-    this.propertyImages,
-    this.minimumStay,
-    this.capacity,
-    this.capacityAvailable,
-    this.enSuiteBathroom,
-    this.sharedBathroom,
-    this.balcony,
-    this.window,
-    this.petsAllowed,
-    this.blockedPeriods,
-    this.beds,
-  });
+class RoomDetailsResponseData {
+  RoomDetailsResponseData({
+      this.id,
+      this.hostId,
+      this.hostName,
+      this.roomName,
+      this.monthRent,
+      this.deposit,
+      this.furnished,
+      this.availableFrom,
+      this.allowedTenants,
+      this.amenities,
+      this.street,
+      this.city,
+      this.government,
+      this.isSaved,
+      this.isPaid,
+      this.propertyImages,
+      this.minimumStay,
+      this.capacity,
+      this.capacityAvailable,
+      this.enSuiteBathroom,
+      this.sharedBathroom,
+      this.balcony,
+      this.window,
+      this.profilePicture,
+      this.petsAllowed,
+      this.blockedPeriods,
+      this.beds,});
 
-  factory RoomData.fromJson(Map<String, dynamic> json) => RoomData(
-    id: json["id"],
-    hostId: json["hostId"],
-    hostName: json["hostName"],
-    roomName: json["roomName"],
-    monthRent: json["month_rent"],
-    deposit: json["deposit"],
-    furnished: json["furnished"],
-    availableFrom: json["availableFrom"],
-    allowedTenants: json["allowedTenants"] == null
-        ? null
-        : AllowedTenants.fromJson(json["allowedTenants"]),
-    amenities: json["amenities"] == null
-        ? null
-        : RoomAmenities.fromJson(json["amenities"]),
-    nearbyServices: json["nearbyServices"] == null
-        ? null
-        : NearbyServices.fromJson(json["nearbyServices"]),
-    street: json["street"],
-    city: json["city"],
-    government: json["government"],
-    latitude: json["latitude"]?.toDouble(),
-    longitude: json["longitude"]?.toDouble(),
-    size: json["size"],
-    propertyImages: json["propertyImages"] == null
-        ? []
-        : List<PropertyImage>.from(
-            json["propertyImages"]!.map((x) => PropertyImage.fromJson(x)),
-          ),
-    minimumStay: json["minimumStay"],
-    capacity: json["capacity"],
-    capacityAvailable: json["capacityAvailable"],
-    enSuiteBathroom: json["enSuiteBathroom"],
-    sharedBathroom: json["sharedBathroom"],
-    balcony: json["balcony"],
-    window: json["window"],
-    petsAllowed: json["petsAllowed"],
-    blockedPeriods: json["blockedPeriods"] == null
-        ? []
-        : List<BlockedPeriod>.from(
-            json["blockedPeriods"]!.map((x) => BlockedPeriod.fromJson(x)),
-          ),
-    beds: json["beds"] == null
-        ? []
-        : List<Bed>.from(json["beds"]!.map((x) => Bed.fromJson(x))),
-  );
+  RoomDetailsResponseData.fromJson(dynamic json) {
+    id = json['id'];
+    hostId = json['hostId'];
+    hostName = json['hostName'];
+    roomName = json['roomName'];
+    monthRent = json['month_rent'];
+    deposit = json['deposit'];
+    furnished = json['furnished'];
+    availableFrom = json['availableFrom'];
+    allowedTenants = json['allowedTenants'] != null ? AllowedTenants.fromJson(json['allowedTenants']) : null;
+    amenities = json['amenities'] != null ? Amenities.fromJson(json['amenities']) : null;
+    street = json['street'];
+    city = json['city'];
+    government = json['government'];
+    isSaved = json['isSaved'];
+    isPaid = json['isPaid'];
+    if (json['propertyImages'] != null) {
+      propertyImages = [];
+      json['propertyImages'].forEach((v) {
+        propertyImages?.add(PropertyImages.fromJson(v));
+      });
+    }
+    minimumStay = json['minimumStay'];
+    capacity = json['capacity'];
+    capacityAvailable = json['capacityAvailable'];
+    enSuiteBathroom = json['enSuiteBathroom'];
+    sharedBathroom = json['sharedBathroom'];
+    balcony = json['balcony'];
+    window = json['window'];
+    profilePicture = json['profilePicture'];
+    petsAllowed = json['petsAllowed'];
+    if (json['blockedPeriods'] != null) {
+      blockedPeriods = [];
+      json['blockedPeriods'].forEach((v) {
+        blockedPeriods?.add(BlockedPeriod.fromJson(v));
+      });
+    }
+    if (json['beds'] != null) {
+      beds = [];
+      json['beds'].forEach((v) {
+        beds?.add(Beds.fromJson(v));
+      });
+    }
+  }
+  num? id;
+  String? hostId;
+  String? hostName;
+  String? roomName;
+  num? monthRent;
+  num? deposit;
+  bool? furnished;
+  String? availableFrom;
+  AllowedTenants? allowedTenants;
+  Amenities? amenities;
+  String? street;
+  String? city;
+  String? government;
+  bool? isSaved;
+  bool? isPaid;
+  List<PropertyImages>? propertyImages;
+  num? minimumStay;
+  num? capacity;
+  num? capacityAvailable;
+  bool? enSuiteBathroom;
+  bool? sharedBathroom;
+  bool? balcony;
+  bool? window;
+  String? profilePicture;
+  bool? petsAllowed;
+  List<dynamic>? blockedPeriods;
+  List<Beds>? beds;
+RoomDetailsResponseData copyWith({  num? id,
+  String? hostId,
+  String? hostName,
+  String? roomName,
+  num? monthRent,
+  num? deposit,
+  bool? furnished,
+  String? availableFrom,
+  AllowedTenants? allowedTenants,
+  Amenities? amenities,
+  String? street,
+  String? city,
+  String? government,
+  bool? isSaved,
+  bool? isPaid,
+  List<PropertyImages>? propertyImages,
+  num? minimumStay,
+  num? capacity,
+  num? capacityAvailable,
+  bool? enSuiteBathroom,
+  bool? sharedBathroom,
+  bool? balcony,
+  bool? window,
+  String? profilePicture,
+  bool? petsAllowed,
+  List<BlockedPeriod>? blockedPeriods,
+  List<Beds>? beds,
+}) => RoomDetailsResponseData(  id: id ?? this.id,
+  hostId: hostId ?? this.hostId,
+  hostName: hostName ?? this.hostName,
+  roomName: roomName ?? this.roomName,
+  monthRent: monthRent ?? this.monthRent,
+  deposit: deposit ?? this.deposit,
+  furnished: furnished ?? this.furnished,
+  availableFrom: availableFrom ?? this.availableFrom,
+  allowedTenants: allowedTenants ?? this.allowedTenants,
+  amenities: amenities ?? this.amenities,
+  street: street ?? this.street,
+  city: city ?? this.city,
+  government: government ?? this.government,
+  isSaved: isSaved ?? this.isSaved,
+  isPaid: isPaid ?? this.isPaid,
+  propertyImages: propertyImages ?? this.propertyImages,
+  minimumStay: minimumStay ?? this.minimumStay,
+  capacity: capacity ?? this.capacity,
+  capacityAvailable: capacityAvailable ?? this.capacityAvailable,
+  enSuiteBathroom: enSuiteBathroom ?? this.enSuiteBathroom,
+  sharedBathroom: sharedBathroom ?? this.sharedBathroom,
+  balcony: balcony ?? this.balcony,
+  window: window ?? this.window,
+  profilePicture: profilePicture ?? this.profilePicture,
+  petsAllowed: petsAllowed ?? this.petsAllowed,
+  blockedPeriods: blockedPeriods ?? this.blockedPeriods,
+  beds: beds ?? this.beds,
+);
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['id'] = id;
+    map['hostId'] = hostId;
+    map['hostName'] = hostName;
+    map['roomName'] = roomName;
+    map['month_rent'] = monthRent;
+    map['deposit'] = deposit;
+    map['furnished'] = furnished;
+    map['availableFrom'] = availableFrom;
+    if (allowedTenants != null) {
+      map['allowedTenants'] = allowedTenants?.toJson();
+    }
+    if (amenities != null) {
+      map['amenities'] = amenities?.toJson();
+    }
+    map['street'] = street;
+    map['city'] = city;
+    map['government'] = government;
+    map['isSaved'] = isSaved;
+    map['isPaid'] = isPaid;
+    if (propertyImages != null) {
+      map['propertyImages'] = propertyImages?.map((v) => v.toJson()).toList();
+    }
+    map['minimumStay'] = minimumStay;
+    map['capacity'] = capacity;
+    map['capacityAvailable'] = capacityAvailable;
+    map['enSuiteBathroom'] = enSuiteBathroom;
+    map['sharedBathroom'] = sharedBathroom;
+    map['balcony'] = balcony;
+    map['window'] = window;
+    map['profilePicture'] = profilePicture;
+    map['petsAllowed'] = petsAllowed;
+    if (blockedPeriods != null) {
+      map['blockedPeriods'] = blockedPeriods?.map((v) => v.toJson()).toList();
+    }
+    if (beds != null) {
+      map['beds'] = beds?.map((v) => v.toJson()).toList();
+    }
+    return map;
+  }
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "hostId": hostId,
-    "hostName": hostName,
-    "roomName": roomName,
-    "month_rent": monthRent,
-    "deposit": deposit,
-    "furnished": furnished,
-    "availableFrom": availableFrom,
-    "allowedTenants": allowedTenants?.toJson(),
-    "amenities": amenities?.toJson(),
-    "nearbyServices": nearbyServices?.toJson(),
-    "street": street,
-    "city": city,
-    "government": government,
-    "latitude": latitude,
-    "longitude": longitude,
-    "size": size,
-    "propertyImages": propertyImages?.map((x) => x.toJson()).toList(),
-    "minimumStay": minimumStay,
-    "capacity": capacity,
-    "capacityAvailable": capacityAvailable,
-    "enSuiteBathroom": enSuiteBathroom,
-    "sharedBathroom": sharedBathroom,
-    "balcony": balcony,
-    "window": window,
-    "petsAllowed": petsAllowed,
-    "blockedPeriods": blockedPeriods?.map((x) => x.toJson()).toList(),
-    "beds": beds?.map((x) => x.toJson()).toList(),
-  };
 }
-
-class AllowedTenants {
-  final bool? allowsFamilies;
-  final bool? allowsChildren;
-  final bool? allowsStudents;
-  final String? studentGender;
-  final bool? allowsWorkers;
-  final String? workerGender;
-  final bool? petsAllowed;
-
-  AllowedTenants({
-    this.allowsFamilies,
-    this.allowsChildren,
-    this.allowsStudents,
-    this.studentGender,
-    this.allowsWorkers,
-    this.workerGender,
-    this.petsAllowed,
-  });
-
-  factory AllowedTenants.fromJson(Map<String, dynamic> json) => AllowedTenants(
-    allowsFamilies: json["allowsFamilies"],
-    allowsChildren: json["allowsChildren"],
-    allowsStudents: json["allowsStudents"],
-    studentGender: json["studentGender"],
-    allowsWorkers: json["allowsWorkers"],
-    workerGender: json["workerGender"],
-    petsAllowed: json["petsAllowed"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "allowsFamilies": allowsFamilies,
-    "allowsChildren": allowsChildren,
-    "allowsStudents": allowsStudents,
-    "studentGender": studentGender,
-    "allowsWorkers": allowsWorkers,
-    "workerGender": workerGender,
-    "petsAllowed": petsAllowed,
-  };
-}
-
-class RoomAmenities {
-  final bool? wifi;
-  final bool? tv;
-  final bool? cooktop;
-  final bool? oven;
-  final bool? kettle;
-  final bool? dishwasher;
-  final bool? refrigerator;
-  final bool? microwave;
-  final bool? washer;
-  final bool? freeParking;
-  final bool? airConditioning;
-  final bool? smokeAlarm;
-  final bool? fireExtinguisher;
-
-  RoomAmenities({
-    this.wifi,
-    this.tv,
-    this.cooktop,
-    this.oven,
-    this.kettle,
-    this.dishwasher,
-    this.refrigerator,
-    this.microwave,
-    this.washer,
-    this.freeParking,
-    this.airConditioning,
-    this.smokeAlarm,
-    this.fireExtinguisher,
-  });
-
-  factory RoomAmenities.fromJson(Map<String, dynamic> json) => RoomAmenities(
-    wifi: json["wifi"],
-    tv: json["tv"],
-    cooktop: json["cooktop"],
-    oven: json["oven"],
-    kettle: json["kettle"],
-    dishwasher: json["dishwasher"],
-    refrigerator: json["refrigerator"],
-    microwave: json["microwave"],
-    washer: json["washer"],
-    freeParking: json["freeParking"],
-    airConditioning: json["airConditioning"],
-    smokeAlarm: json["smokeAlarm"],
-    fireExtinguisher: json["fireExtinguisher"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "wifi": wifi,
-    "tv": tv,
-    "cooktop": cooktop,
-    "oven": oven,
-    "kettle": kettle,
-    "dishwasher": dishwasher,
-    "refrigerator": refrigerator,
-    "microwave": microwave,
-    "washer": washer,
-    "freeParking": freeParking,
-    "airConditioning": airConditioning,
-    "smokeAlarm": smokeAlarm,
-    "fireExtinguisher": fireExtinguisher,
-  };
-}
-
-class NearbyServices {
-  final bool? hasGroceryStore;
-  final bool? hasPharmacy;
-  final bool? hasHospital;
-  final bool? hasSchool;
-  final bool? hasUniversity;
-  final bool? hasPublicTransport;
-  final bool? hasParking;
-  final bool? hasMall;
-  final bool? hasRestaurants;
-  final bool? hasPark;
-  final bool? hasGym;
-  final bool? isSafeArea;
-  final bool? hasPoliceStation;
-  final bool? isQuietArea;
-  final bool? hasChurchNearby;
-  final bool? hasMosqueNearby;
-
-  NearbyServices({
-    this.hasGroceryStore,
-    this.hasPharmacy,
-    this.hasHospital,
-    this.hasSchool,
-    this.hasUniversity,
-    this.hasPublicTransport,
-    this.hasParking,
-    this.hasMall,
-    this.hasRestaurants,
-    this.hasPark,
-    this.hasGym,
-    this.isSafeArea,
-    this.hasPoliceStation,
-    this.isQuietArea,
-    this.hasChurchNearby,
-    this.hasMosqueNearby,
-  });
-
-  factory NearbyServices.fromJson(Map<String, dynamic> json) => NearbyServices(
-    hasGroceryStore: json["hasGroceryStore"],
-    hasPharmacy: json["hasPharmacy"],
-    hasHospital: json["hasHospital"],
-    hasSchool: json["hasSchool"],
-    hasUniversity: json["hasUniversity"],
-    hasPublicTransport: json["hasPublicTransport"],
-    hasParking: json["hasParking"],
-    hasMall: json["hasMall"],
-    hasRestaurants: json["hasRestaurants"],
-    hasPark: json["hasPark"],
-    hasGym: json["hasGym"],
-    isSafeArea: json["isSafeArea"],
-    hasPoliceStation: json["hasPoliceStation"],
-    isQuietArea: json["isQuietArea"],
-    hasChurchNearby: json["hasChurchNearby"],
-    hasMosqueNearby: json["hasMosqueNearby"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "hasGroceryStore": hasGroceryStore,
-    "hasPharmacy": hasPharmacy,
-    "hasHospital": hasHospital,
-    "hasSchool": hasSchool,
-    "hasUniversity": hasUniversity,
-    "hasPublicTransport": hasPublicTransport,
-    "hasParking": hasParking,
-    "hasMall": hasMall,
-    "hasRestaurants": hasRestaurants,
-    "hasPark": hasPark,
-    "hasGym": hasGym,
-    "isSafeArea": isSafeArea,
-    "hasPoliceStation": hasPoliceStation,
-    "isQuietArea": isQuietArea,
-    "hasChurchNearby": hasChurchNearby,
-    "hasMosqueNearby": hasMosqueNearby,
-  };
-}
-
-class PropertyImage {
-  final int? id;
-  final String? imageUrl;
-  final bool? isCover;
-
-  PropertyImage({this.id, this.imageUrl, this.isCover});
-
-  factory PropertyImage.fromJson(Map<String, dynamic> json) => PropertyImage(
-    id: json["id"],
-    imageUrl: json["imageUrl"],
-    isCover: json["isCover"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "imageUrl": imageUrl,
-    "isCover": isCover,
-  };
-}
-
 class BlockedPeriod {
   final String? from;
   final String? to;
@@ -383,23 +274,177 @@ class BlockedPeriod {
   Map<String, dynamic> toJson() => {"from": from, "to": to};
 }
 
-class Bed {
-  final int? bedNumber;
-  final List<BlockedPeriod>? blockedPeriods;
+/// bedNumber : 1
+/// blockedPeriods : []
 
-  Bed({this.bedNumber, this.blockedPeriods});
+class Beds {
+  Beds({
+      this.bedNumber,
+      this.blockedPeriods,});
 
-  factory Bed.fromJson(Map<String, dynamic> json) => Bed(
-    bedNumber: json["bedNumber"],
-    blockedPeriods: json["blockedPeriods"] == null
-        ? []
-        : List<BlockedPeriod>.from(
-            json["blockedPeriods"]!.map((x) => BlockedPeriod.fromJson(x)),
-          ),
-  );
+  Beds.fromJson(dynamic json) {
+    bedNumber = json['bedNumber'];
+    if (json['blockedPeriods'] != null) {
+      blockedPeriods = [];
+      json['blockedPeriods'].forEach((v) {
+        blockedPeriods?.add(BlockedPeriod.fromJson(v));
+      });
+    }
+  }
+  num? bedNumber;
+  List<BlockedPeriod>? blockedPeriods;
+Beds copyWith({  num? bedNumber,
+  List<BlockedPeriod>? blockedPeriods,
+}) => Beds(  bedNumber: bedNumber ?? this.bedNumber,
+  blockedPeriods: blockedPeriods ?? this.blockedPeriods,
+);
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['bedNumber'] = bedNumber;
+    if (blockedPeriods != null) {
+      map['blockedPeriods'] = blockedPeriods?.map((v) => v.toJson()).toList();
+    }
+    return map;
+  }
 
-  Map<String, dynamic> toJson() => {
-    "bedNumber": bedNumber,
-    "blockedPeriods": blockedPeriods?.map((x) => x.toJson()).toList(),
-  };
+}
+
+/// id : 666
+/// imageUrl : "https://graduationproject1.runasp.net/images/properties/f012d8dc-73b3-4666-b10e-9a73c78c5383_1000136238.jpg"
+/// isCover : true
+
+class PropertyImages {
+  PropertyImages({
+      this.id,
+      this.imageUrl,
+      this.isCover,});
+
+  PropertyImages.fromJson(dynamic json) {
+    id = json['id'];
+    imageUrl = json['imageUrl'];
+    isCover = json['isCover'];
+  }
+  num? id;
+  String? imageUrl;
+  bool? isCover;
+PropertyImages copyWith({  num? id,
+  String? imageUrl,
+  bool? isCover,
+}) => PropertyImages(  id: id ?? this.id,
+  imageUrl: imageUrl ?? this.imageUrl,
+  isCover: isCover ?? this.isCover,
+);
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['id'] = id;
+    map['imageUrl'] = imageUrl;
+    map['isCover'] = isCover;
+    return map;
+  }
+
+}
+
+/// airConditioning : true
+/// closet : true
+/// mirror : false
+/// fan : true
+
+class Amenities {
+  Amenities({
+      this.airConditioning,
+      this.closet,
+      this.mirror,
+      this.fan,});
+
+  Amenities.fromJson(dynamic json) {
+    airConditioning = json['airConditioning'];
+    closet = json['closet'];
+    mirror = json['mirror'];
+    fan = json['fan'];
+  }
+  bool? airConditioning;
+  bool? closet;
+  bool? mirror;
+  bool? fan;
+Amenities copyWith({  bool? airConditioning,
+  bool? closet,
+  bool? mirror,
+  bool? fan,
+}) => Amenities(  airConditioning: airConditioning ?? this.airConditioning,
+  closet: closet ?? this.closet,
+  mirror: mirror ?? this.mirror,
+  fan: fan ?? this.fan,
+);
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['airConditioning'] = airConditioning;
+    map['closet'] = closet;
+    map['mirror'] = mirror;
+    map['fan'] = fan;
+    return map;
+  }
+
+}
+
+/// allowsFamilies : false
+/// allowsChildren : false
+/// allowsStudents : false
+/// studentGender : "female"
+/// allowsWorkers : true
+/// workerGender : "female"
+/// petsAllowed : false
+
+class AllowedTenants {
+  AllowedTenants({
+      this.allowsFamilies,
+      this.allowsChildren,
+      this.allowsStudents,
+      this.studentGender,
+      this.allowsWorkers,
+      this.workerGender,
+      this.petsAllowed,});
+
+  AllowedTenants.fromJson(dynamic json) {
+    allowsFamilies = json['allowsFamilies'];
+    allowsChildren = json['allowsChildren'];
+    allowsStudents = json['allowsStudents'];
+    studentGender = json['studentGender'];
+    allowsWorkers = json['allowsWorkers'];
+    workerGender = json['workerGender'];
+    petsAllowed = json['petsAllowed'];
+  }
+  bool? allowsFamilies;
+  bool? allowsChildren;
+  bool? allowsStudents;
+  String? studentGender;
+  bool? allowsWorkers;
+  String? workerGender;
+  bool? petsAllowed;
+AllowedTenants copyWith({  bool? allowsFamilies,
+  bool? allowsChildren,
+  bool? allowsStudents,
+  String? studentGender,
+  bool? allowsWorkers,
+  String? workerGender,
+  bool? petsAllowed,
+}) => AllowedTenants(  allowsFamilies: allowsFamilies ?? this.allowsFamilies,
+  allowsChildren: allowsChildren ?? this.allowsChildren,
+  allowsStudents: allowsStudents ?? this.allowsStudents,
+  studentGender: studentGender ?? this.studentGender,
+  allowsWorkers: allowsWorkers ?? this.allowsWorkers,
+  workerGender: workerGender ?? this.workerGender,
+  petsAllowed: petsAllowed ?? this.petsAllowed,
+);
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['allowsFamilies'] = allowsFamilies;
+    map['allowsChildren'] = allowsChildren;
+    map['allowsStudents'] = allowsStudents;
+    map['studentGender'] = studentGender;
+    map['allowsWorkers'] = allowsWorkers;
+    map['workerGender'] = workerGender;
+    map['petsAllowed'] = petsAllowed;
+    return map;
+  }
+
 }

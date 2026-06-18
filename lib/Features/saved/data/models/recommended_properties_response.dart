@@ -11,14 +11,14 @@ class RecommendedPropertiesResponse {
   RecommendedPropertiesResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? RecommendedPropertiesResponseData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
   String? message;
-  Data? data;
+  RecommendedPropertiesResponseData? data;
 RecommendedPropertiesResponse copyWith({  bool? isSuccess,
   String? message,
-  Data? data,
+  RecommendedPropertiesResponseData? data,
 }) => RecommendedPropertiesResponse(  isSuccess: isSuccess ?? this.isSuccess,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -40,14 +40,14 @@ RecommendedPropertiesResponse copyWith({  bool? isSuccess,
 /// items : [{"id":161,"name":"Luxury Apartment in New Cairo","price":15000,"priceDisplay":"15,000/mo","address":"90 Street, Fifth Settlement, Amiriyyah","city":"Amiriyyah","government":"Cairo","propertyType":"Apartment","bedrooms":3,"bathrooms":2,"isFurnished":true,"distance":"Recommended for you","amenities":{"hasWifi":false,"hasAC":false,"hasParking":false,"hasGym":false},"imageUrl":"https://example.com/images/apartment-cover.jpg"},{"id":149,"name":"asdfasdasdf","price":234,"priceDisplay":"234/mo","address":"wsredfgadsf, Abou Simbel","city":"Abou Simbel","government":"Aswan","propertyType":"Apartment","bedrooms":1,"bathrooms":0,"isFurnished":true,"distance":"Recommended for you","amenities":{"hasWifi":false,"hasAC":false,"hasParking":false,"hasGym":false},"imageUrl":"https://graduationproject1.runasp.net/images/properties/fd9d2666-a48e-4e1d-8722-e5f843e7db33_38.png"}]
 /// isFallback : true
 
-class Data {
-  Data({
+class RecommendedPropertiesResponseData {
+  RecommendedPropertiesResponseData({
       this.title, 
       this.subtitle, 
       this.items, 
       this.isFallback,});
 
-  Data.fromJson(dynamic json) {
+  RecommendedPropertiesResponseData.fromJson(dynamic json) {
     title = json['title'];
     subtitle = json['subtitle'];
     if (json['items'] != null) {
@@ -62,11 +62,11 @@ class Data {
   String? subtitle;
   List<Items>? items;
   bool? isFallback;
-Data copyWith({  String? title,
+RecommendedPropertiesResponseData copyWith({  String? title,
   String? subtitle,
   List<Items>? items,
   bool? isFallback,
-}) => Data(  title: title ?? this.title,
+}) => RecommendedPropertiesResponseData(  title: title ?? this.title,
   subtitle: subtitle ?? this.subtitle,
   items: items ?? this.items,
   isFallback: isFallback ?? this.isFallback,
