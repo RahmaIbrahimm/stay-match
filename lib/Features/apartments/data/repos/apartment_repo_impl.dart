@@ -5,7 +5,7 @@ import 'package:stay_match/core/networking/api_service.dart';
 
 import '../../../../../../../core/networking/endpoints.dart';
 import '../models/all_apartments_response.dart';
-import '../../../shared/models/property_details_response.dart';
+import '../models/property_details_response.dart';
 import 'apartment_repo.dart';
 
 class ApartmentRepoImpl extends ApartmentRepo {

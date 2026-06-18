@@ -6,7 +6,7 @@ import 'package:stay_match/Features/add_property/data/models/update_shared_space
 import 'package:stay_match/Features/add_property/data/models/upload_image_response.dart';
 import 'package:stay_match/core/errors/failures.dart';
 
-import '../../../shared/models/property_details_response.dart';
+import '../../../apartments/data/models/property_details_response.dart';
 import '../models/add_apartment_request.dart';
 import '../models/add_apartment_response.dart';
 import '../models/add_room_request.dart';

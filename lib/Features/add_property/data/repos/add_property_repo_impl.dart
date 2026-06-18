@@ -7,7 +7,7 @@ import 'package:stay_match/Features/add_property/data/models/update_entire_prope
 import 'package:stay_match/Features/add_property/data/models/update_shared_property_request.dart';
 import 'package:stay_match/Features/add_property/data/models/update_shared_space_response.dart';
 import 'package:stay_match/Features/add_property/data/models/upload_image_response.dart';
-import 'package:stay_match/Features/shared/models/property_details_response.dart';
+import 'package:stay_match/Features/apartments/data/models/property_details_response.dart';
 
 import '../../../../core/errors/failures.dart';
 import '../../../../core/networking/api_service.dart';
