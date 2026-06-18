@@ -24,7 +24,7 @@ class ApartmentCard extends StatelessWidget {
         children: [
           SizedBox(
             height: scaleUp ? 200.h : 135.h,
-            child: CardCoverPhoto(imageUrl: property?.coverImageUrl),
+            child: CardCoverPhoto(imageUrl: property?.coverImageUrl,showCompatibility: false,),
           ),
           SizedBox(
             height: scaleUp ? 220.h : 180.h,
