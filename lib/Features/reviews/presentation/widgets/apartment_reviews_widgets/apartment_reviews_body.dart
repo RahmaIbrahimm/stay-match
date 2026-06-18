@@ -91,7 +91,7 @@ class _ApartmentReviewsBodyState extends State<ApartmentReviewsBody> {
               onRetry: () => _pagingController.refresh(),
             );
           }
-          Data? data;
+          GetApartmentReviewsData? data;
           if (state is ReviewsSuccess) data = state.apartmentReviews?.data;
 
           return ReviewsBody(
