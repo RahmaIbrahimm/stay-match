@@ -18,7 +18,7 @@ import 'package:stay_match/core/widgets/location_row.dart';
 import '../../../../google_maps/presentation/views/google_maps_view.dart';
 import '../../../../google_maps/presentation/widgets/maps_helper.dart';
 import '../../../../shared/widgets/amenities_widget.dart';
-import '../../../../shared/models/property_details_response.dart';
+import '../../../data/models/property_details_response.dart';
 import '../../manager/apartment_details_cubit.dart';
 import 'apartment_about_sliver.dart';
 import '../../../../shared/widgets/basic_features_sliver.dart';
@@ -415,7 +415,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [deposit(details), minimumStay(details)],
                       ),
-                      SizedBox(height: 12.h),
+                      if(!(details.isMyProperty?? false) )...[SizedBox(height: 12.h),
                       DurationSelector(
                         minimumStay: details.minimumStay?.toInt() ?? 1,
                         selectedDate: moveInDate,
@@ -424,7 +424,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                             setState(() => moveInDate = date),
                         onDurationChanged: (months) =>
                             setState(() => duration = months),
-                      ),
+                      ),]
                     ],
                   ),
                 ),
@@ -505,12 +505,13 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    SizedBox(height: 24.h),
+                    if(!(details.isMyProperty?? false) )...[SizedBox(height: 24.h),
                     _buildButtons(hostId: details.hostId.toString(),
                         startDate: moveInDate?.toUtc().toIso8601String(),
                         duration: duration,
                         propertyId: widget.id,
-                        details: details),
+                        details: details),],
+                    SizedBox(height: 32.h),
                   ],
                 ),
               ),
@@ -560,7 +561,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          Flexible(
+          if(details?.isPaid ?? false)...[Flexible(
             flex: 3,
             child: CustomElevatedButton(
               borderRadius: 10,
@@ -584,7 +585,7 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
               },
             ),
           ),
-          SizedBox(width: 16.w),
+          SizedBox(width: 16.w),],
           Flexible(
             flex: 4,
             child: CustomElevatedButton(
