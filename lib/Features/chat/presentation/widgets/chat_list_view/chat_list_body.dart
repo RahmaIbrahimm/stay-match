@@ -26,78 +26,218 @@ class ChatListBody extends StatelessWidget {
               child: CircularProgressIndicator(color: AppColors.primary,));
         }
 
+        // if (state is ChatSuccess) {
+        //   // Accessing your data list from the full response you wanted to keep
+        //   final List<dynamic> chats = state.isSearchMode
+        //       ? (state.searchResponse?.data ?? [])
+        //       : (state.response?.data ?? []);
+        //   final chatCubit = BlocProvider.of<ChatListCubit>(context);
+        //   // todo: make this pretty
+        //   void onSearchChanged(String query) {
+        //     if (_debounce?.isActive ?? false) _debounce?.cancel();
+        //     _debounce = Timer(const Duration(milliseconds: 500), () {
+        //       // Calling the unified method in your Cubit
+        //       context.read<ChatListCubit>().getInbox(query: query);
+        //     });
+        //   }
+        //   return CustomScrollView(
+        //     slivers: [
+        //       SliverAppBar(
+        //         backgroundColor: AppColors.containerColor,
+        //         title: Text(
+        //           AppStrings.chats,
+        //           style: AppStyles.bold24poppins.copyWith(
+        //             color: AppColors.textColorPrimary,
+        //           ),
+        //         ),
+        //         centerTitle: true,
+        //         pinned: true,
+        //       ),
+        //       SliverToBoxAdapter(
+        //         child: RPadding(
+        //           padding: EdgeInsets.symmetric(horizontal: 16.r),
+        //           child: CustomTextFormField(
+        //             controller: _searchController,
+        //             hintText: AppStrings.searchConvo,
+        //             validator: (val) => null,
+        //             hasShadow: false,
+        //             prefixIcon: Icon(
+        //               Icons.search,
+        //               color: AppColors.textColorSecondary,
+        //             ),
+        //             onChanged: onSearchChanged,
+        //             fillColor: AppColors.fieldFillColor,
+        //             stroke: false,
+        //             borderRadius: 12,
+        //             hintStyle: AppStyles.regular14poppins.copyWith(color: AppColors.textColorSecondary),
+        //           ),
+        //         ),
+        //       ),
+        //       if(chats.isNotEmpty)SliverPadding(
+        //         padding: EdgeInsets.symmetric(vertical: 8.r),
+        //         sliver: SliverList(
+        //           delegate: SliverChildBuilderDelegate(
+        //                 (context, index) {
+        //               final chat = chats[index];
+        //               return Column(
+        //                 key: ValueKey(chat.otherUserId),
+        //                 children: [
+        //                   ChatTile(chatData: chat),
+        //                   if (index != chats.length - 1)
+        //                     const Divider(height: 1, indent: 85, color: AppColors.stroke),
+        //                 ],
+        //               );
+        //             },
+        //             childCount: chats.length,
+        //           ),
+        //         ),
+        //       ),
+        //       if(chats.isEmpty)
+        //         SliverFillRemaining(
+        //           hasScrollBody: false,
+        //           child: Padding(
+        //             padding: EdgeInsets.symmetric(horizontal: 30.w),
+        //             // Extra padding for the whole column
+        //             child: Column(
+        //               mainAxisAlignment: MainAxisAlignment.center,
+        //               children: [
+        //                 Icon(
+        //                   _searchController.text.isEmpty
+        //                       ? Icons.chat_bubble_outline_rounded
+        //                       : Icons.search_off_rounded,
+        //                   size: 80.r,
+        //                   color: AppColors.textColorSecondary.withOpacity(0.4),
+        //                 ),
+        //                 SizedBox(height: 16.h),
+        //                 Text(
+        //                   _searchController.text.isEmpty
+        //                       ? "No Conversations Yet"
+        //                       : "No Results Found",
+        //                   style: AppStyles.bold18poppins.copyWith(
+        //                     color: AppColors.textColorPrimary,
+        //                   ),
+        //                 ),
+        //                 SizedBox(height: 8.h),
+        //                 Text(
+        //                   _searchController.text.isEmpty
+        //                       ? "Start a chat with your matches to see them here."
+        //                       : "We couldn't find any chats matching '${_searchController
+        //                       .text}'.",
+        //                   textAlign: TextAlign.center,
+        //                   style: AppStyles.regular14poppins.copyWith(
+        //                     color: AppColors.textColorSecondary,
+        //                   ),
+        //                 ),
+        //
+        //                 // --- THE NEW BUTTON STYLE ---
+        //                 if (_searchController.text.isNotEmpty) ...[
+        //                   SizedBox(height: 32.h),
+        //                   SizedBox(
+        //                       width: double.infinity,
+        //                       height: 50.h,
+        //                       child: CustomElevatedButton(
+        //                         text: "Clear Search Results",
+        //                         onPressed: () {
+        //                           _searchController.clear();
+        //                           context.read<ChatListCubit>().getInbox();
+        //                         },
+        //                         textStyle: AppStyles.semiBold16manrope,
+        //                         textColor: Colors.white,
+        //                         borderRadius: 12,
+        //                       )
+        //                   ),
+        //                 ],
+        //               ],
+        //             ),
+        //           ),
+        //         )
+        //     ],
+        //   );
+        // }
+// Inside ChatListBody's Widget build:
         if (state is ChatSuccess) {
-          // Accessing your data list from the full response you wanted to keep
           final List<dynamic> chats = state.isSearchMode
               ? (state.searchResponse?.data ?? [])
               : (state.response?.data ?? []);
-          final chatCubit = BlocProvider.of<ChatListCubit>(context);
-          // todo: make this pretty
+
           void onSearchChanged(String query) {
             if (_debounce?.isActive ?? false) _debounce?.cancel();
             _debounce = Timer(const Duration(milliseconds: 500), () {
-              // Calling the unified method in your Cubit
               context.read<ChatListCubit>().getInbox(query: query);
             });
           }
+
           return CustomScrollView(
             slivers: [
               SliverAppBar(
                 backgroundColor: AppColors.containerColor,
                 title: Text(
                   AppStrings.chats,
-                  style: AppStyles.bold24poppins.copyWith(
-                    color: AppColors.textColorPrimary,
-                  ),
+                  style: AppStyles.bold24poppins.copyWith(color: AppColors.textColorPrimary),
                 ),
                 centerTitle: true,
                 pinned: true,
               ),
               SliverToBoxAdapter(
-                child: RPadding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.r),
-                  child: CustomTextFormField(
-                    controller: _searchController,
-                    hintText: AppStrings.searchConvo,
-                    validator: (val) => null,
-                    hasShadow: false,
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: AppColors.textColorSecondary,
+                child: Column(
+                  children: [
+                    RPadding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.r),
+                      child: CustomTextFormField(
+                        controller: _searchController,
+                        hintText: AppStrings.searchConvo,
+                        validator: (val) => null,
+                        hasShadow: false,
+                        prefixIcon: const Icon(Icons.search, color: AppColors.textColorSecondary),
+                        onChanged: onSearchChanged,
+                        fillColor: AppColors.fieldFillColor,
+                        stroke: false,
+                        borderRadius: 12,
+                        hintStyle: AppStyles.regular14poppins.copyWith(color: AppColors.textColorSecondary),
+                      ),
                     ),
-                    onChanged: onSearchChanged,
-                    fillColor: AppColors.fieldFillColor,
-                    stroke: false,
-                    borderRadius: 12,
-                    hintStyle: AppStyles.regular14poppins.copyWith(color: AppColors.textColorSecondary),
-                  ),
+
+                    // 🌟 Smooth WhatsApp Inline Loader:
+                    if (state.isSearching)
+                      Padding(
+                        padding: EdgeInsets.only(top: 8.h),
+                        child: const LinearProgressIndicator(
+                          backgroundColor: Colors.transparent,
+                          color: AppColors.primary,
+                        ),
+                      )
+                    else
+                      SizedBox(height: 8.h),
+                  ],
                 ),
               ),
-              if(chats.isNotEmpty)SliverPadding(
-                padding: EdgeInsets.symmetric(vertical: 8.r),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                      final chat = chats[index];
-                      return Column(
-                        key: ValueKey(chat.otherUserId),
-                        children: [
-                          ChatTile(chatData: chat),
-                          if (index != chats.length - 1)
-                            const Divider(height: 1, indent: 85, color: AppColors.stroke),
-                        ],
-                      );
-                    },
-                    childCount: chats.length,
+
+              // Keep your exact same Chat list / Empty dynamic rendering state blocks underneath
+              if (chats.isNotEmpty)
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(vertical: 8.r),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                        final chat = chats[index];
+                        return Column(
+                          key: ValueKey(chat.otherUserId),
+                          children: [
+                            ChatTile(chatData: chat),
+                            if (index != chats.length - 1)
+                              const Divider(height: 1, indent: 85, color: AppColors.stroke),
+                          ],
+                        );
+                      },
+                      childCount: chats.length,
+                    ),
                   ),
                 ),
-              ),
-              if(chats.isEmpty)
+              if (chats.isEmpty)
                 SliverFillRemaining(
                   hasScrollBody: false,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30.w),
-                    // Extra padding for the whole column
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -110,41 +250,32 @@ class ChatListBody extends StatelessWidget {
                         ),
                         SizedBox(height: 16.h),
                         Text(
-                          _searchController.text.isEmpty
-                              ? "No Conversations Yet"
-                              : "No Results Found",
-                          style: AppStyles.bold18poppins.copyWith(
-                            color: AppColors.textColorPrimary,
-                          ),
+                          _searchController.text.isEmpty ? "No Conversations Yet" : "No Results Found",
+                          style: AppStyles.bold18poppins.copyWith(color: AppColors.textColorPrimary),
                         ),
                         SizedBox(height: 8.h),
                         Text(
                           _searchController.text.isEmpty
                               ? "Start a chat with your matches to see them here."
-                              : "We couldn't find any chats matching '${_searchController
-                              .text}'.",
+                              : "We couldn't find any chats matching '${_searchController.text}'.",
                           textAlign: TextAlign.center,
-                          style: AppStyles.regular14poppins.copyWith(
-                            color: AppColors.textColorSecondary,
-                          ),
+                          style: AppStyles.regular14poppins.copyWith(color: AppColors.textColorSecondary),
                         ),
-
-                        // --- THE NEW BUTTON STYLE ---
                         if (_searchController.text.isNotEmpty) ...[
                           SizedBox(height: 32.h),
                           SizedBox(
-                              width: double.infinity,
-                              height: 50.h,
-                              child: CustomElevatedButton(
-                                text: "Clear Search Results",
-                                onPressed: () {
-                                  _searchController.clear();
-                                  context.read<ChatListCubit>().getInbox();
-                                },
-                                textStyle: AppStyles.semiBold16manrope,
-                                textColor: Colors.white,
-                                borderRadius: 12,
-                              )
+                            width: double.infinity,
+                            height: 50.h,
+                            child: CustomElevatedButton(
+                              text: "Clear Search Results",
+                              onPressed: () {
+                                _searchController.clear();
+                                context.read<ChatListCubit>().getInbox();
+                              },
+                              textStyle: AppStyles.semiBold16manrope,
+                              textColor: Colors.white,
+                              borderRadius: 12,
+                            ),
                           ),
                         ],
                       ],
@@ -154,7 +285,6 @@ class ChatListBody extends StatelessWidget {
             ],
           );
         }
-
         if (state is ChatFailure) {
           return Center(child: Text(state.errMessage));
         }

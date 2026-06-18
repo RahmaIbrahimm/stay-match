@@ -11,19 +11,35 @@ final class ChatLoading extends ChatListState {
   @override
   List<Object?> get props => [];
 }
-final class ChatSuccess extends ChatListState {
+class ChatSuccess extends ChatListState {
   final MyChats? response;
   final SearchChatsResponse? searchResponse;
+  final bool isSearching; // New tracking property
 
-  ChatSuccess({this.searchResponse, this.response});
+   ChatSuccess({
+    this.response,
+    this.searchResponse,
+    this.isSearching = false,
+  });
 
-  // Helper to determine which data source to use
   bool get isSearchMode => searchResponse != null;
 
+  ChatSuccess copyWith({
+    MyChats? response,
+    SearchChatsResponse? searchResponse,
+    bool? isSearching,
+  }) {
+    return ChatSuccess(
+      response: response ?? this.response,
+      searchResponse: searchResponse ?? this.searchResponse,
+      isSearching: isSearching ?? this.isSearching,
+    );
+  }
+
   @override
-  List<Object?> get props => [response, searchResponse];
-}
-final class ChatFailure extends ChatListState {
+  // TODO: implement props
+  List<Object?> get props =>[response, searchResponse, isSearching];
+}final class ChatFailure extends ChatListState {
   final String errMessage;
 
   ChatFailure({required this.errMessage});
