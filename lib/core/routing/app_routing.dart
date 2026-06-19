@@ -16,11 +16,13 @@ import 'package:stay_match/Features/profile/presentation/manager/profile_cubit.d
 import 'package:stay_match/Features/profile/presentation/views/profile_view.dart';
 import 'package:stay_match/Features/questions/presentation/manager/questions_cubit.dart';
 import 'package:stay_match/Features/questions/presentation/views/questions_%20view.dart';
+import 'package:stay_match/Features/questions/presentation/views/questions_finish_pic.dart';
 import 'package:stay_match/Features/questions/presentation/views/questions_start_view.dart';
 import 'package:stay_match/Features/reviews/presentation/views/add_review_view.dart';
 import 'package:stay_match/Features/rooms/presentation/views/shared_property_view.dart';
 import 'package:stay_match/core/utils/service_locator.dart';
 import 'package:stay_match/core/widgets/layout_scaffold.dart';
+import 'package:stay_match/core/widgets/secondary_splash.dart';
 
 import '../../Features/add_property/data/repos/add_property_repo_impl.dart';
 import '../../Features/add_property/presentation/manager/add_property_cubit.dart';
@@ -49,6 +51,7 @@ import '../../Features/reviews/presentation/views/review_submitted_view.dart';
 import '../../Features/rooms/presentation/views/find_room_view.dart';
 import '../../Features/rooms/presentation/views/room_details_view.dart';
 import '../../Features/saved/presentation/views/saved_view.dart';
+import '../widgets/onboarding.dart';
 
 class AppRouting {
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -165,10 +168,18 @@ class AppRouting {
   static const questionsStartName = 'questionsStart';
   static const questionsStartPath = '/questions-start';
 
+  static const questionsFinishName = 'questionsFinish';
+  static const questionsFinishPath = '/questions-finish';
+
+  static const secondarySplashPath = '/secondary-splash';
+  static const secondarySplashName = 'secondarySplash';
+
+  static const onboardingPath = '/onboarding';
+  static const onboardingName = 'onboarding';
 
   static final router = GoRouter(
     navigatorKey: navigatorKey,
-    initialLocation: questionsStartPath,
+    initialLocation: onboardingPath,
     routes: [
       // ---------------- AUTH ROUTES ----------------
       GoRoute(
@@ -253,18 +264,18 @@ class AppRouting {
               final propertyId = int.tryParse(state.pathParameters['propertyId'] ?? '-1') ?? -1;
               return SharedPropertyView(propertyId: propertyId);
             },
-            routes: [
-              GoRoute(
-                parentNavigatorKey: navigatorKey,
-                path: roomDetailsViewPath,
-                name: roomDetailsViewName,
-                builder: (context, state) {
-                  final roomId = int.tryParse(state.pathParameters['roomId'] ?? '-1') ?? -1;
-                  final propertyId = int.tryParse(state.pathParameters['propertyId'] ?? '-1') ?? -1;
-                  return RoomDetailsView(roomId: roomId, propertyId: propertyId);
-                },
-              ),
-            ],
+              routes: [
+                GoRoute(
+                  name: roomDetailsViewName,
+                  path: roomDetailsViewPath,
+                  builder: (context, state) {
+                    final roomId = int.tryParse(state.pathParameters['roomId'] ?? '-1') ?? -1;
+                    final propertyId = int.tryParse(state.pathParameters['propertyId'] ?? '-1') ?? -1;
+                    return RoomDetailsView(roomId: roomId, propertyId: propertyId);
+                  },
+                ),
+
+              ]
           ),
         ],
       ),
@@ -380,7 +391,13 @@ class AppRouting {
       GoRoute(
         name: questionsStartName,
         path: questionsStartPath,
-        builder: (context, state) => const QuestionsStartView()
+        builder: (context, state) => const SecondarySplashView()
+      ),
+      // onboarding
+      GoRoute(
+        name: onboardingName,
+        path: onboardingPath,
+        builder: (context, state) => const OnboardingPage(),
       ),
 
       // ---------------- STATEFUL NAVIGATION SHELL (BOTTOM NAV BAR) ----------------
