@@ -14,7 +14,8 @@ class CustomBottomNavButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: Duration(milliseconds:150),
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.stroke, width: 2.w),
