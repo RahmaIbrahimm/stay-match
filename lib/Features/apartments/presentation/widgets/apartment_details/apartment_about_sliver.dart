@@ -4,7 +4,7 @@ import 'package:readmore/readmore.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_styles.dart';
-import '../../../../shared/models/property_details_response.dart';
+import '../../../data/models/property_details_response.dart';
 
 class PropertyAboutSliver extends StatelessWidget {
   const PropertyAboutSliver({super.key, required this.details});

@@ -129,7 +129,7 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
           ),
         ),
         HeartFavoriteButton(
-            id: id, initialSavedStatus: initialSavedStatus, scaleUp: scaleUp)
+            id: id, initialSavedStatus: initialSavedStatus, scaleUp: scaleUp,type: SavedItemType.wholeApartment,)
       ],
     );
   }

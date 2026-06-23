@@ -5,6 +5,7 @@ import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/utils/service_locator.dart';
 import 'package:stay_match/core/widgets/app_drawer/main_app_drawer.dart';
 
+import '../../../../core/widgets/draggable_chatbot_fab.dart';
 import '../../../shared/widgets/details_view_app_bar.dart';
 import '../../data/repos/apartment_repo_impl.dart';
 import '../manager/apartment_details_cubit.dart';
@@ -30,7 +31,7 @@ class ApartmentDetailsView extends StatelessWidget {
           title: AppStrings.apartmentDetails,
           barHeight: kToolbarHeight,
         ),
-        body: ApartmentDetailsViewBody(id: id),
+        body: DraggableChatbotFab(child: ApartmentDetailsViewBody(id: id)),
       ),
     );
   }

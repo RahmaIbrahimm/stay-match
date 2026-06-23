@@ -24,7 +24,7 @@ import 'apartment_about_sliver.dart';
 import '../../../../shared/widgets/basic_features_sliver.dart';
 import 'duration_selector.dart';
 import '../../../../shared/widgets/failure_state_widget.dart';
-import '../../../../shared/widgets/host_name_sliver.dart';
+import 'host_name_sliver.dart';
 import '../../../../shared/widgets/property_name_sliver.dart';
 
 class ApartmentDetailsViewBody extends StatefulWidget {
