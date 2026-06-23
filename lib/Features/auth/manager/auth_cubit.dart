@@ -197,22 +197,45 @@ class AuthCubit extends Cubit<AuthState> {
       (exception) {
         emit(LoginStateFailure(errMessage: exception.errMessage));
       },
-      (response) async {
+      // (response) async {
+      //   if (response.isSuccess == true) {
+      //     final secureStorage = getIt.get<SecureStorageHelper>();
+      //     await secureStorage.storage.write(
+      //         key: SecureStorageKeys.tokenKey, value: response.data?.token);
+      //     await secureStorage.storage.write(
+      //         key: SecureStorageKeys.refreshTokenKey,
+      //         value: response.data?.refreshToken);
+      //     await secureStorage.storage.write(key: SecureStorageKeys.userIdKey,
+      //         value: response.data?.userId);
+      //
+      //     final cacheHelper = getIt.get<CacheService>();
+      //     await cacheHelper.setData(
+      //         key: cacheHelper.userNameKey, value: response.data?.displayName);
+      //     await cacheHelper.setData(key: cacheHelper.userProfilePicKey,
+      //         value: response.data?.otherUserProfileImageUrl);
+      //     emit(LoginStateSuccess(response));
+      //   } else {
+      //     emit(LoginStateFailure(errMessage: "Invalid Email or Password"));
+      //   }
+      // },
+          (response) async {
         if (response.isSuccess == true) {
           final secureStorage = getIt.get<SecureStorageHelper>();
-          await secureStorage.storage.write(
+
+          // 🌟 FIX: Using your exact helper method name 'addToSecureStorage'
+          await secureStorage.addToSecureStorage(
               key: SecureStorageKeys.tokenKey, value: response.data?.token);
-          await secureStorage.storage.write(
-              key: SecureStorageKeys.refreshTokenKey,
-              value: response.data?.refreshToken);
-          await secureStorage.storage.write(key: SecureStorageKeys.userIdKey,
-              value: response.data?.userId);
+          await secureStorage.addToSecureStorage(
+              key: SecureStorageKeys.refreshTokenKey, value: response.data?.refreshToken);
+          await secureStorage.addToSecureStorage(
+              key: SecureStorageKeys.userIdKey, value: response.data?.userId);
 
           final cacheHelper = getIt.get<CacheService>();
           await cacheHelper.setData(
               key: cacheHelper.userNameKey, value: response.data?.displayName);
-          await cacheHelper.setData(key: cacheHelper.userProfilePicKey,
-              value: response.data?.otherUserProfileImageUrl);
+          await cacheHelper.setData(
+              key: cacheHelper.userProfilePicKey, value: response.data?.otherUserProfileImageUrl);
+
           emit(LoginStateSuccess(response));
         } else {
           emit(LoginStateFailure(errMessage: "Invalid Email or Password"));
