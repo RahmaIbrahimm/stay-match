@@ -101,6 +101,9 @@ abstract class AppStyles {
 
   static TextStyle get bold12inter =>
       _inter(fontSize: 12, fontWeight: FontWeight.bold);
+
+  static TextStyle get semiBold24inter =>
+      _inter(fontSize: 24, fontWeight: FontWeight.w600);
   // ---------------- PROTEST RIOT ----------------
   static TextStyle get regular15protestRiot =>
       _protestRiot(fontSize: 15, fontWeight: FontWeight.normal);
