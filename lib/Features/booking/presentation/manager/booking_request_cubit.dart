@@ -7,6 +7,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:stay_match/Features/booking/data/model/apartment_booking_request_request.dart';
 import 'package:stay_match/Features/booking/data/model/host_requests_response.dart';
 import 'package:stay_match/Features/booking/data/model/renter_bookings_response.dart';
+import 'package:stay_match/Features/booking/data/model/room_booking_request_request.dart';
 import 'package:stay_match/Features/booking/data/repos/booking_repo.dart';
 import 'package:stay_match/Features/filter/presentation/widgets/filter_helper.dart';
 
@@ -16,6 +17,10 @@ import 'booking_request_state.dart';
 enum UserType {
   host,
   renter
+}
+enum BookingPropertyType {
+  privateRoom,
+  entireApartment,
 }
 class BookingRequestCubit extends Cubit<BookingRequestState> {
   final BookingRepo bookingRepo;
@@ -46,6 +51,13 @@ class BookingRequestCubit extends Cubit<BookingRequestState> {
     propertyId: null,
     startDate: null,
   );
+  RoomBookingRequestRequest _roomRequest = RoomBookingRequestRequest(
+      duration: null,
+      message: null,
+      propertyId: null,
+      startDate: null,
+      roomId: null
+  );
 
   // ─── PAGINATION CONTROLLERS ───
   final PagingController<int, Requests> hostPagingController = PagingController(
@@ -69,22 +81,37 @@ class BookingRequestCubit extends Cubit<BookingRequestState> {
   void updateBookingData({
     int? duration,
     int? propertyId,
+    int? roomId,
     String? startDate,
     String? message,
+     BookingPropertyType type = BookingPropertyType.entireApartment
   }) {
-    _apartmentRequest = ApartmentBookingRequestRequest(
-      duration: duration ?? _apartmentRequest.duration,
-      propertyId: propertyId ?? _apartmentRequest.propertyId,
-      startDate: startDate ?? _apartmentRequest.startDate,
-      message: message ?? _apartmentRequest.message,
-    );
+   if(type == BookingPropertyType.entireApartment){
+     _apartmentRequest = ApartmentBookingRequestRequest(
+       duration: duration ?? _apartmentRequest.duration,
+       propertyId: propertyId ?? _apartmentRequest.propertyId,
+       startDate: startDate ?? _apartmentRequest.startDate,
+       message: message ?? _apartmentRequest.message,
+     );
+   }
+   else{
+     _roomRequest = RoomBookingRequestRequest(
+       duration: duration ?? _apartmentRequest.duration,
+       propertyId: propertyId ?? _apartmentRequest.propertyId,
+       startDate: startDate ?? _apartmentRequest.startDate,
+       message: message ?? _apartmentRequest.message,
+       roomId: roomId ??_roomRequest.roomId
+     );
+
+   }
   }
 
   ApartmentBookingRequestRequest get apartmentRequest => _apartmentRequest;
 
   Future<void> sendApartmentBooking() async {
     if (_apartmentRequest.propertyId == null || _apartmentRequest.startDate == null) {
-      emit(const BookingRequestFailure(errMessage: "Missing required booking details"));
+      emit(BookingRequestFailure(
+          errMessage: "Missing required booking details"));
       return;
     }
 
@@ -92,6 +119,36 @@ class BookingRequestCubit extends Cubit<BookingRequestState> {
 
     final result = await bookingRepo.requestApartmentBooking(
       request: _apartmentRequest,
+    );
+
+    result.fold(
+          (failure) {
+        debugPrint("Cubit: Emitting Failure");
+        emit(BookingRequestFailure(errMessage: failure.errMessage));
+      },
+          (response) {
+        if (response.isSuccess == true) {
+          debugPrint("Cubit: Emitting Success");
+          emit(BookingRequestSuccess());
+        } else {
+          emit(BookingRequestFailure(errMessage: response.message ?? "Failed"));
+        }
+      },
+    );
+  }
+
+  Future<void> sendRoomBooking() async {
+    if (_roomRequest.propertyId == null ||
+        _roomRequest.startDate == null || _roomRequest.roomId == null) {
+      emit(BookingRequestFailure(
+          errMessage: "Missing required booking details"));
+      return;
+    }
+
+    emit(BookingRequestLoading());
+
+    final result = await bookingRepo.requestRoomBooking(
+      request: _roomRequest,
     );
 
     result.fold(
@@ -242,19 +299,23 @@ class BookingRequestCubit extends Cubit<BookingRequestState> {
     }
   }
 
-  // cancel decline and approve and delete
   Future<void> renterCancelBooking(int id) async {
     var response = await bookingRepo.renterCancelBooking(id: id);
     response.fold((fail) =>
         emit(BookingRequestFailure(errMessage: fail.errMessage)), (resp) {
       if (resp.isSuccess == true) {
+        // Remove the cancelled booking from the renter's paged list
+        final currentItems = List<dynamic>.from(
+            renterPagingController.itemList ?? []);
+        currentItems.removeWhere((item) => item.id == id);
+        renterPagingController.itemList = currentItems;
+
         emit(BookingRequestSuccess(cancelBooking: resp,successMessage: "Booking cancelled successfully."));
       } else {
         emit(BookingRequestFailure(errMessage: "Booking cancellation failed. Please try again."));
       }
     });
   }
-
   Future<void> approveBooking(int id) async {
     lastProcessedId = id;
     var response = await bookingRepo.approveBookingRequest(id: id);

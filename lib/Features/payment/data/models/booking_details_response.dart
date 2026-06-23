@@ -11,14 +11,14 @@ class BookingDetailsResponse {
   BookingDetailsResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? BookingDetailsResponseData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
   String? message;
-  Data? data;
+  BookingDetailsResponseData? data;
 BookingDetailsResponse copyWith({  bool? isSuccess,
   String? message,
-  Data? data,
+  BookingDetailsResponseData? data,
 }) => BookingDetailsResponse(  isSuccess: isSuccess ?? this.isSuccess,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -49,8 +49,8 @@ BookingDetailsResponse copyWith({  bool? isSuccess,
 /// renter : {"id":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","name":"Rahma Ibrahim","email":"rahmaibrahim315@gmail.com","phoneNumber":"01064097980","profilePicture":"https://graduationproject1.runasp.net/images/87fc98bc-09fa-4dc7-abe4-a60753c14308.png"}
 /// host : {"id":"1121c342-dd7a-4a29-bc66-c94f6aa43212","name":"abanoub yousry","email":"user@example.com","phoneNumber":""}
 
-class Data {
-  Data({
+class BookingDetailsResponseData {
+  BookingDetailsResponseData({
       this.id, 
       this.startDate, 
       this.endDate, 
@@ -65,7 +65,7 @@ class Data {
       this.renter, 
       this.host,});
 
-  Data.fromJson(dynamic json) {
+  BookingDetailsResponseData.fromJson(dynamic json) {
     id = json['id'];
     startDate = json['startDate'];
     endDate = json['endDate'];
@@ -93,7 +93,7 @@ class Data {
   Room? room;
   Renter? renter;
   Host? host;
-Data copyWith({  int? id,
+BookingDetailsResponseData copyWith({  int? id,
   String? startDate,
   String? endDate,
   int? duration,
@@ -106,7 +106,7 @@ Data copyWith({  int? id,
   Room? room,
   Renter? renter,
   Host? host,
-}) => Data(  id: id ?? this.id,
+}) => BookingDetailsResponseData(  id: id ?? this.id,
   startDate: startDate ?? this.startDate,
   endDate: endDate ?? this.endDate,
   duration: duration ?? this.duration,
