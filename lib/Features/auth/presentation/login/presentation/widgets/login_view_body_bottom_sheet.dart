@@ -40,7 +40,12 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                 content: Text(state.user.message ?? 'Login Successful'),
               ),
             );
-            context.go(AppRouting.homeView);
+            if(state.user.data?.questionsCompleted == true){
+              context.go(AppRouting.homeView);
+            }
+            else{
+              context.go(AppRouting.questionsStartPath);
+            }
           }
           // GOOGLE LOGIN :
           if (state is GoogleLoginStateSuccess) {
@@ -102,7 +107,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                   text: AppStrings.forgetPasswordQuestion,
                 ),
               ),
-              SizedBox(height: 30.h),
+              SizedBox(height: 50.h),
               SizedBox(
                 width: double.infinity,
                 child: CustomElevatedButton(
