@@ -35,7 +35,7 @@ class QuestionsCubit extends Cubit<QuestionsState> {
     }
   }
   Future<void> submitAnswers() async {
-    if (state is QuestionsSuccess) {
+    // if (state is QuestionsSuccess) {
       final currentState = state as QuestionsSuccess;
       final answers = currentState.selectedAnswers;
 
@@ -66,7 +66,7 @@ class QuestionsCubit extends Cubit<QuestionsState> {
           emit(QuestionsSubmissionSuccess(response));
         },
       );
-    }
+    // }
   }
 
   void nextStep() {
