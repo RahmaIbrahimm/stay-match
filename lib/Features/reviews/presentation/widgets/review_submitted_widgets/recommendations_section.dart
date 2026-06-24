@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stay_match/Features/reviews/presentation/widgets/review_submitted_widgets/review_recommendations_property_card.dart';
 import 'package:stay_match/Features/reviews/presentation/widgets/review_submitted_widgets/shimmer_box.dart';
+import 'package:stay_match/core/widgets/custom_text_button.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_styles.dart';
@@ -68,12 +69,8 @@ class RecommendationsSection extends StatelessWidget {
                               color: AppColors.textColorPrimary,
                             ),
                           ),
-                          Text(
-                            'View All',
-                            style: AppStyles.bold14manrope.copyWith(
-                              color: AppColors.primary,
-                            ),
-                          ),
+                        // todo i want a screen to view all recommendations
+                          CustomTextButton(onPressed: (){}, text: 'View All',isUnderlined: false,isPadded: false,)
                         ],
                       ),
                       SizedBox(height: 16.h),
