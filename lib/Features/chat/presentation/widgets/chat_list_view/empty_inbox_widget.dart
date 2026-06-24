@@ -110,7 +110,7 @@ class EmptyInbox extends StatelessWidget {
                   icon: Icons.search,
                   isPrimary: false,
                   context: context,
-                  screenViewName:""
+                  screenViewName:AppRouting.homeViewName
                 ),
 
                 // Extra padding at the bottom to ensure comfortable scrolling
