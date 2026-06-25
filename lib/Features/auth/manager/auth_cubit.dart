@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
@@ -197,32 +199,10 @@ class AuthCubit extends Cubit<AuthState> {
       (exception) {
         emit(LoginStateFailure(errMessage: exception.errMessage));
       },
-      // (response) async {
-      //   if (response.isSuccess == true) {
-      //     final secureStorage = getIt.get<SecureStorageHelper>();
-      //     await secureStorage.storage.write(
-      //         key: SecureStorageKeys.tokenKey, value: response.data?.token);
-      //     await secureStorage.storage.write(
-      //         key: SecureStorageKeys.refreshTokenKey,
-      //         value: response.data?.refreshToken);
-      //     await secureStorage.storage.write(key: SecureStorageKeys.userIdKey,
-      //         value: response.data?.userId);
-      //
-      //     final cacheHelper = getIt.get<CacheService>();
-      //     await cacheHelper.setData(
-      //         key: cacheHelper.userNameKey, value: response.data?.displayName);
-      //     await cacheHelper.setData(key: cacheHelper.userProfilePicKey,
-      //         value: response.data?.otherUserProfileImageUrl);
-      //     emit(LoginStateSuccess(response));
-      //   } else {
-      //     emit(LoginStateFailure(errMessage: "Invalid Email or Password"));
-      //   }
-      // },
           (response) async {
         if (response.isSuccess == true) {
           final secureStorage = getIt.get<SecureStorageHelper>();
 
-          // 🌟 FIX: Using your exact helper method name 'addToSecureStorage'
           await secureStorage.addToSecureStorage(
               key: SecureStorageKeys.tokenKey, value: response.data?.token);
           await secureStorage.addToSecureStorage(
@@ -264,7 +244,6 @@ class AuthCubit extends Cubit<AuthState> {
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
       final String? idToken = googleAuth.idToken;
-
       if (idToken == null) {
         emit(GoogleLoginStateFailure(errMessage: "Failed to get ID token"));
         return;
@@ -280,11 +259,22 @@ class AuthCubit extends Cubit<AuthState> {
           if (resp.isSuccess == true) {
             emit(GoogleLoginStateSuccess(resp: resp));
             final secureStorage = getIt.get<SecureStorageHelper>();
-            await secureStorage.storage.write(
-                key: SecureStorageKeys.tokenKey, value: idToken);
+
+            await secureStorage.addToSecureStorage(
+                key: SecureStorageKeys.tokenKey, value: resp.data?.token);
+            await secureStorage.addToSecureStorage(
+                key: SecureStorageKeys.refreshTokenKey, value: resp.data?.refreshToken);
+            await secureStorage.addToSecureStorage(
+                key: SecureStorageKeys.userIdKey, value: resp.data?.userId);
+
+            final cacheHelper = getIt.get<CacheService>();
+            await cacheHelper.setData(
+                key: cacheHelper.userNameKey, value: resp.data?.displayName);
+            await cacheHelper.setData(
+                key: cacheHelper.userProfilePicKey, value: resp.data?.otherUserProfileImageUrl);;
           } else {
             emit(
-              GoogleLoginStateFailure(errMessage: _extractErrorMessage(resp)),
+              GoogleLoginStateFailure(errMessage: resp.message ?? "Login failed")
             );
           }
         },
@@ -294,19 +284,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  String _extractErrorMessage(LoginWithGoogleResponse resp) {
-    if (resp.errors != null) {
-      if (resp.errors!.invalidGoogleToken?.isNotEmpty == true) {
-        return resp.errors!.invalidGoogleToken!.first;
-      }
-
-      if (resp.errors!.idTokenRequired?.isNotEmpty == true) {
-        return resp.errors!.idTokenRequired!.first;
-      }
-    }
-
-    return resp.message ?? "Login failed";
-  }
   // -------- signup ----------
   Future<void> signup() async {
     var response = await authRepo.signup(
