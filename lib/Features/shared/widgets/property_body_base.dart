@@ -169,29 +169,29 @@ class PropertyBodyBase {
       ),
     );
   }
-
-  static Widget buildLoadingState({
-    required BuildContext context,
-    required Widget filterHeader,
-    required Widget filterCard,
-    required String loadingMessage,
-  }) {
-    return RPadding(
-      padding: const EdgeInsets.all(16.0),
-      child: CustomScrollView(
-        slivers: [
-          buildHeader(context),
-          const SearchAppBar(),
-          filterHeader,
-          filterCard,
-          SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-          SliverToBoxAdapter(
-            child: buildLoadingStateInitial(loadingMessage: loadingMessage),
-          ),
-        ],
-      ),
-    );
-  }
+  //
+  // static Widget buildLoadingState({
+  //   required BuildContext context,
+  //   required Widget filterHeader,
+  //   required Widget filterCard,
+  //   required String loadingMessage,
+  // }) {
+  //   return RPadding(
+  //     padding: const EdgeInsets.all(16.0),
+  //     child: CustomScrollView(
+  //       slivers: [
+  //         buildHeader(context),
+  //         const SearchAppBar(),
+  //         filterHeader,
+  //         filterCard,
+  //         SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+  //         SliverToBoxAdapter(
+  //           child: buildLoadingStateInitial(loadingMessage: loadingMessage),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   static Widget buildInitialState({
     required BuildContext context,

@@ -4,6 +4,7 @@ import 'package:stay_match/core/widgets/heart_favourite_button.dart';
 
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_styles.dart';
+import '../../saved/presentation/manager/saved_properties_cubit.dart';
 
 class PropertyNameAndFavButtonSliver extends StatelessWidget {
   const PropertyNameAndFavButtonSliver(
@@ -33,15 +34,7 @@ class PropertyNameAndFavButtonSliver extends StatelessWidget {
             ),
             Expanded(child: HeartFavoriteButton(id: id,
                 initialSavedStatus: initialSavedStatus,
-                scaleUp: scaleUp))
-            // Expanded(
-            //   flex: 1,
-            //   child: Icon(
-            //     Icons.favorite_outline_rounded,
-            //     size: 24.sp,
-            //     weight: 2,
-            //   ),
-            // ),
+              scaleUp: scaleUp, type: SavedItemType.wholeApartment,))
           ],
         ),
       ),

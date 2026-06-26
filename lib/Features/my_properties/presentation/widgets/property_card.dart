@@ -453,7 +453,8 @@ class PropertyCard extends StatelessWidget {
         ),
       ),
     );
-  }  Widget _buildActionButton({
+  }
+  Widget _buildActionButton({
     required String label,
     IconData? icon,
     required VoidCallback onPressed,

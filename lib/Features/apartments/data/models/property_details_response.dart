@@ -85,6 +85,8 @@ class PropertyDetailsData {
     this.minimumStay,
     this.distanceInKm,
     this.blockedPeriods,
+    this.isMyProperty,
+    this.isPaid
   });
 
   PropertyDetailsData.fromJson(dynamic json) {
@@ -97,6 +99,8 @@ class PropertyDetailsData {
     deposite = json['deposite'];
     furnished = json['furnished'];
     isSaved = json['isSaved'];
+    isPaid = json['isPaid'];
+    isMyProperty = json['isMyProperty'];
     availableFrom = json['availableFrom'];
     availableTo = json['availableTo'];
     numberOfBedrooms = json['numberOfBedrooms'];
@@ -142,6 +146,8 @@ class PropertyDetailsData {
   num? deposite;
   bool? furnished;
   bool? isSaved;
+  bool? isPaid;
+  bool? isMyProperty;
   String? availableFrom;
   dynamic availableTo;
   num? numberOfBedrooms;
@@ -173,6 +179,8 @@ class PropertyDetailsData {
     map['deposite'] = deposite;
     map['furnished'] = furnished;
     map['isSaved'] = isSaved;
+    map['isMyProperty'] = isMyProperty;
+    map['isPaid'] = isPaid;
     map['availableFrom'] = availableFrom;
     map['availableTo'] = availableTo;
     map['numberOfBedrooms'] = numberOfBedrooms;
