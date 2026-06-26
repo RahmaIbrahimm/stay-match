@@ -8,6 +8,7 @@ import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
 import 'package:stay_match/core/utils/service_locator.dart';
 
+import '../../../../core/widgets/custom_elevated_button.dart';
 import '../../data/models/chat_message_item.dart';
 import '../manager/chatbot_cubit.dart';
 
@@ -440,134 +441,291 @@ class _BotBubble extends StatelessWidget {
 }
 
 // ── Result (property) card ──────────────────────────────────────────────────────
-
 class _ResultCard extends StatelessWidget {
   final Results result;
+  final VoidCallback? onTap;
 
-  const _ResultCard({required this.result});
+  const _ResultCard({required this.result, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final priceLabel = (result.priceText != null && result.priceText!.isNotEmpty)
         ? result.priceText!
-        : (result.monthlyRent != null ? '${result.monthlyRent} EGP/month' : null);
+        : (result.monthlyRent != null ? '${result.monthlyRent} EGP/mo' : null);
 
-    final chips = <String>[
-      ...?result.details,
-      ...?result.amenities,
-    ];
+    final chips = <String>[...?result.details, ...?result.amenities];
+    final score = result.recommendationScore;
+    final hasScore = score != null;
+    final scoreColor = score != null
+        ? (score >= 75
+        ? const Color(0xFF22C55E)
+        : score >= 50
+        ? const Color(0xFFF59E0B)
+        : const Color(0xFFEF4444))
+        : null;
 
-    return Container(
-      width: 240.w,
-      decoration: BoxDecoration(
-        color: AppColors.containerColor,
-        borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(color: AppColors.stroke),
-      ),
-      padding: EdgeInsets.all(12.r),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 36.r,
-                height: 36.r,
-                decoration: BoxDecoration(
-                  color: AppColors.blueGrey,
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-                child: Icon(
-                  _iconForResultType(result.resultType),
-                  size: 18.r,
-                  color: AppColors.primary,
-                ),
-              ),
-              SizedBox(width: 10.w),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      result.title ?? 'Untitled',
-                      style: AppStyles.semiBold14poppins.copyWith(
-                        color: AppColors.textColorPrimary,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (result.subtitle != null && result.subtitle!.isNotEmpty)
-                      Text(
-                        result.subtitle!,
-                        style: AppStyles.regular12poppins.copyWith(
-                          color: AppColors.textColorSecondary,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 230.w,
+        decoration: BoxDecoration(
+          color: AppColors.containerColor,
+          borderRadius: BorderRadius.circular(18.r),
+          border: Border.all(color: AppColors.stroke),
+          boxShadow: AppColors.elevationShadow,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // ── Header ───────────────────────────────────────────
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 11.h),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.primary,
+                    AppColors.primary.withOpacity(0.80),
                   ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(18.r),
+                  topRight: Radius.circular(18.r),
                 ),
               ),
-            ],
-          ),
-          if (result.location != null && result.location!.isNotEmpty) ...[
-            SizedBox(height: 8.h),
-            Row(
-              children: [
-                Icon(Icons.location_on_outlined, size: 13.r, color: AppColors.textColorSecondary),
-                SizedBox(width: 2.w),
-                Expanded(
-                  child: Text(
-                    result.location!,
-                    style: AppStyles.regular12poppins.copyWith(
-                      color: AppColors.textColorSecondary,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(7.r),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.18),
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    child: Icon(
+                      _iconForType(result.resultType),
+                      size: 15.r,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
-          if (chips.isNotEmpty) ...[
-            SizedBox(height: 8.h),
-            Wrap(
-              spacing: 6.w,
-              runSpacing: 6.h,
-              children: chips
-                  .take(4)
-                  .map((c) => Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                decoration: BoxDecoration(
-                  color: AppColors.fieldFillColor,
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                child: Text(
-                  c,
-                  style: AppStyles.regular10poppins.copyWith(
-                    color: AppColors.textColorSecondary,
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          result.title ?? 'Untitled',
+                          style: AppStyles.semiBold14poppins.copyWith(
+                            color: Colors.white,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        if (result.subtitle != null &&
+                            result.subtitle!.isNotEmpty)
+                          Text(
+                            result.subtitle!,
+                            style: AppStyles.regular12poppins.copyWith(
+                              color: Colors.white.withOpacity(0.80),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                      ],
+                    ),
                   ),
-                ),
-              ))
-                  .toList(),
+                  // Type badge
+                  if (result.resultType != null) ...[
+                    SizedBox(width: 6.w),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 7.w, vertical: 3.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.18),
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                      child: Text(
+                        result.resultType!.toUpperCase(),
+                        style: AppStyles.regular10poppins.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+
+            // ── Body ─────────────────────────────────────────────
+            Padding(
+              padding: EdgeInsets.all(12.r),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Score + deposit row
+                  if (hasScore || result.deposit != null) ...[
+                    Row(
+                      children: [
+                        if (hasScore) ...[
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8.w, vertical: 4.h),
+                            decoration: BoxDecoration(
+                              color: scoreColor!.withOpacity(0.12),
+                              borderRadius: BorderRadius.circular(8.r),
+                              border: Border.all(
+                                  color: scoreColor.withOpacity(0.35)),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.star_rounded,
+                                    size: 11.r, color: scoreColor),
+                                SizedBox(width: 3.w),
+                                Text(
+                                  '$score% match',
+                                  style: AppStyles.regular10poppins.copyWith(
+                                    color: scoreColor,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Spacer(),
+                        ],
+                        if (result.deposit != null)
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.shield_outlined,
+                                  size: 11.r,
+                                  color: AppColors.textColorSecondary),
+                              SizedBox(width: 3.w),
+                              Text(
+                                'Dep. ${result.deposit} EGP',
+                                style: AppStyles.regular10poppins.copyWith(
+                                  color: AppColors.textColorSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
+                    SizedBox(height: 8.h),
+                  ],
+
+                  // Location
+                  if (result.location != null &&
+                      result.location!.isNotEmpty) ...[
+                    Row(
+                      children: [
+                        Icon(Icons.location_on_rounded,
+                            size: 12.r, color: AppColors.primary),
+                        SizedBox(width: 3.w),
+                        Expanded(
+                          child: Text(
+                            result.location!,
+                            style: AppStyles.regular12poppins.copyWith(
+                              color: AppColors.textColorSecondary,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8.h),
+                  ],
+
+                  // Chips
+                  if (chips.isNotEmpty) ...[
+                    Wrap(
+                      spacing: 5.w,
+                      runSpacing: 5.h,
+                      children: chips
+                          .take(4)
+                          .map(
+                            (c) => Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 7.w, vertical: 3.h),
+                          decoration: BoxDecoration(
+                            color: AppColors.blueGrey,
+                            borderRadius: BorderRadius.circular(6.r),
+                          ),
+                          child: Text(
+                            c,
+                            style: AppStyles.regular10poppins.copyWith(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                      )
+                          .toList(),
+                    ),
+                    SizedBox(height: 8.h),
+                  ],
+
+                  // Price + button
+                  Divider(height: 1, color: AppColors.stroke),
+                  SizedBox(height: 8.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (priceLabel != null)
+                              Text(
+                                priceLabel,
+                                style: AppStyles.bold14poppins.copyWith(
+                                  color: AppColors.primary,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            else
+                              Text(
+                                'Price N/A',
+                                style: AppStyles.regular12poppins.copyWith(
+                                  color: AppColors.textColorSecondary,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 8.w),
+                      CustomElevatedButton(
+                        text: 'View',
+                        onPressed: onTap,
+                        borderRadius: 10.r,
+                        horizontalPadding: 14.r,
+                        verticalPadding: 6.r,
+                        textStyle: AppStyles.semiBold12poppins,
+                        icon: Icon(
+                          Icons.arrow_forward_rounded,
+                          size: 13.r,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
-          if (priceLabel != null) ...[
-            SizedBox(height: 8.h),
-            Divider(height: 1, color: AppColors.stroke),
-            SizedBox(height: 8.h),
-            Text(
-              priceLabel,
-              style: AppStyles.bold14poppins.copyWith(color: AppColors.primary),
-            ),
-          ],
-        ],
+        ),
       ),
     );
   }
 
-  IconData _iconForResultType(String? type) {
+  IconData _iconForType(String? type) {
     switch ((type ?? '').toLowerCase()) {
       case 'room':
         return Icons.bed_outlined;
@@ -578,7 +736,6 @@ class _ResultCard extends StatelessWidget {
     }
   }
 }
-
 // ── Typing indicator ────────────────────────────────────────────────────────────
 
 class _TypingIndicator extends StatefulWidget {

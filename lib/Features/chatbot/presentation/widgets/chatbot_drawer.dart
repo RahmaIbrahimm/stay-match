@@ -108,15 +108,15 @@ class ChatbotDrawer extends StatelessWidget {
                     label: 'Booking Guide',
                     onTap: () => _sendAndClose(
                       context,
-                      'Can you guide me through how booking works?',
+                      'How do I submit a booking request?',
                     ),
                   ),
                   _QuickActionTile(
                     icon: Icons.support_agent_outlined,
-                    label: 'Support Center',
+                    label: 'How to add Property',
                     onTap: () => _sendAndClose(
                       context,
-                      'I need help — can you connect me to support?',
+                      'How do I add a property?',
                     ),
                   ),
                 ],
@@ -164,7 +164,7 @@ class ChatbotDrawer extends StatelessWidget {
                         width: 6.r,
                         height: 6.r,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(i == 0 ? 0.6 : 0.25),
+                          color: Colors.white.withOpacity( 0.6 ),
                           shape: BoxShape.circle,
                         ),
                       );

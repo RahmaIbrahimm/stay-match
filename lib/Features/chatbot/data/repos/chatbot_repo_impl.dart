@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:stay_match/Features/chatbot/data/models/chatbot_response.dart';
 import 'package:stay_match/Features/chatbot/data/repos/chatbot_repo.dart';
 import 'package:stay_match/core/errors/failures.dart';
+import 'package:stay_match/core/networking/api_interceptors.dart';
 import 'package:stay_match/core/utils/secure_storage_helper.dart';
 import 'package:stay_match/core/utils/secure_storage_keys.dart';
 import 'package:stay_match/core/utils/service_locator.dart';
@@ -24,6 +25,7 @@ class ChatbotRepoImpl extends ChatbotRepo {
         error: true,
       ),
     );
+    dio.interceptors.add(ApiInterceptors(dio));
   }
 
   @override
