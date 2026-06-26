@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_styles.dart';
 import '../../../../../core/widgets/heart_favourite_button.dart';
+import '../../../../saved/presentation/manager/saved_properties_cubit.dart';
 import '../../../data/models/review_recommendations.dart';
 
 class ReviewRecommendationPropertyCard extends StatelessWidget {
@@ -22,7 +23,7 @@ class ReviewRecommendationPropertyCard extends StatelessWidget {
           color: AppColors.containerColor,
           borderRadius: BorderRadius.circular(
             24.r,
-          ), // High radius matching the design
+          ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.06),
@@ -34,7 +35,6 @@ class ReviewRecommendationPropertyCard extends StatelessWidget {
         ),
         clipBehavior: Clip.antiAlias,
         width: 280.w,
-        // Slightly increased width to perfectly fit the clean wide card look
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -70,7 +70,7 @@ class ReviewRecommendationPropertyCard extends StatelessWidget {
                     child: HeartFavoriteButton(
                       id: property.id,
                       initialSavedStatus: property.isSaved ?? false,
-                      scaleUp: true,
+                      scaleUp: true, type: SavedItemType.wholeApartment,
                     ),
                   ),
                 ),
@@ -239,12 +239,25 @@ class ReviewRecommendationPropertyCard extends StatelessWidget {
                                 ],
                               ),
                             )
-                          : Text(
-                              'Price on request',
+                          : RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '0',
+                              style: AppStyles.bold18poppins.copyWith(
+                                color: AppColors
+                                    .primary,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '/month',
                               style: AppStyles.regular12poppins.copyWith(
                                 color: AppColors.textColorSecondary,
                               ),
                             ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ],

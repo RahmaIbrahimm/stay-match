@@ -16,29 +16,11 @@ class ReviewsAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.white,
       elevation: 0,
       scrolledUnderElevation: 0,
-      leading: IconButton(
-        icon: Icon(
-          Icons.arrow_back_ios_new_rounded,
-          size: 20.r,
-          color: RColors.textPrimary,
-        ),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
       title: Text(
         'Reviews & Feed backs',
         style: AppStyles.semiBold18poppins.copyWith(color: RColors.textPrimary),
       ),
       centerTitle: true,
-      actions: [
-        IconButton(
-          icon: Icon(
-            Icons.share_outlined,
-            size: 22.r,
-            color: RColors.textPrimary,
-          ),
-          onPressed: () {},
-        ),
-      ],
     );
   }
 }

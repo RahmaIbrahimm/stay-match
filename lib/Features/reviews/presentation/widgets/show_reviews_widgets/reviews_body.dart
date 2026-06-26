@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:stay_match/Features/reviews/presentation/widgets/apartment_reviews_widgets/protected_footer.dart';
-import 'package:stay_match/Features/reviews/presentation/widgets/apartment_reviews_widgets/rating_summary_card.dart';
-import 'package:stay_match/Features/reviews/presentation/widgets/apartment_reviews_widgets/review_card.dart';
-import 'package:stay_match/Features/reviews/presentation/widgets/apartment_reviews_widgets/reviews_header.dart';
-import 'package:stay_match/Features/reviews/presentation/widgets/apartment_reviews_widgets/reviews_search_bar.dart';
+import 'package:stay_match/Features/reviews/presentation/widgets/show_reviews_widgets/protected_footer.dart';
+import 'package:stay_match/Features/reviews/presentation/widgets/show_reviews_widgets/rating_summary_card.dart';
+import 'package:stay_match/Features/reviews/presentation/widgets/show_reviews_widgets/review_card.dart';
+import 'package:stay_match/Features/reviews/presentation/widgets/show_reviews_widgets/reviews_header.dart';
+import 'package:stay_match/Features/reviews/presentation/widgets/show_reviews_widgets/reviews_search_bar.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_styles.dart';
 import '../../../../booking/presentation/widgets/request_booking_widgets/host_card.dart';
+import '../../../../other_user_profile/presentation/widgets/user_review_card.dart';
 import '../../../data/models/get_apartment_reviews.dart';
 import '../shared/reviews_helpers.dart';
 import 'distribution_section.dart';
@@ -17,7 +18,7 @@ import 'error_view.dart';
 import 'no_reviews_view.dart';
 
 class ReviewsBody extends StatelessWidget {
-  final Data? data;
+  final GetApartmentReviewsData? data;
   final PagingController<int, Reviews> pagingController;
   final TextEditingController searchCtrl;
   final ReviewSortOption currentSort;

@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:stay_match/Features/filter/presentation/widgets/filter_helper.dart';
 import 'package:stay_match/Features/reviews/data/models/get_apartment_reviews.dart';
 import 'package:stay_match/Features/reviews/data/repos/reviews_repo.dart';
 
@@ -20,23 +21,31 @@ class ReviewsCubit extends Cubit<ReviewsState> {
 
   // Cache the first-page response so header data (host, summary)
   // is preserved across filter/sort refreshes.
-  GetApartmentReviews? _cachedBase;
+  GetPropertyReviews? _cachedBase;
 
   // ─── FETCH ONE PAGE ───────────────────────────────────────────
   // Called by the PagingController's page-request listener in the screen.
   Future<void> fetchPage({
-    required int propertyId,
+    int? propertyId,
     required int pageKey,
     required PagingController<int, Reviews> pagingController,
+    PropertyType propertyType = PropertyType.apartment,
   }) async {
-    final result = await reviewsRepo.getApartmentReviews(
-      propertyId: propertyId,
-      page:       pageKey,
+    final result = propertyType == PropertyType.apartment
+        ? await reviewsRepo.getApartmentReviews(
+            propertyId: propertyId ?? -1,
+            page:       pageKey,
       pageSize:   _pageSize,
-      // 'all' → null so the repo omits the param entirely (backend rejects '')
       sortBy:     _sortBy == 'all' ? null : _sortBy,
       search:     _search.isEmpty  ? null : _search,
-    );
+          )
+        : await reviewsRepo.getRoomReviews(
+            roomId: propertyId ?? -1,
+            page: pageKey,
+            pageSize: _pageSize,
+            sortBy: _sortBy == 'all' ? null : _sortBy,
+            search: _search.isEmpty ? null : _search,
+          );
 
     result.fold(
           (failure) {

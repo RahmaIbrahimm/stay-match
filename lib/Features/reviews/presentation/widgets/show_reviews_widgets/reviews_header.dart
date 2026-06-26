@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:stay_match/Features/reviews/presentation/widgets/apartment_reviews_widgets/sort_drop_down.dart';
+import 'package:stay_match/Features/reviews/presentation/widgets/show_reviews_widgets/sort_drop_down.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_styles.dart';

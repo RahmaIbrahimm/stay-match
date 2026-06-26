@@ -15,7 +15,7 @@ final class ReviewsLoading extends ReviewsState {
 }
 
 final class ReviewsSuccess extends ReviewsState {
-  final GetApartmentReviews? apartmentReviews;
+  final GetPropertyReviews? apartmentReviews;
 
   const ReviewsSuccess({this.apartmentReviews});
 
