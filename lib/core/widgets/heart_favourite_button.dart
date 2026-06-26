@@ -8,14 +8,16 @@ import '../constants/app_colors.dart';
 
 class HeartFavoriteButton extends StatefulWidget {
   final int? id;
+  final int? roomId;
   final bool initialSavedStatus;
   final bool scaleUp;
-
+  final SavedItemType type;
   const HeartFavoriteButton({
     super.key,
     required this.id,
     required this.initialSavedStatus,
     required this.scaleUp,
+    required this.type, this.roomId,
   });
 
   @override
@@ -87,8 +89,9 @@ class _HeartFavoriteButtonState extends State<HeartFavoriteButton> {
             setState(() => isToggling = true);
 
             cubit.toggleSaved(
-              itemType: SavedItemType.wholeApartment,
+              itemType: widget.type,
               propertyId: widget.id,
+              roomId: widget.type == SavedItemType.room ? widget.id : null,
             );
           },
           child: Container(
