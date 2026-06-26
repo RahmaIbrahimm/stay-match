@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stay_match/Features/home/presentation/widget/section_failure.dart';
-import 'package:stay_match/Features/my_properties/presentation/widgets/my_property_card.dart';
+import 'package:stay_match/Features/my_properties/presentation/widgets/home_my_property_card.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
@@ -99,7 +99,7 @@ class AddOrShowMyProperties extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     itemCount: properties.length,
                     separatorBuilder: (context, index) => SizedBox(width: 10.w),
-                    itemBuilder: (context, index) => MyPropertyCard(property: properties[index]),
+                    itemBuilder: (context, index) => HomeMyPropertyCard(property: properties[index]),
                   ),
                 );
               }

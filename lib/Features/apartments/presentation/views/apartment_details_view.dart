@@ -31,7 +31,8 @@ class ApartmentDetailsView extends StatelessWidget {
           title: AppStrings.apartmentDetails,
           barHeight: kToolbarHeight,
         ),
-        body: DraggableChatbotFab(child: ApartmentDetailsViewBody(id: id)),
+        body: DraggableChatbotFab(hasBottomNav: false,
+        child: ApartmentDetailsViewBody(id: id)),
       ),
     );
   }

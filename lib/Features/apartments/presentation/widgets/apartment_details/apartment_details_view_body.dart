@@ -268,27 +268,29 @@ class _ApartmentDetailsViewBodyState extends State<ApartmentDetailsViewBody> {
                     runSpacing: 6.h,
                     children: [
                       LocationRow(city: details.city, street: details.street),
-                      // todo: implement view reviews
-                      SizedBox(
-                        width: 155.w,
-                        child: CustomElevatedButton(
-                          verticalPadding: 4.r,
-                          horizontalPadding: 16.r,
-                          text: AppStrings.viewReviews,
-                          onPressed: () {
-                            if (context.mounted) {
-                              context.pushNamed(
-                                AppRouting.apartmentReviewsName,
-                                pathParameters: {
-                                  "propertyId": details.id.toString()
-                                });
-                            }
-                          },
-                          backgroundColor: AppColors.bgGrey,
-                          borderColor: AppColors.primary,
-                          borderRadius: 10.r,
-                          textColor: AppColors.primary,
-                          textStyle: AppStyles.medium16poppins,
+                      // todo: overflow here
+                      Expanded(
+                        child: SizedBox(
+                          width: 155.w,
+                          child: CustomElevatedButton(
+                            verticalPadding: 4.r,
+                            horizontalPadding: 16.r,
+                            text: AppStrings.viewReviews,
+                            onPressed: () {
+                              if (context.mounted) {
+                                context.pushNamed(
+                                  AppRouting.showReviewsName,
+                                  pathParameters: {
+                                    "propertyId": details.id.toString()
+                                  });
+                              }
+                            },
+                            backgroundColor: AppColors.bgGrey,
+                            borderColor: AppColors.primary,
+                            borderRadius: 10.r,
+                            textColor: AppColors.primary,
+                            textStyle: AppStyles.medium16poppins,
+                          ),
                         ),
                       ),
                     ],

@@ -85,7 +85,8 @@ class _AddReviewViewState extends State<AddReviewView> {
               ),
             ),
           );
-        } else if (state is WriteReviewSuccess) {
+        }
+        else if (state is WriteReviewSuccess) {
           // Navigate to your review success screen — replace route name as needed
           context.pushReplacementNamed(AppRouting.reviewSubmittedName);
         }
@@ -95,14 +96,6 @@ class _AddReviewViewState extends State<AddReviewView> {
         appBar: AppBar(
           backgroundColor: AppColors.containerColor,
           elevation: 0,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: AppColors.textColorPrimary,
-              size: 24.r,
-            ),
-            onPressed: () => context.pop(),
-          ),
           title: Text(
             'Write Reviews',
             style: AppStyles.bold18poppins.copyWith(
