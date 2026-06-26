@@ -30,6 +30,7 @@ class BottomButtons extends StatelessWidget {
         children: [
           SizedBox(
             height: 52.h,
+            width: double.infinity,
             child: CustomElevatedButton(
               text:data.isMyProperty ?? false ?'Back To Home':'Book This Room',
               backgroundColor: AppColors.primary,
