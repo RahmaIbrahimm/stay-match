@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stay_match/Features/booking/data/repos/booking_repo_impl.dart';
 import 'package:stay_match/core/utils/service_locator.dart';
 import 'package:stay_match/core/widgets/app_drawer/main_app_drawer.dart';
+import 'package:stay_match/core/widgets/draggable_chatbot_fab.dart';
 
 import '../../../../../../../core/constants/app_styles.dart';
 import '../manager/booking_request_cubit.dart';
@@ -32,7 +33,8 @@ class RenterBookingsView extends StatelessWidget {
           centerTitle: true,
         ),
         endDrawer: MainAppDrawer(),
-        body: RenterBookingsBody(),
+        body: DraggableChatbotFab(hasBottomNav: true,
+        child: RenterBookingsBody()),
       ),
     );
   }

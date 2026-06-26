@@ -16,7 +16,6 @@ class RenterBookingRequestCard extends StatelessWidget {
   final RenterBookings? bookings;
 
   const RenterBookingRequestCard({super.key, required this.bookings});
-// todo: add events in all that have booking
   @override
   Widget build(BuildContext context) {
 
@@ -124,22 +123,22 @@ class RenterBookingRequestCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 4.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF3F4F6),
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                      child: Text(
-                        '${bookings?.duration?.toInt() ?? 1} ${bookings?.duration?.toInt() == 1 ? 'Month' : 'Months'}',
-                        style: AppStyles.medium12poppins.copyWith(
-                          color: const Color(0xFF374151),
-                        ),
-                      ),
-                    ),
+                    // Container(
+                    //   padding: EdgeInsets.symmetric(
+                    //     horizontal: 12.w,
+                    //     vertical: 4.h,
+                    //   ),
+                    //   decoration: BoxDecoration(
+                    //     color: const Color(0xFFF3F4F6),
+                    //     borderRadius: BorderRadius.circular(8.r),
+                    //   ),
+                    //   child: Text(
+                    //     '${bookings?.duration?.toInt() ?? 1} ${bookings?.duration?.toInt() == 1 ? 'Month' : 'Months'}',
+                    //     style: AppStyles.medium12poppins.copyWith(
+                    //       color: const Color(0xFF374151),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 SizedBox(height: 16.h),
@@ -242,7 +241,8 @@ class RenterBookingRequestCard extends StatelessWidget {
                         'otherUserId': bookings?.host!.id.toString() ?? '-1',
                       },
                     );
-                  } else {
+                  }
+                  else {
                     AppKeys.rootScaffoldMessengerKey.currentState
                         ?.removeCurrentSnackBar();
                     AppKeys.rootScaffoldMessengerKey.currentState?.showSnackBar(
@@ -270,8 +270,24 @@ class RenterBookingRequestCard extends StatelessWidget {
               bgColor: AppColors.primary,
               textColor: Colors.white,
               onPressed: () {
-                // todo: details according to property type
-                // if(bookings.propertyType == '')
+                if (bookings?.propertyType?.toLowerCase() ==
+                    'entire apartment') {
+                  context.pushNamed(
+                    AppRouting.apartmentDetailsViewName,
+                    pathParameters: {
+                      'id': bookings?.propertyId.toString() ?? '-1',
+                    },
+                  );
+                }
+                else {
+                  context.pushNamed(
+                    AppRouting.roomDetailsViewName,
+                    pathParameters: {
+                      'roomId': bookings?.roomId.toString() ?? '-1',
+                      'propertyId': bookings?.propertyId.toString() ?? '-1',
+                    },
+                  );
+                }
               },
             ),
           ),
@@ -366,8 +382,24 @@ class RenterBookingRequestCard extends StatelessWidget {
               bgColor: AppColors.primary,
               textColor: Colors.white,
               onPressed: () {
-                // todo: details according to property type
-                // if(bookings.propertyType == '')
+                if (bookings?.propertyType?.toLowerCase() ==
+                    'entire apartment') {
+                  context.pushNamed(
+                    AppRouting.apartmentDetailsViewName,
+                    pathParameters: {
+                      'id': bookings?.propertyId.toString() ?? '-1',
+                    },
+                  );
+                }
+                else {
+                  context.pushNamed(
+                    AppRouting.roomDetailsViewName,
+                    pathParameters: {
+                      'roomId': bookings?.roomId.toString() ?? '-1',
+                      'propertyId': bookings?.propertyId.toString() ?? '-1',
+                    },
+                  );
+                }
               },
             ),
           ),
@@ -396,9 +428,47 @@ class RenterBookingRequestCard extends StatelessWidget {
               text: 'Details',
               bgColor: AppColors.primary,
               textColor: Colors.white,
-              onPressed: () {},
+              onPressed: () {
+                if (bookings?.propertyType?.toLowerCase() ==
+                    'entire apartment') {
+                  context.pushNamed(
+                    AppRouting.apartmentDetailsViewName,
+                    pathParameters: {
+                      'id': bookings?.propertyId.toString() ?? '-1',
+                    },
+                  );
+                }
+                else {
+                  context.pushNamed(
+                    AppRouting.roomDetailsViewName,
+                    pathParameters: {
+                      'roomId': bookings?.roomId.toString() ?? '-1',
+                      'propertyId': bookings?.propertyId.toString() ?? '-1',
+                    },
+                  );
+                }
+              },
             ),
           ),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: _createButton(
+              text: 'Delete',
+              bgColor: const Color(0xFFFFF5F5),
+              textColor: const Color(0xFFDC2626),
+              icon: Icons.delete_outline,
+              width: double.infinity,
+              onPressed: () {
+                if (bookings?.id != null) {
+                  context
+                      .read<BookingRequestCubit>()
+                      .deletedBookingId = bookings!.id!;
+                  context.read<BookingRequestCubit>().deleteBooking(
+                      bookings!.id!);
+                }
+              },
+            ),
+          )
         ],
       );
     }

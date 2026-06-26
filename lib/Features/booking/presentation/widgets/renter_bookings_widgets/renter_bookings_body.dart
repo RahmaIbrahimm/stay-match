@@ -22,12 +22,19 @@ class RenterBookingsBody extends StatelessWidget {
 
     return BlocListener<BookingRequestCubit, BookingRequestState>(
       listener: (context, state) {
-        if (state is BookingRequestSuccess && state.deleteBooking != null) {
+        if (state is BookingRequestSuccess &&
+            (state.deleteBooking != null ||
+                state.cancelBooking != null ||
+                state.approveBooking != null ||
+                state.declineBooking != null)) {
           AppKeys.rootScaffoldMessengerKey.currentState
               ?.removeCurrentSnackBar();
           AppKeys.rootScaffoldMessengerKey.currentState?.showSnackBar(
             SnackBar(
-              content:  Text(state.successMessage ?? "Success!",style: AppStyles.semiBold14poppins.copyWith(color: Colors.white),),
+              content: Text(
+                state.successMessage ?? "Success!",
+                style: AppStyles.semiBold14poppins.copyWith(color: Colors.white),
+              ),
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16.r),
@@ -37,13 +44,19 @@ class RenterBookingsBody extends StatelessWidget {
             ),
           );
 
-          final controller = cubit.renterPagingController;
-          final currentState = controller.value;
-          final updatedItems = List<RenterBookings>.from(
-            currentState.itemList ?? [],
-          )..removeWhere((item) => item.id == cubit.deletedBookingId);
-          controller.itemList = updatedItems;
-          cubit.deletedBookingId = -1;
+          // Only the delete flow needs manual list cleanup here —
+          // cancelBooking now removes its own item inside the cubit,
+          // and approve/decline already remove theirs inside the cubit too.
+          if (state.deleteBooking != null) {
+            final controller = cubit.renterPagingController;
+            final currentState = controller.value;
+            final updatedItems = List<RenterBookings>.from(
+              currentState.itemList ?? [],
+            )..removeWhere((item) => item.id == cubit.deletedBookingId);
+            controller.itemList = updatedItems;
+            cubit.deletedBookingId = -1;
+          }
+
           cubit.canceledBookingId = -1;
         }
         else if (state is BookingRequestFailure) {
@@ -117,7 +130,6 @@ class RenterBookingsBody extends StatelessWidget {
               const FilterTabs(),
               BlocBuilder<BookingRequestCubit, BookingRequestState>(
                 builder: (context, state) {
-                  // todo: add events to card
                   return PagedSliverList<int, dynamic>(
                     pagingController: cubit.renterPagingController,
                     builderDelegate: PagedChildBuilderDelegate<dynamic>(

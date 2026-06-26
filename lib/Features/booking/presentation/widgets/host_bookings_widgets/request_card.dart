@@ -2,10 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stay_match/Features/booking/data/model/host_requests_response.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
+import 'package:stay_match/core/widgets/custom_text_button.dart';
 
+import '../../../../../core/routing/app_routing.dart';
 import '../../../../../core/widgets/custom_elevated_button.dart';
 import '../../manager/booking_request_cubit.dart';
 import '../../manager/booking_request_state.dart';
@@ -38,8 +41,21 @@ class RequestCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 32.r,
-                backgroundImage: NetworkImage(
+                backgroundImage: CachedNetworkImageProvider(
                   request.renter?.profileImage ?? '',
+                  errorListener: (e) {
+                    Container(
+                      color: Color(0xFFF1F4FF),
+                      // Matches your dropdown/secondary background tint
+                      child: Center(
+                        child: Icon(
+                          Icons.image_not_supported_outlined,
+                          color: Colors.grey,
+                          size: 28.sp,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
               SizedBox(width: 12.w),
@@ -97,6 +113,7 @@ class RequestCard extends StatelessWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
+                // todo : from matching ai for profile
                 var lst = ["Early Bird", "Social", "Non-smoker"];
                 return Container(
                   // Use padding for breathing room around the text
@@ -221,6 +238,7 @@ class RequestCard extends StatelessWidget {
           SizedBox(height: 20.h),
           Row(
             children: [
+              if(request.status?.toLowerCase() == 'pending')...[
               Expanded(
                 child: CustomElevatedButton(
                   text: "Decline",
@@ -264,10 +282,83 @@ class RequestCard extends StatelessWidget {
                   },
                 ),
               ),
+              ]
             ],
           ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     Icon(
+          //       Icons.chat_bubble_outline_outlined,
+          //       color: AppColors.primary,
+          //       size: 18.sp,
+          //       fontWeight: FontWeight.bold,
+          //     ),
+          //     SizedBox(width: 8.w),
+          //     CustomTextButton(
+          //       onPressed: () {
+          //         if (context.mounted) {
+          //           context.pushNamed(
+          //               AppRouting.messagesName, pathParameters: {
+          //             'otherUserId': ?request.renter?.id.toString()
+          //           });
+          //         }
+          //       },
+          //       text: 'Message ${request.renter?.name ?? 'Guest'}',
+          //       isUnderlined: false,
+          //       textColor: AppColors.primary,
+          //       isPadded: true,
+          //       textStyle: AppStyles.bold14manrope,
+          //     ),
+          //   ],
+          // ),
+         if(request.status?.toLowerCase() == 'pending') _buildTextButton(
+              context, textColor: AppColors.primary, text: 'Message ${request.renter?.name ?? 'Guest'}', onPressed: () {
+            if (context.mounted) {
+              context.pushNamed(
+                  AppRouting.messagesName, pathParameters: {
+                'otherUserId': ?request.renter?.id.toString()
+              });
+            }
+          }, icon: Icons.chat_bubble_outline_outlined,isPadded: true),
+          if(request.status?.toLowerCase() == 'approved') _buildTextButton(
+              context, textColor: AppColors.textColorSuccess, text: 'This request Accepted', onPressed: (){}, icon: Icons.check_box_outlined),
+          if(request.status?.toLowerCase() == 'declined') _buildTextButton(
+              context, textColor: AppColors.textColorError, text: 'This request Declined', onPressed:(){}, icon: Icons.not_interested_rounded),
+
+          SizedBox(height: 12.h,),
+
+          if(request.status?.toLowerCase() == 'history')
+            CustomElevatedButton(
+              text: 'Delete', onPressed: () {
+            context.read<BookingRequestCubit>().deleteBooking(request.id!);
+          })
         ],
       ),
+    );
+  }
+
+  Widget _buildTextButton(BuildContext context,
+      {required Color textColor, required String text, required Function() onPressed, required IconData icon,bool isPadded = false}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          icon,
+          color: textColor,
+          size: 18.sp,
+          fontWeight: FontWeight.bold,
+        ),
+        SizedBox(width: 8.w),
+        CustomTextButton(
+          onPressed: onPressed!,
+          text: text,
+          isUnderlined: false,
+          textColor: textColor,
+          isPadded: isPadded,
+          textStyle: AppStyles.bold14manrope,
+        )
+      ],
     );
   }
 }
