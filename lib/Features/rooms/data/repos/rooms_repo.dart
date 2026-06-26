@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:stay_match/Features/shared/models/property_details_response.dart';
+import 'package:stay_match/Features/apartments/data/models/property_details_response.dart';
+import 'package:stay_match/Features/rooms/data/models/room_details_response.dart';
+import 'package:stay_match/Features/rooms/data/models/shared_apartment_details.dart';
 import 'package:stay_match/core/errors/failures.dart';
 
 import '../models/get_all_rooms.dart';
@@ -22,7 +24,13 @@ abstract class RoomsRepo {
     num? page,
     num? pageSize,
   });
-  Future<Either<Failure, PropertyDetailsResponse>> getRoomDetails({
+  Future<Either<Failure, RoomDetailsResponse>> getRoomDetails({
+    required int roomid ,  required int propertyId
+  });
+  Future<Either<Failure, SharedApartmentDetails>> getSharedPropertyDetails({
+    required int id,
+  });
+  Future<Either<Failure, PropertyDetailsResponse>> getPropertyDetails({
     required int id,
   });
 }

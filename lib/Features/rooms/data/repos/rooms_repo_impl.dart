@@ -1,11 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:stay_match/Features/shared/models/property_details_response.dart';
+import 'package:stay_match/Features/rooms/data/models/room_details_response.dart';
+import 'package:stay_match/Features/rooms/data/models/shared_apartment_details.dart';
+import 'package:stay_match/Features/rooms/data/repos/rooms_repo.dart';
 import 'package:stay_match/core/errors/failures.dart';
 import 'package:stay_match/core/networking/api_service.dart';
 import 'package:stay_match/core/networking/endpoints.dart';
-import 'package:stay_match/Features/rooms/data/repos/rooms_repo.dart';
 
+import '../../../apartments/data/models/property_details_response.dart';
 import '../models/get_all_rooms.dart';
 
 class RoomsRepoImpl extends RoomsRepo {
@@ -57,8 +59,36 @@ class RoomsRepoImpl extends RoomsRepo {
       return left(ServerFailure.fromDioError(e));
     }
   }
+
   @override
-  Future<Either<Failure, PropertyDetailsResponse>> getRoomDetails({
+  Future<Either<Failure, RoomDetailsResponse>> getRoomDetails({
+    required int roomid,
+    required int propertyId,
+  }) async {
+    try {
+      var response = await apiService.get(
+        Endpoints.roomDetails(propertyId,roomid),
+      );
+      return right(RoomDetailsResponse.fromJson(response));
+    } on DioException catch (e) {
+      return left(ServerFailure.fromDioError(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SharedApartmentDetails>> getSharedPropertyDetails(
+      {required int id}) async {
+    try {
+      var response = await apiService.get(
+        Endpoints.getSharedPropertyDetails(id),
+      );
+      return right(SharedApartmentDetails.fromJson(response));
+    } on DioException catch (e) {
+      return left(ServerFailure.fromDioError(e));
+    }
+  }
+  @override
+  Future<Either<Failure, PropertyDetailsResponse>> getPropertyDetails({
     required int id,
   }) async {
     try {
