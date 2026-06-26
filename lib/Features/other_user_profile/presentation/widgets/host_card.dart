@@ -117,11 +117,9 @@ class HostCard extends StatelessWidget {
             height: 50.h,
             child: CustomElevatedButton(
               text: 'Contact ${hostInfo?.hostName}',
-              // TODO: navigate to chat screen with hostInfo?.hostId via ChatService/ChatRepoImpl
               onPressed: isSuspended
                   ? null
                   : () {
-                      // TODO: context.pushNamed(AppRouting.chatView, extra: hostInfo?.hostId);
                       if (context.mounted) {
                         context.pushNamed(
                           AppRouting.messagesName,

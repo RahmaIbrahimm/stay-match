@@ -11,14 +11,14 @@ class HostRequestsResponse {
   HostRequestsResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? HostRequestsResponseData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
   String? message;
-  Data? data;
+  HostRequestsResponseData? data;
 HostRequestsResponse copyWith({  bool? isSuccess,
   String? message,
-  Data? data,
+  HostRequestsResponseData? data,
 }) => HostRequestsResponse(  isSuccess: isSuccess ?? this.isSuccess,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -43,8 +43,8 @@ HostRequestsResponse copyWith({  bool? isSuccess,
 /// requests : [{"id":103,"matchPercentage":94,"renter":{"id":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","name":"Rahma Ibrahim","jobTitle":"Student","age":21,"profileImage":"https://graduationproject1.runasp.net/images/9f8001f0-41dc-4546-8227-dbf2776466cc.png","bio":""},"property":{"name":"asdfasdasdf","type":"Entire Apartment","city":"Abou Simbel"},"dateRange":{"start":"May 1","end":"May 31, 2026","full":"May 1 - May 31, 2026"},"duration":"1 Month","totalPrice":"234 EGP","status":"Pending","lifestyle":{"earlyBird":true,"social":true},"actions":{"canApprove":true,"canDecline":true,"canMessage":true,"canViewProfile":true}},{"id":102,"matchPercentage":94,"renter":{"id":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","name":"Rahma Ibrahim","jobTitle":"Student","age":21,"profileImage":"https://graduationproject1.runasp.net/images/9f8001f0-41dc-4546-8227-dbf2776466cc.png","bio":""},"property":{"name":"asdfasdasdf","type":"Entire Apartment","city":"Abou Simbel"},"dateRange":{"start":"May 1","end":"May 31, 2026","full":"May 1 - May 31, 2026"},"duration":"1 Month","totalPrice":"234 EGP","status":"Pending","lifestyle":{"earlyBird":true,"social":true},"actions":{"canApprove":true,"canDecline":true,"canMessage":true,"canViewProfile":true}},{"id":101,"matchPercentage":94,"renter":{"id":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","name":"Rahma Ibrahim","jobTitle":"Student","age":21,"profileImage":"https://graduationproject1.runasp.net/images/9f8001f0-41dc-4546-8227-dbf2776466cc.png","bio":""},"property":{"name":"asdfasdasdf","type":"Entire Apartment","city":"Abou Simbel"},"dateRange":{"start":"May 1","end":"May 31, 2026","full":"May 1 - May 31, 2026"},"duration":"1 Month","totalPrice":"234 EGP","status":"Pending","lifestyle":{"earlyBird":true,"social":true},"actions":{"canApprove":true,"canDecline":true,"canMessage":true,"canViewProfile":true}},{"id":100,"matchPercentage":94,"renter":{"id":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","name":"Rahma Ibrahim","jobTitle":"Student","age":21,"profileImage":"https://graduationproject1.runasp.net/images/9f8001f0-41dc-4546-8227-dbf2776466cc.png","bio":""},"property":{"name":"asdfasdasdf","type":"Entire Apartment","city":"Abou Simbel"},"dateRange":{"start":"May 1","end":"May 31, 2026","full":"May 1 - May 31, 2026"},"duration":"1 Month","totalPrice":"234 EGP","status":"Pending","lifestyle":{"earlyBird":true,"social":true},"actions":{"canApprove":true,"canDecline":true,"canMessage":true,"canViewProfile":true}},{"id":99,"matchPercentage":94,"renter":{"id":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","name":"Rahma Ibrahim","jobTitle":"Student","age":21,"profileImage":"https://graduationproject1.runasp.net/images/9f8001f0-41dc-4546-8227-dbf2776466cc.png","bio":""},"property":{"name":"asdfasdasdf","type":"Entire Apartment","city":"Abou Simbel"},"dateRange":{"start":"May 1","end":"May 31, 2026","full":"May 1 - May 31, 2026"},"duration":"1 Month","totalPrice":"234 EGP","status":"Pending","lifestyle":{"earlyBird":true,"social":true},"actions":{"canApprove":true,"canDecline":true,"canMessage":true,"canViewProfile":true}},{"id":98,"matchPercentage":94,"renter":{"id":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","name":"Rahma Ibrahim","jobTitle":"Student","age":21,"profileImage":"https://graduationproject1.runasp.net/images/9f8001f0-41dc-4546-8227-dbf2776466cc.png","bio":""},"property":{"name":"asdfasdasdf","type":"Entire Apartment","city":"Abou Simbel"},"dateRange":{"start":"May 1","end":"May 31, 2026","full":"May 1 - May 31, 2026"},"duration":"1 Month","totalPrice":"234 EGP","status":"Pending","lifestyle":{"earlyBird":true,"social":true},"actions":{"canApprove":true,"canDecline":true,"canMessage":true,"canViewProfile":true}},{"id":97,"matchPercentage":94,"renter":{"id":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","name":"Rahma Ibrahim","jobTitle":"Student","age":21,"profileImage":"https://graduationproject1.runasp.net/images/9f8001f0-41dc-4546-8227-dbf2776466cc.png","bio":""},"property":{"name":"asdfasdasdf","type":"Entire Apartment","city":"Abou Simbel"},"dateRange":{"start":"May 1","end":"May 31, 2026","full":"May 1 - May 31, 2026"},"duration":"1 Month","totalPrice":"234 EGP","status":"Pending","lifestyle":{"earlyBird":true,"social":true},"actions":{"canApprove":true,"canDecline":true,"canMessage":true,"canViewProfile":true}},{"id":96,"matchPercentage":94,"renter":{"id":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","name":"Rahma Ibrahim","jobTitle":"Student","age":21,"profileImage":"https://graduationproject1.runasp.net/images/9f8001f0-41dc-4546-8227-dbf2776466cc.png","bio":""},"property":{"name":"asdfasdasdf","type":"Entire Apartment","city":"Abou Simbel"},"dateRange":{"start":"May 1","end":"May 31, 2026","full":"May 1 - May 31, 2026"},"duration":"1 Month","totalPrice":"234 EGP","status":"Pending","lifestyle":{"earlyBird":true,"social":true},"actions":{"canApprove":true,"canDecline":true,"canMessage":true,"canViewProfile":true}},{"id":95,"matchPercentage":94,"renter":{"id":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","name":"Rahma Ibrahim","jobTitle":"Student","age":21,"profileImage":"https://graduationproject1.runasp.net/images/9f8001f0-41dc-4546-8227-dbf2776466cc.png","bio":""},"property":{"name":"asdfasdasdf","type":"Entire Apartment","city":"Abou Simbel"},"dateRange":{"start":"May 1","end":"May 31, 2026","full":"May 1 - May 31, 2026"},"duration":"1 Month","totalPrice":"234 EGP","status":"Pending","lifestyle":{"earlyBird":true,"social":true},"actions":{"canApprove":true,"canDecline":true,"canMessage":true,"canViewProfile":true}},{"id":94,"matchPercentage":94,"renter":{"id":"9b1d8f47-3129-4753-ac61-7bd7ab4c600e","name":"Rahma Ibrahim","jobTitle":"Student","age":21,"profileImage":"https://graduationproject1.runasp.net/images/9f8001f0-41dc-4546-8227-dbf2776466cc.png","bio":""},"property":{"name":"asdfasdasdf","type":"Entire Apartment","city":"Abou Simbel"},"dateRange":{"start":"May 1","end":"May 31, 2026","full":"May 1 - May 31, 2026"},"duration":"1 Month","totalPrice":"234 EGP","status":"Pending","lifestyle":{"earlyBird":true,"social":true},"actions":{"canApprove":true,"canDecline":true,"canMessage":true,"canViewProfile":true}}]
 /// pagination : {"currentPage":1,"pageSize":10,"totalCount":13,"totalPages":2,"hasNext":true,"hasPrevious":false}
 
-class Data {
-  Data({
+class HostRequestsResponseData {
+  HostRequestsResponseData({
       this.pageInfo, 
       this.tabs, 
       this.currentTab, 
@@ -53,7 +53,7 @@ class Data {
       this.requests, 
       this.pagination,});
 
-  Data.fromJson(dynamic json) {
+  HostRequestsResponseData.fromJson(dynamic json) {
     pageInfo = json['pageInfo'] != null ? PageInfo.fromJson(json['pageInfo']) : null;
     if (json['tabs'] != null) {
       tabs = [];
@@ -84,14 +84,14 @@ class Data {
   String? currentSort;
   List<Requests>? requests;
   Pagination? pagination;
-Data copyWith({  PageInfo? pageInfo,
+HostRequestsResponseData copyWith({  PageInfo? pageInfo,
   List<Tabs>? tabs,
   String? currentTab,
   List<SortOptions>? sortOptions,
   String? currentSort,
   List<Requests>? requests,
   Pagination? pagination,
-}) => Data(  pageInfo: pageInfo ?? this.pageInfo,
+}) => HostRequestsResponseData(  pageInfo: pageInfo ?? this.pageInfo,
   tabs: tabs ?? this.tabs,
   currentTab: currentTab ?? this.currentTab,
   sortOptions: sortOptions ?? this.sortOptions,

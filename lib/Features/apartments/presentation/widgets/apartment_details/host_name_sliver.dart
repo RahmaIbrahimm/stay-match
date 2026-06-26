@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_styles.dart';
-import '../../../core/routing/app_routing.dart';
-import '../models/property_details_response.dart';
+import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_styles.dart';
+import '../../../../../core/routing/app_routing.dart';
+import '../../../data/models/property_details_response.dart';
 
 class HostNameSliver extends StatelessWidget {
   const HostNameSliver({super.key, required this.details});

@@ -13,7 +13,7 @@ import '../../../../../core/constants/app_styles.dart';
 import '../../../../../core/routing/app_routing.dart';
 import '../../../../../core/utils/app_keys.dart';
 import '../../manager/booking_request_cubit.dart';
-import '../../views/filter_pill.dart';
+import '../filter_pill.dart';
 
 class HostBookingsBody extends StatelessWidget {
   const HostBookingsBody({super.key});
