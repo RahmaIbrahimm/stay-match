@@ -52,11 +52,19 @@ class ListingCard extends StatelessWidget {
                     // TODO: context.pushNamed(AppRouting.reviewsView, extra: listing.propertyId);
                     if (listing.type?.toLowerCase() == 'apartment') {
                       context.pushNamed(
-                        AppRouting.apartmentReviewsName,
-                        pathParameters: {'id': listing.propertyId.toString()},
+                        AppRouting.showReviewsName,
+                        pathParameters: {
+                          'propertyId': listing.propertyId.toString()
+                        },
                       );
                     } else {
-                      // todo: reviews for room implementation
+                      context.pushNamed(
+                        AppRouting.showReviewsName,
+                        pathParameters: {
+                          'propertyId': listing.propertyId.toString(),
+                          'isRoom': true.toString()
+                        },
+                      );
                     }
                   },
                   child: Container(

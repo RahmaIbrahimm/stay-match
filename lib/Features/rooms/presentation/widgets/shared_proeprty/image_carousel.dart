@@ -64,7 +64,7 @@ class SharedPropertyImageCarousel extends StatelessWidget {
               onTap: () {
                 if (context.mounted) {
                   context.pushNamed(
-                      AppRouting.apartmentReviewsName,
+                      AppRouting.showReviewsName,
                       pathParameters: {
                         "propertyId": propertyId.toString()
                       });

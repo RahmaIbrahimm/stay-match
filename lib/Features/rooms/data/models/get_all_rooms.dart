@@ -106,11 +106,13 @@ class Items {
     this.coverImageUrl,
     this.rooms,
     this.distanceInKm,
+    this.propertyMatchScore,
   });
 
   Items.fromJson(dynamic json) {
     id = json['id'];
     name = json['name'];
+    propertyMatchScore = json['propertyMatchScore'];
     street = json['street'];
     city = json['city'];
     government = json['government'];
@@ -127,6 +129,7 @@ class Items {
     distanceInKm = json['distanceInKm'];
   }
   num? id;
+  num? propertyMatchScore;
   String? name;
   String? street;
   String? city;
@@ -141,6 +144,7 @@ class Items {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = id;
+    map['propertyMatchScore'] = propertyMatchScore;
     map['name'] = name;
     map['street'] = street;
     map['city'] = city;
