@@ -72,7 +72,7 @@ class RoomBookingRequestResponseData {
   String? startDate;
   String? endDate;
   int? duration;
-  int? totalPrice;
+  num? totalPrice;
   String? status;
   String? roomName;
   String? propertyName;
@@ -81,7 +81,7 @@ RoomBookingRequestResponseData copyWith({  int? id,
   String? startDate,
   String? endDate,
   int? duration,
-  int? totalPrice,
+  num? totalPrice,
   String? status,
   String? roomName,
   String? propertyName,
