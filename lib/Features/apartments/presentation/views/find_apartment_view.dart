@@ -3,10 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stay_match/Features/filter/data/repos/location_repo_impl.dart';
 import 'package:stay_match/Features/filter/presentation/manager/filter_cubit.dart';
 import 'package:stay_match/Features/filter/presentation/manager/location_cubit.dart';
+import 'package:stay_match/Features/home/data/repos/home_repo_impl.dart';
 import 'package:stay_match/Features/rooms/data/repos/rooms_repo_impl.dart';
 import 'package:stay_match/core/networking/dio_consumer.dart';
 
 import '../../../../../../../core/utils/service_locator.dart';
+import '../../../../core/widgets/draggable_chatbot_fab.dart';
+import '../../../home/presentation/manager/home_cubit.dart';
 import '../../data/repos/apartment_repo_impl.dart';
 import '../widgets/find_apartment/find_apartment_body.dart';
 
@@ -31,8 +34,14 @@ class FindApartmentView extends StatelessWidget {
               locationRepository: getIt.get<LocationRepoImpl>(),
             ),
           ),
+          BlocProvider(
+            create: (context) => HomeCubit(
+              homeRepo: getIt.get<HomeRepoImpl>(),
+            ),
+          ),
         ],
-        child: Scaffold(body: FindApartmentBody()),
+        child: DraggableChatbotFab(hasBottomNav: false,
+        child: Scaffold(body: FindApartmentBody())),
       ),
     );
   }
