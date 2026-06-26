@@ -14,6 +14,7 @@ import 'package:stay_match/core/routing/app_routing.dart';
 import 'package:stay_match/core/utils/service_locator.dart';
 import 'package:stay_match/core/widgets/app_drawer/main_app_drawer.dart';
 import 'package:stay_match/core/widgets/custom_elevated_button.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../manager/payment_cubit.dart';
 
@@ -219,7 +220,7 @@ class _PayCreditContent extends StatelessWidget {
 // ── Booking summary card ────────────────────────────────────────────────────────
 
 class _BookingSummaryCard extends StatelessWidget {
-  final Data data;
+  final BookingDetailsResponseData data;
 
   const _BookingSummaryCard({required this.data});
 
@@ -615,49 +616,49 @@ class _ErrorView extends StatelessWidget {
 // TODO: add `webview_flutter` to pubspec.yaml, then uncomment this class
 // and the import at the top of this file, and wire it up in _handleRedirect.
 //
-// class _PaymentWebViewScreen extends StatefulWidget {
-//   final String redirectUrl;
-//   final String successUrlPattern;
-//   final VoidCallback onSuccess;
-//
-//   const _PaymentWebViewScreen({
-//     required this.redirectUrl,
-//     required this.successUrlPattern,
-//     required this.onSuccess,
-//   });
-//
-//   @override
-//   State<_PaymentWebViewScreen> createState() => _PaymentWebViewScreenState();
-// }
-//
-// class _PaymentWebViewScreenState extends State<_PaymentWebViewScreen> {
-//   late final WebViewController _controller;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _controller = WebViewController()
-//       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-//       ..setNavigationDelegate(
-//         NavigationDelegate(
-//           onNavigationRequest: (request) {
-//             if (request.url.startsWith(widget.successUrlPattern)) {
-//               widget.onSuccess();
-//               Navigator.of(context).pop();
-//               return NavigationDecision.prevent;
-//             }
-//             return NavigationDecision.navigate;
-//           },
-//         ),
-//       )
-//       ..loadRequest(Uri.parse(widget.redirectUrl));
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Complete Payment')),
-//       body: WebViewWidget(controller: _controller),
-//     );
-//   }
-// }
+class _PaymentWebViewScreen extends StatefulWidget {
+  final String redirectUrl;
+  final String successUrlPattern;
+  final VoidCallback onSuccess;
+
+  const _PaymentWebViewScreen({
+    required this.redirectUrl,
+    required this.successUrlPattern,
+    required this.onSuccess,
+  });
+
+  @override
+  State<_PaymentWebViewScreen> createState() => _PaymentWebViewScreenState();
+}
+
+class _PaymentWebViewScreenState extends State<_PaymentWebViewScreen> {
+  late final WebViewController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (request) {
+            if (request.url.startsWith(widget.successUrlPattern)) {
+              widget.onSuccess();
+              Navigator.of(context).pop();
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(widget.redirectUrl));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Complete Payment')),
+      body: WebViewWidget(controller: _controller),
+    );
+  }
+}
