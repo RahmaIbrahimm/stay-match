@@ -2,21 +2,21 @@
 /// message : "Reviews retrieved successfully"
 /// data : {"host":{"hostName":"Abanoub Yousry","hostId":"1121c342-dd7a-4a29-bc66-c94f6aa43212","hostImage":"https://graduationproject1.runasp.net/images/ac9bf66b-fa35-4b6a-b148-2faf0d01a1b3.jpg","isSuperHost":false,"yearsOfHosting":0,"responseRate":0,"responseTime":"No responses","isStayEaseProtected":true},"summary":{"averageRating":5,"totalReviews":1,"accuracy":5,"cleanliness":5,"location":5,"checkIn":5,"value":5,"communication":5,"distribution":{"5":1}},"reviews":[{"reviewId":3,"reviewerName":"Abanoub Yousry","reviewerImage":"https://graduationproject1.runasp.net/images/ac9bf66b-fa35-4b6a-b148-2faf0d01a1b3.jpg","rating":5,"comment":"good goood","createdAt":"2026-05-10T11:00:10.3878531","hostResponse":null,"responseCreatedAt":null,"hostImage":null}]}
 
-class GetApartmentReviews {
-  GetApartmentReviews({this.success, this.message, this.data});
+class GetPropertyReviews {
+  GetPropertyReviews({this.success, this.message, this.data});
 
-  GetApartmentReviews.fromJson(dynamic json) {
+  GetPropertyReviews.fromJson(dynamic json) {
     success = json['success'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? GetApartmentReviewsData.fromJson(json['data']) : null;
   }
 
   bool? success;
   String? message;
-  Data? data;
+  GetApartmentReviewsData? data;
 
-  GetApartmentReviews copyWith({bool? success, String? message, Data? data}) =>
-      GetApartmentReviews(
+  GetPropertyReviews copyWith({bool? success, String? message, GetApartmentReviewsData? data}) =>
+      GetPropertyReviews(
         success: success ?? this.success,
         message: message ?? this.message,
         data: data ?? this.data,
@@ -37,10 +37,10 @@ class GetApartmentReviews {
 /// summary : {"averageRating":5,"totalReviews":1,"accuracy":5,"cleanliness":5,"location":5,"checkIn":5,"value":5,"communication":5,"distribution":{"5":1}}
 /// reviews : [{"reviewId":3,"reviewerName":"Abanoub Yousry","reviewerImage":"https://graduationproject1.runasp.net/images/ac9bf66b-fa35-4b6a-b148-2faf0d01a1b3.jpg","rating":5,"comment":"good goood","createdAt":"2026-05-10T11:00:10.3878531","hostResponse":null,"responseCreatedAt":null,"hostImage":null}]
 
-class Data {
-  Data({this.host, this.summary, this.reviews});
+class GetApartmentReviewsData {
+  GetApartmentReviewsData({this.host, this.summary, this.reviews});
 
-  Data.fromJson(dynamic json) {
+  GetApartmentReviewsData.fromJson(dynamic json) {
     host = json['host'] != null ? Host.fromJson(json['host']) : null;
     summary = json['summary'] != null
         ? Summary.fromJson(json['summary'])
@@ -57,7 +57,7 @@ class Data {
   Summary? summary;
   List<Reviews>? reviews;
 
-  Data copyWith({Host? host, Summary? summary, List<Reviews>? reviews}) => Data(
+  GetApartmentReviewsData copyWith({Host? host, Summary? summary, List<Reviews>? reviews}) => GetApartmentReviewsData(
     host: host ?? this.host,
     summary: summary ?? this.summary,
     reviews: reviews ?? this.reviews,
@@ -116,7 +116,7 @@ class Reviews {
   int? reviewId;
   String? reviewerName;
   String? reviewerImage;
-  double? rating;
+  num? rating;
   String? comment;
   String? createdAt;
   dynamic hostResponse;
@@ -127,7 +127,7 @@ class Reviews {
     int? reviewId,
     String? reviewerName,
     String? reviewerImage,
-    double? rating,
+    num? rating,
     String? comment,
     String? createdAt,
     dynamic hostResponse,
