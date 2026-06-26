@@ -69,18 +69,54 @@ abstract class Endpoints {
   static String Function(int) getApartmentReviews = (int id) {
     return "/api/Review/property/$id";
   };
+  static String Function(int) getRoomReviews = (int id) {
+    return "/api/Review/room/$id";
+  };
   static String addReview = '/api/Review/AddReview';
   static String reviewRecommendations = '/api/Review/recommendations';
   // other user profile
   static String Function(String)  otherUserProfile= (String id) {
     return "/api/ViewUserProfile/$id";
   };
+  static const String replyToReview = '/api/Review/response';
   // payment
   static const String paymentRedirectLink = '/api/Payment/create-payment-token?';
   static String Function(int) bookingDetails = (int id) {
     return "/api/Booking/$id";
   };
 
+  // chatbot
+  static String chatBot =
+      'https://stay-match-chat-bot-production.up.railway.app/chat';
+
+  // room details
+  static String Function(int, int) roomDetails = (int propertyId, int roomId) {
+    return "/api/Property/$propertyId/rooms/$roomId";
+  };
+  static String Function(int) getSharedPropertyDetails = (int id) {
+    return "/api/Property/shared/$id";
+  };
+
+  // questions
+  static const String getQuestions = 'https://staymatch-recommendation-service-production.up.railway.app/questionnaire/questions';
+  static const String answerQuestions = 'https://staymatch-recommendation-service-production.up.railway.app/questionnaire/answers';
+  // Matching Endpoints
+  static const String postMatchSharedProperties = '/api/match/shared-properties';
+  static String Function(int) getMatchProperty = (int propertyId) {
+    return "/api/match/property/$propertyId";
+  };
+  // ================= Notifications =================
+  static const String notificationsHub = 'https://graduationproject1.runasp.net/notificationHub';
+  static const String getNotifications = '/api/Notification';
+  static const String getUnreadNotificationCount = '/api/Notification/unread-count';
+  static String Function(int) markNotificationAsRead = (int id) {
+    return "/api/Notification/$id/read";
+  };
+  static const String markAllNotificationsAsRead = '/api/Notification/mark-all-read';
+  static const String getNotificationsByType = '/api/Notification/by-type';
+  static String Function(int) deleteNotification = (int id) {
+    return "/api/Notification/$id";
+  };
   // client ids uses for google login
   static const String webClientId =
       '936135595361-tkjd357n4h18pd6pc4pfoch6rto0vlh5.apps.googleusercontent.com';
