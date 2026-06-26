@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
+import 'package:stay_match/core/constants/app_images.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
+import 'package:stay_match/core/routing/app_routing.dart';
 import 'package:stay_match/core/widgets/custom_elevated_button.dart';
 
 import '../../data/models/get_questions_response.dart';
@@ -210,7 +213,7 @@ class _QuestionsViewState extends State<QuestionsView> {
               );
               cubit.previousStep();
             } else {
-              Navigator.pop(context);
+              context.pop();
             }
           },
         ),
@@ -908,7 +911,7 @@ class _QuestionsViewState extends State<QuestionsView> {
                     backgroundColor: AppColors.primary,
                     textColor: Colors.white,
                     borderRadius: 12,
-                    onPressed: () {
+                    onPressed: () async{
                       final cubit = context.read<QuestionsCubit>();
 
                       // 🛑 VALIDATION CHECK: Prevent moving forward if any question is missing an answer
@@ -940,7 +943,8 @@ class _QuestionsViewState extends State<QuestionsView> {
 
                       // If valid, proceed normally
                       if (isLastStep) {
-                        cubit.submitAnswers();
+                        await cubit.submitAnswers();
+                        context.goNamed(AppRouting.questionsFinishName);
                       } else {
                         _pageController.nextPage(
                           duration: const Duration(milliseconds: 300),

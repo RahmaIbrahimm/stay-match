@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_images.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
+import 'package:stay_match/core/routing/app_routing.dart';
 
 import '../../../../core/widgets/custom_elevated_button.dart';
 
@@ -111,25 +113,7 @@ class QuestionsStartView extends StatelessWidget {
                         size: 18.r,
                       ),
                       onPressed: () {
-                        // TODO: Connect questions presentation flow entry point context execution
-                      },
-                    ),
-                  ),
-
-                  SizedBox(height: 14.h),
-
-                  // Secondary Green/Teal Action Button: Skip for Now
-                  SizedBox(
-                    width: double.infinity,
-                    height: 52.h,
-                    child: CustomElevatedButton(
-                      text: "Skip for Now",
-                      borderRadius: 14,
-                      textStyle: AppStyles.semiBold16manrope.copyWith(fontSize: 15.sp),
-                      backgroundColor: const Color(0xFF86CDAE), // 🌟 Beautiful teal/green tone extracted from your precise preview layout
-                      textColor: const Color(0xFF0D3E26), // Deep green tinted color for high text legibility contrasts
-                      onPressed: () {
-                        // TODO: Bypass onboarding preference surveys routing action
+                        context.goNamed(AppRouting.questionsName);
                       },
                     ),
                   ),
@@ -137,7 +121,7 @@ class QuestionsStartView extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 40.h),
+            SizedBox(height: 25.h),
           ],
         ),
       ),

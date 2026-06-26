@@ -47,10 +47,10 @@ class QuestionsRepoImpl extends QuestionsRepo {
           .readFromSecureStorage(key: SecureStorageKeys.tokenKey);
       var response = await dio.post(
         Endpoints.answerQuestions,
-        options: Options(headers: {'Authorization': token,}),
+        options: Options(headers: {'Authorization': "Bearer $token",}),
         data:  request.toJson(),
       );
-      return right(AnswerQuestionsResponse.fromJson(response));
+      return right(AnswerQuestionsResponse.fromJson(response.data));
     } on DioException catch (e) {
       return left(ServerFailure.fromDioError(e));
     }

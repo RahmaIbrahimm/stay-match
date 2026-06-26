@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_images.dart'; // Make sure to add the new image key here!
 import 'package:stay_match/core/constants/app_styles.dart';
+import 'package:stay_match/core/routing/app_routing.dart';
 
 import '../../../../core/widgets/custom_elevated_button.dart';
 
@@ -29,7 +31,7 @@ class QuestionsFinishView extends StatelessWidget {
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1.h),
           child: Divider(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             thickness: 1.h,
             height: 1.h,
           ),
@@ -102,7 +104,7 @@ class QuestionsFinishView extends StatelessWidget {
                   backgroundColor: const Color(0xFF002270), // Matches deep dark brand navy blue from layout image
                   textColor: Colors.white,
                   onPressed: () {
-                    // TODO: Execute popping the entire question wizard stack or push Replacement straight to Home layout view segment
+                    if(context.mounted)context.goNamed(AppRouting.homeViewName);
                   },
                 ),
               ),
