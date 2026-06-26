@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
+import '../../rooms/data/models/get_all_rooms.dart';
 
 class CardCoverPhoto extends StatelessWidget {
   const CardCoverPhoto({
@@ -11,15 +12,17 @@ class CardCoverPhoto extends StatelessWidget {
     required this.imageUrl,
     this.scaleUp = false,
     this.showRating = true,
-    this.showCompatibility = true,
-  });
+    this.showCompatibility = true, this.item,
 
+  });
+  final Items? item;
   final String? imageUrl;
   final bool scaleUp;
   final bool showRating;
   final bool showCompatibility;
   @override
   Widget build(BuildContext context) {
+    print("comp : ${item?.propertyMatchScore}");
     return Stack(
       children: [
         ClipRRect(
@@ -84,10 +87,9 @@ class CardCoverPhoto extends StatelessWidget {
               color: AppColors.primary,
               borderRadius: BorderRadius.circular(5.r),
             ),
-            //todo: add actual match logic when api given
             child: Text(
-              '98 % Match',
-              style: AppStyles.medium10poppins.copyWith(
+              '${((item?.propertyMatchScore ?? 0) * 100).toInt()} % Match',
+              style: AppStyles.medium12poppins.copyWith(
                 color: AppColors.textColorWhite,
               ),
             ),
@@ -111,7 +113,7 @@ class CardCoverPhoto extends StatelessWidget {
                   ),
                 ],
               ),
-              //todo: add actual match logic when api given
+              //todo: add actual rating logic when api given
               alignment: Alignment.topRight,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
