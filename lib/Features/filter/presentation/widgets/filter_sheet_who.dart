@@ -156,8 +156,6 @@ class _FilterSheetWhoState extends State<FilterSheetWho> {
         SliverToBoxAdapter(child: SizedBox(height: 24.h)),
         BlocConsumer<FilterCubit, FilterState>(
           listener: (context, state) {
-            // TODO: implement listener
-            var cubit = BlocProvider.of<FilterCubit>(context);
             if (state is ApartmentFilterFailure) {
               ScaffoldMessenger.of(context).clearSnackBars();
               ScaffoldMessenger.of(

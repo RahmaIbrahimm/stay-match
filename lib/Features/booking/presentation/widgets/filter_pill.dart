@@ -15,7 +15,7 @@ class FilterPill extends StatelessWidget {
   final bool isActive;
   final VoidCallback onTap;
 
-  const FilterPill({
+  const FilterPill({super.key,
     required this.label,
     required this.isActive,
     required this.onTap,

@@ -14,7 +14,6 @@ import '../../../apartments/data/models/all_apartments_response.dart';
 import '../../data/models/apartment_filter_params.dart';
 import '../../data/models/location_model.dart';
 import '../../data/models/rooms_filter_params.dart';
-import 'location_cubit.dart';
 
 part 'filter_state.dart';
 
@@ -31,6 +30,7 @@ class FilterCubit extends Cubit<FilterState> {
   RoomsFilterParams _currentRoomsFilters = const RoomsFilterParams();
   RoomsFilterParams? _lastAppliedRoomsFilters;
   GetAllRooms? _roomsCachedResponse;
+  String _roomsSearchQuery = '';
 
   FilterCubit({required this.roomsRepo, required this.apartmentRepo})
     : super(FilterInitial()) {
@@ -63,25 +63,6 @@ class FilterCubit extends Cubit<FilterState> {
     if (start != null) log('🏢 Apartment | start: $start');
     if (monthsCount != null) log('🏢 Apartment | monthsCount: $monthsCount');
     if (government != null) log('🏢 Apartment | government: $government');
-    if (allowsFamilies != null)
-      log('🏢 Apartment | allowsFamilies: $allowsFamilies');
-    if (allowsChildren != null)
-      log('🏢 Apartment | allowsChildren: $allowsChildren');
-    if (allowsStudents != null)
-      log('🏢 Apartment | allowsStudents: $allowsStudents');
-    if (allowsWorkers != null)
-      log('🏢 Apartment | allowsWorkers: $allowsWorkers');
-    if (studentGender != null)
-      log('🏢 Apartment | studentGender: $studentGender');
-    if (workerGender != null) log('🏢 Apartment | workerGender: $workerGender');
-    if (userLat != null) log('🏢 Apartment | userLat: $userLat');
-    if (userLng != null) log('🏢 Apartment | userLng: $userLng');
-    if (orderByOldest != null)
-      log('🏢 Apartment | orderByOldest: $orderByOldest');
-    if (onlyAvailable != null)
-      log('🏢 Apartment | onlyAvailable: $onlyAvailable');
-    if (page != null) log('🏢 Apartment | page: $page');
-    if (pageSize != null) log('🏢 Apartment | pageSize: $pageSize');
     _currentApartmentFilters = _currentApartmentFilters.copyWith(
       start: start,
       monthsCount: monthsCount,
@@ -209,68 +190,6 @@ class FilterCubit extends Cubit<FilterState> {
     await _getAllApartmentsWithFilters(forceRefresh: true);
   }
 
-  // Rooms Methods
-  // Future<void> updateRoomsFilter({
-  //   String? start,
-  //   int? monthsCount,
-  //   String? government,
-  //   bool? allowsFamilies,
-  //   bool? allowsChildren,
-  //   bool? allowsStudents,
-  //   bool? allowsWorkers,
-  //   String? workerGender,
-  //   String? studentGender,
-  //   double? userLat,
-  //   double? userLng,
-  //   bool? orderByOldest,
-  //   bool? onlyAvailable,
-  //   num? page,
-  //   num? pageSize,
-  //   bool forceRefresh = false,
-  // }) async {
-  //   // Add this at the beginning of updateRoomsFilter method
-  //   if (start != null) log('🚪 Rooms | start: $start');
-  //   if (monthsCount != null) log('🚪 Rooms | monthsCount: $monthsCount');
-  //   if (government != null) log('🚪 Rooms | government: $government');
-  //   if (allowsFamilies != null)
-  //     log('🚪 Rooms | allowsFamilies: $allowsFamilies');
-  //   if (allowsChildren != null)
-  //     log('🚪 Rooms | allowsChildren: $allowsChildren');
-  //   if (allowsStudents != null)
-  //     log('🚪 Rooms | allowsStudents: $allowsStudents');
-  //   if (allowsWorkers != null) log('🚪 Rooms | allowsWorkers: $allowsWorkers');
-  //   if (workerGender != null) log('🚪 Rooms | workerGender: $workerGender');
-  //   if (studentGender != null) log('🚪 Rooms | studentGender: $studentGender');
-  //   if (userLat != null) log('🚪 Rooms | userLat: $userLat');
-  //   if (userLng != null) log('🚪 Rooms | userLng: $userLng');
-  //   if (orderByOldest != null) log('🚪 Rooms | orderByOldest: $orderByOldest');
-  //   if (onlyAvailable != null) log('🚪 Rooms | onlyAvailable: $onlyAvailable');
-  //   if (page != null) log('🚪 Rooms | page: $page');
-  //   if (pageSize != null) log('🚪 Rooms | pageSize: $pageSize');
-  //   _currentRoomsFilters = _currentRoomsFilters.copyWith(
-  //     start: start,
-  //     monthsCount: monthsCount,
-  //     government: government,
-  //     allowsFamilies: allowsFamilies,
-  //     allowsChildren: allowsChildren,
-  //     allowsStudents: allowsStudents,
-  //     allowsWorkers: allowsWorkers,
-  //     workerGender: workerGender,
-  //     studentGender: studentGender,
-  //     userLat: userLat,
-  //     userLng: userLng,
-  //     orderByOldest: orderByOldest,
-  //     onlyAvailable: onlyAvailable,
-  //     page: page,
-  //     pageSize: pageSize,
-  //   );
-  //
-  //   final bool filtersChanged =
-  //       _lastAppliedRoomsFilters == null ||
-  //       _currentRoomsFilters.hasChanges(_lastAppliedRoomsFilters);
-  //
-  //   await _getAllRoomsWithFilters(forceRefresh: forceRefresh || filtersChanged);
-  // }
   Future<void> updateRoomsFilter({
     String? start,
     int? monthsCount,
@@ -451,53 +370,7 @@ class FilterCubit extends Cubit<FilterState> {
     // Emit an initial or loading state to let the UI know it's reset time
     emit( FilterInitial());
   }
-// --- ADDED FOR PAGINATION ---
-//   Future<void> fetchRoomsPage(int pageKey, PagingController<int, Items> pagingController) async {
-//     // Note: We use the current filters but override the page with pageKey
-//     final response = await roomsRepo.getAllRooms(
-//       start: _currentRoomsFilters.start,
-//       monthsCount: _currentRoomsFilters.monthsCount,
-//       government: _currentRoomsFilters.government,
-//       allowsFamilies: _currentRoomsFilters.allowsFamilies,
-//       allowsChildren: _currentRoomsFilters.allowsChildren,
-//       allowsStudents: _currentRoomsFilters.allowsStudents,
-//       allowsWorkers: _currentRoomsFilters.allowsWorkers,
-//       workerGender: _currentRoomsFilters.workerGender,
-//       studentGender: _currentRoomsFilters.studentGender,
-//       userLat: _currentRoomsFilters.userLat,
-//       userLng: _currentRoomsFilters.userLng,
-//       orderByOldest: _currentRoomsFilters.orderByOldest,
-//       onlyAvailable: _currentRoomsFilters.onlyAvailable,
-//       page: pageKey, // The controller provides the current page index
-//       pageSize: 10,
-//     );
-//
-//     response.fold(
-//           (fail) {
-//         log('Pagination Error: ${fail.errMessage}');
-//         pagingController.error = fail.errMessage;
-//       },
-//           (resp) {
-//         if (resp.isSuccess == true) {
-//           final items = resp.data?.items ?? [];
-//           final isLastPage = items.length < 10;
-//
-//           if (isLastPage) {
-//             pagingController.appendLastPage(items);
-//           } else {
-//             pagingController.appendPage(items, pageKey + 1);
-//           }
-//
-//           // Optional: Sync the success state so other UI elements
-//           // (like result counts) stay updated
-//           _roomsCachedResponse = resp;
-//           emit(RoomsFilterSuccess(response: resp));
-//         } else {
-//           pagingController.error = resp.message ?? 'Error fetching rooms';
-//         }
-//       },
-//     );
-//   }
+
   Future<void> fetchRoomsPage(int pageKey, PagingController<int, Items> pagingController) async {
     final response = await roomsRepo.getAllRooms(
       start: _currentRoomsFilters.start,

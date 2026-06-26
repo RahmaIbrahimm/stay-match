@@ -4,7 +4,7 @@ sealed class FilterState extends Equatable {}
 
 final class FilterInitial extends FilterState {
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 
 final class ApartmentFilterLoading extends FilterState {
