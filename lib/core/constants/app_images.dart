@@ -24,6 +24,9 @@ abstract class AppImages {
   static const finishQuestionsPic =  '$path/finish_questions_pic.png';
   static const personalizationLoadingPic =  '$path/secondary_splash_pic.png';
   static const mainLogo =  '$path/full_logo.png';
+  // notifications
+  static const noNotificationImg =  '$path/no_notifications_header_pic.png';
+
 
 
 }
