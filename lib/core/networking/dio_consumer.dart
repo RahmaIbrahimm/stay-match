@@ -14,8 +14,8 @@ class DioConsumer extends ApiService {
       validateStatus: (status) {
         return status != null && status >= 200 && status < 300;
       },
-      connectTimeout: Duration(seconds: 10),
-      receiveTimeout: Duration(seconds: 10),
+      connectTimeout: Duration(seconds: 15),
+      receiveTimeout: Duration(seconds: 60),
     );
     dio.interceptors.add(ApiInterceptors(dio));
     dio.interceptors.add(
