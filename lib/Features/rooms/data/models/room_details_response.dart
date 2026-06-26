@@ -91,7 +91,9 @@ class RoomDetailsResponseData {
       this.profilePicture,
       this.petsAllowed,
       this.blockedPeriods,
-      this.beds,});
+      this.beds,
+      this.isMyProperty
+    ,});
 
   RoomDetailsResponseData.fromJson(dynamic json) {
     id = json['id'];
@@ -101,6 +103,7 @@ class RoomDetailsResponseData {
     monthRent = json['month_rent'];
     deposit = json['deposit'];
     furnished = json['furnished'];
+    isMyProperty = json['isMyProperty'];
     availableFrom = json['availableFrom'];
     allowedTenants = json['allowedTenants'] != null ? AllowedTenants.fromJson(json['allowedTenants']) : null;
     amenities = json['amenities'] != null ? Amenities.fromJson(json['amenities']) : null;
@@ -144,6 +147,7 @@ class RoomDetailsResponseData {
   num? monthRent;
   num? deposit;
   bool? furnished;
+  bool? isMyProperty;
   String? availableFrom;
   AllowedTenants? allowedTenants;
   Amenities? amenities;
@@ -178,6 +182,7 @@ RoomDetailsResponseData copyWith({  num? id,
   String? city,
   String? government,
   bool? isSaved,
+  bool? isMyProperty,
   bool? isPaid,
   List<PropertyImages>? propertyImages,
   num? minimumStay,
@@ -191,13 +196,15 @@ RoomDetailsResponseData copyWith({  num? id,
   bool? petsAllowed,
   List<BlockedPeriod>? blockedPeriods,
   List<Beds>? beds,
-}) => RoomDetailsResponseData(  id: id ?? this.id,
+}) => RoomDetailsResponseData(
+  id: id ?? this.id,
   hostId: hostId ?? this.hostId,
   hostName: hostName ?? this.hostName,
   roomName: roomName ?? this.roomName,
   monthRent: monthRent ?? this.monthRent,
   deposit: deposit ?? this.deposit,
   furnished: furnished ?? this.furnished,
+  isMyProperty: isMyProperty ?? this.isMyProperty,
   availableFrom: availableFrom ?? this.availableFrom,
   allowedTenants: allowedTenants ?? this.allowedTenants,
   amenities: amenities ?? this.amenities,
@@ -228,6 +235,7 @@ RoomDetailsResponseData copyWith({  num? id,
     map['month_rent'] = monthRent;
     map['deposit'] = deposit;
     map['furnished'] = furnished;
+    map['isMyProperty'] = isMyProperty;
     map['availableFrom'] = availableFrom;
     if (allowedTenants != null) {
       map['allowedTenants'] = allowedTenants?.toJson();
