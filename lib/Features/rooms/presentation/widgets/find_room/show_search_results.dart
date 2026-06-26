@@ -42,7 +42,7 @@ class ShowSearchResults extends StatelessWidget {
                 street: roomPropertiesData[index].street,
                 city: roomPropertiesData[index].city,
                 rooms: roomPropertiesData[index].rooms ?? [],
-                id: roomPropertiesData[index].id!.toInt(),
+                id: roomPropertiesData[index].id!.toInt(), item: roomPropertiesData[index],
               );
       },
     );

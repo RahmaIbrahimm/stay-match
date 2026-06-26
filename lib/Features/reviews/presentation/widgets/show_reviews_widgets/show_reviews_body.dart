@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:stay_match/Features/reviews/presentation/widgets/apartment_reviews_widgets/reviews_app_bar.dart';
-import 'package:stay_match/Features/reviews/presentation/widgets/apartment_reviews_widgets/reviews_body.dart';
 import 'package:stay_match/Features/reviews/presentation/widgets/shared/reviews_helpers.dart';
+import 'package:stay_match/Features/reviews/presentation/widgets/show_reviews_widgets/reviews_app_bar.dart';
+import 'package:stay_match/Features/reviews/presentation/widgets/show_reviews_widgets/reviews_body.dart';
 
+import '../../../../../core/constants/app_colors.dart';
+import '../../../../filter/presentation/widgets/filter_helper.dart';
 import '../../../data/models/get_apartment_reviews.dart';
 import '../../manager/reviews_cubit.dart';
 import 'error_view.dart';
 
-class ApartmentReviewsBody extends StatefulWidget {
+class ShowReviewsBody extends StatefulWidget {
   final int propertyId;
+  final bool isRoom;
 
-  const ApartmentReviewsBody({super.key, required this.propertyId});
+  const ShowReviewsBody({super.key, required this.propertyId,  this.isRoom = false});
 
   @override
-  State<ApartmentReviewsBody> createState() => _ApartmentReviewsBodyState();
+  State<ShowReviewsBody> createState() => _ShowReviewsBodyState();
 }
 
-class _ApartmentReviewsBodyState extends State<ApartmentReviewsBody> {
+class _ShowReviewsBodyState extends State<ShowReviewsBody> {
   final TextEditingController _searchCtrl = TextEditingController();
   final PagingController<int, Reviews> _pagingController = PagingController(
     firstPageKey: 1,
@@ -33,6 +36,7 @@ class _ApartmentReviewsBodyState extends State<ApartmentReviewsBody> {
         propertyId: widget.propertyId,
         pageKey: pageKey,
         pagingController: _pagingController,
+        propertyType: widget.isRoom ? PropertyType.room:PropertyType.apartment
       );
     });
   }
@@ -82,7 +86,7 @@ class _ApartmentReviewsBodyState extends State<ApartmentReviewsBody> {
         builder: (context, state) {
           if (state is ReviewsLoading && _pagingController.itemList == null) {
             return const Center(
-              child: CircularProgressIndicator(color: RColors.primary),
+              child: CircularProgressIndicator(color: AppColors.primary),
             );
           }
           if (state is ReviewsFailure && _pagingController.itemList == null) {
