@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
-import 'package:stay_match/core/constants/app_images.dart'; // Make sure to add this image key here
+import 'package:stay_match/core/constants/app_images.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
+import 'package:stay_match/core/routing/app_routing.dart';
+
+import '../utils/secure_storage_helper.dart';
+import '../utils/secure_storage_keys.dart';
+import '../utils/service_locator.dart';
 
 class SecondarySplashView extends StatefulWidget {
   const SecondarySplashView({super.key});
@@ -23,6 +29,33 @@ class _SecondarySplashViewState extends State<SecondarySplashView>
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     )..repeat();
+
+    _checkAuthAndNavigate();
+  }
+
+  void _checkAuthAndNavigate() async {
+    try {
+      // 🌟 Wait for both storage and a clean 2-second minimum delay so the screen doesn't snap away too fast
+      final results = await Future.wait([
+        getIt.get<SecureStorageHelper>().readFromSecureStorage(key: SecureStorageKeys.tokenKey),
+        Future.delayed(const Duration(seconds: 2)),
+      ]);
+
+      final String? token = results[0] as String?;
+
+      if (mounted) {
+        if (token != null) {
+          context.goNamed(AppRouting.homeViewName);
+        } else {
+          context.goNamed(AppRouting.onboardingName);
+        }
+      }
+    } catch (e) {
+      // Fallback safeguard to prevent getting stuck if storage misbehaves
+      if (mounted) {
+        context.goNamed(AppRouting.onboardingName);
+      }
+    }
   }
 
   @override
@@ -33,7 +66,6 @@ class _SecondarySplashViewState extends State<SecondarySplashView>
 
   @override
   Widget build(BuildContext context) {
-    // 🎨 UI background uses a soft radial or linear subtle gradient to match your screenshot
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -43,7 +75,7 @@ class _SecondarySplashViewState extends State<SecondarySplashView>
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFFF7FAFF), // Light soft blue-white top tint
+              Color(0xFFF7FAFF),
               Colors.white,
             ],
           ),
@@ -54,15 +86,14 @@ class _SecondarySplashViewState extends State<SecondarySplashView>
             children: [
               // 📝 1. Top Section: Brand Header & Tagline
               Padding(
-                padding: EdgeInsets.only(top:55.h),
+                padding: EdgeInsets.only(top: 55.h),
                 child: Column(
                   children: [
-                    // Logo + Text Row (If your logo asset has text, replace with Image.asset)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.home_work_rounded, // Replace with your exact SVG/Image logo
+                          Icons.home_work_rounded,
                           color: const Color(0xFF002270),
                           size: 32.r,
                         ),
@@ -96,7 +127,7 @@ class _SecondarySplashViewState extends State<SecondarySplashView>
                   height: 260.h,
                   width: double.infinity,
                   child: Image.asset(
-                    AppImages.personalizationLoadingPic, // 🌟 Pre-rendered center graphic asset
+                    AppImages.personalizationLoadingPic,
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -113,28 +144,30 @@ class _SecondarySplashViewState extends State<SecondarySplashView>
                       builder: (context, child) {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 6.w,
-                          children: List.generate(3, (index) {
-                            // Creates a staggered wave delay for each dot based on its index
-                            final double delay = index * 0.25;
+                          children: List.generate(5, (index) {
+                            // Elements 1, 3, 5 are SizedBoxes to handle spacing cleanly without the invalid keyword
+                            if (index % 2 != 0) {
+                              return SizedBox(width: 6.w);
+                            }
+
+                            final int dotIndex = index ~/ 2;
+                            final double delay = dotIndex * 0.25;
                             double animValue = _animationController.value - delay;
                             if (animValue < 0) animValue += 1.0;
 
-                            // Map to a clean sinewave translation to move the dots up and down smoothly
                             final double offset = Curves.easeInOut.transform(
                               animValue <= 0.5 ? animValue * 2 : (1.0 - animValue) * 2,
                             );
 
                             return Transform.translate(
-                              offset: Offset(0, -offset * 6.r), // Upward bounce range bound
+                              offset: Offset(0, -offset * 6.r),
                               child: Container(
                                 width: 7.r,
                                 height: 7.r,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  // Middle dot scales darker/lighter dynamically
                                   color: const Color(0xFF002270).withOpacity(
-                                    index == 1 ? 0.7 : 0.35,
+                                    dotIndex == 1 ? 0.7 : 0.35,
                                   ),
                                 ),
                               ),
@@ -144,7 +177,6 @@ class _SecondarySplashViewState extends State<SecondarySplashView>
                       },
                     ),
                     SizedBox(height: 16.h),
-                    // Loading Status Message Text
                     Text(
                       "PERSONALIZING YOUR EXPERIENCE",
                       style: AppStyles.bold12poppins.copyWith(
