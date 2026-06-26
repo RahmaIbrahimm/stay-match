@@ -54,7 +54,7 @@ class OnboardingPage extends StatelessWidget {
                     height: 240.h,
                     width: double.infinity,
                     child: Image.asset(
-                      AppImages.mainLogo, // 📌 TODO: Add your welcome graphic asset string to your constants
+                      AppImages.mainLogo,
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -124,7 +124,6 @@ class OnboardingPage extends StatelessWidget {
                           backgroundColor: AppColors.secondary,
                           textColor: AppColors.textColorPrimary,
                           onPressed: () {
-                            // TODO: Add navigation routing sequence to target login interface screen
                             context.goNamed(AppRouting.loginViewName);
                           },
                         ),
