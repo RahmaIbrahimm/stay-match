@@ -54,7 +54,7 @@ class StayMatch extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(402, 874),
       child: DevicePreview(
-        enabled: false,
+        enabled: true,
         builder: (context) => MaterialApp.router(
           scaffoldMessengerKey: AppKeys.rootScaffoldMessengerKey,
           useInheritedMediaQuery: true,
