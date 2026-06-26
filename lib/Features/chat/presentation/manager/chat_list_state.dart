@@ -37,7 +37,6 @@ class ChatSuccess extends ChatListState {
   }
 
   @override
-  // TODO: implement props
   List<Object?> get props =>[response, searchResponse, isSearching];
 }final class ChatFailure extends ChatListState {
   final String errMessage;
