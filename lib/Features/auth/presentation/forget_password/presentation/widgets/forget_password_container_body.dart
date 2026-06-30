@@ -26,9 +26,13 @@ class ForgetPasswordContainerBody extends StatelessWidget {
             ),
           );
         }
+
         if (state is SendCodeStateSuccess) {
           context.pushNamed(AppRouting.verifyEmailViewName);
         }
+        // if (state is VerifyCodeStateSuccess) {
+        //
+        // }
       },
       builder: (context, state) {
         return Form(
@@ -56,14 +60,17 @@ class ForgetPasswordContainerBody extends StatelessWidget {
                 controller: authCubit.forgetEmailController,
               ),
               SizedBox(height: 36.h),
-              CustomElevatedButton(
-                text: AppStrings.confirmEmail,
-                onPressed: () {
-                  authCubit.formValidationAndInvokeMethod(
-                    key: authCubit.forgetFormKey,
-                    authMethod: authCubit.sendCode(),
-                  );
-                },
+              SizedBox(
+                width: double.infinity,
+                child: CustomElevatedButton(
+                  text: AppStrings.confirmEmail,
+                  onPressed: () {
+                    authCubit.formValidationAndInvokeMethod(
+                      key: authCubit.forgetFormKey,
+                      authMethod: authCubit.sendCode(),
+                    );
+                  },
+                ),
               ),
             ],
           ),

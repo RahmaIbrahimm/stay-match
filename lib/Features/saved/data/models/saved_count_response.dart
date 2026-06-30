@@ -11,14 +11,14 @@ class SavedCountResponse {
   SavedCountResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? SavedCountResponseData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
   String? message;
-  Data? data;
+  SavedCountResponseData? data;
 SavedCountResponse copyWith({  bool? isSuccess,
   String? message,
-  Data? data,
+  SavedCountResponseData? data,
 }) => SavedCountResponse(  isSuccess: isSuccess ?? this.isSuccess,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -39,13 +39,13 @@ SavedCountResponse copyWith({  bool? isSuccess,
 /// wholeApartments : 1
 /// sharedHouses : 0
 
-class Data {
-  Data({
+class SavedCountResponseData {
+  SavedCountResponseData({
       this.rooms, 
       this.wholeApartments, 
       this.sharedHouses,});
 
-  Data.fromJson(dynamic json) {
+  SavedCountResponseData.fromJson(dynamic json) {
     rooms = json['rooms'];
     wholeApartments = json['wholeApartments'];
     sharedHouses = json['sharedHouses'];
@@ -53,10 +53,10 @@ class Data {
   int? rooms;
   int? wholeApartments;
   int? sharedHouses;
-Data copyWith({  int? rooms,
+SavedCountResponseData copyWith({  int? rooms,
   int? wholeApartments,
   int? sharedHouses,
-}) => Data(  rooms: rooms ?? this.rooms,
+}) => SavedCountResponseData(  rooms: rooms ?? this.rooms,
   wholeApartments: wholeApartments ?? this.wholeApartments,
   sharedHouses: sharedHouses ?? this.sharedHouses,
 );

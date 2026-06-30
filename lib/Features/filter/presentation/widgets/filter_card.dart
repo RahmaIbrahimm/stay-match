@@ -98,12 +98,26 @@ class FilterCard extends StatelessWidget {
       if (government != null && government.isNotEmpty) {
         return '\n$government';
       }
-    } else {
+      if(filters.userLat != null && filters.userLng != null && cubit.isMyLocation){
+        return '\nYour Location';
+      }
+      else if(filters.userLat != null && filters.userLng != null){
+        return '\nPinned Location';
+      }
+    }
+    else {
       final filters = cubit.currentRoomsFilters;
       final government = filters.government;
       if (government != null && government.isNotEmpty) {
         return '\n$government';
       }
+      if(filters.userLat != null && filters.userLng != null && cubit.isMyLocation){
+        return '\nYour Location';
+      }
+      else if(filters.userLat != null && filters.userLng != null){
+        return '\nPinned Location';
+      }
+
     }
     return '\nSearch Destinations';
   }
@@ -189,7 +203,9 @@ class FilterCard extends StatelessWidget {
           filters.allowsChildren != null ||
           filters.allowsStudents != null ||
           filters.allowsWorkers != null ||
-          filters.onlyAvailable == true;
+          filters.onlyAvailable == true ||
+          filters.userLat != null ||
+          filters.userLng != null;
     } else {
       final filters = cubit.currentRoomsFilters;
       return filters.government != null ||
@@ -199,7 +215,9 @@ class FilterCard extends StatelessWidget {
           filters.allowsChildren != null ||
           filters.allowsStudents != null ||
           filters.allowsWorkers != null ||
-          filters.onlyAvailable == true;
+          filters.onlyAvailable == true ||
+          filters.userLat != null ||
+          filters.userLng != null;
     }
   }
 

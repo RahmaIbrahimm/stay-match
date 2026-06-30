@@ -11,14 +11,14 @@ class RenterCancelBookingResponse {
   RenterCancelBookingResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? RenterCancelBookingResponseData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
   String? message;
-  Data? data;
+  RenterCancelBookingResponseData? data;
 RenterCancelBookingResponse copyWith({  bool? isSuccess,
   String? message,
-  Data? data,
+  RenterCancelBookingResponseData? data,
 }) => RenterCancelBookingResponse(  isSuccess: isSuccess ?? this.isSuccess,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -39,13 +39,13 @@ RenterCancelBookingResponse copyWith({  bool? isSuccess,
 /// id : 91
 /// status : "Cancelled"
 
-class Data {
-  Data({
+class RenterCancelBookingResponseData {
+  RenterCancelBookingResponseData({
       this.message, 
       this.id, 
       this.status,});
 
-  Data.fromJson(dynamic json) {
+  RenterCancelBookingResponseData.fromJson(dynamic json) {
     message = json['message'];
     id = json['id'];
     status = json['status'];
@@ -53,10 +53,10 @@ class Data {
   String? message;
   int? id;
   String? status;
-Data copyWith({  String? message,
+RenterCancelBookingResponseData copyWith({  String? message,
   int? id,
   String? status,
-}) => Data(  message: message ?? this.message,
+}) => RenterCancelBookingResponseData(  message: message ?? this.message,
   id: id ?? this.id,
   status: status ?? this.status,
 );

@@ -11,14 +11,14 @@ class ApproveBookingRequestResponse {
   ApproveBookingRequestResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? ApproveBookingRequestResponseData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
   String? message;
-  Data? data;
+  ApproveBookingRequestResponseData? data;
 ApproveBookingRequestResponse copyWith({  bool? isSuccess,
   String? message,
-  Data? data,
+  ApproveBookingRequestResponseData? data,
 }) => ApproveBookingRequestResponse(  isSuccess: isSuccess ?? this.isSuccess,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -41,15 +41,15 @@ ApproveBookingRequestResponse copyWith({  bool? isSuccess,
 /// declinedCount : 11
 /// messageDetail : "11 conflicting booking(s) were automatically declined."
 
-class Data {
-  Data({
+class ApproveBookingRequestResponseData {
+  ApproveBookingRequestResponseData({
       this.message, 
       this.id, 
       this.status, 
       this.declinedCount, 
       this.messageDetail,});
 
-  Data.fromJson(dynamic json) {
+  ApproveBookingRequestResponseData.fromJson(dynamic json) {
     message = json['message'];
     id = json['id'];
     status = json['status'];
@@ -61,12 +61,12 @@ class Data {
   String? status;
   int? declinedCount;
   String? messageDetail;
-Data copyWith({  String? message,
+ApproveBookingRequestResponseData copyWith({  String? message,
   int? id,
   String? status,
   int? declinedCount,
   String? messageDetail,
-}) => Data(  message: message ?? this.message,
+}) => ApproveBookingRequestResponseData(  message: message ?? this.message,
   id: id ?? this.id,
   status: status ?? this.status,
   declinedCount: declinedCount ?? this.declinedCount,

@@ -68,11 +68,12 @@ class AddPropertySuccessBody extends StatelessWidget {
                   textColor: AppColors.textColorWhite,
                   onPressed: () {
                     context.read<AddPropertyCubit>().resetAll();
-                    final StatefulNavigationShellState shell =
-                        StatefulNavigationShell.of(context);
-                    shell.goBranch(0, initialLocation: true);
-                  },
-                ),
+                    context.goNamed(AppRouting.addPropertyName);
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      context.goNamed(AppRouting.homeViewName);
+                    });
+
+                }),
 
                 SizedBox(height: 12.h),
 
@@ -91,17 +92,27 @@ class AddPropertySuccessBody extends StatelessWidget {
 
                     // 3. Navigate safely using the captured value and the passed id
                     if (isApartment) {
-                      context.pushNamed(
-                        AppRouting.apartmentDetailsViewName,
-                        pathParameters: {"id": id.toString()},
-                      );
-                    } else {
-                      context.pushNamed(
-                        AppRouting.roomDetailsViewName,
-                        pathParameters: {"propertyId": id.toString()},
-                      );
+                      context.read<AddPropertyCubit>().resetAll();
+                      context.goNamed(AppRouting.addPropertyName);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        context.pushNamed(
+                          AppRouting.apartmentDetailsViewName,
+                          pathParameters: {"id": id.toString()},
+                        );                      });
+
                     }
-                  },                ),
+                    else {
+                      context.read<AddPropertyCubit>().resetAll();
+                      context.goNamed(AppRouting.addPropertyName);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        context.pushNamed(
+                          AppRouting.roomDetailsViewName,
+                          pathParameters: {"propertyId": id.toString()},
+                        );                      });
+
+                    }
+                  },
+                ),
               ],
             ),
           ),

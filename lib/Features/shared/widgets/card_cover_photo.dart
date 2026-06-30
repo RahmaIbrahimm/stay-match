@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
+import '../../rooms/data/models/get_all_rooms.dart';
 
 class CardCoverPhoto extends StatelessWidget {
   const CardCoverPhoto({
@@ -11,9 +12,10 @@ class CardCoverPhoto extends StatelessWidget {
     required this.imageUrl,
     this.scaleUp = false,
     this.showRating = true,
-    this.showCompatibility = true,
-  });
+    this.showCompatibility = true, this.item,
 
+  });
+  final Items? item;
   final String? imageUrl;
   final bool scaleUp;
   final bool showRating;
@@ -84,56 +86,55 @@ class CardCoverPhoto extends StatelessWidget {
               color: AppColors.primary,
               borderRadius: BorderRadius.circular(5.r),
             ),
-            //todo: add actual match logic when api given
             child: Text(
-              '98 % Match',
-              style: AppStyles.medium10poppins.copyWith(
+              '${((item?.propertyMatchScore ?? 0) * 100).toInt()} % Match',
+              style: AppStyles.medium12poppins.copyWith(
                 color: AppColors.textColorWhite,
               ),
             ),
           ),
         ),
-        Visibility(
-          visible: showRating,
-          child: Positioned(
-            top: 6.r,
-            right: 6.r,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 6.r, vertical: 2.r),
-              margin: EdgeInsets.symmetric(vertical: 2.r, horizontal: 6.r),
-              decoration: BoxDecoration(
-                color: AppColors.bgGrey,
-                borderRadius: BorderRadius.circular(5.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.2),
-                    blurRadius: 1,
-                  ),
-                ],
-              ),
-              //todo: add actual match logic when api given
-              alignment: Alignment.topRight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                spacing: 2.w,
-                children: [
-                  Icon(
-                    Icons.star_rate_rounded,
-                    color: Colors.yellowAccent,
-                    size: 12,
-                  ),
-                  Text(
-                    '4.5',
-                    style: AppStyles.medium10poppins.copyWith(
-                      color: AppColors.textColorSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+        // Visibility(
+        //   visible: showRating,
+        //   child: Positioned(
+        //     top: 6.r,
+        //     right: 6.r,
+        //     child: Container(
+        //       padding: EdgeInsets.symmetric(horizontal: 6.r, vertical: 2.r),
+        //       margin: EdgeInsets.symmetric(vertical: 2.r, horizontal: 6.r),
+        //       decoration: BoxDecoration(
+        //         color: AppColors.bgGrey,
+        //         borderRadius: BorderRadius.circular(5.r),
+        //         boxShadow: [
+        //           BoxShadow(
+        //             color: Colors.black.withValues(alpha: 0.2),
+        //             blurRadius: 1,
+        //           ),
+        //         ],
+        //       ),
+        //       //todo: add actual rating logic when api given
+        //       alignment: Alignment.topRight,
+        //       child: Row(
+        //         mainAxisAlignment: MainAxisAlignment.end,
+        //         mainAxisSize: MainAxisSize.min,
+        //         spacing: 2.w,
+        //         children: [
+        //           Icon(
+        //             Icons.star_rate_rounded,
+        //             color: Colors.yellowAccent,
+        //             size: 12,
+        //           ),
+        //           Text(
+        //             '4.5',
+        //             style: AppStyles.medium10poppins.copyWith(
+        //               color: AppColors.textColorSecondary,
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

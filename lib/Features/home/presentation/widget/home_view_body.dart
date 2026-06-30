@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -157,65 +156,6 @@ class _HomeViewBodyState extends State<HomeViewBody>
     );
   }
 
-  // Widget _buildSharedPropertyCard(dynamic property) {
-  //   return Card(
-  //     margin: EdgeInsets.only(bottom: 12.h),
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         // property cover image
-  //         ClipRRect(
-  //           borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
-  //           child: CachedNetworkImage(
-  //             imageUrl: property.coverImageUrl ?? '',
-  //             height: 150.h,
-  //             width: double.infinity,
-  //             fit: BoxFit.cover,
-  //             errorWidget: (_, __, ___) => Container(
-  //               height: 150.h,
-  //               color: AppColors.bgGrey,
-  //               child: Icon(Icons.broken_image_outlined, color: AppColors.textColorSecondary),
-  //             ),
-  //           ),
-  //         ),
-  //         Padding(
-  //           padding: EdgeInsets.all(12.r),
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Text(property.name ?? '', style: AppStyles.bold16poppins, maxLines: 1, overflow: TextOverflow.ellipsis),
-  //               SizedBox(height: 4.h),
-  //               Text('${property.city ?? ''}, ${property.street ?? ''}',
-  //                   style: AppStyles.regular12poppins.copyWith(color: AppColors.textColorSecondary)),
-  //               SizedBox(height: 8.h),
-  //               // rooms list
-  //               ...?(property.rooms as List?)?.map((room) => Container(
-  //                 margin: EdgeInsets.only(bottom: 6.h),
-  //                 padding: EdgeInsets.all(8.r),
-  //                 decoration: BoxDecoration(
-  //                   color: AppColors.fieldFillColor,
-  //                   borderRadius: BorderRadius.circular(8.r),
-  //                 ),
-  //                 child: Row(
-  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                   children: [
-  //                     Expanded(
-  //                       child: Text(room.roomName ?? '',
-  //                           style: AppStyles.medium14poppins, maxLines: 1, overflow: TextOverflow.ellipsis),
-  //                     ),
-  //                     Text('${room.monthRent} EGP/mo',
-  //                         style: AppStyles.bold14poppins.copyWith(color: AppColors.primary)),
-  //                   ],
-  //                 ),
-  //               )),
-  //             ],
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 // Same fix for shared:
   Widget _buildSharedResults(List items) {
     if (items.isEmpty) {
@@ -242,55 +182,6 @@ class _HomeViewBodyState extends State<HomeViewBody>
       ),
     );
   }
-  // Widget _buildEntirePropertyCard(dynamic item) {
-  //   return Card(
-  //     margin: EdgeInsets.only(bottom: 12.h),
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         ClipRRect(
-  //           borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
-  //           child: CachedNetworkImage(
-  //             imageUrl: item.coverImageUrl ?? '',
-  //             height: 150.h,
-  //             width: double.infinity,
-  //             fit: BoxFit.cover,
-  //             errorWidget: (_, __, ___) => Container(
-  //               height: 150.h,
-  //               color: AppColors.bgGrey,
-  //               child: Icon(Icons.broken_image_outlined, color: AppColors.textColorSecondary),
-  //             ),
-  //           ),
-  //         ),
-  //         Padding(
-  //           padding: EdgeInsets.all(12.r),
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Text(item.name ?? '', style: AppStyles.bold16poppins, maxLines: 1, overflow: TextOverflow.ellipsis),
-  //               SizedBox(height: 4.h),
-  //               Text('${item.city ?? ''}, ${item.street ?? ''}',
-  //                   style: AppStyles.regular12poppins.copyWith(color: AppColors.textColorSecondary)),
-  //               SizedBox(height: 8.h),
-  //               Row(
-  //                 children: [
-  //                   Icon(Icons.bed, size: 14.sp, color: AppColors.textColorSecondary),
-  //                   SizedBox(width: 4.w),
-  //                   Text('${item.numberOfBedrooms ?? 0} beds',
-  //                       style: AppStyles.regular12poppins.copyWith(color: AppColors.textColorSecondary)),
-  //                   SizedBox(width: 12.w),
-  //                   Text('${item.monthlyRent ?? 0} EGP/mo',
-  //                       style: AppStyles.bold14poppins.copyWith(color: AppColors.primary)),
-  //                 ],
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
   Widget _buildEntirePropertyCard(dynamic item) {
     // Convert search Items to AllApartmentsItems shape
     final adapted = AllApartmentsItems(
@@ -310,30 +201,6 @@ class _HomeViewBodyState extends State<HomeViewBody>
       child: ApartmentCard(property: adapted, scaleUp: true),
     );
   }
-
-  // Widget _buildSharedPropertyCard(dynamic item) {
-  //   // Convert search Rooms to AllRooms shape
-  //   final adaptedRooms = (item.rooms as List?)?.map((room) => AllRooms(
-  //     id: room.id,
-  //     roomName: room.roomName,
-  //     monthRent: room.monthRent,
-  //     isAvailable: room.isAvailable,
-  //     availableFrom: room.availableFrom,
-  //     status: room.status,
-  //   )).toList() ?? [];
-  //
-  //   return Padding(
-  //     padding: EdgeInsets.only(bottom: 12.h),
-  //     child: RoomCard(
-  //       coverImageUrl: item.coverImageUrl,
-  //       name: item.name,
-  //       street: item.street,
-  //       city: item.city,
-  //       id: item.id,
-  //       rooms: adaptedRooms,
-  //     ),
-  //   );
-  // }
   Widget _buildSharedPropertyCard(dynamic item) {
     final adaptedRooms = (item.rooms as List?)?.map((room) => AllRooms(
       id: room.id,
@@ -355,7 +222,7 @@ class _HomeViewBodyState extends State<HomeViewBody>
           street: item.street,
           city: item.city,
           id: item.id,
-          rooms: adaptedRooms,
+          rooms: adaptedRooms, item: item.propertyMatchScore,
         ),
       ),
     );

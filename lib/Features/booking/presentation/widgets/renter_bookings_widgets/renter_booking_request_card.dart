@@ -16,10 +16,8 @@ class RenterBookingRequestCard extends StatelessWidget {
   final RenterBookings? bookings;
 
   const RenterBookingRequestCard({super.key, required this.bookings});
-// todo: add events in all that have booking
   @override
   Widget build(BuildContext context) {
-
     final statusLower = bookings?.status?.toLowerCase() ?? '';
     var cubit = context.read<BookingRequestCubit>();
     return Container(
@@ -124,22 +122,22 @@ class RenterBookingRequestCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 4.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF3F4F6),
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                      child: Text(
-                        '${bookings?.duration?.toInt() ?? 1} ${bookings?.duration?.toInt() == 1 ? 'Month' : 'Months'}',
-                        style: AppStyles.medium12poppins.copyWith(
-                          color: const Color(0xFF374151),
-                        ),
-                      ),
-                    ),
+                    // Container(
+                    //   padding: EdgeInsets.symmetric(
+                    //     horizontal: 12.w,
+                    //     vertical: 4.h,
+                    //   ),
+                    //   decoration: BoxDecoration(
+                    //     color: const Color(0xFFF3F4F6),
+                    //     borderRadius: BorderRadius.circular(8.r),
+                    //   ),
+                    //   child: Text(
+                    //     '${bookings?.duration?.toInt() ?? 1} ${bookings?.duration?.toInt() == 1 ? 'Month' : 'Months'}',
+                    //     style: AppStyles.medium12poppins.copyWith(
+                    //       color: const Color(0xFF374151),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 SizedBox(height: 16.h),
@@ -221,48 +219,79 @@ class RenterBookingRequestCard extends StatelessWidget {
       child: Icon(Icons.image, size: 40.r, color: const Color(0xFF9CA3AF)),
     );
   }
-// todo: build correct view for completed card
   Widget _buildActionButtons(String status, BuildContext context) {
     if (status == 'approved') {
       return Row(
         children:
         [
-          Expanded(
-            child: _createButton(
-              text: 'Chat with host',
-              bgColor: AppColors.primary,
-              textColor: Colors.white,
-              icon: Icons.chat_bubble_outline,
-              onPressed: () {
-                if (bookings?.host != null) {
-                  if (context.mounted) {
-                    context.pushNamed(
-                      AppRouting.messagesName,
-                      pathParameters: {
-                        'otherUserId': bookings?.host!.id.toString() ?? '-1',
-                      },
-                    );
-                  } else {
-                    AppKeys.rootScaffoldMessengerKey.currentState
-                        ?.removeCurrentSnackBar();
-                    AppKeys.rootScaffoldMessengerKey.currentState?.showSnackBar(
-                      SnackBar(
-                        content: const Text(
-                          "Chat is unavailable for this booking.",
-                        ),
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.r),
-                        ),
-                        margin: EdgeInsets.all(16.w),
-                        backgroundColor: AppColors.primary,
+          // Expanded(
+          //   child: _createButton(
+          //     text: 'Chat with host',
+          //     bgColor: AppColors.primary,
+          //     textColor: Colors.white,
+          //     icon: Icons.chat_bubble_outline,
+          //     onPressed: () {
+          //       if (bookings?.host != null) {
+          //         if (context.mounted) {
+          //           context.pushNamed(
+          //             AppRouting.messagesName,
+          //             pathParameters: {
+          //               'otherUserId': bookings?.host!.id.toString() ?? '-1',
+          //             },
+          //           );
+          //         }
+          //         else {
+          //           AppKeys.rootScaffoldMessengerKey.currentState
+          //               ?.removeCurrentSnackBar();
+          //           AppKeys.rootScaffoldMessengerKey.currentState?.showSnackBar(
+          //             SnackBar(
+          //               content: const Text(
+          //                 "Chat is unavailable for this booking.",
+          //               ),
+          //               behavior: SnackBarBehavior.floating,
+          //               shape: RoundedRectangleBorder(
+          //                 borderRadius: BorderRadius.circular(16.r),
+          //               ),
+          //               margin: EdgeInsets.all(16.w),
+          //               backgroundColor: AppColors.primary,
+          //             ),
+          //           );
+          //         }
+          //       }
+          //     },
+          //   ),
+          // ),
+          Expanded(child:  _createButton(
+            text: 'Pay to Chat',
+            bgColor: AppColors.secondary,
+            textColor: Colors.white,
+            onPressed: () {
+              if (bookings?.propertyId != null) {
+                if (context.mounted) {
+                  context.pushNamed(
+                      AppRouting.payCardName,
+                      extra: bookings?.id
+                  );
+                } else {
+                  AppKeys.rootScaffoldMessengerKey.currentState
+                      ?.removeCurrentSnackBar();
+                  AppKeys.rootScaffoldMessengerKey.currentState?.showSnackBar(
+                    SnackBar(
+                      content: const Text(
+                        "Unable to process payment at this moment please try again later.",
                       ),
-                    );
-                  }
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
+                      margin: EdgeInsets.all(16.w),
+                      backgroundColor: AppColors.primary,
+                    ),
+                  );
                 }
-              },
-            ),
-          ),
+              }
+            },
+          )),
           SizedBox(width: 12.w),
           Expanded(
             child: _createButton(
@@ -270,13 +299,66 @@ class RenterBookingRequestCard extends StatelessWidget {
               bgColor: AppColors.primary,
               textColor: Colors.white,
               onPressed: () {
-                // todo: details according to property type
-                // if(bookings.propertyType == '')
+                if (bookings?.propertyType?.toLowerCase() ==
+                    'entire apartment') {
+                  context.pushNamed(
+                    AppRouting.apartmentDetailsViewName,
+                    pathParameters: {
+                      'id': bookings?.propertyId.toString() ?? '-1',
+                    },
+                  );
+                }
+                else {
+                  context.pushNamed(
+                    AppRouting.roomDetailsViewName,
+                    pathParameters: {
+                      'roomId': bookings?.roomId.toString() ?? '-1',
+                      'propertyId': bookings?.propertyId.toString() ?? '-1',
+                    },
+                  );
+                }
               },
             ),
           ),
         ],
       );
+    }
+    if (status == 'paid') {
+      return _createButton(
+        text: 'Chat with host',
+        bgColor: AppColors.primary,
+        textColor: Colors.white,
+        icon: Icons.chat_bubble_outline,
+        onPressed: () {
+          if (bookings?.host != null) {
+            if (context.mounted) {
+              context.pushNamed(
+                AppRouting.messagesName,
+                pathParameters: {
+                  'otherUserId': bookings?.host!.id.toString() ?? '-1',
+                },
+              );
+            } else {
+              AppKeys.rootScaffoldMessengerKey.currentState
+                  ?.removeCurrentSnackBar();
+              AppKeys.rootScaffoldMessengerKey.currentState?.showSnackBar(
+                SnackBar(
+                  content: const Text(
+                    "Chat is unavailable for this booking.",
+                  ),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                  margin: EdgeInsets.all(16.w),
+                  backgroundColor: AppColors.primary,
+                ),
+              );
+            }
+          }
+        },
+      );
+
     }
     if (status == 'completed') {
       bool hasReviewed = bookings?.hasReviewed ?? false;
@@ -317,6 +399,7 @@ class RenterBookingRequestCard extends StatelessWidget {
                 }
               },
             ),
+
           ),
           SizedBox(width: 12.w),
           if(hasReviewed) Expanded(
@@ -366,8 +449,24 @@ class RenterBookingRequestCard extends StatelessWidget {
               bgColor: AppColors.primary,
               textColor: Colors.white,
               onPressed: () {
-                // todo: details according to property type
-                // if(bookings.propertyType == '')
+                if (bookings?.propertyType?.toLowerCase() ==
+                    'entire apartment') {
+                  context.pushNamed(
+                    AppRouting.apartmentDetailsViewName,
+                    pathParameters: {
+                      'id': bookings?.propertyId.toString() ?? '-1',
+                    },
+                  );
+                }
+                else {
+                  context.pushNamed(
+                    AppRouting.roomDetailsViewName,
+                    pathParameters: {
+                      'roomId': bookings?.roomId.toString() ?? '-1',
+                      'propertyId': bookings?.propertyId.toString() ?? '-1',
+                    },
+                  );
+                }
               },
             ),
           ),
@@ -396,9 +495,47 @@ class RenterBookingRequestCard extends StatelessWidget {
               text: 'Details',
               bgColor: AppColors.primary,
               textColor: Colors.white,
-              onPressed: () {},
+              onPressed: () {
+                if (bookings?.propertyType?.toLowerCase() ==
+                    'entire apartment') {
+                  context.pushNamed(
+                    AppRouting.apartmentDetailsViewName,
+                    pathParameters: {
+                      'id': bookings?.propertyId.toString() ?? '-1',
+                    },
+                  );
+                }
+                else {
+                  context.pushNamed(
+                    AppRouting.roomDetailsViewName,
+                    pathParameters: {
+                      'roomId': bookings?.roomId.toString() ?? '-1',
+                      'propertyId': bookings?.propertyId.toString() ?? '-1',
+                    },
+                  );
+                }
+              },
             ),
           ),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: _createButton(
+              text: 'Delete',
+              bgColor: const Color(0xFFFFF5F5),
+              textColor: const Color(0xFFDC2626),
+              icon: Icons.delete_outline,
+              width: double.infinity,
+              onPressed: () {
+                if (bookings?.id != null) {
+                  context
+                      .read<BookingRequestCubit>()
+                      .deletedBookingId = bookings!.id!;
+                  context.read<BookingRequestCubit>().deleteBooking(
+                      bookings!.id!);
+                }
+              },
+            ),
+          )
         ],
       );
     }
@@ -454,7 +591,7 @@ class RenterBookingRequestCard extends StatelessWidget {
       case 'completed':
         return const Color(0xFF10B981);
       default:
-        return const Color(0xFFF59E0B);
+        return const Color(0xFFF57101);
     }
   }
 

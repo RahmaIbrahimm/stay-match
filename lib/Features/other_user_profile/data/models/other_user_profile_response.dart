@@ -11,14 +11,14 @@ class OtherUserProfileResponse {
   OtherUserProfileResponse.fromJson(dynamic json) {
     success = json['success'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? OtherUserProfileResponseData.fromJson(json['data']) : null;
   }
   bool? success;
   String? message;
-  Data? data;
+  OtherUserProfileResponseData? data;
 OtherUserProfileResponse copyWith({  bool? success,
   String? message,
-  Data? data,
+  OtherUserProfileResponseData? data,
 }) => OtherUserProfileResponse(  success: success ?? this.success,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -42,8 +42,8 @@ OtherUserProfileResponse copyWith({  bool? success,
 /// totalProperties : 13
 /// totalRooms : 30
 
-class Data {
-  Data({
+class OtherUserProfileResponseData {
+  OtherUserProfileResponseData({
       this.hostInfo, 
       this.activeListings, 
       this.recentReviews, 
@@ -51,7 +51,7 @@ class Data {
       this.totalProperties, 
       this.totalRooms,});
 
-  Data.fromJson(dynamic json) {
+  OtherUserProfileResponseData.fromJson(dynamic json) {
     hostInfo = json['hostInfo'] != null ? HostInfo.fromJson(json['hostInfo']) : null;
     if (json['activeListings'] != null) {
       activeListings = [];
@@ -75,13 +75,13 @@ class Data {
   int? totalListings;
   int? totalProperties;
   int? totalRooms;
-Data copyWith({  HostInfo? hostInfo,
+OtherUserProfileResponseData copyWith({  HostInfo? hostInfo,
   List<ActiveListings>? activeListings,
   List<RecentReviews>? recentReviews,
   int? totalListings,
   int? totalProperties,
   int? totalRooms,
-}) => Data(  hostInfo: hostInfo ?? this.hostInfo,
+}) => OtherUserProfileResponseData(  hostInfo: hostInfo ?? this.hostInfo,
   activeListings: activeListings ?? this.activeListings,
   recentReviews: recentReviews ?? this.recentReviews,
   totalListings: totalListings ?? this.totalListings,
@@ -239,7 +239,7 @@ class ActiveListings {
   String? government;
   String? image;
   String? type;
-  int? rating;
+  num? rating;
   int? beds;
   int? baths;
   num? size;

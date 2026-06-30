@@ -11,14 +11,14 @@ class DeleteBookingRequestResponse {
   DeleteBookingRequestResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? DeleteBookingRequestResponseData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
   String? message;
-  Data? data;
+  DeleteBookingRequestResponseData? data;
 DeleteBookingRequestResponse copyWith({  bool? isSuccess,
   String? message,
-  Data? data,
+  DeleteBookingRequestResponseData? data,
 }) => DeleteBookingRequestResponse(  isSuccess: isSuccess ?? this.isSuccess,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -38,20 +38,20 @@ DeleteBookingRequestResponse copyWith({  bool? isSuccess,
 /// message : "Booking deleted successfully"
 /// id : 100
 
-class Data {
-  Data({
+class DeleteBookingRequestResponseData {
+  DeleteBookingRequestResponseData({
       this.message, 
       this.id,});
 
-  Data.fromJson(dynamic json) {
+  DeleteBookingRequestResponseData.fromJson(dynamic json) {
     message = json['message'];
     id = json['id'];
   }
   String? message;
   int? id;
-Data copyWith({  String? message,
+DeleteBookingRequestResponseData copyWith({  String? message,
   int? id,
-}) => Data(  message: message ?? this.message,
+}) => DeleteBookingRequestResponseData(  message: message ?? this.message,
   id: id ?? this.id,
 );
   Map<String, dynamic> toJson() {

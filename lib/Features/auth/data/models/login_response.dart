@@ -43,6 +43,7 @@ class LoginData {
   final String? userId;
   final String? otherUserProfileImageUrl;
   final bool? profileComplete;
+  final bool? questionsCompleted;
 
   LoginData(
     this.token,
@@ -53,6 +54,7 @@ class LoginData {
     this.userId,
     this.otherUserProfileImageUrl,
     this.profileComplete,
+    this.questionsCompleted,
   });
 
   LoginData.fromJson(Map<String, dynamic> json)
@@ -63,6 +65,7 @@ class LoginData {
       userId = json['userId'] as String?,
       otherUserProfileImageUrl = json['otherUserProfileImageUrl'] as String?,
       profileComplete = json['profileComplete'] as bool?,
+        questionsCompleted = json['questionsCompleted'] as bool?,
       refreshToken = json['refreshToken'] ?? '';
 
   Map<String, dynamic> toJson() {
@@ -75,6 +78,7 @@ class LoginData {
       'refreshToken': refreshToken,
       'otherUserProfileImageUrl': otherUserProfileImageUrl,
       'profileComplete': profileComplete,
+      'questionsCompleted': questionsCompleted,
     };
   }
 }

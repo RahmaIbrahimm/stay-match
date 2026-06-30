@@ -17,7 +17,7 @@ import '../../../../../core/widgets/heart_favourite_button.dart';
 import '../../../data/models/all_apartments_response.dart';
 
 class ApartmentBriefInfoContainer extends StatelessWidget {
-  ApartmentBriefInfoContainer({
+  const ApartmentBriefInfoContainer({
     super.key,
     required this.name,
     required this.city,
@@ -129,7 +129,7 @@ class ApartmentBriefInfoContainer extends StatelessWidget {
           ),
         ),
         HeartFavoriteButton(
-            id: id, initialSavedStatus: initialSavedStatus, scaleUp: scaleUp)
+            id: id, initialSavedStatus: initialSavedStatus, scaleUp: scaleUp,type: SavedItemType.wholeApartment,)
       ],
     );
   }

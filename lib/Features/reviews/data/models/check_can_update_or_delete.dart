@@ -11,14 +11,14 @@ class CheckCanUpdateOrDelete {
   CheckCanUpdateOrDelete.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? CheckCanUpdateOrDeleteData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
   String? message;
-  Data? data;
+  CheckCanUpdateOrDeleteData? data;
 CheckCanUpdateOrDelete copyWith({  bool? isSuccess,
   String? message,
-  Data? data,
+  CheckCanUpdateOrDeleteData? data,
 }) => CheckCanUpdateOrDelete(  isSuccess: isSuccess ?? this.isSuccess,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -39,13 +39,13 @@ CheckCanUpdateOrDelete copyWith({  bool? isSuccess,
 /// canDelete : true
 /// message : "Allowed"
 
-class Data {
-  Data({
+class CheckCanUpdateOrDeleteData {
+  CheckCanUpdateOrDeleteData({
       this.canUpdate, 
       this.canDelete, 
       this.message,});
 
-  Data.fromJson(dynamic json) {
+  CheckCanUpdateOrDeleteData.fromJson(dynamic json) {
     canUpdate = json['canUpdate'];
     canDelete = json['canDelete'];
     message = json['message'];
@@ -53,10 +53,10 @@ class Data {
   bool? canUpdate;
   bool? canDelete;
   String? message;
-Data copyWith({  bool? canUpdate,
+CheckCanUpdateOrDeleteData copyWith({  bool? canUpdate,
   bool? canDelete,
   String? message,
-}) => Data(  canUpdate: canUpdate ?? this.canUpdate,
+}) => CheckCanUpdateOrDeleteData(  canUpdate: canUpdate ?? this.canUpdate,
   canDelete: canDelete ?? this.canDelete,
   message: message ?? this.message,
 );

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stay_match/Features/home/presentation/widget/section_failure.dart';
-import 'package:stay_match/Features/my_properties/presentation/widgets/my_property_card.dart';
+import 'package:stay_match/Features/my_properties/presentation/widgets/home_my_property_card.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_strings.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
@@ -78,15 +78,18 @@ class AddOrShowMyProperties extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: 16.h),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 50.r),
-                        child: CustomElevatedButton(
-                          verticalPadding: 8.r,
-                          text: AppStrings.addProperty,
-                          onPressed: () {
-                            StatefulNavigationShell.of(context).goBranch(1);
-                            context.goNamed(AppRouting.addPropertyName);
-                          },
+                      SizedBox(
+                        width: 280.w,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.r),
+                          child: CustomElevatedButton(
+                            verticalPadding: 8.r,
+                            text: AppStrings.addProperty,
+                            onPressed: () {
+                              StatefulNavigationShell.of(context).goBranch(1);
+                              context.goNamed(AppRouting.addPropertyName);
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -94,12 +97,12 @@ class AddOrShowMyProperties extends StatelessWidget {
                 }
 
                 return SizedBox(
-                  height: 230.h,
+                  height: 210.h,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: properties.length,
                     separatorBuilder: (context, index) => SizedBox(width: 10.w),
-                    itemBuilder: (context, index) => MyPropertyCard(property: properties[index]),
+                    itemBuilder: (context, index) => HomeMyPropertyCard(property: properties[index]),
                   ),
                 );
               }

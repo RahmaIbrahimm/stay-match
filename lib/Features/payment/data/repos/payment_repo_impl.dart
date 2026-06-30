@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:stay_match/Features/payment/data/models/booking_details_response.dart';
+import 'package:stay_match/Features/payment/data/models/check_if_paid_response.dart';
 import 'package:stay_match/Features/payment/data/models/redirect_payment_response.dart';
 import 'package:stay_match/Features/payment/data/repos/payment_repo.dart';
 import 'package:stay_match/core/errors/failures.dart';
@@ -39,6 +40,18 @@ class PaymentRepoImpl extends PaymentRepo {
         Endpoints.bookingDetails(id),
       );
       return right(BookingDetailsResponse.fromJson(response));
+    } on DioException catch (e) {
+      return left(ServerFailure.fromDioError(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CheckIfPaidResponse>> checkPaid({required int bookingId}) async{
+    try {
+      var response = await apiService.get(
+        Endpoints.checkIfPaid(bookingId),
+      );
+      return right(CheckIfPaidResponse.fromJson(response));
     } on DioException catch (e) {
       return left(ServerFailure.fromDioError(e));
     }

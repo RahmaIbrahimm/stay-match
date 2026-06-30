@@ -11,14 +11,14 @@ class MySavedResponse {
   MySavedResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? MySavedResponseData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
   String? message;
-  Data? data;
+  MySavedResponseData? data;
 MySavedResponse copyWith({  bool? isSuccess,
   String? message,
-  Data? data,
+  MySavedResponseData? data,
 }) => MySavedResponse(  isSuccess: isSuccess ?? this.isSuccess,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -43,8 +43,8 @@ MySavedResponse copyWith({  bool? isSuccess,
 /// currentFilter : "all"
 /// searchTerm : null
 
-class Data {
-  Data({
+class MySavedResponseData {
+  MySavedResponseData({
       this.profileViews, 
       this.status, 
       this.stats, 
@@ -53,7 +53,7 @@ class Data {
       this.currentFilter, 
       this.searchTerm,});
 
-  Data.fromJson(dynamic json) {
+  MySavedResponseData.fromJson(dynamic json) {
     profileViews = json['profileViews'];
     status = json['status'];
     stats = json['stats'] != null ? Stats.fromJson(json['stats']) : null;
@@ -74,14 +74,14 @@ class Data {
   Pagination? pagination;
   String? currentFilter;
   dynamic searchTerm;
-Data copyWith({  int? profileViews,
+MySavedResponseData copyWith({  int? profileViews,
   String? status,
   Stats? stats,
   List<SavedItems>? savedItems,
   Pagination? pagination,
   String? currentFilter,
   dynamic searchTerm,
-}) => Data(  profileViews: profileViews ?? this.profileViews,
+}) => MySavedResponseData(  profileViews: profileViews ?? this.profileViews,
   status: status ?? this.status,
   stats: stats ?? this.stats,
   savedItems: savedItems ?? this.savedItems,

@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../shared/models/property_details_response.dart';
+import '../../data/models/property_details_response.dart';
 import '../../data/repos/apartment_repo.dart';
 
 part 'apartment_details_state.dart';

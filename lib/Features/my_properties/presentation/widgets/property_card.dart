@@ -167,12 +167,6 @@ class PropertyCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    Text(
-                      '\$${property.monthlyRent ?? "0"}/month',
-                      style: AppStyles.bold14poppins.copyWith(
-                        color: AppColors.primary, // primary
-                      ),
-                    ),
                   ],
                 ),
                 SizedBox(height: 4.h),
@@ -229,7 +223,6 @@ class PropertyCard extends StatelessWidget {
                     if(property.status?.toLowerCase() !=
                         'rejected') GestureDetector(
                       onTap: () {
-                        // todo : implement deleting it ?? is it implemented in back ?
                         _showDeleteConfirmationDialog(context);
                       },
                       child: Padding(
@@ -242,15 +235,15 @@ class PropertyCard extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 8.w),
-                    // Edit Button
-                    if(property.status?.toLowerCase() !=
-                        'rejected') _buildActionButton(
-                      label: 'Edit',
-                      icon: Icons.edit_outlined,
-                      onPressed: () {},
-                      color: Colors.black,
-                    ),
-                    SizedBox(width: 8.w),
+                    // //todo: Edit Button
+                    // if(property.status?.toLowerCase() !=
+                    //     'rejected') _buildActionButton(
+                    //   label: 'Edit',
+                    //   icon: Icons.edit_outlined,
+                    //   onPressed: () {},
+                    //   color: Colors.black,
+                    // ),
+                    // SizedBox(width: 8.w),
                     // Details Button
                     _buildActionButton(
                       label:
@@ -453,7 +446,8 @@ class PropertyCard extends StatelessWidget {
         ),
       ),
     );
-  }  Widget _buildActionButton({
+  }
+  Widget _buildActionButton({
     required String label,
     IconData? icon,
     required VoidCallback onPressed,

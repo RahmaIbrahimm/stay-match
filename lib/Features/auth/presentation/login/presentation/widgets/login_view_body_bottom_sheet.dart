@@ -34,23 +34,37 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
             ).showSnackBar(SnackBar(content: Text(state.errMessage)));
           }
           if (state is LoginStateSuccess) {
+            ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 backgroundColor: AppColors.secondary,
                 content: Text(state.user.message ?? 'Login Successful'),
               ),
             );
-            context.go(AppRouting.homeView);
+            if(state.user.data?.questionsCompleted == true){
+              context.go(AppRouting.homeView);
+            }
+            else{
+              context.go(AppRouting.questionsStartPath);
+            }
           }
           // GOOGLE LOGIN :
           if (state is GoogleLoginStateSuccess) {
             // Handle successful Google login
+            ScaffoldMessenger.of(context).clearSnackBars();
+
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Google Sign-In Successful!')),
             );
-            context.go(AppRouting.homeView);
+            if(state.resp?.data?.questionsCompleted == true){
+              context.go(AppRouting.homeView);
+            }
+            else{
+              context.go(AppRouting.questionsStartPath);
+            }
           }
           if (state is GoogleLoginStateFailure) {
+            ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text(state.errMessage)));
@@ -102,7 +116,7 @@ class LoginViewBodyBottomSheet extends StatelessWidget {
                   text: AppStrings.forgetPasswordQuestion,
                 ),
               ),
-              SizedBox(height: 30.h),
+              SizedBox(height: 50.h),
               SizedBox(
                 width: double.infinity,
                 child: CustomElevatedButton(

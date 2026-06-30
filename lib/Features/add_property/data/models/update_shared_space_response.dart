@@ -11,14 +11,14 @@ class UpdateSharedSpaceResponse {
   UpdateSharedSpaceResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? UpdateSharedSpaceResponseData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
   String? message;
-  Data? data;
+  UpdateSharedSpaceResponseData? data;
 UpdateSharedSpaceResponse copyWith({  bool? isSuccess,
   String? message,
-  Data? data,
+  UpdateSharedSpaceResponseData? data,
 }) => UpdateSharedSpaceResponse(  isSuccess: isSuccess ?? this.isSuccess,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -38,20 +38,20 @@ UpdateSharedSpaceResponse copyWith({  bool? isSuccess,
 /// propertyId : 176
 /// message : "Property updated successfully!"
 
-class Data {
-  Data({
+class UpdateSharedSpaceResponseData {
+  UpdateSharedSpaceResponseData({
       this.propertyId, 
       this.message,});
 
-  Data.fromJson(dynamic json) {
+  UpdateSharedSpaceResponseData.fromJson(dynamic json) {
     propertyId = json['propertyId'];
     message = json['message'];
   }
   int? propertyId;
   String? message;
-Data copyWith({  int? propertyId,
+UpdateSharedSpaceResponseData copyWith({  int? propertyId,
   String? message,
-}) => Data(  propertyId: propertyId ?? this.propertyId,
+}) => UpdateSharedSpaceResponseData(  propertyId: propertyId ?? this.propertyId,
   message: message ?? this.message,
 );
   Map<String, dynamic> toJson() {

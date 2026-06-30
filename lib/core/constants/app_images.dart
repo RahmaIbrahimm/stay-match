@@ -20,6 +20,13 @@ abstract class AppImages {
   static const errorImg =  '$path/error_img.png';
   // reviews
   static const reviewSuccessImg =  '$path/review_success_img.png';
+  static const startMatchingPic =  '$path/start_matching_pic.png';
+  static const finishQuestionsPic =  '$path/finish_questions_pic.png';
+  static const personalizationLoadingPic =  '$path/secondary_splash_pic.png';
+  static const mainLogo =  '$path/full_logo.png';
+  // notifications
+  static const noNotificationImg =  '$path/no_notifications_header_pic.png';
+
 
 
 }

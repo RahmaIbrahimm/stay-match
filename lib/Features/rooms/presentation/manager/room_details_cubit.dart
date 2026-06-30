@@ -1,52 +1,43 @@
 import 'package:bloc/bloc.dart';
-import 'package:stay_match/Features/rooms/data/repos/rooms_repo.dart';
-import 'package:stay_match/Features/rooms/presentation/manager/room_details_state.dart';
+import 'package:equatable/equatable.dart';
+import 'package:stay_match/Features/rooms/data/models/room_details_response.dart';
+import 'package:stay_match/Features/rooms/data/repos/rooms_repo_impl.dart';
 
-import '../../../shared/models/property_details_response.dart';
-
+part 'room_details_state.dart';
 
 class RoomDetailsCubit extends Cubit<RoomDetailsState> {
-  final RoomsRepo roomsRepo;
-  final int id;
-  RoomDetailsCubit({required this.roomsRepo, required this.id}) : super(RoomDetailsInitial()){
-    _loadInitialData();
-  }
-  Future<void> _loadInitialData() async {
-    if (_cachedResponse != null) {
-      emit(GetRoomDetailsSuccess(response: _cachedResponse!));
-    } else {
-      await getPropertyDetails(id: id);
-    }
-  }
-  PropertyDetailsResponse? _cachedResponse;
+  final RoomsRepoImpl roomsRepo;
 
-  Future<void> getPropertyDetails({required int id}) async {
-    emit(GetRoomDetailsLoading());
+  late int _roomId;
+  late int _propertyId;
 
-    try {
-      var response = await roomsRepo.getRoomDetails(id: id);
+  RoomDetailsCubit({required this.roomsRepo}) : super(RoomDetailsInitial());
 
-      response.fold(
-            (fail) {
-          emit(GetRoomDetailsFailure(errMessage: fail.errMessage));
-        },
-            (response) {
-          if (response.isSuccess == true) {
-            _cachedResponse = response;
-            emit(GetRoomDetailsSuccess(response: response));
-          } else {
-            emit(
-              GetRoomDetailsFailure(
-                errMessage:
-                response.message ?? 'Error getting Apartment Details',
-              ),
-            );
-          }
-        },
-      );
-    } catch (e) {
-      emit(GetRoomDetailsFailure(errMessage: e.toString()));
-    }
+  Future<void> fetchRoomDetails({
+    required int roomId,
+    required int propertyId,
+  }) async {
+    _roomId = roomId;
+    _propertyId = propertyId;
+    emit(RoomDetailsLoading());
+
+    final result = await roomsRepo.getRoomDetails(
+      roomid: roomId,
+      propertyId: propertyId,
+    );
+
+    result.fold(
+          (f) => emit(RoomDetailsFailure(errMessage: f.errMessage)),
+          (r) {
+        if (r.isSuccess == true && r.data != null) {
+          emit(RoomDetailsSuccess(response: r));
+        } else {
+          emit(RoomDetailsFailure(
+              errMessage: r.message ?? 'Failed to load room'));
+        }
+      },
+    );
   }
 
+  void retry() => fetchRoomDetails(roomId: _roomId, propertyId: _propertyId);
 }

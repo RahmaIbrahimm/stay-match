@@ -51,7 +51,7 @@ class BottomSheetBody extends StatelessWidget {
                 content: Text('Sign Up Successful ✔️'),
               ),
             );
-            context.go(AppRouting.homeView);
+            context.go(AppRouting.loginViewName);
           }
         },
         child: ListView(

@@ -51,8 +51,15 @@ final class BookingRequestSuccess extends BookingRequestState {
 final class BookingRequestFailure extends BookingRequestState {
   final String errMessage;
 
-  const BookingRequestFailure({required this.errMessage});
+  // A monotonically increasing id so that two failures with the *same*
+  // errMessage are still treated as distinct states by Equatable.
+  // Without this, Bloc's emit() is a no-op when the new state == current
+  // state, so BlocListener never fires for a second identical failure.
+  final int _instanceId;
+
+  BookingRequestFailure({required this.errMessage})
+      : _instanceId = DateTime.now().microsecondsSinceEpoch;
 
   @override
-  List<Object?> get props => [errMessage];
+  List<Object?> get props => [errMessage, _instanceId];
 }

@@ -20,7 +20,7 @@ class RoomCard extends StatelessWidget {
     required this.city,
     required this.id,
     required this.rooms,
-    this.scaleUp = false,
+    this.scaleUp = false, this.item,
   });
 
   final String? coverImageUrl;
@@ -29,125 +29,128 @@ class RoomCard extends StatelessWidget {
   final String? city;
   final List<AllRooms> rooms;
   final int id;
+  final Items? item;
   final bool scaleUp;
+
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Container(
-      width: size.width * 0.5.h,
-      margin: EdgeInsets.only(right: 16.r),
+      width: double.infinity, // Tells the card to securely span the full horizontal track width
       decoration: BoxDecoration(
         color: AppColors.containerColor,
         borderRadius: BorderRadius.circular(8.r),
         boxShadow: AppColors.elevationShadow,
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min, // Allows the full card to naturally size itself vertically
         children: [
-          Expanded(
-            flex: 2,
-            child: CardCoverPhoto(imageUrl: coverImageUrl ?? ''),
+          // 1. Fixed Aspect Ratio Image
+          AspectRatio(
+            aspectRatio: 1.8,
+            child: CardCoverPhoto(imageUrl: coverImageUrl ?? '',item: item,),
           ),
-          Expanded(
-            flex: 3,
-            child: Container(
-              // width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.containerColor,
-                border: Border(
-                  left: BorderSide(
-                    color: AppColors.primary,
-                    strokeAlign: BorderSide.strokeAlignInside,
-                  ),
-                  right: BorderSide(
-                    color: AppColors.primary,
-                    strokeAlign: BorderSide.strokeAlignInside,
-                  ),
-                  bottom: BorderSide(
-                    color: AppColors.primary,
-                    strokeAlign: BorderSide.strokeAlignInside,
-                  ),
-                ),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(8.r),
-                  bottomRight: Radius.circular(8.r),
-                ),
+
+          // 2. Details Border Container
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.containerColor,
+              border: Border(
+                left: BorderSide(color: AppColors.primary, strokeAlign: BorderSide.strokeAlignInside),
+                right: BorderSide(color: AppColors.primary, strokeAlign: BorderSide.strokeAlignInside),
+                bottom: BorderSide(color: AppColors.primary, strokeAlign: BorderSide.strokeAlignInside),
               ),
-              child: _buildRoomDetails(context),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(8.r),
+                bottomRight: Radius.circular(8.r),
+              ),
             ),
+            child: _buildRoomDetails(context),
           ),
         ],
       ),
     );
   }
 
-  Column _buildRoomDetails(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: 4.h),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5.r),
-          child: Text(
+  Widget _buildRoomDetails(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min, // Changes column constraint to prevent layout size crashes
+        children: [
+          // Title
+          Text(
             name ?? 'No name',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: (scaleUp?AppStyles.semiBold16poppins:AppStyles.semiBold12poppins).copyWith(
+            style: (scaleUp ? AppStyles.semiBold16poppins : AppStyles.semiBold12poppins).copyWith(
               color: AppColors.textColorPrimary,
             ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5.r),
-          child: Row(
+
+          SizedBox(height: 4.h),
+
+          // Location
+          Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 Icons.location_on,
                 color: AppColors.textColorSecondary,
-                size: 10.r,
+                size: 13.r,
               ),
+              SizedBox(width: 4.w),
               Flexible(
                 child: Text(
                   '${street ?? 'No street'}, ${city ?? 'No city'}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: (scaleUp?AppStyles.semiBold12poppins:AppStyles.medium10poppins).copyWith(
+                  style: (scaleUp ? AppStyles.semiBold12poppins : AppStyles.medium10poppins).copyWith(
                     color: AppColors.textColorSecondary,
                   ),
                 ),
               ),
             ],
           ),
-        ),
-        Divider(color: AppColors.textColorSecondary, thickness: 1.r),
-        SizedBox(
-          height:scaleUp?68.h: 50.h,
-          child: RoomInPropertyData(rooms: rooms,scaleUp: scaleUp,),
-        ),
-        Padding(
-          padding: EdgeInsets.only(
-            top: 8.0.r,
-            bottom: 8.r,
-            right: 16.r,
-            left: 16.r,
+
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.h),
+            child: Divider(color: AppColors.textColorSecondary.withValues(alpha: 0.3), thickness: 0.8.r),
           ),
-          child: SizedBox(
-            width: double.infinity,
-            child: SmallCustomButton(
-              text: AppStrings.viewDetails,
-              textStyle: scaleUp?AppStyles.semiBold16poppins:AppStyles.semiBold15poppins,
-              onPressed: () {
-                context.pushNamed(
-                  AppRouting.roomDetailsViewName,
-                  pathParameters: {'propertyId': id.toString()},
-                );
-              },
+
+          // --- FIXED HERE ---
+          // Replaced Flexible/Expanded with a bounded container structure.
+          // This allows it to layout perfectly under vertical full-width scroll lists.
+            SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: RoomInPropertyData(
+                rooms: rooms,
+                scaleUp: scaleUp,
+              ),
+            ),
+
+          // Action Button
+          Padding(
+            padding: EdgeInsets.only(top: 12.h),
+            child: SizedBox(
+              width: double.infinity,
+              height: scaleUp ? 46.h : 38.h,
+              child: SmallCustomButton(
+                text: AppStrings.viewDetails,
+                textStyle: scaleUp ? AppStyles.semiBold16poppins : AppStyles.semiBold15poppins,
+                onPressed: () {
+                  context.pushNamed(
+                    AppRouting.sharedPropertyViewName,
+                    pathParameters: {'propertyId': id.toString()},
+                  );
+                },
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

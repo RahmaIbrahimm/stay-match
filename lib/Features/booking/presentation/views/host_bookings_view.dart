@@ -9,6 +9,9 @@ import 'package:stay_match/core/constants/app_styles.dart';
 import 'package:stay_match/core/utils/service_locator.dart';
 import 'package:stay_match/core/widgets/app_drawer/main_app_drawer.dart';
 
+import '../../../../core/widgets/draggable_chatbot_fab.dart';
+import '../../../profile/data/repos/profile_repo_impl.dart';
+import '../../../profile/presentation/manager/profile_cubit.dart';
 import '../manager/booking_request_cubit.dart';
 import '../widgets/host_bookings_widgets/host_bookings_body.dart';
 
@@ -20,7 +23,9 @@ class HostBookingsView extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           BookingRequestCubit(bookingRepo: getIt.get<BookingRepoImpl>()),
-      child: const HostBookingsBody(),
+
+      child: DraggableChatbotFab(hasBottomNav: false,
+      child: const HostBookingsBody()),
     );
   }
 }

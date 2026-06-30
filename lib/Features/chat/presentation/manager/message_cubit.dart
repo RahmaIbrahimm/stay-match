@@ -1,11 +1,10 @@
 // import 'dart:developer';
-// import 'dart:io';
 //
 // import 'package:equatable/equatable.dart';
 // import 'package:file_picker/file_picker.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:path_provider/path_provider.dart'; // Add this
-// import 'package:record/record.dart'; // Add this
+// import 'package:path_provider/path_provider.dart';
+// import 'package:record/record.dart';
 // import 'package:stay_match/core/networking/chat_service.dart';
 //
 // import '../../data/models/start_chat_response.dart';
@@ -16,11 +15,11 @@
 // class MessageCubit extends Cubit<MessageState> {
 //   final ChatRepo chatRepo;
 //   final ChatService chatService;
-//   bool _isServiceStarted = false;
 //   final String otherUserId;
-//   int? _chatId;
+//    String? myUserId;
 //
-//   // Voice Recording Instance
+//   bool _isServiceStarted = false;
+//   int? _chatId;
 //   final AudioRecorder _audioRecorder = AudioRecorder();
 //
 //   int? get chatId => _chatId;
@@ -29,26 +28,88 @@
 //     required this.chatRepo,
 //     required this.chatService,
 //     required this.otherUserId,
-//   }) : super(MessageInitial());
+//     this.myUserId,
+//   }) : super(MessageInitial()) {
+//     log("🛠️ [MessageCubit] Initialized for: $otherUserId");
+//   }
 //
-//   // --- 1. Voice Recording Logic ---
+//   // --- 1. START CHAT & REFRESH LOGIC ---
+//   Future<void> startChat({required String otherUserId, bool isRefresh = false}) async {
+//     if (state is! MessageSuccess && !isRefresh) {
+//       emit(MessageLoading());
+//     }
 //
+//     var result = await chatRepo.startChat(otherUserId: otherUserId);
+//
+//     result.fold(
+//           (failure) {
+//         log("❌ [startChat] Error: ${failure.errMessage}");
+//         if (!isRefresh) emit(MessageFailure(errMessage: failure.errMessage));
+//       },
+//           (response) {
+//         final chatData = response.data;
+//         final messagesList = List<Messages>.from(chatData?.messages ?? []);
+//         _chatId = chatData?.chatId;
+//
+//         if (!isClosed) {
+//           if (isRefresh && state is MessageSuccess) {
+//             final currentState = state as MessageSuccess;
+//             // On refresh, replace only real messages — keep any still-pending
+//             // optimistic ones (id == -1) that haven't been confirmed yet
+//             final pendingOptimistic = currentState.messages
+//                 .where((m) => m.id == -1)
+//                 .toList();
+//             emit(currentState.copyWith(
+//               messages: [...messagesList, ...pendingOptimistic],
+//             ));
+//           } else {
+//             emit(MessageSuccess(
+//               messages: messagesList,
+//               chatId: chatData?.chatId,
+//               otherUserName: chatData?.otherUserFullName,
+//               otherUserProfile: chatData?.otherUserProfilePicture,
+//             ));
+//           }
+//         }
+//
+//         if (!_isServiceStarted) {
+//           _isServiceStarted = true;
+//           log("📡 [SignalR] Initializing Hub Connection...");
+//           chatService.initHub(
+//             onRefresh: () {
+//               log("🔄 [SignalR] Event Received: Refreshing chat...");
+//               startChat(otherUserId: otherUserId, isRefresh: true);
+//             },
+//           );
+//         }
+//       },
+//     );
+//   }
+//
+//   // --- 2. VOICE RECORDING LOGIC ---
 //   Future<void> startRecording() async {
 //     try {
-//       log("🎙️ [Voice] Checking permissions...");
+//       log("🎙️ [Voice] Checking microphone permissions...");
 //       if (await _audioRecorder.hasPermission()) {
 //         final directory = await getApplicationDocumentsDirectory();
-//         // Create unique path for the audio file
 //         final String filePath =
 //             '${directory.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
-//
-//         log("🎙️ [Voice] Starting record at: $filePath");
+//         log("🎙️ [Voice] Recording started: $filePath");
 //         await _audioRecorder.start(const RecordConfig(), path: filePath);
 //       } else {
-//         log("❌ [Voice] Permission denied");
+//         log("⚠️ [Voice] Permission denied by user");
 //       }
 //     } catch (e) {
 //       log("❌ [Voice] Start Error: $e");
+//     }
+//   }
+//
+//   Future<void> discardRecording() async {
+//     try {
+//       await _audioRecorder.stop();
+//       log("🗑️ [Voice] Recording discarded locally.");
+//     } catch (e) {
+//       log("❌ [Voice] Discard Error: $e");
 //     }
 //   }
 //
@@ -56,9 +117,8 @@
 //     try {
 //       final String? path = await _audioRecorder.stop();
 //       if (path != null && _chatId != null) {
-//         log("✅ [Voice] Record stopped. Path: $path. Sending...");
+//         log("✅ [Voice] Record stopped. Sending file at: $path");
 //
-//         // Directly call the repo with the "Audio" type
 //         var result = await chatRepo.sendMessage(
 //           chatId: _chatId!,
 //           filePath: path,
@@ -66,19 +126,19 @@
 //         );
 //
 //         result.fold(
-//               (failure) => log("❌ [Voice] Send Failure: ${failure.errMessage}"),
-//               (success) => log("✨ [Voice] Voice Message Sent Successfully"),
+//               (failure) => log("❌ [Voice] Send API Error: ${failure.errMessage}"),
+//               (success) => log("✨ [Voice] Message Sent Successfully"),
 //         );
 //       }
 //     } catch (e) {
-//       log("❌ [Voice] Stop Error: $e");
+//       log("❌ [Voice] Stop/Send Error: $e");
 //     }
 //   }
 //
-//   // --- 2. Pick File Logic ---
-//
+//   // --- 3. FILE PICKING LOGIC ---
 //   Future<void> pickAFile() async {
 //     try {
+//       log("🔵 [FilePicker] Opening picker...");
 //       FilePickerResult? result = await FilePicker.pickFiles();
 //
 //       if (result != null && result.files.single.path != null) {
@@ -90,29 +150,221 @@
 //             stagedFileName: fileName,
 //             stagedFileBase64: filePath,
 //           ));
+//           log("✅ [FilePicker] Staged: $fileName");
 //         }
 //       }
 //     } catch (e) {
-//       log("❌ [pickAFile] Error: $e");
+//       log("❌ [FilePicker] Error: $e");
 //     }
 //   }
 //
-//   // --- 3. Start Chat Logic ---
+//   // --- 4. MAIN SEND MESSAGE (Text, Image, or File) ---
+//   Future<void> handleSendMessage({String? text}) async {
+//     if (state is! MessageSuccess || _chatId == null) return;
 //
-//   Future<void> startChat({required String otherUserId}) async {
-//     if (state is! MessageSuccess) {
+//     final currentState = state as MessageSuccess;
+//     final String? path = currentState.stagedFileBase64;
+//     final String? fileName = currentState.stagedFileName;
+//
+//     final bool hasText = text != null && text.trim().isNotEmpty;
+//     final bool hasFile = path != null;
+//     if (!hasText && !hasFile) return;
+//
+//     // Determine type
+//     String apiType = "Text";
+//     if (hasFile) {
+//       apiType = _isImage(fileName) ? "Image" : "File";
+//     }
+//
+//     // Build optimistic message — shown immediately before API responds
+//     final optimisticMessage = Messages(
+//       id: -1,
+//       content: hasText ? text : fileName,
+//       senderId: myUserId ?? '',
+//       sentAt: DateTime.now().toIso8601String(),
+//       type: apiType,
+//       fileUrl: path,
+//     );
+//
+//     // Insert optimistic message and clear staged file right away
+//     emit(currentState.copyWith(
+//       messages: [...currentState.messages, optimisticMessage],
+//       clearFile: true,
+//     ));
+//
+//     log("🚀 [SendMessage] Sending $apiType...");
+//
+//     var result = await chatRepo.sendMessage(
+//       chatId: _chatId!,
+//       content: hasText ? text : null,
+//       filePath: path,
+//       type: apiType,
+//     );
+//
+//     // State may have changed while awaiting — grab the latest
+//     if (state is! MessageSuccess) return;
+//     final afterSendState = state as MessageSuccess;
+//
+//     result.fold(
+//           (failure) {
+//         log("❌ [SendMessage] Error: ${failure.errMessage}");
+//         // Mark the optimistic message as failed by moving id -1 to failedMessageIds.
+//         // We use the content as key since we have no real ID yet.
+//         final failKey = hasText ? (text ?? 'file') : (fileName ?? 'file');
+//         emit(afterSendState.copyWith(
+//           failedMessageIds: {...afterSendState.failedMessageIds, failKey},
+//         ));
+//       },
+//           (success) {
+//         log("✨ [SendMessage] Success");
+//         // Remove the optimistic message — SignalR refresh will bring the real one
+//         final withoutOptimistic = afterSendState.messages
+//             .where((m) => m.id != -1)
+//             .toList();
+//         emit(afterSendState.copyWith(messages: withoutOptimistic));
+//       },
+//     );
+//   }
+//   Future<void> retrySendMessage(Messages failedMessage) async {
+//     if (state is! MessageSuccess || _chatId == null) return;
+//     final currentState = state as MessageSuccess;
+//
+//     final failKey = failedMessage.content ?? 'file';
+//
+//     // Remove from failed, mark as pending again
+//     emit(currentState.copyWith(
+//       failedMessageIds: currentState.failedMessageIds
+//           .where((id) => id != failKey)
+//           .toSet(),
+//     ));
+//
+//     final String? path = failedMessage.fileUrl;
+//     String apiType = failedMessage.type ?? "Text";
+//
+//     var result = await chatRepo.sendMessage(
+//       chatId: _chatId!,
+//       content: failedMessage.content,
+//       filePath: path,
+//       type: apiType,
+//     );
+//
+//     if (state is! MessageSuccess) return;
+//     final afterState = state as MessageSuccess;
+//
+//     result.fold(
+//           (failure) {
+//         log("❌ [Retry] Failed again: ${failure.errMessage}");
+//         // Put it back in failed
+//         emit(afterState.copyWith(
+//           failedMessageIds: {...afterState.failedMessageIds, failKey},
+//         ));
+//       },
+//           (success) {
+//         log("✨ [Retry] Success");
+//         // Remove the optimistic message — SignalR will bring the real one
+//         final withoutOptimistic = afterState.messages
+//             .where((m) => m.id != -1)
+//             .toList();
+//         emit(afterState.copyWith(messages: withoutOptimistic));
+//       },
+//     );
+//   }
+//   void deleteFailedMessage(Messages failedMessage) {
+//     if (state is! MessageSuccess) return;
+//     final currentState = state as MessageSuccess;
+//     final failKey = failedMessage.content ?? 'file';
+//
+//     emit(currentState.copyWith(
+//       messages: currentState.messages
+//           .where((m) => !(m.id == -1 && m.content == failedMessage.content))
+//           .toList(),
+//       failedMessageIds: currentState.failedMessageIds
+//           .where((id) => id != failKey)
+//           .toSet(),
+//     ));
+//   }
+//   // --- HELPERS ---
+//   bool _isImage(String? fileName) {
+//     if (fileName == null) return false;
+//     final imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+//     return imageExtensions.any((ext) => fileName.toLowerCase().endsWith(ext));
+//   }
+//
+//   void clearStagedFile() {
+//     if (state is MessageSuccess) {
+//       emit((state as MessageSuccess).copyWith(clearFile: true));
+//     }
+//   }
+//
+//   @override
+//   Future<void> close() {
+//     log("⚰️ [MessageCubit] Disposing resources...");
+//     _audioRecorder.dispose();
+//     chatService.hubConnection.off('ReceiveMessage');
+//     return super.close();
+//   }
+// }
+// import 'dart:developer';
+// import 'package:equatable/equatable.dart';
+// import 'package:file_picker/file_picker.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:path_provider/path_provider.dart';
+// import 'package:record/record.dart';
+// import 'package:stay_match/core/networking/chat_service.dart';
+// import '../../data/models/start_chat_response.dart';
+// import '../../data/repos/chat_repo.dart';
+//
+// part 'message_state.dart';
+//
+// class MessageCubit extends Cubit<MessageState> {
+//   final ChatRepo chatRepo;
+//   final ChatService chatService;
+//   final String otherUserId;
+//   String? myUserId;
+//
+//   bool _isServiceStarted = false;
+//   int? _chatId;
+//   final AudioRecorder _audioRecorder = AudioRecorder();
+//
+//   int? get chatId => _chatId;
+//
+//   MessageCubit({
+//     required this.chatRepo,
+//     required this.chatService,
+//     required this.otherUserId,
+//     this.myUserId,
+//   }) : super(MessageInitial()) {
+//     log("🛠️ [MessageCubit] Initialized for: $otherUserId");
+//   }
+//
+//   // --- 1. START CHAT & REFRESH LOGIC ---
+//   Future<void> startChat({required String otherUserId, bool isRefresh = false}) async {
+//     if (state is! MessageSuccess && !isRefresh) {
 //       emit(MessageLoading());
 //     }
 //
 //     var result = await chatRepo.startChat(otherUserId: otherUserId);
+//
+//     // If the user backed out of the screen while waiting for the repository API, stop immediately.
+//     if (isClosed) return;
+//
 //     result.fold(
-//           (failure) => emit(MessageFailure(errMessage: failure.errMessage)),
+//           (failure) {
+//         log("❌ [startChat] Error: ${failure.errMessage}");
+//         if (!isRefresh) emit(MessageFailure(errMessage: failure.errMessage));
+//       },
 //           (response) {
 //         final chatData = response.data;
 //         final messagesList = List<Messages>.from(chatData?.messages ?? []);
 //         _chatId = chatData?.chatId;
 //
-//         if (!isClosed) {
+//         if (isRefresh && state is MessageSuccess) {
+//           final currentState = state as MessageSuccess;
+//           final pendingOptimistic = currentState.messages.where((m) => m.id == -1).toList();
+//           emit(currentState.copyWith(
+//             messages: [...messagesList, ...pendingOptimistic],
+//           ));
+//         } else {
 //           emit(MessageSuccess(
 //             messages: messagesList,
 //             chatId: chatData?.chatId,
@@ -121,70 +373,232 @@
 //           ));
 //         }
 //
+//         // Initialize connection safely
 //         if (!_isServiceStarted) {
 //           _isServiceStarted = true;
+//           log("📡 [SignalR] Initializing Hub Connection via Cubit...");
+//
 //           chatService.initHub(
-//             onRefresh: () => startChat(otherUserId: otherUserId),
+//             onRefresh: () {
+//               log("🔄 [SignalR] Event Received: Refreshing chat...");
+//               if (!isClosed) {
+//                 startChat(otherUserId: otherUserId, isRefresh: true);
+//               }
+//             },
 //           );
 //         }
 //       },
 //     );
 //   }
 //
-//   // --- 4. Main Send Logic (Text/Image/File) ---
+//   // --- 2. VOICE RECORDING LOGIC ---
+//   Future<void> startRecording() async {
+//     try {
+//       log("🎙️ [Voice] Checking microphone permissions...");
+//       if (await _audioRecorder.hasPermission()) {
+//         final directory = await getApplicationDocumentsDirectory();
+//         final String filePath = '${directory.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
+//         log("🎙️ [Voice] Recording started: $filePath");
+//         await _audioRecorder.start(const RecordConfig(), path: filePath);
+//       } else {
+//         log("⚠️ [Voice] Permission denied by user");
+//       }
+//     } catch (e) {
+//       log("❌ [Voice] Start Error: $e");
+//     }
+//   }
 //
+//   Future<void> discardRecording() async {
+//     try {
+//       await _audioRecorder.stop();
+//       log("🗑️ [Voice] Recording discarded locally.");
+//     } catch (e) {
+//       log("❌ [Voice] Discard Error: $e");
+//     }
+//   }
+//
+//   Future<void> stopAndSendRecording() async {
+//     try {
+//       final String? path = await _audioRecorder.stop();
+//       if (path != null && _chatId != null) {
+//         log("✅ [Voice] Record stopped. Sending file at: $path");
+//
+//         var result = await chatRepo.sendMessage(
+//           chatId: _chatId!,
+//           filePath: path,
+//           type: "Voice",
+//         );
+//
+//         result.fold(
+//               (failure) => log("❌ [Voice] Send API Error: ${failure.errMessage}"),
+//               (success) => log("✨ [Voice] Message Sent Successfully"),
+//         );
+//       }
+//     } catch (e) {
+//       log("❌ [Voice] Stop/Send Error: $e");
+//     }
+//   }
+//
+//   // --- 3. FILE PICKING LOGIC ---
+//   Future<void> pickAFile() async {
+//     try {
+//       log("🔵 [FilePicker] Opening picker...");
+//       FilePickerResult? result = await FilePicker.pickFiles();
+//
+//       if (result != null && result.files.single.path != null) {
+//         String filePath = result.files.single.path!;
+//         String fileName = result.files.single.name;
+//
+//         if (state is MessageSuccess) {
+//           emit((state as MessageSuccess).copyWith(
+//             stagedFileName: fileName,
+//             stagedFileBase64: filePath,
+//           ));
+//           log("✅ [FilePicker] Staged: $fileName");
+//         }
+//       }
+//     } catch (e) {
+//       log("❌ [FilePicker] Error: $e");
+//     }
+//   }
+//
+//   // --- 4. MAIN SEND MESSAGE (Text, Image, or File) ---
 //   Future<void> handleSendMessage({String? text}) async {
-//     if (state is! MessageSuccess) return;
+//     if (state is! MessageSuccess || _chatId == null) return;
 //
 //     final currentState = state as MessageSuccess;
 //     final String? path = currentState.stagedFileBase64;
 //     final String? fileName = currentState.stagedFileName;
 //
+//     final bool hasText = text != null && text.trim().isNotEmpty;
+//     final bool hasFile = path != null;
+//     if (!hasText && !hasFile) return;
+//
 //     String apiType = "Text";
-//     if (path != null) {
+//     if (hasFile) {
 //       apiType = _isImage(fileName) ? "Image" : "File";
 //     }
 //
+//     final optimisticMessage = Messages(
+//       id: -1,
+//       content: hasText ? text : fileName,
+//       senderId: myUserId ?? '',
+//       sentAt: DateTime.now().toIso8601String(),
+//       type: apiType,
+//       fileUrl: path,
+//     );
+//
+//     emit(currentState.copyWith(
+//       messages: [...currentState.messages, optimisticMessage],
+//       clearFile: true,
+//     ));
+//
+//     log("🚀 [SendMessage] Sending $apiType...");
+//
 //     var result = await chatRepo.sendMessage(
 //       chatId: _chatId!,
-//       content: text,
+//       content: hasText ? text : null,
 //       filePath: path,
 //       type: apiType,
 //     );
 //
+//     if (isClosed || state is! MessageSuccess) return;
+//     final afterSendState = state as MessageSuccess;
+//
 //     result.fold(
-//           (failure) => log("❌ [handleSendMessage] Error: ${failure.errMessage}"),
-//           (success) {
-//         emit(currentState.copyWith(
-//           stagedFileName: null,
-//           stagedFileBase64: null,
+//           (failure) {
+//         log("❌ [SendMessage] Error: ${failure.errMessage}");
+//         final failKey = hasText ? (text ?? 'file') : (fileName ?? 'file');
+//         emit(afterSendState.copyWith(
+//           failedMessageIds: {...afterSendState.failedMessageIds, failKey},
 //         ));
+//       },
+//           (success) {
+//         log("✨ [SendMessage] Success");
+//         final withoutOptimistic = afterSendState.messages.where((m) => m.id != -1).toList();
+//         emit(afterSendState.copyWith(messages: withoutOptimistic));
 //       },
 //     );
 //   }
 //
+//   Future<void> retrySendMessage(Messages failedMessage) async {
+//     if (state is! MessageSuccess || _chatId == null) return;
+//     final currentState = state as MessageSuccess;
+//     final failKey = failedMessage.content ?? 'file';
+//
+//     emit(currentState.copyWith(
+//       failedMessageIds: currentState.failedMessageIds.where((id) => id != failKey).toSet(),
+//     ));
+//
+//     var result = await chatRepo.sendMessage(
+//       chatId: _chatId!,
+//       content: failedMessage.content,
+//       filePath: failedMessage.fileUrl,
+//       type: failedMessage.type ?? "Text",
+//     );
+//
+//     if (isClosed || state is! MessageSuccess) return;
+//     final afterState = state as MessageSuccess;
+//
+//     result.fold(
+//           (failure) {
+//         log("❌ [Retry] Failed again: ${failure.errMessage}");
+//         emit(afterState.copyWith(
+//           failedMessageIds: {...afterState.failedMessageIds, failKey},
+//         ));
+//       },
+//           (success) {
+//         log("✨ [Retry] Success");
+//         final withoutOptimistic = afterState.messages.where((m) => m.id != -1).toList();
+//         emit(afterState.copyWith(messages: withoutOptimistic));
+//       },
+//     );
+//   }
+//
+//   void deleteFailedMessage(Messages failedMessage) {
+//     if (state is! MessageSuccess) return;
+//     final currentState = state as MessageSuccess;
+//     final failKey = failedMessage.content ?? 'file';
+//
+//     emit(currentState.copyWith(
+//       messages: currentState.messages
+//           .where((m) => !(m.id == -1 && m.content == failedMessage.content))
+//           .toList(),
+//       failedMessageIds: currentState.failedMessageIds.where((id) => id != failKey).toSet(),
+//     ));
+//   }
+//
+//   // --- HELPERS ---
 //   bool _isImage(String? fileName) {
 //     if (fileName == null) return false;
-//     final images = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
-//     return images.any((ext) => fileName.toLowerCase().endsWith(ext));
+//     final imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+//     return imageExtensions.any((ext) => fileName.toLowerCase().endsWith(ext));
+//   }
+//
+//   void clearStagedFile() {
+//     if (state is MessageSuccess) {
+//       emit((state as MessageSuccess).copyWith(clearFile: true));
+//     }
 //   }
 //
 //   @override
 //   Future<void> close() {
-//     _audioRecorder.dispose(); // Dispose the recorder
-//     chatService.hubConnection.off('ReceiveMessage');
+//     log("⚰️ [MessageCubit] Disposing resources...");
+//     _audioRecorder.dispose();
+//
+//     // 💡 Defends against LateInitializationError by encapsulating disposal safely
+//     chatService.disposeReceiveListener();
+//
 //     return super.close();
 //   }
 // }
 import 'dart:developer';
-
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:stay_match/core/networking/chat_service.dart';
-
 import '../../data/models/start_chat_response.dart';
 import '../../data/repos/chat_repo.dart';
 
@@ -194,7 +608,7 @@ class MessageCubit extends Cubit<MessageState> {
   final ChatRepo chatRepo;
   final ChatService chatService;
   final String otherUserId;
-   String? myUserId;
+  String? myUserId;
 
   bool _isServiceStarted = false;
   int? _chatId;
@@ -209,6 +623,15 @@ class MessageCubit extends Cubit<MessageState> {
     this.myUserId,
   }) : super(MessageInitial()) {
     log("🛠️ [MessageCubit] Initialized for: $otherUserId");
+    // 💡 Register internal listener hook on initialization
+    chatService.addRefreshListener(_onSignalRRefresh);
+  }
+
+  void _onSignalRRefresh() {
+    log("🔄 [MessageCubit] SignalR event intercepted. Re-fetching messages...");
+    if (!isClosed) {
+      startChat(otherUserId: otherUserId, isRefresh: true);
+    }
   }
 
   // --- 1. START CHAT & REFRESH LOGIC ---
@@ -218,6 +641,9 @@ class MessageCubit extends Cubit<MessageState> {
     }
 
     var result = await chatRepo.startChat(otherUserId: otherUserId);
+
+    // If the user backed out of the screen while waiting for the repository API, stop immediately.
+    if (isClosed) return;
 
     result.fold(
           (failure) {
@@ -229,36 +655,26 @@ class MessageCubit extends Cubit<MessageState> {
         final messagesList = List<Messages>.from(chatData?.messages ?? []);
         _chatId = chatData?.chatId;
 
-        if (!isClosed) {
-          if (isRefresh && state is MessageSuccess) {
-            final currentState = state as MessageSuccess;
-            // On refresh, replace only real messages — keep any still-pending
-            // optimistic ones (id == -1) that haven't been confirmed yet
-            final pendingOptimistic = currentState.messages
-                .where((m) => m.id == -1)
-                .toList();
-            emit(currentState.copyWith(
-              messages: [...messagesList, ...pendingOptimistic],
-            ));
-          } else {
-            emit(MessageSuccess(
-              messages: messagesList,
-              chatId: chatData?.chatId,
-              otherUserName: chatData?.otherUserFullName,
-              otherUserProfile: chatData?.otherUserProfilePicture,
-            ));
-          }
+        if (isRefresh && state is MessageSuccess) {
+          final currentState = state as MessageSuccess;
+          final pendingOptimistic = currentState.messages.where((m) => m.id == -1).toList();
+          emit(currentState.copyWith(
+            messages: [...messagesList, ...pendingOptimistic],
+          ));
+        } else {
+          emit(MessageSuccess(
+            messages: messagesList,
+            chatId: chatData?.chatId,
+            otherUserName: chatData?.otherUserFullName,
+            otherUserProfile: chatData?.otherUserProfilePicture,
+          ));
         }
 
+        // Initialize connection safely
         if (!_isServiceStarted) {
           _isServiceStarted = true;
-          log("📡 [SignalR] Initializing Hub Connection...");
-          chatService.initHub(
-            onRefresh: () {
-              log("🔄 [SignalR] Event Received: Refreshing chat...");
-              startChat(otherUserId: otherUserId, isRefresh: true);
-            },
-          );
+          log("📡 [SignalR] Initializing Hub Connection via Cubit...");
+          chatService.initHub();
         }
       },
     );
@@ -270,8 +686,7 @@ class MessageCubit extends Cubit<MessageState> {
       log("🎙️ [Voice] Checking microphone permissions...");
       if (await _audioRecorder.hasPermission()) {
         final directory = await getApplicationDocumentsDirectory();
-        final String filePath =
-            '${directory.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
+        final String filePath = '${directory.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
         log("🎙️ [Voice] Recording started: $filePath");
         await _audioRecorder.start(const RecordConfig(), path: filePath);
       } else {
@@ -348,13 +763,11 @@ class MessageCubit extends Cubit<MessageState> {
     final bool hasFile = path != null;
     if (!hasText && !hasFile) return;
 
-    // Determine type
     String apiType = "Text";
     if (hasFile) {
       apiType = _isImage(fileName) ? "Image" : "File";
     }
 
-    // Build optimistic message — shown immediately before API responds
     final optimisticMessage = Messages(
       id: -1,
       content: hasText ? text : fileName,
@@ -364,7 +777,6 @@ class MessageCubit extends Cubit<MessageState> {
       fileUrl: path,
     );
 
-    // Insert optimistic message and clear staged file right away
     emit(currentState.copyWith(
       messages: [...currentState.messages, optimisticMessage],
       clearFile: true,
@@ -379,15 +791,12 @@ class MessageCubit extends Cubit<MessageState> {
       type: apiType,
     );
 
-    // State may have changed while awaiting — grab the latest
-    if (state is! MessageSuccess) return;
+    if (isClosed || state is! MessageSuccess) return;
     final afterSendState = state as MessageSuccess;
 
     result.fold(
           (failure) {
         log("❌ [SendMessage] Error: ${failure.errMessage}");
-        // Mark the optimistic message as failed by moving id -1 to failedMessageIds.
-        // We use the content as key since we have no real ID yet.
         final failKey = hasText ? (text ?? 'file') : (fileName ?? 'file');
         emit(afterSendState.copyWith(
           failedMessageIds: {...afterSendState.failedMessageIds, failKey},
@@ -395,58 +804,46 @@ class MessageCubit extends Cubit<MessageState> {
       },
           (success) {
         log("✨ [SendMessage] Success");
-        // Remove the optimistic message — SignalR refresh will bring the real one
-        final withoutOptimistic = afterSendState.messages
-            .where((m) => m.id != -1)
-            .toList();
+        final withoutOptimistic = afterSendState.messages.where((m) => m.id != -1).toList();
         emit(afterSendState.copyWith(messages: withoutOptimistic));
       },
     );
   }
+
   Future<void> retrySendMessage(Messages failedMessage) async {
     if (state is! MessageSuccess || _chatId == null) return;
     final currentState = state as MessageSuccess;
-
     final failKey = failedMessage.content ?? 'file';
 
-    // Remove from failed, mark as pending again
     emit(currentState.copyWith(
-      failedMessageIds: currentState.failedMessageIds
-          .where((id) => id != failKey)
-          .toSet(),
+      failedMessageIds: currentState.failedMessageIds.where((id) => id != failKey).toSet(),
     ));
-
-    final String? path = failedMessage.fileUrl;
-    String apiType = failedMessage.type ?? "Text";
 
     var result = await chatRepo.sendMessage(
       chatId: _chatId!,
       content: failedMessage.content,
-      filePath: path,
-      type: apiType,
+      filePath: failedMessage.fileUrl,
+      type: failedMessage.type ?? "Text",
     );
 
-    if (state is! MessageSuccess) return;
+    if (isClosed || state is! MessageSuccess) return;
     final afterState = state as MessageSuccess;
 
     result.fold(
           (failure) {
         log("❌ [Retry] Failed again: ${failure.errMessage}");
-        // Put it back in failed
         emit(afterState.copyWith(
           failedMessageIds: {...afterState.failedMessageIds, failKey},
         ));
       },
           (success) {
         log("✨ [Retry] Success");
-        // Remove the optimistic message — SignalR will bring the real one
-        final withoutOptimistic = afterState.messages
-            .where((m) => m.id != -1)
-            .toList();
+        final withoutOptimistic = afterState.messages.where((m) => m.id != -1).toList();
         emit(afterState.copyWith(messages: withoutOptimistic));
       },
     );
   }
+
   void deleteFailedMessage(Messages failedMessage) {
     if (state is! MessageSuccess) return;
     final currentState = state as MessageSuccess;
@@ -456,11 +853,10 @@ class MessageCubit extends Cubit<MessageState> {
       messages: currentState.messages
           .where((m) => !(m.id == -1 && m.content == failedMessage.content))
           .toList(),
-      failedMessageIds: currentState.failedMessageIds
-          .where((id) => id != failKey)
-          .toSet(),
+      failedMessageIds: currentState.failedMessageIds.where((id) => id != failKey).toSet(),
     ));
   }
+
   // --- HELPERS ---
   bool _isImage(String? fileName) {
     if (fileName == null) return false;
@@ -478,7 +874,10 @@ class MessageCubit extends Cubit<MessageState> {
   Future<void> close() {
     log("⚰️ [MessageCubit] Disposing resources...");
     _audioRecorder.dispose();
-    chatService.hubConnection.off('ReceiveMessage');
+
+    // 💡 Unregister layout instance to prevent background trace leakages
+    chatService.removeRefreshListener(_onSignalRRefresh);
+
     return super.close();
   }
 }

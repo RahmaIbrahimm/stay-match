@@ -19,12 +19,14 @@ import '../widgets/request_booking_widgets/time_line_step.dart';
 
 class RequestBookingView extends StatefulWidget {
   final int propertyId;
+  final int roomId;
   final String startDate;
   final int duration;
   final double monthlyRent;
+  final double securityDeposit;
   final String hostName;
   final String propertyImg;
-
+  final bool isRoom;
   // final String hostImg;
   final String propertyName;
   final String street;
@@ -45,6 +47,9 @@ class RequestBookingView extends StatefulWidget {
     required this.propertyName,
     required this.propertyImg,
     required this.monthlyRent,
+    required this.securityDeposit,
+    required this.roomId,
+    this.isRoom = false
     // required this.hostImg,
     // required this.joinYear,
   });
@@ -181,7 +186,6 @@ class _RequestBookingViewState extends State<RequestBookingView> {
       ),
     );
   }
-
   Widget _buildApartmentHeaderCard() {
     return Container(
       padding: EdgeInsets.all(12.r),
@@ -199,10 +203,11 @@ class _RequestBookingViewState extends State<RequestBookingView> {
       child: Row(
         children: [
           CachedNetworkImage(
+
             imageUrl: widget.propertyImg,
             width: 85.w,
             height: 85.h,
-            fit: BoxFit.cover,
+            fit: BoxFit.fill,
             placeholder: (context, url) => Container(
               width: 85.w,
               height: 85.h,
@@ -318,15 +323,15 @@ class _RequestBookingViewState extends State<RequestBookingView> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "Total Monthly Rent",
+            "Total",
             style: TextStyle(
               color: Colors.white,
-              fontSize: 14.sp,
+              fontSize: 18.sp,
               fontWeight: FontWeight.w500,
             ),
           ),
           Text(
-            (widget.monthlyRent * widget.duration).toString(),
+            (widget.monthlyRent * widget.duration + widget.securityDeposit).toString(),
             style: TextStyle(
               color: Colors.white,
               fontSize: 18.sp,
@@ -356,7 +361,16 @@ class _RequestBookingViewState extends State<RequestBookingView> {
         // Logic: Disable button by passing null to onPressed if loading
         onPressed: state is BookingRequestLoading
             ? null
-            : () async {
+            :widget.isRoom? () async {
+          context.read<BookingRequestCubit>().updateBookingData(
+            message: _messageController.text,
+            roomId: widget.roomId,
+            type: BookingPropertyType.privateRoom
+          );
+          await context
+              .read<BookingRequestCubit>()
+              .sendRoomBooking();
+        }: () async {
                 context.read<BookingRequestCubit>().updateBookingData(
                   message: _messageController.text,
                 );

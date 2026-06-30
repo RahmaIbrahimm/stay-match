@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:stay_match/Features/reviews/data/models/get_apartment_reviews.dart';
+import 'package:stay_match/Features/reviews/data/models/host_reply_response.dart';
 import 'package:stay_match/Features/reviews/data/models/review_recommendations.dart';
 import 'package:stay_match/Features/reviews/data/models/write_review_response.dart';
 import 'package:stay_match/Features/reviews/data/repos/reviews_repo.dart';
@@ -16,7 +17,7 @@ class ReviewsRepoImpl extends ReviewsRepo {
   ReviewsRepoImpl({required this.apiService});
 
   @override
-  Future<Either<Failure, GetApartmentReviews>> getApartmentReviews({
+  Future<Either<Failure, GetPropertyReviews>> getApartmentReviews({
     required int propertyId,
     int? page,
     int? pageSize,
@@ -46,7 +47,7 @@ class ReviewsRepoImpl extends ReviewsRepo {
         queryParameters: queryParameters, // This map now only contains valid keys
       );
 
-      return Right(GetApartmentReviews.fromJson(response));
+      return Right(GetPropertyReviews.fromJson(response));
     } on DioException catch (e) {
       return Left(ServerFailure.fromDioError(e));
     }
@@ -72,6 +73,53 @@ class ReviewsRepoImpl extends ReviewsRepo {
         Endpoints.reviewRecommendations,
       );
       return Right(ReviewRecommendations.fromJson(response));
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDioError(e));
+    }
+  }
+  @override
+  Future<Either<Failure, GetPropertyReviews>> getRoomReviews(
+      {required int roomId, int? page, int? pageSize, String? sortBy = 'All', String? search})async {
+    try {
+      // 1. Initialize with required fields
+      final Map<String, dynamic> queryParameters = {
+        'page': page,
+        'pageSize': pageSize,
+      };
+
+      // 2. Only add sortBy if it's not null and not 'All'
+      // (Assuming 'All' is what you want to omit)
+      if (sortBy != null && sortBy.isNotEmpty && sortBy != 'All') {
+        queryParameters['sortBy'] = sortBy;
+      }
+
+      // 3. Only add search if it's not null and not empty
+      if (search != null && search.isNotEmpty) {
+        queryParameters['search'] = search;
+      }
+
+      final response = await apiService.get(
+        Endpoints.getRoomReviews(roomId),
+        queryParameters: queryParameters, // This map now only contains valid keys
+      );
+
+      return Right(GetPropertyReviews.fromJson(response));
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDioError(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, HostReplyResponse>> hostReplyToReview({required int reviewId, required String response})async {
+    try {
+      final resp = await apiService.post(
+        Endpoints.replyToReview,
+        data: {
+          'reviewId': reviewId,
+          'response': response,
+        }
+      );
+      return Right(HostReplyResponse.fromJson(resp));
     } on DioException catch (e) {
       return Left(ServerFailure.fromDioError(e));
     }

@@ -16,9 +16,10 @@ final class ProfileFailure extends ProfileState {
   List<Object?> get props => [errMessage];
 }
 final class ProfileSuccess extends ProfileState {
-  final ProfileResponse response;
+  final ProfileResponse? response;
+  final CompatibilityProfileResponse? compatibilityResponse;
   ProfileSuccess(
-      {required this.response});
+      { this.response,  this.compatibilityResponse});
 
   @override
   List<Object?> get props =>

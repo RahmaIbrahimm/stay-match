@@ -232,7 +232,7 @@ abstract class AppStrings {
     'North Sinai', 'Port Said', 'Qalyubia', 'Qena', 'Red Sea', 'Sharqia',
     'Sohag', 'South Sinai', 'Suez',
   ];
-  static const culturalImportanceSliderOptions = <String>["Low", "Medium", "High", "Essential"];
+  static const culturalImportanceSliderOptions = <String>["Very Low","Low", "Medium", "High"];
   // --- Saved Screen ---
   static const savedListings = 'Saved Listings';
   static const savedSubtitle = 'properties bookmarked for your next move.';
@@ -254,4 +254,6 @@ abstract class AppStrings {
   static const studio = 'Studio';
   static const bed = 'Bed';
   static const perMonth = '/month';
+  static const chatbot = 'Chat Bot';
+
 }

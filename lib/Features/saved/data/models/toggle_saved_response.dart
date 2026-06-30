@@ -11,14 +11,14 @@ class ToggleSavedResponse {
   ToggleSavedResponse.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? ToggleSavedResponseData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
   String? message;
-  Data? data;
+  ToggleSavedResponseData? data;
 ToggleSavedResponse copyWith({  bool? isSuccess,
   String? message,
-  Data? data,
+  ToggleSavedResponseData? data,
 }) => ToggleSavedResponse(  isSuccess: isSuccess ?? this.isSuccess,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -39,13 +39,13 @@ ToggleSavedResponse copyWith({  bool? isSuccess,
 /// message : "apartment saved successfully"
 /// type : "property"
 
-class Data {
-  Data({
+class ToggleSavedResponseData {
+  ToggleSavedResponseData({
       this.saved, 
       this.message, 
       this.type,});
 
-  Data.fromJson(dynamic json) {
+  ToggleSavedResponseData.fromJson(dynamic json) {
     saved = json['saved'];
     message = json['message'];
     type = json['type'];
@@ -53,10 +53,10 @@ class Data {
   bool? saved;
   String? message;
   String? type;
-Data copyWith({  bool? saved,
+ToggleSavedResponseData copyWith({  bool? saved,
   String? message,
   String? type,
-}) => Data(  saved: saved ?? this.saved,
+}) => ToggleSavedResponseData(  saved: saved ?? this.saved,
   message: message ?? this.message,
   type: type ?? this.type,
 );

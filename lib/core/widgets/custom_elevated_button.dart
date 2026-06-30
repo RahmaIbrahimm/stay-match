@@ -61,17 +61,21 @@ class CustomElevatedButton extends StatelessWidget {
       child: isLoading
           ? CircularProgressIndicator(color: AppColors.textColorWhite)
           : Row(
+        mainAxisSize: MainAxisSize.min,
               spacing: 8.w,
               mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.center,
               children: [
                 if (suffixIcon != null) suffixIcon!,
-                Text(
-                  text,
-                  style: (textStyle ?? AppStyles.medium20poppins).copyWith(
-                    color: textColor ?? AppColors.containerColor,
-                    overflow: TextOverflow.ellipsis,
+                Flexible(
+                  child: Text(
+                    text,
+                    style: (textStyle ?? AppStyles.medium20poppins).copyWith(
+                      color: textColor ?? AppColors.containerColor,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    maxLines: maxLines,
+                    textAlign: TextAlign.center,
                   ),
-                  maxLines: maxLines,
                 ),
                 if (icon != null) icon!,
               ],

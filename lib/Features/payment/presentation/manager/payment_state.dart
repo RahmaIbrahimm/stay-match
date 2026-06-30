@@ -55,3 +55,13 @@ class BookingDetailsSuccess extends PaymentState {
 }
 
 enum RedirectLinkStatus { initial, loading, success, failure }
+
+class CheckPaidLoading extends PaymentState {}
+class CheckPaidSuccess extends PaymentState {
+  final bool isCompleted;
+  const CheckPaidSuccess({required this.isCompleted});
+}
+class CheckPaidFailure extends PaymentState {
+  final String errMessage;
+  const CheckPaidFailure(this.errMessage);
+}

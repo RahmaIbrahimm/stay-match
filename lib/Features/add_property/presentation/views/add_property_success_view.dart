@@ -16,6 +16,7 @@ class AddPropertySuccessView extends StatelessWidget {
         backgroundColor: AppColors.containerColor,
         elevation: 0,
         centerTitle: true,
+        leading: Container(),
         title: Text(
           'Success',
           style: AppStyles.bold18poppins.copyWith(color: AppColors.textColorPrimary)

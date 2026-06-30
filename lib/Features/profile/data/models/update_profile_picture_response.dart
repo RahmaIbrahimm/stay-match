@@ -11,14 +11,14 @@ class UpdateProfilePictureResponse {
   UpdateProfilePictureResponse.fromJson(dynamic json) {
     success = json['success'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? UpdateProfilePictureResponseData.fromJson(json['data']) : null;
   }
   bool? success;
   String? message;
-  Data? data;
+  UpdateProfilePictureResponseData? data;
 UpdateProfilePictureResponse copyWith({  bool? success,
   String? message,
-  Data? data,
+  UpdateProfilePictureResponseData? data,
 }) => UpdateProfilePictureResponse(  success: success ?? this.success,
   message: message ?? this.message,
   data: data ?? this.data,
@@ -37,16 +37,16 @@ UpdateProfilePictureResponse copyWith({  bool? success,
 
 /// imageUrl : "https://graduationproject1.runasp.net/images/ca47d646-553f-4ca1-8677-f5462e36028c.png"
 
-class Data {
-  Data({
+class UpdateProfilePictureResponseData {
+  UpdateProfilePictureResponseData({
       this.imageUrl,});
 
-  Data.fromJson(dynamic json) {
+  UpdateProfilePictureResponseData.fromJson(dynamic json) {
     imageUrl = json['imageUrl'];
   }
   String? imageUrl;
-Data copyWith({  String? imageUrl,
-}) => Data(  imageUrl: imageUrl ?? this.imageUrl,
+UpdateProfilePictureResponseData copyWith({  String? imageUrl,
+}) => UpdateProfilePictureResponseData(  imageUrl: imageUrl ?? this.imageUrl,
 );
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

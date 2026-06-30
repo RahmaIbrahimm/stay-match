@@ -31,31 +31,30 @@ class _MyPropertiesViewState extends State<MyPropertiesView> {
               MyPropertiesCubit(
                   myPropertiesRepo: getIt.get<MyPropertiesRepo>()),
         ),
-        // BlocProvider(
-        //   create: (context) => AddPropertyCubit(addPropertyRepo: getIt.get<AddPropertyRepoImpl>()),
-        // ),
       ],
-      child: Scaffold(
-        backgroundColor: AppColors.secondaryScaffBg,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Color(0xFF182E6E)),
-            onPressed: () {
-              context.goNamed(AppRouting.homeViewName);
-            },
-          ),
-          title: Text(
-            AppStrings.myProperties,
-            style: AppStyles.bold20poppins.copyWith(
-              color: AppColors.textColorPrimary,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: AppColors.secondaryScaffBg,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Color(0xFF182E6E)),
+              onPressed: () {
+                context.goNamed(AppRouting.homeViewName);
+              },
             ),
+            title: Text(
+              AppStrings.myProperties,
+              style: AppStyles.bold20poppins.copyWith(
+                color: AppColors.textColorPrimary,
+              ),
+            ),
+            centerTitle: true,
           ),
-          centerTitle: true,
+          endDrawer: MainAppDrawer(),
+          body: MyPropertiesBody(),
         ),
-        endDrawer: MainAppDrawer(),
-        body: MyPropertiesBody(),
       ),
     );
   }

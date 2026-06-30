@@ -8,4 +8,7 @@ abstract class AppIcons {
   static const folderExchangeIcon = '$assetsPath/folder_exchange.png';
   static const childIcon = '$assetsPath/child_icon.png';
   static const addCircleIcon = '$assetsPath/add_circle.png';
+  static const chatbotIcon = '$assetsPath/chatbot_icon.png';
+  static const notificationsIcon = '$assetsPath/notifications_icon.png';
+  static const notificationExistIcon =  '$assetsPath/notification_exist_icon.png';
 }

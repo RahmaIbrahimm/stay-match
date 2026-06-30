@@ -82,21 +82,24 @@ class ResetPasswordContainerBody extends StatelessWidget {
                 controller: authCubit.resetConfirmPasswordController,
               ),
               const SizedBox(height: 40),
-              CustomElevatedButton(
-                text: AppStrings.confirmCode,
-                onPressed: () async {
-                  await authCubit.formValidationAndInvokeMethod(
-                    key: authCubit.resetPasswordFormKey,
-                    authMethod: authCubit.formValidationAndInvokeMethod(
+              SizedBox(
+                width: double.infinity,
+                child: CustomElevatedButton(
+                  text: AppStrings.confirmCode,
+                  onPressed: () async {
+                    await authCubit.formValidationAndInvokeMethod(
                       key: authCubit.resetPasswordFormKey,
-                      authMethod: authCubit.resetPassword(),
-                      hasConfirmPassword: true,
-                      pass: authCubit.resetPasswordController.text,
-                      confirmPass:
-                          authCubit.resetConfirmPasswordController.text,
-                    ),
-                  );
-                },
+                      authMethod: authCubit.formValidationAndInvokeMethod(
+                        key: authCubit.resetPasswordFormKey,
+                        authMethod: authCubit.resetPassword(),
+                        hasConfirmPassword: true,
+                        pass: authCubit.resetPasswordController.text,
+                        confirmPass:
+                            authCubit.resetConfirmPasswordController.text,
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),

@@ -14,14 +14,12 @@ import '../../../apartments/data/models/all_apartments_response.dart';
 import '../../data/models/apartment_filter_params.dart';
 import '../../data/models/location_model.dart';
 import '../../data/models/rooms_filter_params.dart';
-import 'location_cubit.dart';
 
 part 'filter_state.dart';
 
 class FilterCubit extends Cubit<FilterState> {
   final ApartmentRepo apartmentRepo;
   final RoomsRepo roomsRepo;
-
   // Apartment filter state
   ApartmentFilterParams _currentApartmentFilters =
       const ApartmentFilterParams();
@@ -32,7 +30,7 @@ class FilterCubit extends Cubit<FilterState> {
   RoomsFilterParams _currentRoomsFilters = const RoomsFilterParams();
   RoomsFilterParams? _lastAppliedRoomsFilters;
   GetAllRooms? _roomsCachedResponse;
-
+  bool isMyLocation = false;
   FilterCubit({required this.roomsRepo, required this.apartmentRepo})
     : super(FilterInitial()) {
     log('FilterCubit initialized');
@@ -64,25 +62,6 @@ class FilterCubit extends Cubit<FilterState> {
     if (start != null) log('🏢 Apartment | start: $start');
     if (monthsCount != null) log('🏢 Apartment | monthsCount: $monthsCount');
     if (government != null) log('🏢 Apartment | government: $government');
-    if (allowsFamilies != null)
-      log('🏢 Apartment | allowsFamilies: $allowsFamilies');
-    if (allowsChildren != null)
-      log('🏢 Apartment | allowsChildren: $allowsChildren');
-    if (allowsStudents != null)
-      log('🏢 Apartment | allowsStudents: $allowsStudents');
-    if (allowsWorkers != null)
-      log('🏢 Apartment | allowsWorkers: $allowsWorkers');
-    if (studentGender != null)
-      log('🏢 Apartment | studentGender: $studentGender');
-    if (workerGender != null) log('🏢 Apartment | workerGender: $workerGender');
-    if (userLat != null) log('🏢 Apartment | userLat: $userLat');
-    if (userLng != null) log('🏢 Apartment | userLng: $userLng');
-    if (orderByOldest != null)
-      log('🏢 Apartment | orderByOldest: $orderByOldest');
-    if (onlyAvailable != null)
-      log('🏢 Apartment | onlyAvailable: $onlyAvailable');
-    if (page != null) log('🏢 Apartment | page: $page');
-    if (pageSize != null) log('🏢 Apartment | pageSize: $pageSize');
     _currentApartmentFilters = _currentApartmentFilters.copyWith(
       start: start,
       monthsCount: monthsCount,
@@ -206,11 +185,11 @@ class FilterCubit extends Cubit<FilterState> {
 
   Future<void> resetApartmentFilters() async {
     log('Resetting all apartment filters');
+    isMyLocation = false;
     _currentApartmentFilters = const ApartmentFilterParams();
     await _getAllApartmentsWithFilters(forceRefresh: true);
   }
 
-  // Rooms Methods
   Future<void> updateRoomsFilter({
     String? start,
     int? monthsCount,
@@ -229,16 +208,12 @@ class FilterCubit extends Cubit<FilterState> {
     num? pageSize,
     bool forceRefresh = false,
   }) async {
-    // Add this at the beginning of updateRoomsFilter method
     if (start != null) log('🚪 Rooms | start: $start');
     if (monthsCount != null) log('🚪 Rooms | monthsCount: $monthsCount');
     if (government != null) log('🚪 Rooms | government: $government');
-    if (allowsFamilies != null)
-      log('🚪 Rooms | allowsFamilies: $allowsFamilies');
-    if (allowsChildren != null)
-      log('🚪 Rooms | allowsChildren: $allowsChildren');
-    if (allowsStudents != null)
-      log('🚪 Rooms | allowsStudents: $allowsStudents');
+    if (allowsFamilies != null) log('🚪 Rooms | allowsFamilies: $allowsFamilies');
+    if (allowsChildren != null) log('🚪 Rooms | allowsChildren: $allowsChildren');
+    if (allowsStudents != null) log('🚪 Rooms | allowsStudents: $allowsStudents');
     if (allowsWorkers != null) log('🚪 Rooms | allowsWorkers: $allowsWorkers');
     if (workerGender != null) log('🚪 Rooms | workerGender: $workerGender');
     if (studentGender != null) log('🚪 Rooms | studentGender: $studentGender');
@@ -248,6 +223,7 @@ class FilterCubit extends Cubit<FilterState> {
     if (onlyAvailable != null) log('🚪 Rooms | onlyAvailable: $onlyAvailable');
     if (page != null) log('🚪 Rooms | page: $page');
     if (pageSize != null) log('🚪 Rooms | pageSize: $pageSize');
+
     _currentRoomsFilters = _currentRoomsFilters.copyWith(
       start: start,
       monthsCount: monthsCount,
@@ -268,11 +244,15 @@ class FilterCubit extends Cubit<FilterState> {
 
     final bool filtersChanged =
         _lastAppliedRoomsFilters == null ||
-        _currentRoomsFilters.hasChanges(_lastAppliedRoomsFilters);
+            _currentRoomsFilters.hasChanges(_lastAppliedRoomsFilters);
 
-    await _getAllRoomsWithFilters(forceRefresh: forceRefresh || filtersChanged);
+    if (filtersChanged || forceRefresh) {
+      // This tells FindRoomBody to call _pagingController.refresh()
+      emit(FilterInitial());
+    } else {
+      await _getAllRoomsWithFilters(forceRefresh: forceRefresh);
+    }
   }
-
   Future<void> updateRoomsLocation({
     required Governorate? government,
     required City? city,
@@ -383,11 +363,15 @@ class FilterCubit extends Cubit<FilterState> {
   Future<void> resetRoomsFilters() async {
     log('Resetting all rooms filters');
     _currentRoomsFilters = const RoomsFilterParams();
-    await _getAllRoomsWithFilters(forceRefresh: true);
+    isMyLocation = false;
+    // Clear the pagination data cache if you have one
+    _roomsCachedResponse = null;
+
+    // Emit an initial or loading state to let the UI know it's reset time
+    emit( FilterInitial());
   }
-// --- ADDED FOR PAGINATION ---
+
   Future<void> fetchRoomsPage(int pageKey, PagingController<int, Items> pagingController) async {
-    // Note: We use the current filters but override the page with pageKey
     final response = await roomsRepo.getAllRooms(
       start: _currentRoomsFilters.start,
       monthsCount: _currentRoomsFilters.monthsCount,
@@ -402,32 +386,45 @@ class FilterCubit extends Cubit<FilterState> {
       userLng: _currentRoomsFilters.userLng,
       orderByOldest: _currentRoomsFilters.orderByOldest,
       onlyAvailable: _currentRoomsFilters.onlyAvailable,
-      page: pageKey, // The controller provides the current page index
+      page: pageKey,
       pageSize: 10,
     );
 
     response.fold(
           (fail) {
-        log('Pagination Error: ${fail.errMessage}');
+        log('Pagination Error Check: ${fail.errMessage}');
+
+        // --- THE WORKAROUND FOR SERVER 404 ON EMPTY ---
+        // If the repository gives you the 404 error phrase or server error response message:
+        if (fail.errMessage.contains('not found') || fail.errMessage.contains('No properties found')) {
+          log('Handling server 404 empty result gracefully as empty page.');
+          pagingController.appendLastPage([]); // Explicitly feed it an empty array
+          return;
+        }
+
         pagingController.error = fail.errMessage;
       },
           (resp) {
         if (resp.isSuccess == true) {
-          final items = resp.data?.items ?? [];
-          final isLastPage = items.length < 10;
+          final allItems = resp.data?.items ?? [];
+          final availableItems = allItems.where((item) => item.rooms != null && item.rooms!.isNotEmpty).toList();
+          final isLastPage = allItems.length < 10;
 
           if (isLastPage) {
-            pagingController.appendLastPage(items);
+            pagingController.appendLastPage(availableItems);
           } else {
-            pagingController.appendPage(items, pageKey + 1);
+            pagingController.appendPage(availableItems, pageKey + 1);
           }
 
-          // Optional: Sync the success state so other UI elements
-          // (like result counts) stay updated
           _roomsCachedResponse = resp;
           emit(RoomsFilterSuccess(response: resp));
         } else {
-          pagingController.error = resp.message ?? 'Error fetching rooms';
+          // Double check if it fails inside success block with false status
+          if (resp.message == "No properties found.") {
+            pagingController.appendLastPage([]);
+          } else {
+            pagingController.error = resp.message ?? 'Error fetching rooms';
+          }
         }
       },
     );

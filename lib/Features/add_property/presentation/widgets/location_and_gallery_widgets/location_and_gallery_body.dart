@@ -18,8 +18,8 @@ import '../shared/progress_bar.dart';
 import '../shared/section_header.dart';
 import '../shared/validation_helper.dart';
 import 'address_details_section.dart';
-import 'property_gallery_widget.dart';
 import 'map_picker_section.dart';
+import 'property_gallery_widget.dart';
 
 class LocationAndGalleryBody extends StatefulWidget {
   const LocationAndGalleryBody({super.key});

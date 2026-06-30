@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
@@ -7,6 +8,7 @@ import 'package:stay_match/core/constants/app_styles.dart';
 import 'package:stay_match/core/routing/app_routing.dart';
 
 import '../../../data/models/my_chats.dart';
+import '../../manager/chat_list_cubit.dart';
 import '../shared/chat_helper.dart';
 
 class ChatTile extends StatelessWidget {
@@ -19,8 +21,21 @@ class ChatTile extends StatelessWidget {
     final String? imageUrl = chatData.otherUserProfileImageUrl;
 
     return ListTile(
+      // onTap: () {
+      //   if(context.mounted) context.pushNamed(AppRouting.messagesName,pathParameters: {'otherUserId':chatData.otherUserId ?? '-1'});
+      // },
       onTap: () {
-        if(context.mounted) context.pushNamed(AppRouting.messagesName,pathParameters: {'otherUserId':chatData.otherUserId ?? '-1'});
+        if (context.mounted) {
+          context.pushNamed(
+            AppRouting.messagesName,
+            pathParameters: {'otherUserId': chatData.otherUserId ?? '-1'},
+          ).then((_) {
+            // 💡 This executes automatically when the user comes back!
+            if (context.mounted) {
+              context.read<ChatListCubit>().getInbox();
+            }
+          });
+        }
       },
       contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       leading: Stack(

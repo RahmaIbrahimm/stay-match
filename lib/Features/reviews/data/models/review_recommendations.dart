@@ -8,12 +8,12 @@ class ReviewRecommendations {
 
   ReviewRecommendations.fromJson(dynamic json) {
     isSuccess = json['isSuccess'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? ReviewRecommendationsData.fromJson(json['data']) : null;
   }
   bool? isSuccess;
-  Data? data;
+  ReviewRecommendationsData? data;
 ReviewRecommendations copyWith({  bool? isSuccess,
-  Data? data,
+  ReviewRecommendationsData? data,
 }) => ReviewRecommendations(  isSuccess: isSuccess ?? this.isSuccess,
   data: data ?? this.data,
 );
@@ -31,12 +31,12 @@ ReviewRecommendations copyWith({  bool? isSuccess,
 /// recommendedProperties : [{"id":137,"name":"غرفة مفروشة للبنات في شقة مشتركة","mainImage":"https://example.com/images/living-room.jpg","monthlyRent":4500,"rating":5,"city":"Amiriyyah"},{"id":138,"name":"شقة سكنية للطالبات - غرف مشتركة","mainImage":"https://example.com/images/property_cover.jpg","monthlyRent":0,"rating":0,"city":"Amiriyyah"},{"id":146,"name":"weraqweasd","mainImage":"https://graduationproject1.runasp.net/images/properties/95d1d455-0eb2-491d-9d16-7dfc792bd788_39.png","monthlyRent":345,"rating":0,"city":"Abou Simbel"}]
 /// siteStats : {"totalReviews":6,"totalVerifiedHosts":0,"happyTenants":1}
 
-class Data {
-  Data({
+class ReviewRecommendationsData {
+  ReviewRecommendationsData({
       this.recommendedProperties, 
       this.siteStats,});
 
-  Data.fromJson(dynamic json) {
+  ReviewRecommendationsData.fromJson(dynamic json) {
     if (json['recommendedProperties'] != null) {
       recommendedProperties = [];
       json['recommendedProperties'].forEach((v) {
@@ -47,9 +47,9 @@ class Data {
   }
   List<RecommendedProperties>? recommendedProperties;
   SiteStats? siteStats;
-Data copyWith({  List<RecommendedProperties>? recommendedProperties,
+ReviewRecommendationsData copyWith({  List<RecommendedProperties>? recommendedProperties,
   SiteStats? siteStats,
-}) => Data(  recommendedProperties: recommendedProperties ?? this.recommendedProperties,
+}) => ReviewRecommendationsData(  recommendedProperties: recommendedProperties ?? this.recommendedProperties,
   siteStats: siteStats ?? this.siteStats,
 );
   Map<String, dynamic> toJson() {
