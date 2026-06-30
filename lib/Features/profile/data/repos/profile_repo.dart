@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:stay_match/Features/profile/data/models/compatibility_profile_response.dart';
 import 'package:stay_match/Features/profile/data/models/delete_account_response.dart';
 import 'package:stay_match/Features/profile/data/models/delete_profile_picture_response.dart';
 import 'package:stay_match/Features/profile/data/models/profile_response.dart';
@@ -22,4 +23,5 @@ abstract class ProfileRepo {
   });
   Future<Either<Failure,DeleteAccountResponse>> deleteAccount();
   Future<Either<Failure,DeleteProfilePictureResponse>> deleteProfilePic();
+  Future<Either<Failure,CompatibilityProfileResponse>> compatibilityProfile();
 }

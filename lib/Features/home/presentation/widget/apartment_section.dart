@@ -30,18 +30,15 @@ class ApartmentSection extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      Icons.apartment_outlined,
-                      size: 40.r,
-                      color: Colors.grey[400],
-                    ),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 16.h,),
                     Text(
                       AppStrings.noApartmentsAvailable,
-                      style: AppStyles.semibold24poppins.copyWith(
+                      style: AppStyles.semiBold20poppins.copyWith(
                         color: AppColors.textColorSecondary,
                       ),
                     ),
+                    SizedBox(height: 16.h,),
+
                   ],
                 ),
               ),

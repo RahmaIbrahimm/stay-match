@@ -41,7 +41,7 @@ class FindApartmentView extends StatelessWidget {
           ),
         ],
         child: DraggableChatbotFab(hasBottomNav: false,
-        child: Scaffold(body: FindApartmentBody())),
+        child: SafeArea(child: Scaffold(body: FindApartmentBody()))),
       ),
     );
   }

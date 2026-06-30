@@ -12,7 +12,7 @@ import 'amenitiy_chip.dart';
 import 'image_placeholder.dart';
 
 class ListingCard extends StatelessWidget {
-  final ActiveListings listing;
+  final dynamic listing;
 
   const ListingCard({super.key, required this.listing});
 

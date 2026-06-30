@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart'; // Add this package
+import 'package:stay_match/Features/profile/data/models/compatibility_profile_response.dart';
 import 'package:stay_match/Features/profile/data/models/delete_account_response.dart';
 import 'package:stay_match/Features/profile/data/models/delete_profile_picture_response.dart';
 import 'package:stay_match/Features/profile/data/models/profile_response.dart';
@@ -47,6 +48,7 @@ class ProfileRepoImpl extends ProfileRepo {
         'FieldOfStudy': request.fieldOfStudy,
         'JobTitle': request.jobTitle,
         'Password': request.password,
+        'AboutMe': request.aboutMe,
         'PasswordConfirmation': request.passwordConfirmation,
       };
       dataMap.removeWhere((key, value) => value == null);
@@ -137,4 +139,16 @@ class ProfileRepoImpl extends ProfileRepo {
       return left(ServerFailure.fromDioError(e));
     }
   }
+
+  @override
+  Future<Either<Failure,
+      CompatibilityProfileResponse>> compatibilityProfile() async {
+    try {
+      var response = await apiService.get(
+          'https://staymatch-recommendation-service-production.up.railway.app/profile/questionnaire');
+      return right(CompatibilityProfileResponse.fromJson(response));
+    } on DioException catch (e) {
+      return left(ServerFailure.fromDioError(e));
+    }}
+
 }

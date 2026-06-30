@@ -44,6 +44,7 @@ class _CustomToggleSwitchState extends State<CustomToggleSwitch> {
     return GestureDetector(
       onTap: () {
         // 2. We trigger the internal animation first
+        if (widget.onTap == null && widget.onChangedBool == null) return;
         setState(() {
           isOn = !isOn;
         });

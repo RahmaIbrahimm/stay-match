@@ -147,7 +147,7 @@ class HomeMyPropertyCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 185.w,
+        width: 200.w,
         decoration: BoxDecoration(
           color: AppColors.containerColor,
           borderRadius: BorderRadius.circular(12.r),
@@ -193,7 +193,6 @@ class HomeMyPropertyCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: AppStyles.regular12poppins.copyWith(
                             color: AppColors.textColorSecondary,
-                            fontSize: 11.sp,
                           ),
                         ),
                       ),
@@ -210,29 +209,29 @@ class HomeMyPropertyCard extends StatelessWidget {
               indent: 8.w,
               endIndent: 8.w,
             ),
-
+            SizedBox(height: 8.h,),
             // 4. Price
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.w),
-              child: Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'EGP ${property.monthlyRent?.toInt() ?? 0}',
-                      style: AppStyles.bold14poppins.copyWith(
-                        color: AppColors.textColorPrimary,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' / month',
-                      style: AppStyles.medium10poppins.copyWith(
-                        color: AppColors.textColorSuccess,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 8.w),
+            //   child: Text.rich(
+            //     TextSpan(
+            //       children: [
+            //         TextSpan(
+            //           text: 'EGP ${property.monthlyRent?.toInt() ?? 0}',
+            //           style: AppStyles.bold14poppins.copyWith(
+            //             color: AppColors.textColorPrimary,
+            //           ),
+            //         ),
+            //         TextSpan(
+            //           text: ' / month',
+            //           style: AppStyles.medium10poppins.copyWith(
+            //             color: AppColors.textColorSuccess,
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
 
             // 5. Preview button
             Padding(
@@ -242,13 +241,16 @@ class HomeMyPropertyCard extends StatelessWidget {
                 height: 30.h,
                 child: OutlinedButton(
                   onPressed: () {
-                    // TODO: navigate based on property.type
                     if (property.type?.toLowerCase() == 'apartment') {
                       context.pushNamed(AppRouting.apartmentDetailsViewName,
                           pathParameters: {'id': property.id.toString()});
                     } else {
-                      context.pushNamed(AppRouting.sharedPropertyViewName,
-                          pathParameters: {'propertyId': property.id.toString()});
+                      context.pushNamed(
+                        AppRouting.sharedPropertyViewName,
+                        pathParameters: {
+                          'propertyId': property.id.toString()
+                        },
+                      );
                     }
                   },
                   style: OutlinedButton.styleFrom(

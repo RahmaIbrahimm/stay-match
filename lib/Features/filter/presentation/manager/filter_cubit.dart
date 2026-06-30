@@ -30,8 +30,7 @@ class FilterCubit extends Cubit<FilterState> {
   RoomsFilterParams _currentRoomsFilters = const RoomsFilterParams();
   RoomsFilterParams? _lastAppliedRoomsFilters;
   GetAllRooms? _roomsCachedResponse;
-  String _roomsSearchQuery = '';
-
+  bool isMyLocation = false;
   FilterCubit({required this.roomsRepo, required this.apartmentRepo})
     : super(FilterInitial()) {
     log('FilterCubit initialized');
@@ -186,6 +185,7 @@ class FilterCubit extends Cubit<FilterState> {
 
   Future<void> resetApartmentFilters() async {
     log('Resetting all apartment filters');
+    isMyLocation = false;
     _currentApartmentFilters = const ApartmentFilterParams();
     await _getAllApartmentsWithFilters(forceRefresh: true);
   }
@@ -363,7 +363,7 @@ class FilterCubit extends Cubit<FilterState> {
   Future<void> resetRoomsFilters() async {
     log('Resetting all rooms filters');
     _currentRoomsFilters = const RoomsFilterParams();
-
+    isMyLocation = false;
     // Clear the pagination data cache if you have one
     _roomsCachedResponse = null;
 

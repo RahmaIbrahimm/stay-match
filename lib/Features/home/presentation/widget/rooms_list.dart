@@ -31,7 +31,7 @@ class RoomsList extends StatelessWidget {
         .length;
 
     return SizedBox(
-      height: 285.h,
+      height: 295.h,
       // Added a tiny bit of height clearance for the spec grid layout
       child: ListView.builder(
         scrollDirection: Axis.horizontal,

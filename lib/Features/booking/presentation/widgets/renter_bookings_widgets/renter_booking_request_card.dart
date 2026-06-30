@@ -18,7 +18,6 @@ class RenterBookingRequestCard extends StatelessWidget {
   const RenterBookingRequestCard({super.key, required this.bookings});
   @override
   Widget build(BuildContext context) {
-
     final statusLower = bookings?.status?.toLowerCase() ?? '';
     var cubit = context.read<BookingRequestCubit>();
     return Container(
@@ -220,49 +219,79 @@ class RenterBookingRequestCard extends StatelessWidget {
       child: Icon(Icons.image, size: 40.r, color: const Color(0xFF9CA3AF)),
     );
   }
-// todo: build correct view for completed card
   Widget _buildActionButtons(String status, BuildContext context) {
     if (status == 'approved') {
       return Row(
         children:
         [
-          Expanded(
-            child: _createButton(
-              text: 'Chat with host',
-              bgColor: AppColors.primary,
-              textColor: Colors.white,
-              icon: Icons.chat_bubble_outline,
-              onPressed: () {
-                if (bookings?.host != null) {
-                  if (context.mounted) {
-                    context.pushNamed(
-                      AppRouting.messagesName,
-                      pathParameters: {
-                        'otherUserId': bookings?.host!.id.toString() ?? '-1',
-                      },
-                    );
-                  }
-                  else {
-                    AppKeys.rootScaffoldMessengerKey.currentState
-                        ?.removeCurrentSnackBar();
-                    AppKeys.rootScaffoldMessengerKey.currentState?.showSnackBar(
-                      SnackBar(
-                        content: const Text(
-                          "Chat is unavailable for this booking.",
-                        ),
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.r),
-                        ),
-                        margin: EdgeInsets.all(16.w),
-                        backgroundColor: AppColors.primary,
+          // Expanded(
+          //   child: _createButton(
+          //     text: 'Chat with host',
+          //     bgColor: AppColors.primary,
+          //     textColor: Colors.white,
+          //     icon: Icons.chat_bubble_outline,
+          //     onPressed: () {
+          //       if (bookings?.host != null) {
+          //         if (context.mounted) {
+          //           context.pushNamed(
+          //             AppRouting.messagesName,
+          //             pathParameters: {
+          //               'otherUserId': bookings?.host!.id.toString() ?? '-1',
+          //             },
+          //           );
+          //         }
+          //         else {
+          //           AppKeys.rootScaffoldMessengerKey.currentState
+          //               ?.removeCurrentSnackBar();
+          //           AppKeys.rootScaffoldMessengerKey.currentState?.showSnackBar(
+          //             SnackBar(
+          //               content: const Text(
+          //                 "Chat is unavailable for this booking.",
+          //               ),
+          //               behavior: SnackBarBehavior.floating,
+          //               shape: RoundedRectangleBorder(
+          //                 borderRadius: BorderRadius.circular(16.r),
+          //               ),
+          //               margin: EdgeInsets.all(16.w),
+          //               backgroundColor: AppColors.primary,
+          //             ),
+          //           );
+          //         }
+          //       }
+          //     },
+          //   ),
+          // ),
+          Expanded(child:  _createButton(
+            text: 'Pay to Chat',
+            bgColor: AppColors.secondary,
+            textColor: Colors.white,
+            onPressed: () {
+              if (bookings?.propertyId != null) {
+                if (context.mounted) {
+                  context.pushNamed(
+                      AppRouting.payCardName,
+                      extra: bookings?.id
+                  );
+                } else {
+                  AppKeys.rootScaffoldMessengerKey.currentState
+                      ?.removeCurrentSnackBar();
+                  AppKeys.rootScaffoldMessengerKey.currentState?.showSnackBar(
+                    SnackBar(
+                      content: const Text(
+                        "Unable to process payment at this moment please try again later.",
                       ),
-                    );
-                  }
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
+                      margin: EdgeInsets.all(16.w),
+                      backgroundColor: AppColors.primary,
+                    ),
+                  );
                 }
-              },
-            ),
-          ),
+              }
+            },
+          )),
           SizedBox(width: 12.w),
           Expanded(
             child: _createButton(
@@ -293,6 +322,43 @@ class RenterBookingRequestCard extends StatelessWidget {
           ),
         ],
       );
+    }
+    if (status == 'paid') {
+      return _createButton(
+        text: 'Chat with host',
+        bgColor: AppColors.primary,
+        textColor: Colors.white,
+        icon: Icons.chat_bubble_outline,
+        onPressed: () {
+          if (bookings?.host != null) {
+            if (context.mounted) {
+              context.pushNamed(
+                AppRouting.messagesName,
+                pathParameters: {
+                  'otherUserId': bookings?.host!.id.toString() ?? '-1',
+                },
+              );
+            } else {
+              AppKeys.rootScaffoldMessengerKey.currentState
+                  ?.removeCurrentSnackBar();
+              AppKeys.rootScaffoldMessengerKey.currentState?.showSnackBar(
+                SnackBar(
+                  content: const Text(
+                    "Chat is unavailable for this booking.",
+                  ),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                  margin: EdgeInsets.all(16.w),
+                  backgroundColor: AppColors.primary,
+                ),
+              );
+            }
+          }
+        },
+      );
+
     }
     if (status == 'completed') {
       bool hasReviewed = bookings?.hasReviewed ?? false;
@@ -333,6 +399,7 @@ class RenterBookingRequestCard extends StatelessWidget {
                 }
               },
             ),
+
           ),
           SizedBox(width: 12.w),
           if(hasReviewed) Expanded(
@@ -524,7 +591,7 @@ class RenterBookingRequestCard extends StatelessWidget {
       case 'completed':
         return const Color(0xFF10B981);
       default:
-        return const Color(0xFFF59E0B);
+        return const Color(0xFFF57101);
     }
   }
 

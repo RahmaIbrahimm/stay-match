@@ -78,11 +78,17 @@ abstract class Endpoints {
   static String Function(String)  otherUserProfile= (String id) {
     return "/api/ViewUserProfile/$id";
   };
+  static String Function(String)  otherUserProfileListings= (String id) {
+    return "/api/ViewUserProfile/$id/listings";
+  };
   static const String replyToReview = '/api/Review/response';
   // payment
   static const String paymentRedirectLink = '/api/Payment/create-payment-token?';
   static String Function(int) bookingDetails = (int id) {
     return "/api/Booking/$id";
+  };
+  static String Function(int) checkIfPaid = (int id) {
+    return "/api/Property/booking/$id/is-paid";
   };
 
   // chatbot

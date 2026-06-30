@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stay_match/Features/other_user_profile/presentation/widgets/user_review_card.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
+import 'package:stay_match/core/widgets/custom_text_button.dart';
 
+import '../../../../core/routing/app_routing.dart';
 import '../manager/other_user_profile_cubit.dart';
 import 'compatibility_section.dart';
 import 'host_card.dart';
@@ -58,7 +61,7 @@ class OtherUserProfileBody extends StatelessWidget {
           }
 
           if (state is OtherUserProfileSuccess) {
-            final data = state.profile.data;
+            final data = state.profile?.data;
 
             if (data == null) {
               return const _ErrorView(message: 'No profile data found.');
@@ -70,14 +73,53 @@ class OtherUserProfileBody extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   HostCard(hostInfo: data.hostInfo),
-                  SizedBox(height: 16.h),
-                  const CompatibilitySection(),
+                  // SizedBox(height: 16.h),
+                  // const CompatibilitySection(),
                   SizedBox(height: 24.h),
-                  Text(
-                    'Active Listings',
-                    style: AppStyles.bold18poppins.copyWith(
-                      color: AppColors.textColorPrimary,
-                    ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Text(
+                  //       'Active Listings',
+                  //       style: AppStyles.bold18poppins.copyWith(
+                  //         color: AppColors.textColorPrimary,
+                  //       ),
+                  //     ),
+                  //     CustomTextButton(
+                  //       text: 'View All Listings',
+                  //       textColor: AppColors.primary,
+                  //       isPadded: true,
+                  //       isUnderlined: false,
+                  //       onPressed: (){
+                  //         context.pushNamed(AppRouting.userListingsName,extra:data.hostInfo?.hostId);
+                  //       },
+                  //     ),
+                  //   ],
+                  // ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Active Listings',
+                        style: AppStyles.bold18poppins.copyWith(
+                          color: AppColors.textColorPrimary,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          context.pushNamed(
+                            AppRouting.userListingsName,
+                            extra: data.hostInfo?.hostId,
+                          );
+                        },
+                        child: Text(
+                          'View All',
+                          style: AppStyles.semiBold14poppins.copyWith(
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 12.h),
                   if (data.activeListings == null ||

@@ -39,23 +39,28 @@ class RequestCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              CircleAvatar(
-                radius: 32.r,
-                backgroundImage: CachedNetworkImageProvider(
-                  request.renter?.profileImage ?? '',
-                  errorListener: (e) {
-                    Container(
-                      color: Color(0xFFF1F4FF),
-                      // Matches your dropdown/secondary background tint
-                      child: Center(
-                        child: Icon(
-                          Icons.image_not_supported_outlined,
-                          color: Colors.grey,
-                          size: 28.sp,
+              GestureDetector(
+                onTap: (){
+                  context.pushNamed(AppRouting.otherUserProfileName,extra: request.renter?.id);
+                },
+                child: CircleAvatar(
+                  radius: 32.r,
+                  backgroundImage: CachedNetworkImageProvider(
+                    request.renter?.profileImage ?? '',
+                    errorListener: (e) {
+                      Container(
+                        color: Color(0xFFF1F4FF),
+                        // Matches your dropdown/secondary background tint
+                        child: Center(
+                          child: Icon(
+                            Icons.image_not_supported_outlined,
+                            color: Colors.grey,
+                            size: 28.sp,
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ),
               SizedBox(width: 12.w),
@@ -88,7 +93,7 @@ class RequestCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Text(
-                  '${request.matchPercentage}% Match',
+                  request.status?.toUpperCase() ?? 'Unknown',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -312,8 +317,8 @@ class RequestCard extends StatelessWidget {
           //     ),
           //   ],
           // ),
-         if(request.status?.toLowerCase() == 'pending') _buildTextButton(
-              context, textColor: AppColors.primary, text: 'Message ${request.renter?.name ?? 'Guest'}', onPressed: () {
+         if(request.status?.toLowerCase() == 'pending')
+           _buildTextButton(context, textColor: AppColors.primary, text: 'Message ${request.renter?.name ?? 'Guest'}', onPressed: () {
             if (context.mounted) {
               context.pushNamed(
                   AppRouting.messagesName, pathParameters: {
@@ -321,8 +326,16 @@ class RequestCard extends StatelessWidget {
               });
             }
           }, icon: Icons.chat_bubble_outline_outlined,isPadded: true),
-          if(request.status?.toLowerCase() == 'approved') _buildTextButton(
-              context, textColor: AppColors.textColorSuccess, text: 'This request Accepted', onPressed: (){}, icon: Icons.check_box_outlined),
+          if(request.status?.toLowerCase() == 'approved')
+            _buildTextButton(context, textColor: AppColors.primary, text: 'Message ${request.renter?.name ?? 'Guest'}', onPressed: () {
+              if (context.mounted) {
+                context.pushNamed(
+                    AppRouting.messagesName, pathParameters: {
+                  'otherUserId': ?request.renter?.id.toString()
+                });
+              }
+            }, icon: Icons.chat_bubble_outline_outlined,isPadded: true),
+          // _buildTextButton(context, textColor: AppColors.textColorSuccess, text: 'This request Accepted', onPressed: (){}, icon: Icons.check_box_outlined),
           if(request.status?.toLowerCase() == 'declined') _buildTextButton(
               context, textColor: AppColors.textColorError, text: 'This request Declined', onPressed:(){}, icon: Icons.not_interested_rounded),
 

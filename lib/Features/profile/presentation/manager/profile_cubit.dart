@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
+import 'package:stay_match/Features/profile/data/models/compatibility_profile_response.dart';
 import 'package:stay_match/Features/profile/data/models/profile_response.dart';
 import 'package:stay_match/Features/profile/data/models/update_profile_picture_response.dart';
 import 'package:stay_match/Features/profile/data/models/update_profile_request.dart';
@@ -29,7 +30,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   bool get isDirty {
     if (state is! ProfileSuccess || _request == null) return false;
-    final original = (state as ProfileSuccess).response.data;
+    final original = (state as ProfileSuccess).response?.data;
 
     final hasTextChanges =
         _request?.fullName != original?.fullName ||
@@ -111,7 +112,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       if (state is ProfileSuccess) {
         final currentResponse = (state as ProfileSuccess).response;
-        emit(ProfileSuccess(response: currentResponse.copyWith()));
+        emit(ProfileSuccess(response: currentResponse?.copyWith()));
       }
     } else {
       log('🚫 Image Selection Cancelled');
@@ -159,14 +160,16 @@ class ProfileCubit extends Cubit<ProfileState> {
       _request = newRequest;
 
       final currentState = state as ProfileSuccess;
-      emit(ProfileSuccess(response: currentState.response.copyWith()));
+      emit(ProfileSuccess(response: currentState.response?.copyWith()));
 
       log('📝 Draft Updated: ${_request?.fullName}');
     }
   }
   Future<void> saveProfileChanges() async {
+    print(_request);
+
     if (_request == null || state is! ProfileSuccess) return;
-    final original = (state as ProfileSuccess).response.data;
+    final original = (state as ProfileSuccess).response?.data;
 
     final hasTextChanges =
         _request?.fullName != original?.fullName ||
@@ -188,6 +191,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     if (hasTextChanges || hasPasswordChange) {
       log('📤 Updating Text Info...');
+      log(_request!.toJson().toString());
       var result = await profileRepo.updateProfile(request: _request!);
       result.fold(
             (fail) {
@@ -239,6 +243,20 @@ class ProfileCubit extends Cubit<ProfileState> {
         await getProfileData();
       },
     );
+  }
+  Future<void> getPreferences() async{
+    var response = await profileRepo.compatibilityProfile();
+    response.fold(
+          (fail) {
+        log('❌ Profile Fetch Failed: ${fail.errMessage}');
+        emit(ProfileFailure(errMessage: fail.errMessage));
+      },
+          (profileResponse) async {
+        if (profileResponse.error != null) {
+          log('✅ Profile Fetch Success: ${profileResponse.answeredQuestions}');
+          final data = profileResponse;
+        }
+  });
   }
 
   Future<void> deleteProfilePic() async {

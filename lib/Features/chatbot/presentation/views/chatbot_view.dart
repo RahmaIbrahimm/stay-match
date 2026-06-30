@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stay_match/Features/chatbot/data/models/chatbot_response.dart';
 import 'package:stay_match/Features/chatbot/data/repos/chatbot_repo_impl.dart';
 import 'package:stay_match/Features/chatbot/presentation/widgets/chatbot_drawer.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
+import 'package:stay_match/core/routing/app_routing.dart';
 import 'package:stay_match/core/utils/service_locator.dart';
 
 import '../../../../core/widgets/custom_elevated_button.dart';
@@ -418,7 +420,22 @@ class _BotBubble extends StatelessWidget {
                 SizedBox(height: 12.h),
                 ...message.results.map((r) => Padding(
                   padding: EdgeInsets.only(bottom: 10.h),
-                  child: _ResultCard(result: r),
+                  // todo: the nav thingie idk whatever
+                  child: _ResultCard(result: r,onTap: (){
+                    if(context.mounted) {
+                      if(r.resultType?.toLowerCase() == 'room'){
+                        context.pushNamed(AppRouting.roomDetailsViewName,pathParameters:{
+                          'roomId': r.id.toString(),
+                          'propertyId': r.propertyId.toString(),
+                        } );
+                      }
+                      else if(r.resultType?.toLowerCase() == 'property'){
+                        context.pushNamed(AppRouting.apartmentDetailsViewName,pathParameters:{
+                          'id': r.id.toString(),
+                        } );
+                      }
+                    }
+                  }),
                 )),
                 if (message.pagination?.hasMore == true)
                   Padding(
@@ -465,7 +482,22 @@ class _ResultCard extends StatelessWidget {
         : null;
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: (){
+        if(context.mounted) {
+          if(result.resultType?.toLowerCase() == 'room'){
+            context.pushNamed(AppRouting.roomDetailsViewName,pathParameters:{
+              'roomId': result.id.toString(),
+              'propertyId': result.propertyId.toString(),
+            } );
+          }
+          else if(result.resultType?.toLowerCase() == 'property'){
+            context.pushNamed(AppRouting.apartmentDetailsViewName,pathParameters:{
+              'id': result.id.toString(),
+            } );
+          }
+        }
+      },
+      // onTap: onTap,
       child: Container(
         width: 230.w,
         decoration: BoxDecoration(

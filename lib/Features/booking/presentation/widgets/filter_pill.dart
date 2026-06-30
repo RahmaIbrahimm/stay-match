@@ -26,8 +26,8 @@ class FilterPill extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.only(right: 8.w),
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+        margin: EdgeInsets.only(right: 10.w),
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
         decoration: BoxDecoration(
           color: isActive ? const Color(0xFF2E3791) : const Color(0xFFE4E7EC),
           borderRadius: BorderRadius.circular(24.r),

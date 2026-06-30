@@ -327,7 +327,7 @@ class PropertyGalleryWidget extends StatelessWidget {
       child: imageFile == null
           ? Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Icon(Icons.camera_alt_outlined, size: 40.sp, color: AppColors.primary),
-        Text("Upload Room Cover", style: AppStyles.medium14poppins),
+        Text("Upload Apartment Cover", style: AppStyles.medium14poppins),
       ])
           : Container(
         alignment: Alignment.center,

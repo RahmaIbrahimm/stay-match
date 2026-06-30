@@ -12,6 +12,7 @@ import 'package:stay_match/Features/google_maps/presentation/views/google_maps_v
 import 'package:stay_match/Features/home/presentation/views/home_view.dart';
 import 'package:stay_match/Features/notifications/presentation/views/notificaitons_view.dart';
 import 'package:stay_match/Features/other_user_profile/presentation/views/other_user_profile_view.dart';
+import 'package:stay_match/Features/other_user_profile/presentation/views/user_listings_view.dart';
 import 'package:stay_match/Features/payment/presentation/views/pay_credit_view.dart';
 import 'package:stay_match/Features/profile/presentation/manager/profile_cubit.dart';
 import 'package:stay_match/Features/profile/presentation/views/profile_view.dart';
@@ -56,6 +57,7 @@ import '../widgets/onboarding.dart';
 
 class AppRouting {
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static final addPropertyNavigatorKey = GlobalKey<NavigatorState>();
 
   // =========== Auth Routes ============
   static const loginView = '/login';
@@ -157,6 +159,9 @@ class AppRouting {
   static const otherUserProfilePath = '/other-user-profile';
   static const otherUserProfileName = 'otherUserProfile';
 
+  static const userListingsPath = 'user-listings';
+  static const userListingsName = 'userListings';
+
   static const payCardPath = '/pay-card';
   static const payCardName = 'payCard';
 
@@ -165,7 +170,6 @@ class AppRouting {
 
   static const questionsName = 'questions';
   static const questionsPath = '/questions';
-
   static const questionsStartName = 'questionsStart';
   static const questionsStartPath = '/questions-start';
 
@@ -421,6 +425,16 @@ class AppRouting {
           final userId = state.extra as String;
           return OtherUserProfileView(userId: userId);
         },
+        routes: [
+          GoRoute(
+            path: userListingsPath,
+            name: userListingsName,
+            builder: (context, state) {
+              var userId = state.extra as String;
+             return UserListingsView(userId: userId);
+            },
+          ),
+        ]
       ),
       GoRoute(
         path: payCardPath,
@@ -484,6 +498,7 @@ class AppRouting {
           ),
           // BRANCH 3: ADD PROPERTY MULTI-STEP WIZARD
           StatefulShellBranch(
+            navigatorKey: addPropertyNavigatorKey,
             routes: [
               ShellRoute(
                 builder: (context, state, child) {

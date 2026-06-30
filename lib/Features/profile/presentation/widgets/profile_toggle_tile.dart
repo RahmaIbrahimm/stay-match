@@ -16,7 +16,7 @@ class ProfileToggleTile extends StatelessWidget {
   final IconData icon;
   final String title;
   final bool isOn;
-  final VoidCallback onChanged;
+  final VoidCallback? onChanged;
 
   @override
   Widget build(BuildContext context) {

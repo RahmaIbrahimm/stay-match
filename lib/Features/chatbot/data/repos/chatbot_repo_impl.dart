@@ -9,23 +9,56 @@ import 'package:stay_match/core/utils/secure_storage_keys.dart';
 import 'package:stay_match/core/utils/service_locator.dart';
 
 import '../../../../core/networking/endpoints.dart';
+import 'chat_bot_api_interceptor.dart';
 
 class ChatbotRepoImpl extends ChatbotRepo {
   final Dio dio;
 
+  // ChatbotRepoImpl() : dio = Dio() {
+  //   dio.interceptors.add(
+  //     LogInterceptor(
+  //       request: true,
+  //       requestBody: true,
+  //       requestHeader: true,
+  //       responseBody: true,
+  //       responseHeader: true,
+  //       responseUrl: true,
+  //       error: true,
+  //     ),
+  //   );
+  //   dio.interceptors.add(ApiInterceptors(dio));
+  // }
+  //
+  // @override
+  // Future<Either<Failure, ChatbotResponse>> getChatbotResponse({
+  //   required String message,
+  // }) async {
+  //   try {
+  //     String? token = await getIt
+  //         .get<SecureStorageHelper>()
+  //         .readFromSecureStorage(key: SecureStorageKeys.tokenKey);
+  //     var response = await dio.post(
+  //       Endpoints.chatBot,
+  //       data: {'message': message},
+  //       options: Options(headers: {'Authorization': 'Bearer $token'},),
+  //     );
+  //     return right(ChatbotResponse.fromJson(response.data));
+  //   } on DioException catch (e) {
+  //     return left(ServerFailure.fromDioError(e));
+  //   }
+  // }
+
   ChatbotRepoImpl() : dio = Dio() {
-    dio.interceptors.add(
-      LogInterceptor(
-        request: true,
-        requestBody: true,
-        requestHeader: true,
-        responseBody: true,
-        responseHeader: true,
-        responseUrl: true,
-        error: true,
-      ),
-    );
-    dio.interceptors.add(ApiInterceptors(dio));
+    dio.interceptors.add(LogInterceptor(
+            request: true,
+            requestBody: true,
+            requestHeader: true,
+            responseBody: true,
+            responseHeader: true,
+            responseUrl: true,
+            error: true,
+          ),);
+    dio.interceptors.add(ChatbotApiInterceptor(dio));
   }
 
   @override
@@ -33,13 +66,9 @@ class ChatbotRepoImpl extends ChatbotRepo {
     required String message,
   }) async {
     try {
-      String? token = await getIt
-          .get<SecureStorageHelper>()
-          .readFromSecureStorage(key: SecureStorageKeys.tokenKey);
       var response = await dio.post(
         Endpoints.chatBot,
         data: {'message': message},
-        options: Options(headers: {'Authorization': 'Bearer ${token}'},),
       );
       return right(ChatbotResponse.fromJson(response.data));
     } on DioException catch (e) {

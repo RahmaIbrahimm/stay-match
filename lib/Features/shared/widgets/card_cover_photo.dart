@@ -22,7 +22,6 @@ class CardCoverPhoto extends StatelessWidget {
   final bool showCompatibility;
   @override
   Widget build(BuildContext context) {
-    print("comp : ${item?.propertyMatchScore}");
     return Stack(
       children: [
         ClipRRect(
@@ -95,47 +94,47 @@ class CardCoverPhoto extends StatelessWidget {
             ),
           ),
         ),
-        Visibility(
-          visible: showRating,
-          child: Positioned(
-            top: 6.r,
-            right: 6.r,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 6.r, vertical: 2.r),
-              margin: EdgeInsets.symmetric(vertical: 2.r, horizontal: 6.r),
-              decoration: BoxDecoration(
-                color: AppColors.bgGrey,
-                borderRadius: BorderRadius.circular(5.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.2),
-                    blurRadius: 1,
-                  ),
-                ],
-              ),
-              //todo: add actual rating logic when api given
-              alignment: Alignment.topRight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                spacing: 2.w,
-                children: [
-                  Icon(
-                    Icons.star_rate_rounded,
-                    color: Colors.yellowAccent,
-                    size: 12,
-                  ),
-                  Text(
-                    '4.5',
-                    style: AppStyles.medium10poppins.copyWith(
-                      color: AppColors.textColorSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+        // Visibility(
+        //   visible: showRating,
+        //   child: Positioned(
+        //     top: 6.r,
+        //     right: 6.r,
+        //     child: Container(
+        //       padding: EdgeInsets.symmetric(horizontal: 6.r, vertical: 2.r),
+        //       margin: EdgeInsets.symmetric(vertical: 2.r, horizontal: 6.r),
+        //       decoration: BoxDecoration(
+        //         color: AppColors.bgGrey,
+        //         borderRadius: BorderRadius.circular(5.r),
+        //         boxShadow: [
+        //           BoxShadow(
+        //             color: Colors.black.withValues(alpha: 0.2),
+        //             blurRadius: 1,
+        //           ),
+        //         ],
+        //       ),
+        //       //todo: add actual rating logic when api given
+        //       alignment: Alignment.topRight,
+        //       child: Row(
+        //         mainAxisAlignment: MainAxisAlignment.end,
+        //         mainAxisSize: MainAxisSize.min,
+        //         spacing: 2.w,
+        //         children: [
+        //           Icon(
+        //             Icons.star_rate_rounded,
+        //             color: Colors.yellowAccent,
+        //             size: 12,
+        //           ),
+        //           Text(
+        //             '4.5',
+        //             style: AppStyles.medium10poppins.copyWith(
+        //               color: AppColors.textColorSecondary,
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

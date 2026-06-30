@@ -10,9 +10,10 @@ class NotificationsInitial extends NotificationsState {}
 class NotificationsLoading extends NotificationsState {}
 class NotificationsSuccess extends NotificationsState {
   final GetAllNotifications response;
+
   const NotificationsSuccess({required this.response});
   @override
-  List<Object?> get props => [response];
+  List<Object?> get props => [];
 }
 class NotificationsFailure extends NotificationsState {
   final String errMessage;

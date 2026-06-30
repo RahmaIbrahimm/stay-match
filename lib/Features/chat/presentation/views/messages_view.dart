@@ -20,7 +20,6 @@ class MessagesView extends StatefulWidget {
 }
 
 class _MessagesViewState extends State<MessagesView> {
-  String? _myId;
   late final MessageCubit _cubit;
 
   @override
@@ -40,7 +39,6 @@ class _MessagesViewState extends State<MessagesView> {
         .get<SecureStorageHelper>()
         .readFromSecureStorage(key: SecureStorageKeys.userIdKey);
     if (mounted) {
-      setState(() => _myId = value);
       // Set it on the cubit so optimistic messages use the exact same value
       _cubit.myUserId = value;
     }
@@ -67,9 +65,7 @@ class _MessagesViewState extends State<MessagesView> {
           ],
         ),
         resizeToAvoidBottomInset: true,
-        // bottomNavigationBar: MessageInputBar(
-        //   chatId: _cubit.chatId ?? -1,
-        // ),
+
       ),
     );
   }

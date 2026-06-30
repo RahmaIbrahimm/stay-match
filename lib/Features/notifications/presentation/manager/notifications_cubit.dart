@@ -17,12 +17,11 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   GetAllNotifications get cached => _cached ?? GetAllNotifications();
   NotificationsCubit({required this.repo}) : super(NotificationsInitial());
 
-  /// Call once after the cubit is created (e.g. in main.dart via
-  /// `context.read<NotificationsCubit>().connectHub()`).
   Future<void> connectHub() async {
     if (_hubStarted) return;
     _hubStarted = true;
     await _notificationService.initHub(onRefresh: fetchNotifications);
+    await fetchNotifications(); // ✅ CHANGE 1: fetch on startup for initial icon state
   }
 
   Future<void> fetchNotifications() async {
@@ -33,8 +32,9 @@ class NotificationsCubit extends Cubit<NotificationsState> {
           (r) {
         if (r.isSuccess == true) {
           _cached = r;
-          emit(NotificationsSuccess(response: r));
+          // ✅ CHANGE 2: set hasUnread BEFORE emitting so BlocBuilder reads correct value
           hasUnread = r.data?.allNotifications?.any((n) => n.isRead == false) ?? false;
+          emit(NotificationsSuccess(response: r));
         } else {
           emit(NotificationsFailure(errMessage: r.message ?? 'Failed'));
         }
@@ -49,13 +49,8 @@ class NotificationsCubit extends Cubit<NotificationsState> {
           (f) => emit(MarkAllReadFailure(errMessage: f.errMessage)),
           (r) {
         if (r.isSuccess == true) {
-          // 1. Locally change all inner values to isRead = true AND set hasUnread = false
           _markAllReadLocally();
-
-          // 2. Notify action success
           emit(MarkAllReadSuccess());
-
-          // 3. 🌟 Schedule the UI data state refresh for the next frame pipeline
           if (_cached != null) {
             Future.delayed(Duration.zero, () {
               if (!isClosed) emit(NotificationsSuccess(response: _cached!));
@@ -67,19 +62,15 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       },
     );
   }
-  Future<void> markAsRead({required int id}) async {
-    // Skip if already read
-    if (_isAlreadyRead(id)) return;
 
-    // 1. Instant local update → UI reacts immediately
+  Future<void> markAsRead({required int id}) async {
+    if (_isAlreadyRead(id)) return;
     _setReadById(id, value: true);
     if (_cached != null) emit(NotificationsSuccess(response: _cached!));
 
-    // 2. Background API call
     final result = await repo.readNotificationById(id: id);
     result.fold(
           (f) {
-        // Revert on network/server failure
         _setReadById(id, value: false);
         if (_cached != null) emit(NotificationsSuccess(response: _cached!));
       },
@@ -91,6 +82,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       },
     );
   }
+
   bool _isAlreadyRead(int id) {
     final all = _cached?.data?.allNotifications;
     if (all == null) return false;
@@ -100,6 +92,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       return false;
     }
   }
+
   void _setReadById(int id, {required bool value}) {
     if (_cached?.data == null) return;
     final d = _cached!.data!;
@@ -121,9 +114,9 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     }
 
     hasUnread =
-        _cached!.data!.allNotifications?.any((n) => n.isRead == false) ??
-            false;
+        _cached!.data!.allNotifications?.any((n) => n.isRead == false) ?? false;
   }
+
   Future<void> deleteNotification({required int id}) async {
     final result = await repo.deleteNotification(id: id);
     result.fold(
@@ -139,21 +132,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       },
     );
   }
-  // Future<void> deleteNotification({required int id}) async {
-  //   final result = await repo.deleteNotification(id: id);
-  //   result.fold(
-  //         (f) => emit(DeleteNotificationFailure(errMessage: f.errMessage)),
-  //         (r) {
-  //       if (r.isSuccess == true) {
-  //         _removeLocallyById(id);
-  //         emit(DeleteNotificationSuccess(deletedId: id));
-  //         if (_cached != null) emit(NotificationsSuccess(response: _cached!));
-  //       } else {
-  //         emit(DeleteNotificationFailure(errMessage: r.message ?? 'Failed'));
-  //       }
-  //     },
-  //   );
-  // }
+
   Future<void> getUnreadCount() async {
     final result = await repo.getUnreadCount();
     result.fold(

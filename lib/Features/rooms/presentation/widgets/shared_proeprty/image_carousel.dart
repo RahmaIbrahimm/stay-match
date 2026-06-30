@@ -57,34 +57,34 @@ class SharedPropertyImageCarousel extends StatelessWidget {
           ),
 
           // View Reviews — top left
-          Positioned(
-            top: 12.h,
-            left: 12.w,
-            child: GestureDetector(
-              onTap: () {
-                if (context.mounted) {
-                  context.pushNamed(
-                      AppRouting.showReviewsName,
-                      pathParameters: {
-                        "propertyId": propertyId.toString()
-                      });
-                }
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(20.r),
-                ),
-                child: Text(
-                  'View Reviews',
-                  style: AppStyles.semiBold12poppins.copyWith(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: 12.h,
+          //   left: 12.w,
+          //   child: GestureDetector(
+          //     onTap: () {
+          //       if (context.mounted) {
+          //         context.pushNamed(
+          //             AppRouting.showReviewsName,
+          //             pathParameters: {
+          //               "propertyId": propertyId.toString()
+          //             });
+          //       }
+          //     },
+          //     child: Container(
+          //       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+          //       decoration: BoxDecoration(
+          //         color: AppColors.primary,
+          //         borderRadius: BorderRadius.circular(20.r),
+          //       ),
+          //       child: Text(
+          //         'View Reviews',
+          //         style: AppStyles.semiBold12poppins.copyWith(
+          //           color: Colors.white,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
 
           // todo: share — top right
           Positioned(

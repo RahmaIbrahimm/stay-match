@@ -24,7 +24,7 @@ class RecommendedItemCard extends StatelessWidget {
             : AppRouting.roomDetailsViewName;
         if (context.mounted) {
           if (item.propertyType == "Apartment") {
-            context.pushNamed(route, queryParameters: {"id": item.id});
+            context.pushNamed(route, pathParameters: {"id": item.id.toString()});
           }
         }
       },

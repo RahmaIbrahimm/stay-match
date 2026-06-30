@@ -130,7 +130,8 @@ Pagination copyWith({  int? page,
 class Results {
   Results({
       this.id, 
-      this.resultType, 
+      this.propertyId,
+      this.resultType,
       this.title, 
       this.subtitle, 
       this.location, 
@@ -144,6 +145,7 @@ class Results {
 
   Results.fromJson(dynamic json) {
     id = json['id'];
+    propertyId = json['property_id'];
     resultType = json['result_type'];
     title = json['title'];
     subtitle = json['subtitle'];
@@ -157,6 +159,7 @@ class Results {
     recommendationScore = json['recommendation_score'];
   }
   int? id;
+  int? propertyId;
   String? resultType;
   String? title;
   String? subtitle;
@@ -168,7 +171,9 @@ class Results {
   List<String>? amenities;
   Attributes? attributes;
   int? recommendationScore;
-Results copyWith({  int? id,
+Results copyWith({
+  int? id,
+  int? propertyId,
   String? resultType,
   String? title,
   String? subtitle,
@@ -180,7 +185,9 @@ Results copyWith({  int? id,
   List<String>? amenities,
   Attributes? attributes,
   int? recommendationScore,
-}) => Results(  id: id ?? this.id,
+}) => Results(
+  id: id ?? this.id,
+  propertyId: propertyId ?? this.propertyId,
   resultType: resultType ?? this.resultType,
   title: title ?? this.title,
   subtitle: subtitle ?? this.subtitle,
@@ -196,6 +203,7 @@ Results copyWith({  int? id,
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = id;
+    map['property_id'] = propertyId;
     map['result_type'] = resultType;
     map['title'] = title;
     map['subtitle'] = subtitle;

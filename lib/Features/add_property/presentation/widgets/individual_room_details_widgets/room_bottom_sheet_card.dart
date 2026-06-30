@@ -16,7 +16,7 @@ class RoomBottomSheetCard extends StatelessWidget {
   final AddPropertyCubit cubit;
   final bool canDelete;
 
-  const RoomBottomSheetCard({
+  const RoomBottomSheetCard({super.key,
     required this.index,
     required this.room,
     required this.cubit,
@@ -98,7 +98,7 @@ class RoomBottomSheetCard extends StatelessWidget {
                       CustomTextFormField(
                         hasShadow: false,
                         strokeColor: AppColors.stroke,
-                        hintText: "\$",
+                        hintText: "\$0.0",
                         keyboardType: TextInputType.number,
                         onChanged: (v) => cubit.updateRoomBasicData(
                           index,
@@ -119,7 +119,7 @@ class RoomBottomSheetCard extends StatelessWidget {
                       CustomTextFormField(
                         hasShadow: false,
                         strokeColor: AppColors.stroke,
-                        hintText: "\$",
+                        hintText: "\$0.0",
                         keyboardType: TextInputType.number,
                         onChanged: (v) => cubit.updateRoomBasicData(
                           index,

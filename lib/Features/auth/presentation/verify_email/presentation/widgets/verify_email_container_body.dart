@@ -365,7 +365,7 @@ class _VerifyEmailContainerBodyState extends State<VerifyEmailContainerBody> {
             if (context.mounted) {
               authCubit.otpController.clear();
               // Using pushReplacement allows widgets to dispose of themselves gracefully
-              context.pushReplacement(AppRouting.loginView);
+              context.pushReplacementNamed(AppRouting.resetPasswordViewName);
             }
           });
         }
@@ -408,13 +408,16 @@ class _VerifyEmailContainerBodyState extends State<VerifyEmailContainerBody> {
                   controller: authCubit.otpController,
                 ),
               ),
-              CustomElevatedButton(
-                text: AppStrings.confirmCode,
-                onPressed: () async {
-                  if (verifyCodeFormKey.currentState!.validate()) {
-                    await authCubit.verifyOTP();
-                  }
-                },
+              SizedBox(
+                width: double.infinity,
+                child: CustomElevatedButton(
+                  text: AppStrings.confirmCode,
+                  onPressed: () async {
+                    if (verifyCodeFormKey.currentState!.validate()) {
+                      await authCubit.verifyOTP();
+                    }
+                  },
+                ),
               ),
               SizedBox(height: 16.h),
               Row(

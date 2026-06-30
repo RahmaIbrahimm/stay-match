@@ -3,14 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stay_match/Features/booking/data/repos/booking_repo_impl.dart';
-import 'package:stay_match/Features/booking/presentation/manager/booking_request_cubit.dart';
 import 'package:stay_match/Features/notifications/data/models/get_all_notifications.dart';
 import 'package:stay_match/Features/notifications/presentation/widgets/no_notifications_body.dart';
 import 'package:stay_match/core/constants/app_colors.dart';
 import 'package:stay_match/core/constants/app_styles.dart';
 import 'package:stay_match/core/utils/app_keys.dart';
-import 'package:stay_match/core/utils/service_locator.dart';
 import 'package:stay_match/core/widgets/app_drawer/main_app_drawer.dart';
 
 import '../../../../core/routing/app_routing.dart';
@@ -195,97 +192,102 @@ class NotificationsBody extends StatelessWidget {
     final last7 = data.last7Days ?? [];
     final older = data.older ?? [];
 
-    return CustomScrollView(
-      slivers: [
-        // ── Header: title + mark all as read ──────────────────────────
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 8.h),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Notifications',
-                        style: AppStyles.bold24poppins.copyWith(
-                          color: AppColors.textColorPrimary,
+    return RefreshIndicator(
+      onRefresh: ()async{
+        context.read<NotificationsCubit>().fetchNotifications();
+      },
+      child: CustomScrollView(
+        slivers: [
+          // ── Header: title + mark all as read ──────────────────────────
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 8.h),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Notifications',
+                          style: AppStyles.bold24poppins.copyWith(
+                            color: AppColors.textColorPrimary,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 4.h),
-                      Text(
-                        'Stay updated with your latest activities.',
-                        style: AppStyles.regular12poppins.copyWith(
-                          color: AppColors.textColorSecondary,
+                        SizedBox(height: 4.h),
+                        Text(
+                          'Stay updated with your latest activities.',
+                          style: AppStyles.regular12poppins.copyWith(
+                            color: AppColors.textColorSecondary,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 12.w),
+                  MarkAllReadButton(),
+                ],
+              ),
+            ),
+          ),
+
+          // ── Today ─────────────────────────────────────────────────────
+          if (today.isNotEmpty) ...[
+            SectionHeader(label: 'TODAY'),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (_, i) => NotificationCard(
+                  n: _toGeneric(today[i], senderId: data.today?[i].senderId),
+                ),
+                childCount: today.length,
+              ),
+            ),
+          ],
+
+          // ── Yesterday ─────────────────────────────────────────────────
+          if (yesterday.isNotEmpty) ...[
+            SectionHeader(label: 'YESTERDAY'),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (_, i) => NotificationCard(
+                  n: _toGeneric(
+                    yesterday[i],
+                    senderId: data.yesterday?[i].senderId,
                   ),
                 ),
-                SizedBox(width: 12.w),
-                MarkAllReadButton(),
-              ],
-            ),
-          ),
-        ),
-
-        // ── Today ─────────────────────────────────────────────────────
-        if (today.isNotEmpty) ...[
-          SectionHeader(label: 'TODAY'),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (_, i) => NotificationCard(
-                n: _toGeneric(today[i], senderId: data.today?[i].senderId),
+                childCount: yesterday.length,
               ),
-              childCount: today.length,
             ),
-          ),
-        ],
+          ],
 
-        // ── Yesterday ─────────────────────────────────────────────────
-        if (yesterday.isNotEmpty) ...[
-          SectionHeader(label: 'YESTERDAY'),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (_, i) => NotificationCard(
-                n: _toGeneric(
-                  yesterday[i],
-                  senderId: data.yesterday?[i].senderId,
+          // ── Last 7 days ───────────────────────────────────────────────
+          if (last7.isNotEmpty) ...[
+            SectionHeader(label: 'LAST 7 DAYS'),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (_, i) => NotificationCard(
+                  n: _toGeneric(last7[i], senderId: data.last7Days?[i].senderId),
                 ),
+                childCount: last7.length,
               ),
-              childCount: yesterday.length,
             ),
-          ),
-        ],
+          ],
 
-        // ── Last 7 days ───────────────────────────────────────────────
-        if (last7.isNotEmpty) ...[
-          SectionHeader(label: 'LAST 7 DAYS'),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (_, i) => NotificationCard(
-                n: _toGeneric(last7[i], senderId: data.last7Days?[i].senderId),
+          // ── Older ─────────────────────────────────────────────────────
+          if (older.isNotEmpty) ...[
+            SectionHeader(label: 'OLDER'),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (_, i) => NotificationCard(n: _toGeneric(older[i])),
+                childCount: older.length,
               ),
-              childCount: last7.length,
             ),
-          ),
-        ],
+          ],
 
-        // ── Older ─────────────────────────────────────────────────────
-        if (older.isNotEmpty) ...[
-          SectionHeader(label: 'OLDER'),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (_, i) => NotificationCard(n: _toGeneric(older[i])),
-              childCount: older.length,
-            ),
-          ),
+          SliverToBoxAdapter(child: SizedBox(height: 32.h)),
         ],
-
-        SliverToBoxAdapter(child: SizedBox(height: 32.h)),
-      ],
+      ),
     );
   }
 
@@ -414,143 +416,29 @@ class MarkAllReadButton extends StatelessWidget {
 }
 
 // ─── Notification card ────────────────────────────────────────────────────────
-
-// class NotificationCard extends StatelessWidget {
-//   final NotifData n;
-//
-//   const NotificationCard({super.key, required this.n});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Dismissible(
-//       key: ValueKey(n.id),
-//       direction: DismissDirection.endToStart,
-//       background: Container(
-//         alignment: Alignment.centerRight,
-//         padding: EdgeInsets.only(right: 20.w),
-//         margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
-//         decoration: BoxDecoration(
-//           color: const Color(0xFFFFEBEE),
-//           borderRadius: BorderRadius.circular(16.r),
-//         ),
-//         child: Icon(
-//           Icons.delete_outline,
-//           color: const Color(0xFFE53935),
-//           size: 24.r,
-//         ),
-//       ),
-//       confirmDismiss: (_) async {
-//         context.read<NotificationsCubit>().deleteNotification(id: n.id);
-//         return false; // cubit handles list update
-//       },
-//
-//       child: Container(
-//         margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
-//         decoration: BoxDecoration(
-//           color: !n.isRead ? Colors.white : AppColors.grey,
-//           borderRadius: BorderRadius.circular(16.r),
-//           border: Border.all(color: AppColors.stroke),
-//           boxShadow: AppColors.elevationShadow,
-//         ),
-//         clipBehavior: Clip.hardEdge,
-//         child: IntrinsicHeight(
-//           child: Row(
-//             children: [
-//               // Left accent border
-//               Container(
-//                 width: 4.w,
-//                 decoration: BoxDecoration(
-//                   color: borderColor(n.type),
-//                   borderRadius: BorderRadius.only(
-//                     topLeft: Radius.circular(16.r),
-//                     bottomLeft: Radius.circular(16.r),
-//                   ),
-//                 ),
-//               ),
-//               // Content
-//               Expanded(
-//                 child: Padding(
-//                   padding: EdgeInsets.all(12.r),
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Row(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           // Avatar or icon
-//                           Avatar(n: n),
-//                           SizedBox(width: 10.w),
-//                           Expanded(
-//                             child: Column(
-//                               crossAxisAlignment: CrossAxisAlignment.start,
-//                               children: [
-//                                 Row(
-//                                   children: [
-//                                     Expanded(
-//                                       child: Text(
-//                                         n.title ?? '',
-//                                         style: AppStyles.semiBold14poppins
-//                                             .copyWith(
-//                                               color: AppColors.textColorPrimary,
-//                                             ),
-//                                       ),
-//                                     ),
-//                                     if (!n.isRead)
-//                                       Container(
-//                                         width: 8.r,
-//                                         height: 8.r,
-//                                         decoration: BoxDecoration(
-//                                           color: AppColors.primary,
-//                                           shape: BoxShape.circle,
-//                                         ),
-//                                       ),
-//                                   ],
-//                                 ),
-//                                 SizedBox(height: 2.h),
-//                                 Text(
-//                                   n.time ?? '',
-//                                   style: AppStyles.regular10poppins.copyWith(
-//                                     color: AppColors.textColorSecondary,
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       SizedBox(height: 8.h),
-//                       Text(
-//                         n.message ?? '',
-//                         style: AppStyles.regular14poppins.copyWith(
-//                           color: AppColors.textColorSecondary,
-//                           height: 1.5,
-//                         ),
-//                         maxLines: 3,
-//                         overflow: TextOverflow.ellipsis,
-//                       ),
-//                       // Action buttons by type
-//                       ActionButtons(n: n),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-class NotificationCard extends StatelessWidget {
+class NotificationCard extends StatefulWidget {
   final NotifData n;
 
   const NotificationCard({super.key, required this.n});
 
   @override
+  State<NotificationCard> createState() => _NotificationCardState();
+}
+
+class _NotificationCardState extends State<NotificationCard> {
+  late bool _isRead; // ← local mutable copy
+  @override
+  void initState() {
+    super.initState();
+    _isRead = widget.n.isRead; // ← initialize from widget
+  }
+  @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: ValueKey(n.id),
-      direction:n.isRead ? DismissDirection.endToStart: DismissDirection.horizontal,
+      key: ValueKey(widget.n.id),
+      direction: widget.n.isRead
+          ? DismissDirection.endToStart
+          : DismissDirection.horizontal,
 
       // Left-to-right → mark as read (green)
       background: Container(
@@ -579,12 +467,16 @@ class NotificationCard extends StatelessWidget {
           size: 24.r,
         ),
       ),
-
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.endToStart) {
-          context.read<NotificationsCubit>().deleteNotification(id: n.id);
-        } else if (direction == DismissDirection.startToEnd && !n.isRead) {
-          context.read<NotificationsCubit>().markAsRead(id: n.id);
+          context.read<NotificationsCubit>().deleteNotification(
+              id: widget.n.id);
+        } else
+        if (direction == DismissDirection.startToEnd && !widget.n.isRead) {
+          context.read<NotificationsCubit>().markAsRead(id: widget.n.id);
+          setState(() {
+            _isRead = true;
+          });
         }
         return false; // cubit handles list update
       },
@@ -592,7 +484,7 @@ class NotificationCard extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
         decoration: BoxDecoration(
-          color: !n.isRead ? Colors.white : AppColors.grey,
+          color: !_isRead ? Colors.white : AppColors.grey,
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(color: AppColors.stroke),
           boxShadow: AppColors.elevationShadow,
@@ -605,7 +497,7 @@ class NotificationCard extends StatelessWidget {
               Container(
                 width: 4.w,
                 decoration: BoxDecoration(
-                  color: borderColor(n.type),
+                  color: borderColor(widget.n.type),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(16.r),
                     bottomLeft: Radius.circular(16.r),
@@ -622,7 +514,7 @@ class NotificationCard extends StatelessWidget {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Avatar(n: n),
+                          Avatar(n: widget.n),
                           SizedBox(width: 10.w),
                           Expanded(
                             child: Column(
@@ -632,14 +524,14 @@ class NotificationCard extends StatelessWidget {
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        n.title ?? '',
+                                        widget.n.title ?? '',
                                         style: AppStyles.semiBold14poppins
                                             .copyWith(
                                               color: AppColors.textColorPrimary,
                                             ),
                                       ),
                                     ),
-                                    if (!n.isRead)
+                                    if (!_isRead)
                                       Container(
                                         width: 9.r,
                                         height: 9.r,
@@ -652,7 +544,7 @@ class NotificationCard extends StatelessWidget {
                                 ),
                                 SizedBox(height: 2.h),
                                 Text(
-                                  n.time ?? '',
+                                  widget.n.time ?? '',
                                   style: AppStyles.regular10poppins.copyWith(
                                     color: AppColors.textColorSecondary,
                                   ),
@@ -664,7 +556,7 @@ class NotificationCard extends StatelessWidget {
                       ),
                       SizedBox(height: 8.h),
                       Text(
-                        n.message ?? '',
+                        widget.n.message ?? '',
                         style: AppStyles.regular14poppins.copyWith(
                           color: AppColors.textColorSecondary,
                           height: 1.5,
@@ -672,7 +564,13 @@ class NotificationCard extends StatelessWidget {
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      ActionButtons(n: n),
+                      ActionButtons(n: widget.n, onRead: () {
+                        if (!_isRead) {
+                          context.read<NotificationsCubit>().markAsRead(
+                              id: widget.n.id);
+                          setState(() => _isRead = true);
+                        }
+                      },),
                     ],
                   ),
                 ),
@@ -717,8 +615,9 @@ class Avatar extends StatelessWidget {
 
 class ActionButtons extends StatelessWidget {
   final NotifData n;
+  final VoidCallback onRead; // ← add this
 
-  const ActionButtons({super.key, required this.n});
+  const ActionButtons({super.key, required this.n, required this.onRead});
 
   @override
   Widget build(BuildContext context) {
@@ -730,8 +629,9 @@ class ActionButtons extends StatelessWidget {
             label: 'Review',
             filled: true,
             onTap: () {
+              onRead(); // ← add to every case
               if (context.mounted) {
-                context.pushNamed(AppRouting.hostBookingsPath);
+                context.pushNamed(AppRouting.hostBookingsName);
               }
             },
           ),
@@ -801,8 +701,8 @@ class ActionButtons extends StatelessWidget {
         return Padding(
           padding: EdgeInsets.only(top: 10.h),
           child: CardBtn(
-            label: 'View Review',
-            filled: false,
+            label: 'Reply to review',
+            filled: true,
             onTap: () {
               if (context.mounted) {
                 context.pushNamed(

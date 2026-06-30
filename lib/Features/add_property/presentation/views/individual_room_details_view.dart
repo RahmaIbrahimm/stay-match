@@ -104,7 +104,8 @@ class _IndividualRoomDetailsViewState extends State<IndividualRoomDetailsView> {
                                 pathParameters: {'id': cubit.id.toString()});
                           }
                         },
-                        nextPageRoute: AppRouting.addPropertySuccessName,
+                        nextPageRoute: '',
+                        // nextPageRoute: AppRouting.addPropertySuccessName,
                       ),
                     ),
                   ),

@@ -179,20 +179,99 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
                   children: [
                     //todo: use current location
                     GestureDetector(
+                      // onTap: () async {
+                      //   // Get current location first
+                      //   Position position =
+                      //       await Geolocator.getCurrentPosition();
+                      //   final result = LatLng(
+                      //     position.latitude,
+                      //     position.longitude,
+                      //   );
+                      //
+                      //   setState(() {
+                      //     selectedMapLocation = result;
+                      //     selectedGovernorate = null;
+                      //     selectedCity = null;
+                      //   });
+                      // },
                       onTap: () async {
-                        // Get current location first
-                        Position position =
-                            await Geolocator.getCurrentPosition();
-                        final result = LatLng(
-                          position.latitude,
-                          position.longitude,
-                        );
+                        // 1. Check service enabled
+                        final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+                        if (!serviceEnabled) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Location services are disabled. Please enable them in settings.')),
+                            );
+                          }
+                          return;
+                        }
 
-                        setState(() {
-                          selectedMapLocation = result;
-                          selectedGovernorate = null;
-                          selectedCity = null;
-                        });
+                        // 2. Check / request permission
+                        LocationPermission permission = await Geolocator.checkPermission();
+                        if (permission == LocationPermission.denied) {
+                          permission = await Geolocator.requestPermission();
+                          if (permission == LocationPermission.denied) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Location permission denied.')),
+                              );
+                            }
+                            return;
+                          }
+                        }
+
+                        if (permission == LocationPermission.deniedForever) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text('Location permission permanently denied.'),
+                                action: SnackBarAction(
+                                  label: 'Open Settings',
+                                  onPressed: () => Geolocator.openAppSettings(),
+                                ),
+                              ),
+                            );
+                          }
+                          return;
+                        }
+
+                        // 3. Get position
+                        setState(() => isLoading = true);
+                        try {
+                          final position = await Geolocator.getCurrentPosition(
+                            locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+                          );
+
+                          if (!context.mounted) return;
+
+                          // 4. Auto-apply and close
+                          if (widget.propertyType == PropertyType.apartment) {
+                            await context.read<FilterCubit>().updateApartmentFilter(
+                              userLat: position.latitude,
+                              userLng: position.longitude,
+                              government: null,
+                              forceRefresh: true,
+                            );
+                            context.read<FilterCubit>().isMyLocation = true;
+                          } else {
+                            await context.read<FilterCubit>().updateRoomsFilter(
+                              userLat: position.latitude,
+                              userLng: position.longitude,
+                              government: null,
+                              forceRefresh: true,
+                            );
+                          }
+
+                          if (context.mounted && context.canPop()) context.pop();
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Failed to get location: $e')),
+                            );
+                          }
+                        } finally {
+                          if (mounted) setState(() => isLoading = false);
+                        }
                       },
                       child: RPadding(
                         padding: const EdgeInsets.all(16.0),
@@ -244,6 +323,8 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
                             selectedCity = null;
                           });
                         }
+                        context.read<FilterCubit>().isMyLocation = false;
+
                       },
                       child: RPadding(
                         padding: const EdgeInsets.all(16.0),
@@ -304,6 +385,8 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
                                   government: null,
                                   forceRefresh: true,
                                 );
+                            context.read<FilterCubit>().isMyLocation = false;
+
                           } else {
                             await context.read<FilterCubit>().updateRoomsFilter(
                               userLat: selectedMapLocation!.latitude,
@@ -311,6 +394,7 @@ class _FilterSheetWhereState extends State<FilterSheetWhere> {
                               government: null,
                               forceRefresh: true,
                             );
+                            context.read<FilterCubit>().isMyLocation = true;
                           }
 
                           setState(() {

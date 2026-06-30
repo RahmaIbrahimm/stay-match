@@ -64,14 +64,6 @@ class HostBookingsBody extends StatelessWidget {
               );
             }
 
-            // final controller = cubit.hostPagingController;
-            // if (cubit.lastProcessedId != null) {
-            //   final updatedItems = List<Requests>.from(controller.itemList ?? [])
-            //     ..removeWhere((item) => item.id == cubit.lastProcessedId);
-            //
-            //   controller.itemList = updatedItems;
-            //   cubit.lastProcessedId = null;
-            // }
           } else if (state is BookingRequestFailure) {
             AppKeys.rootScaffoldMessengerKey.currentState
                 ?.removeCurrentSnackBar();
@@ -125,13 +117,6 @@ class HostBookingsBody extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      FilterPill(
-                        label: "All",
-                        isActive: cubit.currentFilterKey == 'all',
-                        onTap: () {
-                          cubit.changeActiveFilterTab('all', UserType.host);
-                        },
-                      ),
                       FilterPill(
                         label: "Pending",
                         isActive: cubit.currentFilterKey == 'pending',

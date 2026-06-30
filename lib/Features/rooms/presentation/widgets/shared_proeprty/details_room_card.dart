@@ -98,7 +98,7 @@ class DetailsRoomCard extends StatelessWidget {
                         pathParameters: {
                           'roomId': room.id?.toString() ?? '-1',
                           'propertyId': propertyId.toString(),
-                          'isMyProperty': isMyProperty.toString(),
+                          // 'isMyProperty': isMyProperty.toString(),
                         },
                       );
                     },

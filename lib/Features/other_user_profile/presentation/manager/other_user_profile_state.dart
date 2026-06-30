@@ -12,9 +12,10 @@ class OtherUserProfileInitial extends OtherUserProfileState {}
 class OtherUserProfileLoading extends OtherUserProfileState {}
 
 class OtherUserProfileSuccess extends OtherUserProfileState {
-  final OtherUserProfileResponse profile;
+  final OtherUserProfileResponse? profile;
+  final UserListingsResponse? listings;
 
-  const OtherUserProfileSuccess({required this.profile});
+  const OtherUserProfileSuccess({this.profile, this.listings});
 
   @override
   List<Object?> get props => [profile];

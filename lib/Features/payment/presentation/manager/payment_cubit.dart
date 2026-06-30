@@ -74,4 +74,12 @@ class PaymentCubit extends Cubit<PaymentState> {
       },
     );
   }
+  Future<void> checkIfPaid({required int bookingId}) async {
+    emit(CheckPaidLoading());
+    final result = await paymentRepo.checkPaid(bookingId: bookingId);
+    result.fold(
+          (failure) => emit(CheckPaidFailure(failure.errMessage)),
+          (response) => emit(CheckPaidSuccess(isCompleted: response.data?.isCompleted ?? false)),
+    );
+  }
 }

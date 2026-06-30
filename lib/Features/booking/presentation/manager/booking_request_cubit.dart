@@ -39,7 +39,7 @@ class BookingRequestCubit extends Cubit<BookingRequestState> {
   }
 
   String currentSortKey = 'newest'; // 'newest' or 'oldest'
-  String currentFilterKey = 'all';
+  String currentFilterKey = 'pending';
   int deletedBookingId = -1;
   int canceledBookingId = -1;
   bool isFiltered = false;

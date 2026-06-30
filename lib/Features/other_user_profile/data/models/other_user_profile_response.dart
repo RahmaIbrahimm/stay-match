@@ -239,7 +239,7 @@ class ActiveListings {
   String? government;
   String? image;
   String? type;
-  int? rating;
+  num? rating;
   int? beds;
   int? baths;
   num? size;

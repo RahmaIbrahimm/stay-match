@@ -7,6 +7,7 @@ import 'package:stay_match/core/errors/failures.dart';
 import 'package:stay_match/core/networking/api_service.dart';
 
 import '../../../../core/networking/endpoints.dart';
+import '../models/user_listings_response.dart';
 import 'other_user_profile_repo.dart';
 
 class OtherUserProfileRepoImpl extends OtherUserProfileRepo {
@@ -19,6 +20,18 @@ class OtherUserProfileRepoImpl extends OtherUserProfileRepo {
         Endpoints.otherUserProfile(userId),
       );
       return right(OtherUserProfileResponse.fromJson(response));
+    } on DioException catch (e) {
+      return left(ServerFailure.fromDioError(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserListingsResponse>> getUserListings({required String userId})async {
+    try {
+      var response = await apiService.get(
+        Endpoints.otherUserProfileListings(userId),
+      );
+      return right(UserListingsResponse.fromJson(response));
     } on DioException catch (e) {
       return left(ServerFailure.fromDioError(e));
     }

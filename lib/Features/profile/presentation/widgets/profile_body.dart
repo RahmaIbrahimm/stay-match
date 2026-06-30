@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:stay_match/Features/filter/presentation/manager/location_cubit.dart';
+import 'package:stay_match/Features/profile/data/models/compatibility_profile_response.dart';
 import 'package:stay_match/Features/profile/presentation/manager/profile_cubit.dart';
 import 'package:stay_match/core/widgets/custom_drop_down_menu.dart';
 import 'package:stay_match/core/widgets/custom_elevated_button.dart';
@@ -50,6 +51,7 @@ class _ProfileBodyState extends State<ProfileBody> {
   void initState() {
     super.initState();
     context.read<ProfileCubit>().getProfileData();
+    context.read<ProfileCubit>().getPreferences();
     context.read<LocationCubit>().loadLocations();
   }
 
@@ -72,39 +74,49 @@ class _ProfileBodyState extends State<ProfileBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProfileCubit, ProfileState>(
-      listener: (context, state) {
-        if (state is ProfileSuccess && !_isInitialSyncDone) {
-          final data = state.response.data;
+    return RefreshIndicator(
+      strokeWidth: 1,
+      color: AppColors.primary,
+      backgroundColor: Colors.white.withValues(alpha: 0.9),
+      onRefresh: ()async{
+       await context.read<ProfileCubit>().getProfileData();
+        await context.read<ProfileCubit>().getPreferences();
+        // await context.read<LocationCubit>().loadLocations();
+      },
+      child: BlocConsumer<ProfileCubit, ProfileState>(
+        listener: (context, state) {
+          if (state is ProfileSuccess && !_isInitialSyncDone) {
+            final data = state.response?.data;
 
-          _nameController.text = data?.fullName ?? '';
-          _emailController.text = data?.email ?? '';
-          _phoneController.text = data?.phoneNumber ?? '';
-          _genderController.text = data?.gender ?? '';
-          _educationController.text = data?.fieldOfStudy ?? '';
-          _jobController.text = data?.jobTitle ?? '';
-          _governorateController.text = data?.governorate ?? '';
-          _cityController.text = data?.city ?? '';
-          _bioController.text = data?.aboutMe ?? '';
-          _isInitialSyncDone = true;
-        }
-      },
-      builder: (context, state) {
-        if (state is ProfileLoading) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.primary),
-          );
-        } else if (state is ProfileFailure) {
-          return Center(child: Text(state.errMessage));
-        } else if (state is ProfileSuccess) {
-          return _buildProfileForm(state.response.data);
-        }
-        return const SizedBox.shrink();
-      },
+            _nameController.text = data?.fullName ?? '';
+            _emailController.text = data?.email ?? '';
+            _phoneController.text = data?.phoneNumber ?? '';
+            _genderController.text = data?.gender ?? '';
+            _educationController.text = data?.fieldOfStudy ?? '';
+            _jobController.text = data?.jobTitle ?? '';
+            _governorateController.text = data?.governorate ?? '';
+            _cityController.text = data?.city ?? '';
+            _bioController.text = data?.aboutMe ?? '';
+            _isInitialSyncDone = true;
+          }
+        },
+        builder: (context, state) {
+          if (state is ProfileLoading) {
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            );
+          } else if (state is ProfileFailure) {
+            return Center(child: Text(state.errMessage));
+          } else if (state is ProfileSuccess) {
+            return _buildProfileForm(state.response?.data,state.compatibilityResponse);
+          }
+          return const SizedBox.shrink();
+        },
+      ),
     );
   }
 
-  Widget _buildProfileForm(ProfileRespData? data) {
+  Widget _buildProfileForm(ProfileRespData? data, CompatibilityProfileResponse? compatibilityProfile) {
     final profileCubit = context.watch<ProfileCubit>();
 
     return BlocBuilder<LocationCubit, LocationState>(
@@ -128,7 +140,8 @@ class _ProfileBodyState extends State<ProfileBody> {
           if (profileCubit.pickedIdImageFile != null) {
             // Local file picked priority view
             idImageDisplayText = "Selected: ${profileCubit.pickedIdImageFile!.path.split('/').last}";
-          } else if (data?.idImage != null && data!.idImage!.isNotEmpty) {
+          }
+          else if (data?.idImage != null && data!.idImage!.isNotEmpty) {
             // Cloud file verified fallback view
             idImageDisplayText = "ID Image Uploaded Verified";
           }
@@ -146,7 +159,6 @@ class _ProfileBodyState extends State<ProfileBody> {
               ? locationCubit.filteredCities
               : (matchedGov?.citiesAndVillages ?? []);
           var citiesName = cities.map((e) => e.nameInEnglish).toList();
-
           if (locationCubit.selectedGovernorate == null && matchedGov != null) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               locationCubit.selectGovernorate(matchedGov);
@@ -366,20 +378,20 @@ class _ProfileBodyState extends State<ProfileBody> {
                   ProfileToggleTile(
                     icon: Icons.smoking_rooms,
                     title: AppStrings.smoker,
-                    isOn: false,
+                    isOn: compatibilityProfile?.compatibilityPreferences?.smoker ?? false,
                     onChanged: () => null,
                   ),
                   ProfileToggleTile(
                     icon: Icons.pets,
                     title: AppStrings.hasPets,
-                    isOn: false,
-                    onChanged: () => null,
+                    isOn: compatibilityProfile?.compatibilityPreferences?.hasPets ?? false,
+                    onChanged: null,
                   ),
                   ProfileToggleTile(
                     icon: Icons.nightlight_round,
                     title: AppStrings.nightOwl,
-                    isOn: false,
-                    onChanged: () => null,
+                    isOn: compatibilityProfile?.compatibilityPreferences?.nightOwl ?? false,
+                    onChanged:null,
                   ),
 
                   SizedBox(height: 16.h),
@@ -433,18 +445,21 @@ class _ProfileBodyState extends State<ProfileBody> {
                   VibeCheckSlider(
                     title: AppStrings.culturalImportance,
                     options: AppStrings.culturalImportanceSliderOptions,
-                    initialValue: 2,
+                    initialValue: 4 - (compatibilityProfile?.vibeCheck?.culturalImportance?.value?.toInt() ?? 1),
                     onChanged: (index) {
                       log("Cultural: $index");
                     },
+                    enabled: false,
                   ),
                   VibeCheckSlider(
                     title: "Cleanliness Level",
-                    options: const ["Relaxed", "Normal", "Strict", "Very Strict"],
-                    initialValue: 3,
+                    options: const ["Relaxed", "Moderate", "Strict", "Very Strict"],
+                    initialValue: 4 - (compatibilityProfile?.vibeCheck?.cleanlinessLevel?.value?.toInt() ?? 1),
                     onChanged: (index) {
                       log("Cleanliness: $index");
                     },
+                    enabled: false,
+
                   ),
 
                   SizedBox(height: 16.h),

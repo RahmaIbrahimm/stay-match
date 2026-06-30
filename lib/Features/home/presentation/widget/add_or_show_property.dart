@@ -78,15 +78,18 @@ class AddOrShowMyProperties extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: 16.h),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 50.r),
-                        child: CustomElevatedButton(
-                          verticalPadding: 8.r,
-                          text: AppStrings.addProperty,
-                          onPressed: () {
-                            StatefulNavigationShell.of(context).goBranch(1);
-                            context.goNamed(AppRouting.addPropertyName);
-                          },
+                      SizedBox(
+                        width: 280.w,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.r),
+                          child: CustomElevatedButton(
+                            verticalPadding: 8.r,
+                            text: AppStrings.addProperty,
+                            onPressed: () {
+                              StatefulNavigationShell.of(context).goBranch(1);
+                              context.goNamed(AppRouting.addPropertyName);
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -94,7 +97,7 @@ class AddOrShowMyProperties extends StatelessWidget {
                 }
 
                 return SizedBox(
-                  height: 230.h,
+                  height: 210.h,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: properties.length,

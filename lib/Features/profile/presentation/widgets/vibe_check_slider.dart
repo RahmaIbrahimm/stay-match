@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
+
 class VibeCheckSlider extends StatefulWidget {
   const VibeCheckSlider({
     super.key,
@@ -10,12 +11,14 @@ class VibeCheckSlider extends StatefulWidget {
     required this.options,
     required this.initialValue,
     required this.onChanged,
+    this.enabled = true,
   });
 
   final String title;
   final List<String> options;
-  final int initialValue; // Index of the options list
+  final int initialValue;
   final ValueChanged<int> onChanged;
+  final bool enabled;
 
   @override
   State<VibeCheckSlider> createState() => _VibeCheckSliderState();
@@ -28,6 +31,16 @@ class _VibeCheckSliderState extends State<VibeCheckSlider> {
   void initState() {
     super.initState();
     _currentValue = widget.initialValue.toDouble();
+  }
+
+  @override
+  void didUpdateWidget(covariant VibeCheckSlider oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialValue != oldWidget.initialValue) {
+      setState(() {
+        _currentValue = widget.initialValue.toDouble();
+      });
+    }
   }
 
   @override
@@ -51,11 +64,14 @@ class _VibeCheckSliderState extends State<VibeCheckSlider> {
           data: SliderTheme.of(context).copyWith(
             trackHeight: 6.h,
             activeTrackColor: AppColors.primary.withValues(alpha: 0.2),
-            inactiveTrackColor: AppColors.primary.withValues(alpha: 0.1),
+            inactiveTrackColor: AppColors.primary.withValues(alpha: 0.2),
             thumbColor: AppColors.primary,
             overlayColor: AppColors.primary.withValues(alpha: 0.1),
             thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8.r),
             // Removes the default tick marks for a cleaner look like the image
+            disabledThumbColor: AppColors.primary,
+            disabledActiveTrackColor: AppColors.primary.withValues(alpha: 0.2),
+
             tickMarkShape: SliderTickMarkShape.noTickMark,
           ),
           child: Slider(
@@ -63,12 +79,12 @@ class _VibeCheckSliderState extends State<VibeCheckSlider> {
             min: 0,
             max: (widget.options.length - 1).toDouble(),
             divisions: widget.options.length - 1,
-            onChanged: (value) {
-              setState(() {
-                _currentValue = value;
-              });
+            onChanged: widget.enabled
+                ? (value) {
+              setState(() => _currentValue = value);
               widget.onChanged(value.toInt());
-            },
+            }
+                : null,
           ),
         ),
         SizedBox(height: 10.h),

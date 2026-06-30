@@ -77,7 +77,6 @@ class ReviewsRepoImpl extends ReviewsRepo {
       return Left(ServerFailure.fromDioError(e));
     }
   }
-  // todo: correct getapartmentreviews to room when got
   @override
   Future<Either<Failure, GetPropertyReviews>> getRoomReviews(
       {required int roomId, int? page, int? pageSize, String? sortBy = 'All', String? search})async {

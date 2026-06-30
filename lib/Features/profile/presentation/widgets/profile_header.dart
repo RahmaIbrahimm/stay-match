@@ -84,7 +84,7 @@ class ProfileHeader extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           Text(
-            "${data.fieldOfStudy ?? 'Student'} @ ${data.fieldOfStudy ??
+            "${data.fieldOfStudy ?? 'Student'} @ ${data.university ??
                 'University'}",
             style: AppStyles.regular16poppins.copyWith(
                 color: AppColors.textColorPrimary),

@@ -5,33 +5,19 @@ import 'package:stay_match/Features/questions/data/models/answer_questions_respo
 import 'package:stay_match/Features/questions/data/models/get_questions_response.dart';
 import 'package:stay_match/Features/questions/data/repos/questions_repo.dart';
 import 'package:stay_match/core/errors/failures.dart';
+import 'package:stay_match/core/networking/api_service.dart';
 
 import '../../../../core/networking/endpoints.dart';
-import '../../../../core/utils/secure_storage_helper.dart';
-import '../../../../core/utils/secure_storage_keys.dart';
-import '../../../../core/utils/service_locator.dart';
 
 class QuestionsRepoImpl extends QuestionsRepo {
-  final Dio dio;
+  ApiService apiService;
 
-  QuestionsRepoImpl() : dio = Dio() {
-    dio.interceptors.add(
-      LogInterceptor(
-        request: true,
-        requestBody: true,
-        requestHeader: true,
-        responseBody: true,
-        responseHeader: true,
-        responseUrl: true,
-        error: true,
-      ),
-    );
-  }
+  QuestionsRepoImpl({required this.apiService}) : super();
   @override
   Future<Either<Failure, GetQuestionsResponse>> getQuestions() async {
     try {
-      var response = await dio.get(Endpoints.getQuestions);
-      return right(GetQuestionsResponse.fromJson(response.data));
+      var response = await apiService.get(Endpoints.getQuestions);
+      return right(GetQuestionsResponse.fromJson(response));
     } on DioException catch (e) {
       return left(ServerFailure.fromDioError(e));
     }
@@ -42,15 +28,11 @@ class QuestionsRepoImpl extends QuestionsRepo {
     required AnswerQuestionsRequest request,
   }) async {
     try {
-      String? token = await getIt
-          .get<SecureStorageHelper>()
-          .readFromSecureStorage(key: SecureStorageKeys.tokenKey);
-      var response = await dio.post(
+      var response = await apiService.post(
         Endpoints.answerQuestions,
-        options: Options(headers: {'Authorization': "Bearer $token",}),
         data:  request.toJson(),
       );
-      return right(AnswerQuestionsResponse.fromJson(response.data));
+      return right(AnswerQuestionsResponse.fromJson(response));
     } on DioException catch (e) {
       return left(ServerFailure.fromDioError(e));
     }

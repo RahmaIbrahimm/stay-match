@@ -50,6 +50,9 @@ class BookingHelper {
                 SizedBox(height: 24.h),
                 CustomElevatedButton(
                   text: "Back to Home",
+                  textStyle: AppStyles.regular14poppins.copyWith(
+                    color: Colors.white,
+                  ),
                   backgroundColor: const Color(0xFF1A2E63),
                   onPressed: () {
                     // Close dialog

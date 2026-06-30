@@ -64,7 +64,7 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton<PaymentRepoImpl>(() =>
       PaymentRepoImpl(apiService: getIt<DioConsumer>()));
   getIt.registerLazySingleton<QuestionsRepoImpl>(() =>
-      QuestionsRepoImpl());
+      QuestionsRepoImpl(apiService: getIt<DioConsumer>()));
   getIt.registerFactory<LocationCubit>(
         () => LocationCubit(locationRepository: getIt<LocationRepoImpl>()),
   );

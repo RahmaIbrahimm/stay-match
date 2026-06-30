@@ -17,7 +17,7 @@ import 'nearby_services_list.dart';
 class SharedPropertyBody extends StatefulWidget {
   final SharedApartmentDetailsData data;
 
-  const SharedPropertyBody({required this.data});
+  const SharedPropertyBody({super.key, required this.data});
 
   @override
   State<SharedPropertyBody> createState() => _SharedPropertyBodyState();
